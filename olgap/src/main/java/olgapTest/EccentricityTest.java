@@ -20,12 +20,15 @@ public class EccentricityTest {
 
 		try (RepositoryConnection conn = workingRep.getConnection();
 				RepositoryConnection workingConn = workingRep.getConnection();) {
-			
 			String queryString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n";
 			queryString += "PREFIX olgap: <http://inova8.com/olgap/> \n";
-			queryString += "SELECT   ?eccentricity \n";
+			queryString += "SELECT   ?eccentricitySubject ?eccentricity \n";
 			queryString += "WHERE { \n";
-			queryString += "   BIND( olgap:eccentricity(\"http://localhost:8082/rdf4j-server/\", \"tfl\", <http://in4mium.com/londontube/id/Baker_Street> ) as ?eccentricity)";
+			queryString += "BIND( <http://in4mium.com/londontube/id/Baker_Street> as ?subject)\n";
+			queryString += "BIND( \"http://localhost:8082/rdf4j-server/repositories/tfl\" as ?service)\n";
+			queryString += "BIND( ?subject  as ?eccentricitySubject)\n";
+			queryString += "BIND( <http://inova8.com/olgap/eccentricity> ( ?service, ?subject)  as ?eccentricity)\n";
+			queryString += "BIND( olgap:eccentricity(?service , ?subject) as ?eccentricity)";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);	
 			try (TupleQueryResult result = query.evaluate()) {

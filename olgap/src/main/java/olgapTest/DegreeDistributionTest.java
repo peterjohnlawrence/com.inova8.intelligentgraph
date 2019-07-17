@@ -24,10 +24,9 @@ public class DegreeDistributionTest {
 			queryString += "SELECT ?degree ?count \n";
 			queryString += "WHERE { \n";		
 			queryString += "   { select ?degree ?count  {";
-			queryString += "   BIND( \"http://localhost:8082/rdf4j-server/\" as ?service)";
-			queryString += "   BIND( \"tfl\" as ?repository)";
+			queryString += "   BIND( \"http://localhost:8082/rdf4j-server/repositories/tfl?distinct=true\" as ?service)";
 			//queryString += "   (?service ?repository)  olgap:degreeDistributionProperty (?degree  ?count )  .";
-			queryString += "   (?degree  ?count ) olgap:degreeDistributionProperty   (?service ?repository)  .";
+			queryString += "   (?degree  ?count ) olgap:degreeDistribution   (?service)  .";
 			queryString += "   }}}  order by ?degree";
 
 			TupleQuery query = conn.prepareTupleQuery(queryString);

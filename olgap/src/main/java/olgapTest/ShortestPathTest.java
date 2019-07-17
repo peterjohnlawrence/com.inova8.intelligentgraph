@@ -34,13 +34,13 @@ public class ShortestPathTest {
 			//		+ " 8 )  .";		
 			queryString += "SELECT ?subject ?property ?object ?direct  ?edge \r\n" + "WHERE {\r\n"
 					+ "     BIND( \"http://localhost:8082/rdf4j-server/repositories/tfl\" as ?service)\r\n"
-					+ "	 BIND( <http://in4mium.com/londontube/id/Mornington_Crescent> as ?start)\r\n"
+					+ "	 BIND( <http://in4mium.com/londontube/id/Euston> as ?start)\r\n"
 					+ "	 BIND( <http://in4mium.com/londontube/id/Baker_Street> as ?end)\r\n"
-					//+ "	 BIND( \"(<http://in4mium.com/londontube/ref/connectsToxx>|<http://in4mium.com/londontube/ref/onLinexx>)!(rdf:type)^(<http://in4mium.com/londontube/ref/connectsFrom>|  <http://in4mium.com/londontube/ref/hasStationOnLinexx>)^!(rdf:type)\" as ?propertyPath)\r\n"
+					//+ "	 BIND( \"(<http://in4mium.com/londontube/ref/connectsToxx>|<http://in4mium.com/londontube/ref/onLinexx>)!(rdf:type)^(<http://in4mium.com/londontube/ref/connectsFrom>|<http://in4mium.com/londontube/ref/hasStationOnLinexx>)^!(rdf:type)\" as ?propertyPath)\r\n"
 					//+ "	 BIND( \"^!(rdf:type)!(rdf:type)^(tfl:connectsFrom)\" as ?propertyPath)\r\n"
-					+ "	 BIND( (tfl:connectsFrom tfl:hasStationOnLinexx) as ?propertyPath)\r\n"
+					+ "	 BIND( \"(<http://in4mium.com/londontube/ref/connectsFrom>)!(rdf:type|<http://in4mium.com/londontube/ref/connectsTo>)^!(rdf:type|<http://in4mium.com/londontube/ref/hasStationInZone>|<http://in4mium.com/londontube/ref/hasStationOnLine>|<http://in4mium.com/londontube/ref/connectsFrom>)^(rdf:type)\" as ?propertyPath)\r\n"
 					+ "	 BIND( 8 as ?maxPath)\r\n"
-					+ "	(?edge ?subject ?property ?direct ?object )  <http://inova8.com/olgap/shortestPathProperty>   (?service  ?start  ?end ?propertyPath ?maxPath )  .\r\n"
+					+ "	(?edge ?subject ?property ?direct ?object )  <http://inova8.com/olgap/shortestPath>   (?service  ?start  ?end ?propertyPath ?maxPath )  .\r\n"
 					+ "}";
 			queryString += "order by ?edge";
 

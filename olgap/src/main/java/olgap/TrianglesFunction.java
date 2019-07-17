@@ -4,6 +4,7 @@ import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.GraphQueryResult;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -12,8 +13,8 @@ import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 public class TrianglesFunction  implements Function{
@@ -22,6 +23,7 @@ public class TrianglesFunction  implements Function{
 	public TrianglesFunction() {
 		super();
 		workingRep = new SailRepository(new MemoryStore());
+		workingRep.init();
 	}
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
 	@Override
@@ -30,9 +32,7 @@ public class TrianglesFunction  implements Function{
 	}
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
-		//Repository workingRep = new SailRepository(new MemoryStore());
-		workingRep.init();
-		Repository rep = new HTTPRepository(args[0].stringValue(),args[1].stringValue());//"http://localhost:8082/rdf4j-server/", "tfl");
+		Repository rep = new SPARQLRepository(args[0].stringValue());
 		rep.init();	
 		
 		try (RepositoryConnection workingConn = workingRep.getConnection();RepositoryConnection conn = rep.getConnection(); ) {
@@ -68,7 +68,7 @@ public class TrianglesFunction  implements Function{
 				// we just iterate over all solutions in the result...
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					return valueFactory.createLiteral(solution.getValue("triangles").toString());
+					return valueFactory.createLiteral( ((SimpleLiteral) solution.getValue("triangles")).intValue());
 
 				}
 			}

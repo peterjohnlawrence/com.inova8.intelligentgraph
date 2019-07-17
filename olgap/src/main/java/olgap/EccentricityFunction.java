@@ -54,6 +54,7 @@ public class EccentricityFunction  implements Function{
 	public EccentricityFunction() {
 		super();
 		workingRep = new SailRepository(new MemoryStore());
+		workingRep.init();
 	}
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
 	@Override
@@ -62,13 +63,13 @@ public class EccentricityFunction  implements Function{
 	}
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
-		workingRep.init();
+
 		Repository rep = new HTTPRepository(args[0].stringValue(),args[1].stringValue());
 		rep.init();	
 		int iter_no = 0;
 		int count = 1;
-		 service = "SERVICE <http://localhost:8082/rdf4j-server/repositories/tfl>";
-		Resource node = (Resource) args[2];
+		service = "SERVICE <http://localhost:8082/rdf4j-server/repositories/tfl>";
+		Resource node = (Resource) args[1];
 		try (RepositoryConnection workingConn = workingRep.getConnection();RepositoryConnection conn = rep.getConnection(); ) {
 			
 			//Resource graph = workingRep.getValueFactory().createIRI("ng:labels");

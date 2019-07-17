@@ -167,7 +167,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	protected static final String LT = "<";
 	protected static final String GT = ">";
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
-	protected static final String SHORTEST_PATH_PROPERTY = "shortestPathProperty";
+	protected static final String SHORTEST_PATH_PROPERTY = "shortestPath";
 
 	String HTTP_BACK; 
 	String HTTP_FRONT;
@@ -236,7 +236,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 
 		//n=0
 		Collection<BindingSet> path = null;
-		while (iterator < maxPathLength && !pathFound) {
+		while (iterator < Math.ceil( maxPathLength/2.) && !pathFound) {
 			//increment n	
 			iterator++;
 			//Increment front:n		
@@ -338,18 +338,43 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	private void incrementFront(RepositoryConnection workingConn, int frontIndex) {
 		String graphA = LT + HTTP_FRONT + frontIndex + GT;
 		String graphB = LT + HTTP_FRONT + (frontIndex - 1) + GT;
-		String incrementFrontString = "		INSERT{GRAPH " + graphA + "{ \r\n"
+		
+		String frontNodesString = "select ?startNode { GRAPH " + graphB  + "{ select distinct ?startNode	{?startNode ?p ?o}}} ";
+		TupleQuery frontNodesQuery = workingConn.prepareTupleQuery(frontNodesString);
+		StringBuilder frontNodesValues = new StringBuilder("VALUES(?startNode){");
+		try (TupleQueryResult result = frontNodesQuery.evaluate()) {
+			while (result.hasNext()) {
+				BindingSet solution = result.next();
+				Value startNode = solution.getValue("startNode");
+				frontNodesValues.append("(<" + startNode.stringValue() + ">)");
+			}
+			frontNodesValues.append("}");
+		}
+		
+		String incrementFrontString = "		INSERT{GRAPH " + graphA 
+				+ "{ \r\n"
 				+ "			?frontNode ?designation ?startNode.\r\n"
-				+ "			?frontNode <http://property> ?property.\r\n " + "		}}\r\n" + "		WHERE {\r\n"
-				+ "			{ " + service + "\r\n" + "				{\r\n"
+				+ "			?frontNode <http://property> ?property.\r\n " 
+				+ "		}}\r\n" 
+				+ "		WHERE {\r\n"
+				+ "			{ " + service + "\r\n" 
+				+ "				{\r\n"
 				+ "					SELECT DISTINCT ?startNode ?frontNode (IF(BOUND(?predicate),<http://startNode>,<http://endNode>) as ?designation) (COALESCE(?predicate,?inversePredicate ) as ?property) \r\n"
-				+ "					{\r\n" + "						{\r\n"
-				+ "							?startNode ?predicate  ?frontNode .\r\n" + notPredicateFilterClause
+				+ "					{\r\n" 
+				+ frontNodesValues.toString()
+				+ "						{\r\n"
+				+ "							?startNode ?predicate  ?frontNode .\r\n" 
+				+ notPredicateFilterClause
 				+ predicateFilterClause + "						}UNION{\r\n"
 				+ "							?frontNode  ?inversePredicate   ?startNode .\r\n"
-				+ notInversePredicateFilterClause + inversePredicateFilterClause + "						}\r\n"
-				+ "					}\r\n" + "				}\r\n" + "			}\r\n" + "			GRAPH " + graphB
-				+ "{ select distinct ?startNode	{?startNode ?p ?o} }\r\n" + "		}";
+				+ notInversePredicateFilterClause + inversePredicateFilterClause 
+				+ "						}\r\n"
+				+ "					}\r\n" 
+				+ "				}\r\n" 
+				+ "			}\r\n"
+				//+ "			GRAPH " + graphB
+				//+ "{ select distinct ?startNode	{?startNode ?p ?o} }\r\n" 
+				+ "		}";
 		Update incrementFront = workingConn.prepareUpdate(incrementFrontString);
 		incrementFront.execute();
 	}
@@ -357,18 +382,43 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	private void incrementBack(RepositoryConnection workingConn, int backIndex) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
 		String graphB = LT +HTTP_BACK + (backIndex - 1) + GT;
-		String incrementBackString = "		INSERT{GRAPH " + graphA + "{ \r\n"
+		
+		String backNodesString = "select ?endNode { GRAPH " + graphB  + "{ select distinct ?endNode	{?endNode ?p ?o}}} ";
+		TupleQuery backNodesQuery = workingConn.prepareTupleQuery(backNodesString);
+		StringBuilder backNodesValues = new StringBuilder("VALUES(?endNode){");
+		try (TupleQueryResult result = backNodesQuery.evaluate()) {
+			while (result.hasNext()) {
+				BindingSet solution = result.next();
+				Value endNode = solution.getValue("endNode");
+				backNodesValues.append("(<" + endNode.stringValue() + ">)");
+			}
+			backNodesValues.append("}");
+		}
+		
+		String incrementBackString = "		INSERT{GRAPH " + graphA 
+				+ "{ \r\n"
 				+ "			?backNode  ?designation ?endNode.\r\n"
-				+ "			?backNode <http://property> ?property.\r\n " + "		}}\r\n" + "		WHERE {\r\n"
-				+ "			{ " + service + "\r\n" + "				{\r\n"
+				+ "			?backNode <http://property> ?property.\r\n " 
+				+ "		}}\r\n" 
+				+ "		WHERE {\r\n"
+				+ "			{ " + service + "\r\n" 
+				+ "				{\r\n"
 				+ "					SELECT DISTINCT ?endNode ?backNode (IF(BOUND(?inversePredicate),<http://startNode>,<http://endNode>) as ?designation) (COALESCE(?predicate,?inversePredicate ) as ?property)\r\n"
-				+ "					{\r\n" + "						{\r\n"
+				+ "					{\r\n" 
+				+ backNodesValues.toString()
+				+ "						{\r\n"
 				+ "							?backNode ?inversePredicate  ?endNode .\r\n"
-				+ notInversePredicateFilterClause + inversePredicateFilterClause + "						}UNION{\r\n"
+				+ notInversePredicateFilterClause + inversePredicateFilterClause 
+				+ "						}UNION{\r\n"
 				+ "							?endNode  ?predicate   ?backNode .\r\n" + notPredicateFilterClause
-				+ predicateFilterClause + "						}\r\n" + "					}\r\n"
-				+ "				}\r\n" + "			}\r\n" + "			GRAPH " + graphB
-				+ "{ select distinct ?endNode	{?endNode ?p ?o} }\r\n" + "		}";
+				+ predicateFilterClause
+				+ "						}\r\n" 
+				+ "					}\r\n"
+				+ "				}\r\n" 
+				+ "			}\r\n" 
+				//+ "			GRAPH " + graphB
+				//+ "{ select distinct ?endNode	{?endNode ?p ?o} }\r\n" 
+				+ "		}";
 		Update incrementBack = workingConn.prepareUpdate(incrementBackString);
 		incrementBack.execute();
 	}
@@ -386,12 +436,11 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		try (TupleQueryResult result = frontToBackQuery.evaluate()) {
 			Value pivotNode = null;
 			while (result.hasNext()) {
-				//found a match
-				//result.next();
 				pathFound = true;
 				BindingSet solution = result.next();
 				pivotNode = solution.getValue("frontNode");
 				result.close();
+				//found an edge so since we only want the shortestpath we can stop looking further
 				break;
 			}
 
@@ -414,6 +463,8 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 							BindingSet solution = pathResult.next();
 							frontPivotNode = solution.getValue("subject");
 							results.add(solution);
+							//found an edge so since we only want the shortestpath we can stop looking further
+							break;
 						}
 					}
 				}
@@ -436,6 +487,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 							BindingSet solution = pathResult.next();
 							backPivotNode = solution.getValue("object");
 							results.add(solution);
+							break;
 						}
 					}
 				}
