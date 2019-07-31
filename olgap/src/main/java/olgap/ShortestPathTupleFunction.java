@@ -204,7 +204,8 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 					SHORTEST_PATH_PROPERTY + " requires" + "exactly 5 arguments: service, start, end, path, max. Got "
 							+ args.length);
 		}
-		service = "SERVICE <" + ((Literal) args[0]).getLabel() + ">";
+		//service = "SERVICE <" + ((Literal) args[0]).getLabel() + ">";
+		service = "SERVICE <" + args[0].toString() + ">";
 		Value startNode = args[1];
 		Value endNode = args[2];
 		prepareFilters(((Literal) args[3]).getLabel());
