@@ -273,9 +273,20 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 				}
 			};
 		} else {
-			dropGraphs(frontContexts);
-			dropGraphs(backContexts);
-			return null;
+			return new ConvertingIteration<BindingSet, List<Value>, QueryEvaluationException>(
+					new CloseableIteratorIteration<>(null)) {
+
+				@Override
+				protected List<Value> convert(BindingSet bindings) throws QueryEvaluationException {
+					List<Value> results = new ArrayList<>();
+					for (String bindingName : bindings.getBindingNames()) {
+						results.add(bindings.getValue(bindingName));
+					}
+					dropGraphs(frontContexts);
+					dropGraphs(backContexts);
+					return results;
+				}
+			};
 		}
 	}
 	public void dropGraphs(ArrayList<Resource> contexts) {
@@ -477,10 +488,10 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 							+ "			{VALUES(?subject){(<" + backPivotNode.stringValue() + ">)}\r\n"
 							+ "			GRAPH " + graph + "{\r\n"
 							+ "			   	{ ?subject <http://endNode> ?object ;  \r\n"
-							+ "					<http://property> ?property . BIND( true as ?direct) \r\n"
+							+ "					<http://property> ?property . BIND( false as ?direct) \r\n"
 							+ "			    } UNION \r\n"
 							+ "			    { ?subject <http://startNode> ?object ;  \r\n"
-							+ "					<http://property> ?property . BIND( false  as ?direct)\r\n"
+							+ "					<http://property> ?property . BIND( true  as ?direct)\r\n"
 							+ "			    } \r\n" + "			}}}";
 					TupleQuery reconstructPathQuery = workingConn.prepareTupleQuery(reconstructPathString);
 					try (TupleQueryResult pathResult = reconstructPathQuery.evaluate()) {
