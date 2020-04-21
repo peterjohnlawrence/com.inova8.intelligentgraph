@@ -234,7 +234,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 						new CloseableIteratorIteration<>(results.iterator())) {
 					@Override
 					protected List<Value> convert(BindingSet bindings) throws QueryEvaluationException {
-						List<Value> results = new ArrayList<>();
+						List<Value> results = new ArrayList<Value>();
 						for (String bindingName : bindings.getBindingNames()) {
 							results.add(bindings.getValue(bindingName));
 						}
@@ -242,18 +242,19 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 					}
 				};	
 			}else {
+				results = new ArrayList<BindingSet>();
 				return new ConvertingIteration<BindingSet, List<Value>, QueryEvaluationException>(
-						new CloseableIteratorIteration<>(null)) {
+						new CloseableIteratorIteration<>(results.iterator())) {
 					@Override
 					protected List<Value> convert(BindingSet bindings) throws QueryEvaluationException {
-						List<Value> results = new ArrayList<>();
+						List<Value> results = new ArrayList<Value>();
 						for (String bindingName : bindings.getBindingNames()) {
 							results.add(bindings.getValue(bindingName));
 						}
 						return results;
 					}
 				};		
-				
+			//	return null;
 			}
 		}
 		
