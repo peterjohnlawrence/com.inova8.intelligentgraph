@@ -1,5 +1,7 @@
 package olgapTest;
 
+import java.util.List;
+
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -9,6 +11,7 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.spin.SpinSail;
 
+@SuppressWarnings("deprecation")
 public class ShortestPathTest {
 	public static void main(String[] args) {
 
@@ -32,13 +35,14 @@ public class ShortestPathTest {
 			
 			queryString += "PREFIX londontube: <http://in4mium.com/londontube/id/> \n"
 			+	"PREFIX  tfl: <http://in4mium.com/londontube/ref/> \n"
-			+ "SELECT ?subject ?property ?object ?direct  ?edge \r\n" + "WHERE {\r\n"
-			+ "     BIND( <http://localhost:8082/rdf4j-server/repositories/tfl> as ?service)\r\n"
-			+ "	 BIND( <http://in4mium.com/londontube/id/Harringay> as ?start)\r\n"
-			+ "	 BIND( <http://in4mium.com/londontube/id/Euston_Square> as ?end)\r\n"
-			+ "	 BIND( \"(<http://in4mium.com/londontube/ref/connectsFrom>)!(rdf:type|<http://in4mium.com/londontube/ref/connectsTo>)^!(rdf:type|<http://in4mium.com/londontube/ref/hasStationInZone>|<http://in4mium.com/londontube/ref/hasStationOnLine>|<http://in4mium.com/londontube/ref/connectsFrom>)^(<http://in4mium.com/londontube/ref/connectsTo>)\" as ?propertyPath)\r\n"
-			+ "	 BIND( 20 as ?maxPath)\r\n"
-			+ "	(?edge ?subject ?property ?direct ?object )  <http://inova8.com/olgap/shortestPath>   (?service  ?start  ?end ?propertyPath ?maxPath )  .\r\n"
+			+ "  SELECT ?subject ?property ?object ?direct  ?edge \n" //?service  ?start  ?end ?propertyPath ?maxPath\n" 
+			+ "WHERE {\n"
+			+ "  BIND( <http://localhost:8080/rdf4j-server/repositories/tfl> as ?service)\n"
+			+ "	 BIND( <http://in4mium.com/londontube/id/Mornington_Crescent> as ?start)\n"
+			+ "	 BIND( <http://in4mium.com/londontube/id/Oakleigh_Park> as ?end)\n"
+			+ "	 BIND( \"!(rdf:type|<http://in4mium.com/londontube/ref/connectsTo>)^!(rdf:type|<http://in4mium.com/londontube/ref/hasStationInZone>|<http://in4mium.com/londontube/ref/hasStationOnLine>|<http://in4mium.com/londontube/ref/connectsFrom>)\" as ?propertyPath)\n"
+			+ "	 BIND( 20 as ?maxPath)\n"
+			+ "	(?edge ?subject ?property ?direct ?object )  olgap:shortestPath   ( ?service  ?start  ?end ?propertyPath ?maxPath )  .\n"
 			+ "}";
 
 //			queryString += "PREFIX northwind: <http://northwind.com/model/> \n"
@@ -85,16 +89,14 @@ public class ShortestPathTest {
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 
 			try (TupleQueryResult result = query.evaluate()) {
-//					List<String> bindingNames = result.getBindingNames();
+					List<String> bindingNames = result.getBindingNames();
 					while (result.hasNext()) {
 						BindingSet solution = result.next();
-						System.out.println(solution.toString());
-//						StringBuilder aResult = new StringBuilder();
-//						for (String bindingName : bindingNames) {
-//							aResult.append(bindingName).append(" = ")
-//									.append(solution.getValue(bindingName).stringValue()).append("; ");
-//						}
-//						System.out.println(aResult);
+						StringBuilder aResult = new StringBuilder();
+						for (String bindingName : bindingNames) {
+							aResult.append(bindingName).append(" = ").append(solution.getValue(bindingName).stringValue()).append("; ");
+						}
+						System.out.println(aResult);
 				}
 				System.out.println("Finished!");
 			}
@@ -102,16 +104,14 @@ public class ShortestPathTest {
 			System.out.println("Try again from cache!");
 			
 			try (TupleQueryResult result = query.evaluate()) {
-//				List<String> bindingNames = result.getBindingNames();
+				List<String> bindingNames = result.getBindingNames();
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					System.out.println(solution.toString());
-//					StringBuilder aResult = new StringBuilder();
-//					for (String bindingName : bindingNames) {
-//						aResult.append(bindingName).append(" = ")
-//								.append(solution.getValue(bindingName).stringValue()).append("; ");
-//					}
-//					System.out.println(aResult);
+					StringBuilder aResult = new StringBuilder();
+					for (String bindingName : bindingNames) {
+						aResult.append(bindingName).append(" = ").append(solution.getValue(bindingName).stringValue()).append("; ");
+					}
+					System.out.println(aResult);
 			}
 			System.out.println("Finished!");
 		}		

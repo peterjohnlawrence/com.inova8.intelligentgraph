@@ -68,10 +68,10 @@ public class EccentricityFunction  implements Function{
 		rep.init();	
 		int iter_no = 0;
 		int count = 1;
-		service = "SERVICE <http://localhost:8082/rdf4j-server/repositories/tfl>";
+		service =  "SERVICE <" + args[0].toString() + "?distinct=true&infer=false>"; 
 		Resource node = (Resource) args[1];
 		try (RepositoryConnection workingConn = workingRep.getConnection();RepositoryConnection conn = rep.getConnection(); ) {
-			
+
 			//Resource graph = workingRep.getValueFactory().createIRI("ng:labels");
 			//workingConn.add(workingRep.getValueFactory().createStatement(node,  workingRep.getValueFactory().createIRI("<label:flag>"),workingRep.getValueFactory().createLiteral(0) ), graph);
 			

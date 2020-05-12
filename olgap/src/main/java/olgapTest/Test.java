@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.spin.SpinSail;
 
+@SuppressWarnings("deprecation")
 public class Test {
 	public static void main(String[] args) {
 		

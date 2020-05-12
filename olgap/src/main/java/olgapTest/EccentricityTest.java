@@ -24,10 +24,10 @@ public class EccentricityTest {
 			queryString += "PREFIX olgap: <http://inova8.com/olgap/> \n";
 			queryString += "SELECT   ?eccentricitySubject ?eccentricity \n";
 			queryString += "WHERE { \n";
-			queryString += "BIND( <http://in4mium.com/londontube/id/Baker_Street> as ?subject)\n";
+			queryString += "BIND( <http://in4mium.com/londontube/id/Mornington_Crescent> as ?subject)\n";
 			queryString += "BIND( \"http://localhost:8082/rdf4j-server/repositories/tfl\" as ?service)\n";
 			queryString += "BIND( ?subject  as ?eccentricitySubject)\n";
-			queryString += "BIND( <http://inova8.com/olgap/eccentricity> ( ?service, ?subject)  as ?eccentricity)\n";
+			//queryString += "BIND( <http://inova8.com/olgap/eccentricity> ( ?service, ?subject)  as ?eccentricity)\n";
 			queryString += "BIND( olgap:eccentricity(?service , ?subject) as ?eccentricity)";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);	

@@ -7,15 +7,21 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.GraphQueryResult;
+import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.Update;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
+import org.eclipse.rdf4j.query.parser.ParsedUpdate;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
+
+import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
+import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 
 public class TrianglesFunction  implements Function{
 	public RepositoryConnection conn;
@@ -33,9 +39,21 @@ public class TrianglesFunction  implements Function{
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
 		Repository rep = new SPARQLRepository(args[0].stringValue());
-		rep.init();	
+		rep.init();
+		
+		
+		//QueryContext queryContext;
+		//queryContext=QueryContext.getQueryContext();
+		//TripleSource tripleSource = queryContext.getQueryPreparer().getTripleSource();
+		//ParsedUpdate parsedUpdate = new ParsedUpdate("insert data{graph <http://test> {	<http://exampleSub> <http://examplePred> <http://exampleObj> ");
+		//Update update = queryContext.getQueryPreparer().prepare(parsedUpdate);
+		//update.execute();
 		
 		try (RepositoryConnection workingConn = workingRep.getConnection();RepositoryConnection conn = rep.getConnection(); ) {
+			
+			//SPARQLRepository updaterepository = new SPARQLRepository(args[0].stringValue()+"/statements");
+			//Update update =updaterepository.getConnection().prepareUpdate(QueryLanguage.SPARQL,"insert data{graph <http://test> {<http://exampleSub> <http://examplePred> <http://exampleObj> }}");
+			//update.execute();
 			
 			String graphQueryString = "CONSTRUCT{?vertex <label:connect> ?neighbor.}\r\n" 
 					+ "WHERE{\r\n"
