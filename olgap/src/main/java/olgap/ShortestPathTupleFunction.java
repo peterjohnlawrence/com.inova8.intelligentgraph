@@ -154,11 +154,13 @@ import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
 import org.eclipse.rdf4j.common.iteration.Iteration;
+import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -410,7 +412,14 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 				nodeCount++;
 				BindingSet solution = result.next();
 				Value startNode = solution.getValue("startNode");
-				startNodesValues.append("(<" + startNode.stringValue() + ">)");
+				try {
+					IRI iriStartNode = (IRI)startNode;
+					startNodesValues.append("(<" + iriStartNode.stringValue() + ">)");
+				}catch(Exception e) {
+					//Ignore blank and non-IRI nodes
+				//	BNode blankStartNode = (BNode)startNode;
+				//	startNodesValues.append("(" + blankStartNode.stringValue() + ")");
+				}
 				if (startNodesValues.length()> MAX_UPDATE_STRING) {
 					startNodesValues.append("}");
 					log.debug("Adding to front " + frontIndex + ", "  + nodeCount + ". String length=" + startNodesValues.length());
@@ -498,7 +507,14 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 				nodeCount++;
 				BindingSet solution = result.next();
 				Value endNode = solution.getValue("endNode");
-				endNodesValues.append("(<" + endNode.stringValue() + ">)");
+				try {
+					IRI iriEndNode = (IRI)endNode;
+					endNodesValues.append("(<" + iriEndNode.stringValue() + ">)");
+				}catch(Exception e) {
+					//Ignore blank and non-IRI nodes
+				//	BNode blankEndNode = (BNode)endNode;
+				//	endNodesValues.append("(_:" + blankEndNode.getID() + ")");
+				}
 				if (endNodesValues.length()> MAX_UPDATE_STRING) {
 					endNodesValues.append("}");
 					log.debug("Adding to back " + backIndex + ", "  + nodeCount + ". String length=" + endNodesValues.length() );
