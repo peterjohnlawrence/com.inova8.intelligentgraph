@@ -40,20 +40,20 @@ public class FactValue extends Evaluator implements Function {
 
 	public FactValue() throws NoSuchAlgorithmException {
 		super();
-		if(hosted) {
-			//Use a host triplestore for the path manipulation
-			String rdf4jServer = "http://localhost:8080/rdf4j-server/";
-			String repositoryID = "olgap";
-			cacheRep = new HTTPRepository(rdf4jServer, repositoryID);	
-			cacheConn = cacheRep.getConnection();	
-			cacheService ="SERVICE <" + rdf4jServer + "repositories/" + repositoryID + "?distinct=true&infer=false>";
-			logger.info("FactValue hosted at:" + cacheService);
-
-		}else {
-			//Use a in-memory triplestore for the path manipulation, however the SPARQ:L cannot use SERVICE call backs to this memory store
-			cacheRep = new SailRepository(new MemoryStore());
-			logger.info("AttributeValue hosted in memory");
-		}	
+//		if(hosted) {
+//			//Use a host triplestore for the path manipulation
+//			String rdf4jServer = "http://localhost:8080/rdf4j-server/";
+//			String repositoryID = "olgap";
+//			cacheRep = new HTTPRepository(rdf4jServer, repositoryID);	
+//			cacheConn = cacheRep.getConnection();	
+//			cacheService ="SERVICE <" + rdf4jServer + "repositories/" + repositoryID + "?distinct=true&infer=false>";
+//			logger.info("FactValue hosted at:" + cacheService);
+//
+//		}else {
+//			//Use a in-memory triplestore for the path manipulation, however the SPARQ:L cannot use SERVICE call backs to this memory store
+//			cacheRep = new SailRepository(new MemoryStore());
+//			logger.info("FactValue hosted in memory");
+//		}	
 		cacheRep.init();
 		logger.info(new FormattedMessage("Initiating {}",this));
 	}
