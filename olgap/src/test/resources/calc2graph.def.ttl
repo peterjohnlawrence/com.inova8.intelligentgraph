@@ -1,0 +1,81 @@
+# baseURI: http://inova8.com/calc2graph/def
+
+@prefix : <http://inova8.com/calc2graph/def/> .
+@prefix def: <http://inova8.com/calc2graph/def/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/calc2graph/def/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://inova8.com/calc2graph/def>
+  rdf:type owl:Ontology ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+def:BatteryLimit
+  rdf:type owl:Class ;
+  rdfs:label "Battery limit" ;
+.
+def:Script
+  rdf:type owl:Class ;
+  rdfs:label "Script" ;
+.
+def:Unit
+  rdf:type owl:Class ;
+  rdfs:label "Unit" ;
+.
+def:batteryLimits
+  rdf:type rdf:Property ;
+  rdfs:label "battery limits" ;
+.
+def:density
+  rdf:type rdf:Property ;
+  rdfs:label "density" ;
+  rdfs:range xsd:float ;
+.
+def:hasFeedBatteryLimit
+  rdf:type owl:ObjectProperty ;
+.
+def:hasProductBatteryLimit
+  rdf:type owl:ObjectProperty ;
+.
+def:massFlow
+  rdf:type rdf:Property ;
+  rdfs:label "mass flow" ;
+.
+def:massFlowBalance
+  rdf:type rdf:Property ;
+  rdfs:label "massFlowBalance" ;
+.
+def:massThroughput
+  rdf:type rdf:Property ;
+  rdfs:label "mass throughput" ;
+.
+def:massYield
+  rdf:type rdf:Property ;
+  rdfs:label "mass yield" ;
+.
+def:maximumMassFlow
+  rdf:type rdf:Property ;
+  rdfs:label "maximum mass flow" ;
+.
+def:script
+  rdf:type rdfs:Datatype ;
+  rdfs:label "script" ;
+  rdfs:subClassOf rdfs:Literal ;
+.
+script:groovy
+  rdf:type rdfs:Datatype ;
+  rdfs:label "groovy script" ;
+  rdfs:subClassOf def:script ;
+.
+def:scriptCode
+  rdf:type rdf:Property ;
+  rdfs:domain def:Script ;
+  rdfs:label "script code" ;
+  rdfs:range def:script ;
+.
+def:volumeFlow
+  rdf:type rdf:Property ;
+  rdfs:label "volume flow" ;
+.
