@@ -1,91 +1,92 @@
 package olgap;
 
-import java.util.Arrays;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import javax.script.ScriptEngine;
+import javax.script.CompiledScript;
+import javax.script.ScriptContext;
 import javax.script.ScriptException;
+import javax.script.SimpleScriptContext;
 
-import org.apache.logging.log4j.message.FormattedMessage;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
-import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
-
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
 
 public class Thing extends olgap.Value
 {
-	TripleSource tripleSource;
-	private Evaluator host;
+	Source source;
 	private HashMap<String, olgap.Value> values = new HashMap<String,olgap.Value>();
 	
-	public Thing(Evaluator host,TripleSource tripleSource,  org.eclipse.rdf4j.model.Value superValue ) {
-		this.host = host;
-		this.superValue = superValue;
-		this.tripleSource = tripleSource;
-	}
 
+	public Thing(Source source,  org.eclipse.rdf4j.model.Value superValue ) {
+		this.superValue = superValue;
+		this.source = source;
+	}
 	public String toString() {
 		return superValue.toString();
 	}
-
-	public HashSet<olgap.Value> getFacts(IRI predicate, Value ... arguments) {
-		//logger.traceEntry(new FormattedMessage("GetObjects <{}> of subject <{}>", predicate,superValue));
-		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = tripleSource
+	@SafeVarargs
+	public final HashSet<olgap.Value> getFacts(IRI predicate, HashMap<String,olgap.Value>... customQueryOptions) {
+		addTrace(new ParameterizedMessage("Seeking values {} of subject {}", addIRI(predicate),addIRI(superValue)));
+		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = Source.getTripleSource()
 				.getStatements((IRI) superValue, predicate, null);
 		HashSet<olgap.Value> values = new HashSet<olgap.Value>();
 		while (objectStatements.hasNext()) {
 			Statement objectStatement = objectStatements.next();
-			values.add(this.host.valueFactory(objectStatement.getObject()));
+			values.add(source.valueFactory(getTracer(), objectStatement.getObject()));
 			//objects.add(new  olgap.Value(tripleSource, shell, objectStatement.getObject()));
 		}
-		logger.traceExit(new FormattedMessage("Retrieving objects <{}> of <{}> = {}",predicate,superValue,  values));
+		addTrace(new ParameterizedMessage("Retrieved objects {} of {} = {}",addIRI(predicate),addIRI(superValue),  values));
 		return values;
 	}
-	public HashSet<olgap.Value> getFacts(String predicateIRI, Value ... args) {
-		IRI predicate = tripleSource.getValueFactory().createIRI(predicateIRI);	
-		return this.getFacts(predicate,args);
+	@SafeVarargs
+	public final HashSet<olgap.Value> getFacts(String predicateIRI, HashMap<String,olgap.Value>... customQueryOptions) {
+		IRI predicate = Source.getTripleSource().getValueFactory().createIRI(predicateIRI);	
+		return this.getFacts(predicate,customQueryOptions);
 	}
-	
-	public HashSet<olgap.Value> getIsFactsOf(IRI predicate, Value ... arguments) {
-		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = tripleSource
+	@SafeVarargs
+	public final HashSet<olgap.Value> getIsFactsOf(IRI predicate, HashMap<String,olgap.Value>... customQueryOptions) {
+		addTrace(new ParameterizedMessage("Seeking subjects {} of {}",addIRI(predicate),addIRI(superValue)));
+		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = Source.getTripleSource()
 				.getStatements(null, predicate, (IRI) superValue);
 		HashSet<olgap.Value> values = new HashSet<olgap.Value>();
 		while (objectStatements.hasNext()) {
 			Statement objectStatement = objectStatements.next();
-			values.add(this.host.valueFactory(objectStatement.getSubject()));
-
+			values.add(source.valueFactory(getTracer(),objectStatement.getSubject()));
 		}
-		logger.traceExit(new FormattedMessage("Retrieving subjects <{}> of <{}> = {}",predicate,superValue,  values));
+		addTrace(new ParameterizedMessage("Retrieved subjects {} of {} = {}",addIRI(predicate),addIRI(superValue),  values));
 		return values;
 	}
-	public HashSet<olgap.Value> getIsFactsOf(String predicateIRI, Value ... args) {
-		IRI predicate = tripleSource.getValueFactory().createIRI(predicateIRI);	
-		return this.getIsFactsOf(predicate,args);
+	@SafeVarargs
+	public final HashSet<olgap.Value> getIsFactsOf(String predicateIRI,  HashMap<String,olgap.Value>... customQueryOptions) {
+		IRI predicate = Source.getTripleSource().getValueFactory().createIRI(predicateIRI);	
+		return this.getIsFactsOf(predicate,customQueryOptions);
 	}
-	public olgap.Value getFact(IRI predicate, SimpleLiteral scriptString, Value ... arguments) {
-		olgap.Value result = this.handleScript( scriptString, predicate, arguments);
+	@SafeVarargs
+	public final olgap.Value getFact(IRI predicate, SimpleLiteral scriptString, HashMap<String, olgap.Value>... customQueryOptions) {
+		olgap.Value result = this.handleScript( scriptString, predicate, customQueryOptions);
 		return result;		
 		
 	}
-	public olgap.Value getFact(IRI predicate, Value ... arguments) {
-		String key =predicate.toString() + Arrays.toString(arguments);
-		if( values.containsKey(key)) {
+	@SafeVarargs
+	public final olgap.Value getFact(IRI predicate, HashMap<String,olgap.Value>... customQueryOptions) {
+		String key =predicate.toString() +  StringUtils.join(customQueryOptions);
+		addTrace(new ParameterizedMessage("Seeking value {} of {} using customQueryOptions {}",addIRI(predicate),addIRI(superValue),customQueryOptions));
+		if(notTracing() && values.containsKey(key)) {
 			olgap.Value result = values.get(key);
-			logger.traceExit(new FormattedMessage("Cache <{}> of <{}> = {}",predicate,superValue,result.getValue()));
+			addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}",addIRI(predicate),addIRI(superValue),result.getValue()));
 			return result;			
 		}else {
-			CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = tripleSource
+			CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = Source.getTripleSource()
 					.getStatements((IRI) superValue, predicate, null);
 			while (objectStatements.hasNext()) {
 				Statement objectStatement = objectStatements.next();
@@ -93,118 +94,116 @@ public class Thing extends olgap.Value
 				SimpleLiteral literalValue;
 				try{
 					literalValue = (SimpleLiteral)objectValue;
-					if( host.scriptEngines.containsKey(literalValue.getDatatype().getLocalName()) ) {
-						olgap.Value  result =  getFact(predicate,literalValue, arguments) ;
+					if( Evaluator.scriptEngines.containsKey(literalValue.getDatatype().getLocalName()) ) {
+
+						olgap.Value  result =  getFact(predicate,literalValue, customQueryOptions) ;
 						if(result!=null) {
-							logger.traceExit(new FormattedMessage("Evaluating <{}> of <{}> = {}",predicate,superValue, result.getValue()));
+							
 							values.put(key, result);
+							addTrace(new ParameterizedMessage("Calculated {} of {} = {}",addIRI(predicate),addIRI(superValue),result.getValue()));
 						}
 						return result;					
 					}else {
-						logger.traceExit(new FormattedMessage("Literal <{}> of <{}> = {}",predicate,superValue, objectValue));
-						return this.host.valueFactory( objectValue);
+						addTrace(new ParameterizedMessage("Retrieved literal {} of {} = {}",addIRI(predicate),addIRI(superValue), objectValue));
+						return source.valueFactory( getTracer(),objectValue);
 					}
 				}catch(Exception e) {
-					logger.traceExit(new FormattedMessage("Resource <{}> of <{}> = {}",predicate,superValue, objectValue));
-					return this.host.valueFactory( objectValue);
+					addTrace(new ParameterizedMessage("Retrieved resource {} of {} = {}",addIRI(predicate),addIRI(superValue), objectValue));
+					return source.valueFactory(getTracer(), objectValue);
 				}
 			}
-			logger.error(new FormattedMessage("No predicate {} found for subject {}", predicate, this));
+			addTrace(new ParameterizedMessage("Error: No predicate {} found for subject {}", addIRI(predicate), addThisIRI()));
+			decrementTraceLevel();
 			return null;
 		}
 	}
-	public olgap.Value getFact(String predicateIRI, Value ... arguments) {
-		IRI predicate = tripleSource.getValueFactory().createIRI(predicateIRI);	
-		return this.getFact(predicate,arguments);
+	@SafeVarargs
+	public final olgap.Value getFact(String predicateIRI, HashMap<String,olgap.Value>...  customQueryOptions) {
+		IRI predicate = Source.getTripleSource().getValueFactory().createIRI(predicateIRI);	
+		return this.getFact(predicate,customQueryOptions);
 	}
-
-	protected olgap.Value handleScript(SimpleLiteral scriptString, IRI predicate, Value ...  arguments) {
+	@SafeVarargs
+	protected final olgap.Value handleScript(SimpleLiteral scriptString, IRI predicate, HashMap<String, olgap.Value>...  customQueryOptions) {
 		String scriptCode = scriptString.getLabel();
 		scriptCode=scriptCode.trim();
 		if(scriptCode.startsWith("$$")) {
 			String scriptIRI = scriptCode.substring(2);
-			Resource scriptResource = tripleSource.getValueFactory().createIRI(scriptIRI);
-			IRI scriptPropertyIRI = tripleSource.getValueFactory().createIRI("http://inova8.com/calc2graph/def/scriptCode");
-			CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = tripleSource
+			Resource scriptResource = Source.getTripleSource().getValueFactory().createIRI(scriptIRI);
+			IRI scriptPropertyIRI = Source.getTripleSource().getValueFactory().createIRI("http://inova8.com/calc2graph/def/scriptCode");
+			CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = Source.getTripleSource()
 					.getStatements(scriptResource, scriptPropertyIRI, null);
 			while (scriptStatements.hasNext()) {
 				Statement scriptStatement = scriptStatements.next();
 				SimpleLiteral scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
-				return handleScript(scriptCodeliteral, predicate, arguments);
+				return handleScript(scriptCodeliteral, predicate, customQueryOptions);
 			}
-			logger.error(new FormattedMessage("Reference script <{}> not found for subject {}", scriptIRI, this));
+			logger.error(new ParameterizedMessage("Reference script <{}> not found for subject {}", scriptIRI, this));
+		}else {
+			incrementTraceLevel();
+			IRI cacheContextIRI = generateCacheContext(predicate, customQueryOptions);
+			
+			ScriptContext scriptContext = new SimpleScriptContext();
+			scriptContext.setAttribute("$tripleSource", Source.getTripleSource(),ScriptContext.ENGINE_SCOPE);
+			scriptContext.setAttribute("$this", this,ScriptContext.ENGINE_SCOPE);
+			scriptContext.setAttribute("$property", source.thingFactory(getTracer(), predicate),ScriptContext.ENGINE_SCOPE);
+			scriptContext.setAttribute("$args", customQueryOptions,ScriptContext.ENGINE_SCOPE);
+			scriptContext.setAttribute("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI),ScriptContext.ENGINE_SCOPE);
+			String scripttype = scriptString.getDatatype().getLocalName();
+			//addTrace(String.format("Evaluating predicate %s of %s, by invoking <b>%s</b> script\n",addIRI(predicate),addIRI(superValue),scripttype));
+			addTrace(new ParameterizedMessage("Evaluating predicate {} of {}, by invoking <b>{}</b> script\n",addIRI(predicate),addIRI(superValue),scripttype));
+			addScript(scriptString.getLabel());
+			incrementTraceLevel();
+			Object scriptResult = null;
+			try {
+				CompiledScript compiledScriptCode= source.compiledScriptFactory(scriptString);
+				scriptResult = compiledScriptCode.eval(scriptContext);
+				olgap.Value result = returnResult(scriptResult, cacheContextIRI);
+				decrementTraceLevel();
+				//addTrace(String.format("Evaluated %s of %s =  %s",addIRI(predicate),addIRI(superValue),result.getHTMLValue()));
+				addTrace(new ParameterizedMessage("Evaluated {} of {} =  {}",addIRI(predicate),addIRI(superValue),result.getHTMLValue()));
+				decrementTraceLevel();
+				return result;
+			} catch (ScriptException e) {
+				decrementTraceLevel();
+				//addTrace(String.format("Script failed with <br/><code ><span style=\"white-space: pre-wrap\">%s</span></code >", StringEscapeUtils.escapeHtml4(e.getMessage())));
+				addTrace(new ParameterizedMessage("Script failed with <br/><code ><span style=\"white-space: pre-wrap\">{}</span></code >",StringEscapeUtils.escapeHtml4(e.getMessage())));				
+				return null;
+			}
 		}
-		IRI cacheContextIRI = generateCacheContext(predicate, arguments);
-		
-		ScriptEngine groovyScriptEngine = 	Evaluator.scriptEngines.get(scriptString.getDatatype().getLocalName());
-		groovyScriptEngine.put("$tripleSource", tripleSource);
-		groovyScriptEngine.put("$this", this);
-		groovyScriptEngine.put("$property", this.host.thingFactory( predicate));
-		groovyScriptEngine.put("$args", arguments);
-		groovyScriptEngine.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
-		Object scriptResult = null;
-		try {
-			scriptResult = groovyScriptEngine.eval(scriptCode);
-			olgap.Value result = returnResult(scriptResult, cacheContextIRI);
-			logger.traceExit(new FormattedMessage("Script Result {}",result.getValue()));
-			return result;
-		} catch (ScriptException e) {
-			logger.traceExit(new FormattedMessage("Script failed with {}",e.getMessage()));
-			return null;
-		}
-/* Use GroovyShell directly instead of via Javax JSR223
-		
-		Script script = shell.parse(scriptCode);
-		Binding binding = new Binding();
-		binding.setVariable("$tripleSource", tripleSource);
-		binding.setVariable("$this", this);
-		binding.setVariable("$property", this.host.thingFactory( predicate));
-		binding.setVariable("$args", arguments);
-
-		binding.setVariable("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
-		script.setBinding(binding);
-		logger.traceEntry(new FormattedMessage("Evaluating predicate <{}> of <{}>, by invoking script\n\n{}\n", predicate,superValue, scriptString));
-
-		try {
-			Object scriptResult = script.run();
-			olgap.Value result = returnResult(scriptResult, cacheContextIRI);
-			logger.traceExit(new FormattedMessage("Script Result {}",result.getValue()));
-			return result;
-		}catch(Exception e) {
-			logger.traceExit(new FormattedMessage("Script failed with {}",e.getMessage()));
-			return null;
-		}
-*/
+		return null;
 	}
 
-	private IRI generateCacheContext(IRI predicate, Value... arguments) {
-		String key = superValue.toString() + predicate.toString() + Arrays.toString(arguments);
-		String cacheContext = Evaluator.bytesToHex(Evaluator.digest.digest(key.getBytes()));
-		IRI cacheContextIRI = this.tripleSource.getValueFactory().createIRI("http://inova8.com/cat2graph/data/", cacheContext);
+
+	@SafeVarargs
+	private final IRI generateCacheContext(IRI predicate, HashMap<String, olgap.Value>... customQueryOptions) {
+		String key = superValue.toString() + predicate.toString() + StringUtils.join(customQueryOptions);
+		String cacheContext = Evaluator.getHexKey(key);
+		IRI cacheContextIRI = Source.getTripleSource().getValueFactory().createIRI("http://inova8.com/cat2graph/data/", cacheContext);
 		return cacheContextIRI;
 	}
 
-	public  olgap.Value returnResult(Object result, IRI cacheContext) {
+	public  olgap.Value returnResult(Object result, IRI cacheContextIRI) {
 		switch (result.getClass().getSimpleName()) {
 		case "Integer":
-			return this.host.valueFactory(this.tripleSource.getValueFactory().createLiteral((Integer)result));
+			return source.valueFactory(getTracer(),Source.getTripleSource().getValueFactory().createLiteral((Integer)result));
 		case "Double":
-			return this.host.valueFactory(this.tripleSource.getValueFactory().createLiteral((Double)result));
+			return source.valueFactory(getTracer(),Source.getTripleSource().getValueFactory().createLiteral((Double)result));
+		case "BigDecimal":
+			return source.valueFactory(getTracer(),Source.getTripleSource().getValueFactory().createLiteral((BigDecimal)result));
 		case "Thing":
 			return (Thing)result;
 		case "LinkedHashModel":
-			writeModelToCache(result, cacheContext);
-			return this.host.thingFactory(cacheContext);		
+			source.writeModelToCache(result, cacheContextIRI);
+			return source.thingFactory(getTracer(),cacheContextIRI);		
 		default:
-			logger.error(new FormattedMessage("No handler found for result {} of class {}", result,result.getClass().getSimpleName()));
+			logger.error("No handler found for result {} of class {}", result.toString(),result.getClass().getSimpleName());
 			break;
 		}
-		
 		return null;		 
 	}
-
-	private void writeModelToCache(Object result, IRI cacheContext) {
-		this.host.cacheConn.add((Model) result);
+	public void writeResultToCache(){
+//		source.writeModelToCache(result, cacheContext);
+		
 	}
 
 	public String getLabel() {

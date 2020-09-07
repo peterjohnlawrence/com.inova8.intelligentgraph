@@ -27,12 +27,6 @@
 			<artifactId>rdf4j-runtime</artifactId>
 			<type>pom</type>
 		</dependency>
-				<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>3.0.5</version>
-			<type>pom</type>
-				</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -43,6 +37,12 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.13.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-jsr223</artifactId>
+			<version>3.0.5</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -77,4 +77,11 @@
 	<properties>
 		<rdf4j.version>3.3.1</rdf4j.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>ICM</id>
+			<name>ICM</name>
+			<url>http://maven.icm.edu.pl/artifactory/repo/</url>
+		</repository>
+	</repositories>
 </project>

@@ -79,5 +79,26 @@ public class ObjectValueTest extends OlgapTest{
 				"" ,
 				result);
 	}
+	@Test
+	void test3() {
+		String queryString8 = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n";
+		queryString8 += "PREFIX olgap: <http://inova8.com/olgap/> \n";
+		queryString8 +=	 "  SELECT  ?s  ?p  ?result1\n" 
+		+ "WHERE { VALUES(?s ?p){(<http://inova8.com/calc2graph/id/Unit1> <http://inova8.com/calc2graph/def/batteryLimits>)}.    \n"
+		+ "		?s ?p ?o . \n"
+		+ "	 BIND( olgap:objectValue(?s , ?p, ?o, 'abc','def') as ?result1 ). \n"
+		+ "}";
+		String result = runQuery(conn, queryString8);
+		assertEquals( "p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type;s=http://inova8.com/calc2graph/id/Unit1;result1=http://inova8.com/calc2graph/def/Unit;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/batteryLimits;s=http://inova8.com/calc2graph/id/Unit1;result1=http://inova8.com/cat2graph/data/501A35D75E3A97E9A1FB2D7A7917A96D;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/hasFeedBatteryLimit;s=http://inova8.com/calc2graph/id/Unit1;result1=http://inova8.com/calc2graph/id/BatteryLimit1;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/hasProductBatteryLimit;s=http://inova8.com/calc2graph/id/Unit1;result1=http://inova8.com/calc2graph/id/BatteryLimit2;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/hasProductBatteryLimit;s=http://inova8.com/calc2graph/id/Unit1;result1=http://inova8.com/calc2graph/id/BatteryLimit3;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/massFlowBalance;s=http://inova8.com/calc2graph/id/Unit1;result1=-0.8200013935565948;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/massThroughput;s=http://inova8.com/calc2graph/id/Unit1;result1=25.600000619888306;\r\n" + 
+				"p=http://inova8.com/calc2graph/def/maximumMassFlow;s=http://inova8.com/calc2graph/id/Unit1;result1=http://inova8.com/calc2graph/id/BatteryLimit2;\r\n" + 
+				"" ,
+				result);
+	}
 
 }

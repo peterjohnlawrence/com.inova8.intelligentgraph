@@ -5,13 +5,11 @@ import java.math.BigInteger;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 
 public class Literal extends olgap.Value{
-	private final Logger logger = LogManager.getLogger(Literal.class);
+//	private final Logger logger = LogManager.getLogger(Literal.class);
 	public Literal(Value value) {
 		superValue = value;
 	}

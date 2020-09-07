@@ -154,13 +154,11 @@ import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
 import org.eclipse.rdf4j.common.iteration.Iteration;
-import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -285,8 +283,8 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		workingConn.begin();
 		ValueFactory factory = workingRep.getValueFactory();
 		IRI edgePredicateIRI = factory.createIRI("http://", "edge");
-		IRI startNodePredicateIRI = factory.createIRI("http://", "startNode");
-		IRI endNodePredicateIRI = factory.createIRI("http://", "endNode");
+//		IRI startNodePredicateIRI = factory.createIRI("http://", "startNode");
+//		IRI endNodePredicateIRI = factory.createIRI("http://", "endNode");
 		ArrayList<Resource> frontContexts = new ArrayList<Resource>();
 		ArrayList<Resource> backContexts = new ArrayList<Resource>();
 

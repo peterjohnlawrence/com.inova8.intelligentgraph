@@ -28,7 +28,7 @@ public class OlgapTest {
 			}
 			aResult.append("\r\n");
 		}
-		//System.out.println("\n");
+		contextResults.close();
 		return aResult.toString();
 	}
 }

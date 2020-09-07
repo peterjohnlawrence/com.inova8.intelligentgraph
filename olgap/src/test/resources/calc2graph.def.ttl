@@ -66,7 +66,14 @@ def:script
 .
 script:groovy
   rdf:type rdfs:Datatype ;
+  rdfs:comment "groovy;Groovy;" ;
   rdfs:label "groovy script" ;
+  rdfs:subClassOf def:script ;
+.
+script:javascript
+  rdf:type rdfs:Datatype ;
+  rdfs:comment "nashorn;Nashorn;js;JS;JavaScript;javascript;ECMAScript;ecmascript;" ;
+  rdfs:label "java script" ;
   rdfs:subClassOf def:script ;
 .
 def:scriptCode

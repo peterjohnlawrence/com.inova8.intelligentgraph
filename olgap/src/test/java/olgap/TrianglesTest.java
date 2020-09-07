@@ -25,7 +25,7 @@ public class TrianglesTest {
 			queryString += "PREFIX olgap: <http://inova8.com/olgap/> \n";
 			queryString += "SELECT   ?triangles \n";
 			queryString += "WHERE { \n";
-			queryString += "   BIND( olgap:triangles(\"http://localhost:8082/rdf4j-server/repositories/tfl?distinct=true\") as ?triangles)";
+			queryString += "   BIND( olgap:triangles(\"http://localhost:8080/rdf4j-server/repositories/olgap?distinct=true\") as ?triangles)";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);	
 			try (TupleQueryResult result = query.evaluate()) {

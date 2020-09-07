@@ -13,7 +13,8 @@ public class ClearCache extends Evaluator implements Function{
 	}
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
-		clearCache();
+		Evaluator.sources.get(valueFactory);
+		Source.clearCache();
 		return valueFactory.createLiteral(true);
 	}
 }

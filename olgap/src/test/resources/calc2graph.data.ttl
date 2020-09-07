@@ -22,15 +22,15 @@ id:BatteryLimit1
   rdf:type def:BatteryLimit ;
   def:density ".42"^^xsd:float ;
   def:massFlow "$$http://inova8.com/calc2graph/id/calculateMassFlow"^^<http://inova8.com/calc2graph/def/script/groovy> ;
-  def:volumeFlow "59;"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:volumeFlow "59;"^^<http://inova8.com/calc2graph/def/script/javascript> ;
   rdfs:label "BatteryLimit1" ;
 .
 id:BatteryLimit2
   rdf:type def:BatteryLimit ;
   def:density ".36"^^xsd:float ;
   def:massFlow "$$http://inova8.com/calc2graph/id/calculateMassFlow"^^<http://inova8.com/calc2graph/def/script/groovy> ;
-  def:massYield "$$http://inova8.com/calc2graph/id/calculateMassYield"^^<http://inova8.com/calc2graph/def/script/groovy> ;
-  def:volumeFlow "40;"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:massYield "$$http://inova8.com/calc2graph/id/calculateMassYield"^^<http://inova8.com/calc2graph/def/script/javascript> ;
+  def:volumeFlow "40;"^^<http://inova8.com/calc2graph/def/script/javascript> ;
   rdfs:label "BatteryLimit2" ;
 .
 id:BatteryLimit3
