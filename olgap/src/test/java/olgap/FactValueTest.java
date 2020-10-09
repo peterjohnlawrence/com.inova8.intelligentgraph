@@ -50,7 +50,7 @@ public class FactValueTest extends OlgapTest{
 		String queryString = "";
 		queryString += "PREFIX olgap: <http://inova8.com/olgap/> \n";
 		queryString += "  SELECT  ?result \n" + "WHERE {\n"
-				+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/BatteryLimit1> , <http://inova8.com/calc2graph/def/testProperty2>) as ?result ).\n"
+				+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/BatteryLimit1> , <http://inova8.com/calc2graph/def/density>,'aggregate','Instant','start','2010-08-01T00:00:00.000000000+00:00'^^xsd:dateTime) as ?result ).\n"
 				+ "}";
 		String result = runQuery(conn, queryString);
 		assertEquals("result=0.21622;\r\n",result);
