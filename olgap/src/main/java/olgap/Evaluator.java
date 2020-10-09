@@ -50,7 +50,7 @@ public class Evaluator {
 				
 				initialized=true;
 			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
+				logger.error( e.getMessage());
 			}
 		}
 	}

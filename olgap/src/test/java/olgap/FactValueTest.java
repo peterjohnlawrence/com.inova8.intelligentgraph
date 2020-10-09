@@ -35,7 +35,26 @@ public class FactValueTest extends OlgapTest{
 		conn.add(model.getStatements(null, null, null));
 	}
 
-
+	@Test
+	void test0_1() {
+		String queryString = "";
+		queryString += "PREFIX olgap: <http://inova8.com/olgap/> \n";
+		queryString += "  SELECT  ?result \n" + "WHERE {\n"
+				+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/BatteryLimit1> , <http://inova8.com/calc2graph/def/testProperty4>,'start','2010-08-01T00:00:00.000000000+00:00'^^xsd:dateTime, 'end','2010-08-02T00:00:00.000000000+00:00'^^xsd:dateTime, 'aggregate','average') as ?result ).\n"
+				+ "}";
+		String result = runQuery(conn, queryString);
+		assertEquals("result=0.25075123726851867;\r\n",result);
+	}
+	@Test
+	void test0_2() {
+		String queryString = "";
+		queryString += "PREFIX olgap: <http://inova8.com/olgap/> \n";
+		queryString += "  SELECT  ?result \n" + "WHERE {\n"
+				+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/BatteryLimit1> , <http://inova8.com/calc2graph/def/testProperty2>) as ?result ).\n"
+				+ "}";
+		String result = runQuery(conn, queryString);
+		assertEquals("result=0.21622;\r\n",result);
+	}
 	@Test
 	void test1_1() {
 		String queryString = "";
@@ -44,7 +63,7 @@ public class FactValueTest extends OlgapTest{
 				+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/Unit1> , <http://inova8.com/calc2graph/def/massFlowBalance>,'abc','def') as ?result ).\n"
 				+ "}";
 		String result = runQuery(conn, queryString);
-		assertEquals( "result=-0.8200013935565948;\r\n",result);
+		assertEquals( "result=0.949998676776886\r\n",result);
 	}
 	@Test
 	void test2_1() {
@@ -54,7 +73,7 @@ public class FactValueTest extends OlgapTest{
 				+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/BatteryLimit1> , <http://inova8.com/calc2graph/def/massFlow>,'abc','def') as ?result ).\n"
 				+ "}";
 		String result = runQuery(conn, queryString);
-		assertEquals( "result=24.77999922633171;\r\n" + 
+		assertEquals( "result=26.54999929666519;\r\n" + 
 				"",result);
 	}
 	@Test
@@ -94,7 +113,7 @@ public class FactValueTest extends OlgapTest{
 		String queryString = "PREFIX olgap: <http://inova8.com/olgap/> \n";
 		queryString +=	 "  SELECT  *\n" 
 		+ "WHERE {\n"
-		+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/Unit1> , <http://inova8.com/calc2graph/def/batteryLimits>,'abc','def') as ?result ).\n"
+		+ "	 BIND( olgap:factValue(<http://inova8.com/calc2graph/id/Unit1> , <http://inova8.com/calc2graph/def/batteryLimits>,'service',<http://localhost:8080/rdf4j-server/repositories/olgap>) as ?result ).\n"
 		+ "  SERVICE <http://localhost:8080/rdf4j-server/repositories/olgap>{ GRAPH ?result { ?s ?p ?o }}"
 		+ "}";
 		String result = runQuery(conn, queryString);

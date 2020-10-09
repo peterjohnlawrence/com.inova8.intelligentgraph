@@ -18,10 +18,36 @@ id:
   owl:imports <http://inova8.com/calc2graph/def> ;
   owl:versionInfo "Created with TopBraid Composer" ;
 .
+id:Attribute_1
+  rdf:type def:Attribute ;
+  <http://inova8.com/calc2graph/def/attribute.Property> def:density ;
+  <http://inova8.com/calc2graph/def/attribute.of.Item> id:BatteryLimit1 ;
+  <http://inova8.com/calc2graph/def/attribute.producedBy.Signal> id:Signal_1 ;
+  rdfs:label "Attribute 1" ;
+.
+id:Attribute_2
+  rdf:type def:Attribute ;
+  <http://inova8.com/calc2graph/def/attribute.Property> def:density ;
+  <http://inova8.com/calc2graph/def/attribute.of.Item> id:BatteryLimit2 ;
+  <http://inova8.com/calc2graph/def/attribute.producedBy.Signal> id:Signal_2 ;
+  rdfs:label "Attribute 2" ;
+.
+id:Attribute_3
+  rdf:type def:Attribute ;
+  <http://inova8.com/calc2graph/def/attribute.Property> def:density ;
+  <http://inova8.com/calc2graph/def/attribute.of.Item> id:BatteryLimit3 ;
+  <http://inova8.com/calc2graph/def/attribute.producedBy.Signal> id:Signal_3 ;
+  rdfs:label "Attribute 3" ;
+.
 id:BatteryLimit1
   rdf:type def:BatteryLimit ;
-  def:density ".42"^^xsd:float ;
+  def:density "$this.getSignal(\"SEEQ://host.docker.internal:34216/api/signals/4BE33085-0C32-41B4-A160-FA5A79B97581\",$customQueryOptions).doubleValue()"^^<http://inova8.com/calc2graph/def/script/groovy> ;
   def:massFlow "$$http://inova8.com/calc2graph/id/calculateMassFlow"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:testProperty1 "$this.getFact(\"http://inova8.com/calc2graph/def/testProperty2\",$customQueryOptions).doubleValue()"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:testProperty2 "$this.getFact(\"http://inova8.com/calc2graph/def/testProperty3\",$customQueryOptions).doubleValue()"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:testProperty3 "$this.getFact(\"http://inova8.com/calc2graph/def/testProperty2\",$customQueryOptions).doubleValue()"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:testProperty4 "$this.getSignal(\"SEEQ://host.docker.internal:34216/api/signals/4BE33085-0C32-41B4-A160-FA5A79B97581\",$customQueryOptions).doubleValue()"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  def:testProperty5 "$this.getSignal(\"http://inova8.com/calc2graph/id/Signal_1\",$customQueryOptions).doubleValue()"^^<http://inova8.com/calc2graph/def/script/groovy> ;
   def:volumeFlow "59;"^^<http://inova8.com/calc2graph/def/script/javascript> ;
   rdfs:label "BatteryLimit1" ;
 .
@@ -47,6 +73,258 @@ id:ScriptTest
   rdfs:label "Script test" ;
   rdfs:range rdfs:Literal ;
 .
+id:SignalValue_1
+  rdf:type def:SignalValue ;
+  def:value "0.22"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-01T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_10
+  rdf:type def:SignalValue ;
+  def:value "0.31"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-10T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_11
+  rdf:type def:SignalValue ;
+  def:value "0.32"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-11T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_12
+  rdf:type def:SignalValue ;
+  def:value "0.33"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-12T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_13
+  rdf:type def:SignalValue ;
+  def:value "0.34"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-13T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_14
+  rdf:type def:SignalValue ;
+  def:value "0.35"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-14T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_15
+  rdf:type def:SignalValue ;
+  def:value "0.36"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-15T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_16
+  rdf:type def:SignalValue ;
+  def:value "0.37"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-16T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_17
+  rdf:type def:SignalValue ;
+  def:value "0.38"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-17T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_18
+  rdf:type def:SignalValue ;
+  def:value "0.39"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-18T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_19
+  rdf:type def:SignalValue ;
+  def:value "0.4"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-19T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_2
+  rdf:type def:SignalValue ;
+  def:value "0.23"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-02T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_20
+  rdf:type def:SignalValue ;
+  def:value "0.41"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-20T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_21
+  rdf:type def:SignalValue ;
+  def:value "0.42"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-21T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_22
+  rdf:type def:SignalValue ;
+  def:value "0.43"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-22T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_23
+  rdf:type def:SignalValue ;
+  def:value "0.44"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-23T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_24
+  rdf:type def:SignalValue ;
+  def:value "0.45"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-24T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_25
+  rdf:type def:SignalValue ;
+  def:value "0.46"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-25T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_26
+  rdf:type def:SignalValue ;
+  def:value "0.47"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-26T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_27
+  rdf:type def:SignalValue ;
+  def:value "0.48"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-27T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_28
+  rdf:type def:SignalValue ;
+  def:value "0.49"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-28T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_29
+  rdf:type def:SignalValue ;
+  def:value "0.5"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-29T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_3
+  rdf:type def:SignalValue ;
+  def:value "0.24"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-03T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_30
+  rdf:type def:SignalValue ;
+  def:value "0.51"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-30T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_4
+  rdf:type def:SignalValue ;
+  def:value "0.25"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-04T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_5
+  rdf:type def:SignalValue ;
+  def:value "0.26"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-05T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_6
+  rdf:type def:SignalValue ;
+  def:value "0.27"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-06T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_7
+  rdf:type def:SignalValue ;
+  def:value "0.28"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-07T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_8
+  rdf:type def:SignalValue ;
+  def:value "0.29"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-08T12:00:00.000"^^xsd:dateTime ;
+.
+id:SignalValue_9
+  rdf:type def:SignalValue ;
+  def:value "0.3"^^xsd:double ;
+  <http://inova8.com/calc2graph/def/value.Timestamp> "2020-09-09T12:00:00.000"^^xsd:dateTime ;
+.
+id:Signal_1
+  rdf:type def:Signal ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_1 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_10 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_11 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_12 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_13 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_14 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_15 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_16 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_17 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_18 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_19 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_2 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_20 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_21 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_22 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_23 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_24 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_25 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_26 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_27 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_28 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_29 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_3 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_30 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_4 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_5 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_6 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_7 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_8 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_9 ;
+  rdfs:label "Signal 1" ;
+.
+id:Signal_2
+  rdf:type def:Signal ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_1 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_10 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_11 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_12 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_13 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_14 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_15 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_16 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_17 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_18 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_19 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_2 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_20 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_21 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_22 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_23 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_24 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_25 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_26 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_27 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_28 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_29 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_3 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_30 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_4 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_5 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_6 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_7 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_8 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_9 ;
+  rdfs:label "Signal 2" ;
+.
+id:Signal_3
+  rdf:type def:Signal ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_1 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_10 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_11 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_12 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_13 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_14 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_15 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_16 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_17 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_18 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_19 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_2 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_20 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_21 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_22 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_23 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_24 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_25 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_26 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_27 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_28 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_29 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_3 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_30 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_4 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_5 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_6 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_7 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_8 ;
+  <http://inova8.com/calc2graph/def/signal.SignalValue> id:SignalValue_9 ;
+  rdfs:label "Signal 3" ;
+.
 id:Unit1
   rdf:type def:Unit ;
   def:batteryLimits """var modelBuilder = $builder;
@@ -63,21 +341,21 @@ return modelBuilder.build();"""^^<http://inova8.com/calc2graph/def/script/groovy
   def:hasProductBatteryLimit id:BatteryLimit3 ;
   def:massFlowBalance """var massFlowBalance=0.0; 
 for(batterylimit in $this.getFacts(\"http://inova8.com/calc2graph/def/hasFeedBatteryLimit\")){
-	massFlowBalance += batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$args).doubleValue()
+	massFlowBalance += batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$customQueryOptions).doubleValue()
 }; 
 for(batterylimit in $this.getFacts(\"http://inova8.com/calc2graph/def/hasProductBatteryLimit\")){
-	massFlowBalance -= batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$args).doubleValue()
+	massFlowBalance -= batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$customQueryOptions).doubleValue()
 }; 
 massFlowBalance;"""^^<http://inova8.com/calc2graph/def/script/groovy> ;
   def:massThroughput """var massThroughput=0.0; 
 for(batterylimit in $this.getFacts(\"http://inova8.com/calc2graph/def/hasProductBatteryLimit\")){
-	massThroughput += batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$args).doubleValue()
+	massThroughput += batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$customQueryOptions).doubleValue()
 }; 
 massThroughput;"""^^<http://inova8.com/calc2graph/def/script/groovy> ;
   def:maximumMassFlow """var maximumMassFlow=0.0; 
 var maximumMassFlowBatteryLimit;
 for(batterylimit in $this.getFacts(\"http://inova8.com/calc2graph/def/hasProductBatteryLimit\")){
-	massFlow = batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$args).doubleValue();
+	massFlow = batterylimit.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$customQueryOptions).doubleValue();
 	if(massFlow > maximumMassFlow){
 		maximumMassFlow = massFlow;
 		maximumMassFlowBatteryLimit= batterylimit;
@@ -87,7 +365,7 @@ return maximumMassFlowBatteryLimit;"""^^<http://inova8.com/calc2graph/def/script
 .
 id:calculateMassFlow
   rdf:type def:Script ;
-  def:scriptCode """var result= $this.getFact(\"http://inova8.com/calc2graph/def/volumeFlow\",$args).floatValue()* $this.getFact(\"http://inova8.com/calc2graph/def/density\",$args).floatValue();  
+  def:scriptCode """var result= $this.getFact(\"http://inova8.com/calc2graph/def/volumeFlow\",$customQueryOptions).floatValue()* $this.getFact(\"http://inova8.com/calc2graph/def/density\",$customQueryOptions).floatValue();  
 result;"""^^<http://inova8.com/calc2graph/def/script/groovy> ;
   rdfs:label "calculate mass flow" ;
   rdfs:range xsd:float ;
@@ -96,9 +374,15 @@ id:calculateMassYield
   rdf:type def:Script ;
   def:scriptCode """var result;
 for(unit in $this.getIsFactsOf(\"http://inova8.com/calc2graph/def/hasProductBatteryLimit\")){
-	massThroughput = unit.getFact(\"http://inova8.com/calc2graph/def/massThroughput\",$args).doubleValue();
-	result= $this.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$args).floatValue()/massThroughput; 
+	massThroughput = unit.getFact(\"http://inova8.com/calc2graph/def/massThroughput\",$customQueryOptions).doubleValue();
+	result= $this.getFact(\"http://inova8.com/calc2graph/def/massFlow\",$customQueryOptions).floatValue()/massThroughput; 
 }; 
 result;"""^^<http://inova8.com/calc2graph/def/script/groovy> ;
   rdfs:label "calculate mass yield" ;
+.
+id:id_BatteryLimit1-massFlow-
+  rdf:type rdf:Statement ;
+  rdf:object "$$http://inova8.com/calc2graph/id/calculateMassFlow"^^<http://inova8.com/calc2graph/def/script/groovy> ;
+  rdf:predicate def:massFlow ;
+  rdf:subject id:BatteryLimit1 ;
 .

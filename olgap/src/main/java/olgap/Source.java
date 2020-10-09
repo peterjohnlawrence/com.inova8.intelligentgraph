@@ -2,6 +2,7 @@ package olgap;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Stack;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -30,11 +31,22 @@ public class Source {
 	static private TripleSource tripleSource; //Not unique per call using the same underlying triplestore
 	static private ModelBuilder modelBuilder;
 	static private HashMap<String, Thing> things = new HashMap<String, Thing>();
+	static private HashMap<String, HashMap<String, olgap.Value>> facts = new HashMap<String, HashMap<String, olgap.Value>>();
 	static private HashMap<String, CompiledScript> compiledScripts = new HashMap<String, CompiledScript>();
+	static private HashMap<String, SEEQSource> seeqSources = new HashMap<String, SEEQSource>();
+	static private IRI attributeOfItem;
+	static private IRI attributeProperty;
+	static private IRI attributeProducedBySignal;
 
 	public Source(TripleSource tripleSource) {
 		Source.tripleSource = tripleSource;
 		Source.modelBuilder = new ModelBuilder();
+		attributeOfItem = Source.getTripleSource().getValueFactory()
+				.createIRI("http://inova8.com/calc2graph/def/attribute.of.Item");
+		attributeProperty = Source.getTripleSource().getValueFactory()
+				.createIRI("http://inova8.com/calc2graph/def/attribute.Property");
+		attributeProducedBySignal = Source.getTripleSource().getValueFactory()
+				.createIRI("http://inova8.com/calc2graph/def/attribute.producedBy.Signal");
 	}
 
 	public static Repository getCacheRep() {
@@ -64,23 +76,33 @@ public class Source {
 	public static ModelBuilder getModelBuilder() {
 		return modelBuilder;
 	}
-	public Thing thingFactory(Resource subject) {
-		return thingFactory(null, subject);
-	}
-	public Thing thingFactory(Tracer tracer, Resource subject) {
-		if (things.containsKey(subject.toString())) {
-			Thing thing = things.get(subject.toString());
-			thing.setTracer(tracer);
-			return thing;
-		} else {
-			olgap.Thing newThing = new Thing(this, subject);
-			newThing.setTracer(tracer);
-			things.put(subject.toString(), newThing);
-			return newThing;
-		}
+
+	public Thing thingFactory(Resource subject, Stack<String> stack) {
+		return thingFactory(null, subject, stack);
 	}
 
-	public olgap.Value valueFactory(Tracer tracer, Value value) {
+	public Thing thingFactory(Tracer tracer, Resource subject, Stack<String> stack) {
+		HashMap<String, olgap.Value> values;
+		if (facts.containsKey(subject.toString())) {
+			values = facts.get(subject.toString());
+			//	thing.setTracer(tracer);
+			//	return thing;
+		} else {
+			values = new HashMap<String, olgap.Value>();
+			facts.put(subject.toString(), values);
+		}
+		olgap.Thing newThing = new Thing(this, subject);
+		newThing.setTracer(tracer);
+		newThing.setStack(stack);
+		newThing.setValues(values);
+		return newThing;
+
+	}
+	public olgap.Value valueFactory(Tracer tracer, String value, Stack<String> stack) {
+		return this.valueFactory(tracer, Source.getTripleSource().getValueFactory().createLiteral(value),stack);
+	}
+
+	public olgap.Value valueFactory(Tracer tracer, Value value, Stack<String> stack) {
 		switch (value.getClass().getSimpleName()) {
 		case "SimpleLiteral":
 		case "BooleanLiteral":
@@ -99,21 +121,29 @@ public class Source {
 			return new olgap.Literal(value);
 		default:
 			//logger.error(new ParameterizedMessage("No handler found for objectvalue class {}",value.getClass().getSimpleName()));
-			return thingFactory(tracer, (IRI) value);
+			return thingFactory(tracer, (IRI) value, stack);
 		}
 	}
-	public HashMap<String, olgap.Value> getCustomQueryOptions(Value[] customQueryOptionsArray){
+
+	public HashMap<String, olgap.Value> getCustomQueryOptions(Value[] customQueryOptionsArray) {
 		if (customQueryOptionsArray.length == 0) {
 			return null;
 		} else {
-			HashMap<String, olgap.Value> customQueryOptions = new HashMap<String,olgap.Value>();
-			for ( int customQueryOptionsArrayIndex = 0;customQueryOptionsArrayIndex<customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2 ) {	
-				
-				customQueryOptions.put(customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue(), valueFactory(null, customQueryOptionsArray[customQueryOptionsArrayIndex+1]));
+			HashMap<String, olgap.Value> customQueryOptions = new HashMap<String, olgap.Value>();
+			for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2) {
+				String customQueryOptionParameter = customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue();
+				customQueryOptions.put(customQueryOptionParameter,
+						valueFactory(null, customQueryOptionsArray[customQueryOptionsArrayIndex + 1], null));//TODO
+				if (customQueryOptionParameter.equals("service")) {
+					String service = customQueryOptions.get("service").getValue().toString();
+					service = service.substring(0, service.indexOf('?'));
+					setCacheService(service);
+				}
 			}
 			return customQueryOptions;
-		}		
+		}
 	}
+
 	public CompiledScript compiledScriptFactory(SimpleLiteral scriptString) throws ScriptException {
 		String scriptCode = scriptString.getLabel();
 		if (compiledScripts.containsKey(scriptCode)) {
@@ -121,56 +151,95 @@ public class Source {
 		} else {
 			try {
 				ScriptEngine scriptEngine = Evaluator.scriptEngines.get(scriptString.getDatatype().getLocalName());
-				if(scriptEngine!=null ) {
+				if (scriptEngine != null) {
 					CompiledScript compiledScriptCode;
 					compiledScriptCode = ((Compilable) scriptEngine).compile(scriptCode);
 					compiledScripts.put(scriptCode.toString(), compiledScriptCode);
 					return compiledScriptCode;
-				}else {
-					throw new  ScriptException("Unrecognized script language:" + scriptString.getDatatype().getLocalName());
+				} else {
+					throw new ScriptException(
+							"Unrecognized script language:" + scriptString.getDatatype().getLocalName());
 				}
 			} catch (ScriptException e) {
 				//logger.error(String.format("Failed to compile '%s' language  script of  with contents:\n %s",scriptString.getDatatype().getLocalName(), scriptString.toString()));
-				logger.error(new ParameterizedMessage("Failed to compile '{}' language  script of  with contents:\n {}",scriptString.getDatatype().getLocalName(), scriptString.toString()));
+				logger.error(new ParameterizedMessage("Failed to compile '{}' language  script of  with contents:\n {}",
+						scriptString.getDatatype().getLocalName(), scriptString.toString()));
 				throw e;
 			}
 		}
 	}
-
+	public SEEQSource seeqSourceFactory(String seeqServer) throws ScriptException {
+		if (seeqSources.containsKey(seeqServer)) {
+			return seeqSources.get(seeqServer);
+		} else {
+			try {
+				SEEQSource seeqSource = new SEEQSource("http://" + seeqServer + "/api","peter.lawrence@inova8.com","lusterthief");
+				seeqSources.put(seeqServer, seeqSource);
+		        return seeqSource;
+			} catch (Exception e) {
+				//logger.error(String.format("Failed to compile '%s' language  script of  with contents:\n %s",scriptString.getDatatype().getLocalName(), scriptString.toString()));
+				logger.error(new ParameterizedMessage("Failed to connect to SEEQSource '{}'",
+						seeqServer));
+				throw e;
+			}
+		}
+	}
 	public static void clearCache() {
 		things.clear();
 	}
 
-	public void writeModelToCache(Object result, IRI cacheContext) {
-		if(connected()) {
+	public void writeModelToCache(Thing thing, Object result, IRI cacheContext) {
+		if (connected()) {
 			try {
 				cacheConnection.clear(cacheContext);
 				Source.getTripleSource().getValueFactory().createIRI("http://inova8.com/olgap/cacheDateTime");
-				((Model) result).add(cacheContext, Source.getTripleSource().getValueFactory().createIRI("http://inova8.com/olgap/cacheDateTime"), Source.getTripleSource().getValueFactory().createLiteral(new Date()), cacheContext);
-				cacheConnection.add((Model) result,cacheContext);
-			}catch(Exception e) {
-				//logger.error(String.format("Failed to write results to cache %s with context \n %s with exception %s", "Failed to write results to cache  {} with context \n {} with exception {}"));
-				logger.error(new ParameterizedMessage("Failed to write results to cache  {} with context \n {} with exception {}",	result.toString(), cacheContext),e);
+				((Model) result).add(cacheContext,
+						Source.getTripleSource().getValueFactory().createIRI("http://inova8.com/olgap/cacheDateTime"),
+						Source.getTripleSource().getValueFactory().createLiteral(new Date()), cacheContext);
+				cacheConnection.add((Model) result, cacheContext);
+				thing.addTrace(new ParameterizedMessage("Results cached to service {} in graph {}",
+						addService(Source.getCacheService()), addService(cacheContext.stringValue())));
+			} catch (Exception e) {
+				logger.error(new ParameterizedMessage(
+						"Failed to write results to cache  {} with context \n {} with exception {}", result.toString(),
+						cacheContext), e);
+				thing.addTrace(new ParameterizedMessage("Results NOT cached to service:{}",
+						addService(Source.getCacheService())));
+			}
+		} else {
+			thing.addTrace(new ParameterizedMessage("No service to cached results"));
+		}
+	}
+
+	private String addService(String service) {
+		return "<a href='" + service + "' target='_blank'>" + service + "</a>";
+	}
+
+	private boolean connected() {
+		if (cacheConnection != null && cacheConnection.isActive()) {
+			return true;
+		} else {
+			try {
+				Repository rep = new HTTPRepository(cacheService);
+				rep.init();
+				cacheConnection = rep.getConnection();
+				return true;
+			} catch (Exception e) {
+				logger.error("Failed to create connection to cache:" + cacheService);
+				return false;
 			}
 		}
 	}
 
-	private boolean connected() {
-		if(cacheConnection!=null && cacheConnection.isActive()) {
-			return true;
-		}else {
-			try {
-				String rdf4jServer = "http://localhost:8080/rdf4j-server/repositories/";
-				String repositoryID = "olgap";
-				Repository rep = new HTTPRepository(rdf4jServer+repositoryID);
-				//cacheService ="SERVICE <" + rdf4jServer + "repositories/" + repositoryID + "?distinct=true&infer=false>";
-				rep.init();
-				cacheConnection = rep.getConnection();
-				return true;
-			}catch(Exception e) {
-				logger.error("Failed to create connection to cache Repository");
-				return false;
-			}
-		}
+	public static IRI getAttributeOfItem() {
+		return attributeOfItem;
+	}
+
+	public static IRI getAttributeProperty() {
+		return attributeProperty;
+	}
+
+	public static IRI getAttributeProducedBySignal() {
+		return attributeProducedBySignal;
 	}
 }

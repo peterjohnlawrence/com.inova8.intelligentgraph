@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import java.security.NoSuchAlgorithmException;
@@ -15,23 +18,48 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.apache.logging.log4j.LogManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FactProvenance.
+ */
+public class FactProvenance extends Evaluator implements Function {
+	
+	/** The logger. */
+	private final Logger logger = LogManager.getLogger(FactProvenance.class);
 
-public class FactValue extends Evaluator implements Function {
-	private final Logger logger = LogManager.getLogger(FactValue.class);
-	public FactValue() throws NoSuchAlgorithmException {
+	/**
+	 * Instantiates a new fact provenance.
+	 *
+	 * @throws NoSuchAlgorithmException the no such algorithm exception
+	 */
+	public FactProvenance() throws NoSuchAlgorithmException {
 		super();
-		logger.info(new ParameterizedMessage("Initiating FactValue"));
+		logger.info(new ParameterizedMessage("Initiating FactProvenance"));
 	}
-
+	
+	/**
+	 * Gets the uri.
+	 *
+	 * @return the uri
+	 */
 	@Override
 	public String getURI() {
-		return  NAMESPACE + "factValue";
+		return  NAMESPACE + "factProvenance";
 	}
 
+	/**
+	 * Evaluate.
+	 * 
+	 * Returns the calculation trace (if calculated) of the value of the predicate of the subject
+	 *
+	 * @param tripleSource the triple source
+	 * @param args the args, args[0] subject, args[1] predicate 
+	 * @return the value
+	 * @throws ValueExprEvaluationException the value expr evaluation exception
+	 */
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
-	
-		logger.debug(new ParameterizedMessage("Evaluate for {} with args <{}>", tripleSource.getValueFactory(),args));
+		logger.debug(new ParameterizedMessage("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),args));
 		if(args.length <2) {
 			ParameterizedMessage message = new ParameterizedMessage("At least subject, and predicate arguments required");
 			logger.error(message);
@@ -54,16 +82,13 @@ public class FactValue extends Evaluator implements Function {
 				}
 				Source source = sources.get(tripleSource.getValueFactory());
 				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
-				
-				Thing subjectThing = source.thingFactory(subject,new Stack<String>());
-				olgap.Value fact = subjectThing.getFact( predicate, customQueryOptions);
-				if( fact != null) {
-					Value result = fact.getValue();
-					logger.debug(new ParameterizedMessage("FactValue = {}",result));
-					return  result;
-				}else {
-					return tripleSource.getValueFactory().createLiteral("");
-				}			
+				Tracer tracer = new Tracer();
+				tracer.setTracing(true);
+				Thing subjectThing = source.thingFactory(tracer, subject, new Stack<String>());
+				//olgap.Value fact = 
+				subjectThing.getFact( predicate, customQueryOptions);
+				logger.debug("Trace\r\n"+tracer.getTrace());
+				return tripleSource.getValueFactory().createLiteral(tracer.getTrace());		
 
 			}catch(Exception e) {
 				return args[2];
@@ -71,6 +96,14 @@ public class FactValue extends Evaluator implements Function {
 		}
 	}
 
+	/**
+	 * Evaluate.
+	 *
+	 * @param valueFactory the value factory
+	 * @param args the args
+	 * @return the value
+	 * @throws ValueExprEvaluationException the value expr evaluation exception
+	 */
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
 		return null;

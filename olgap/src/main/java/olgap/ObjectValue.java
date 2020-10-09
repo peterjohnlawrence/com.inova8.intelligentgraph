@@ -3,6 +3,7 @@ package olgap;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
@@ -62,7 +63,7 @@ public class ObjectValue extends Evaluator implements Function {
 						source = sources.get(tripleSource.getValueFactory());
 					}
 					HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 3, args.length));
-					Thing subjectThing = source.thingFactory( subject);
+					Thing subjectThing = source.thingFactory( subject, new Stack<String>());
 					olgap.Value fact = subjectThing.getFact( predicate,literalValue, customQueryOptions);
 					if( fact != null) {
 						Value result = fact.getValue();

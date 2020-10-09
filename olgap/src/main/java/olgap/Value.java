@@ -2,11 +2,15 @@ package olgap;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
 import org.eclipse.rdf4j.model.IRI;
+
+import java.util.Stack;
+
 import org.apache.logging.log4j.LogManager;
 public  class Value {
 	protected org.eclipse.rdf4j.model.Value superValue;
 	protected final Logger logger = LogManager.getLogger(Value.class);
 	private Tracer tracer;
+	private Stack<String> stack;
 	public Tracer getTracer() {
 		return tracer;
 	}
@@ -50,12 +54,19 @@ public  class Value {
 		if (tracer!=null)
 			tracer.addScript(script);
 	}
+	protected String  addIRIHRef(IRI iri) {
+		return "<a href='" + iri.stringValue() +"' target='_blank'>" + iri.getLocalName() + "</a>";
+	}
 	protected String  addIRI(IRI iri) {
 		if (tracer!=null)
-			return "<a href='" + iri.stringValue() +"' target='_blank'>" + iri.getLocalName() + "</a>";
+			return addIRIHRef(iri);
 		else
 			return "";
 	}	
+	protected String  addIRIHRef(org.eclipse.rdf4j.model.Value value) {
+		IRI iri = (IRI)value;
+		return addIRIHRef(iri);
+	}
 	protected String  addIRI(org.eclipse.rdf4j.model.Value value) {
 		IRI iri = (IRI)value;
 		return addIRI(iri);
@@ -77,6 +88,12 @@ public  class Value {
 			return tracer.indentScriptForTrace(script);
 		else
 			return null;
+	}
+	public Stack<String> getStack() {
+		return stack;
+	}
+	public void setStack(Stack<String> stack) {
+		this.stack = stack;
 	}
 
 }
