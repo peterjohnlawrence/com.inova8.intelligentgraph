@@ -64,7 +64,7 @@ public class Tracer {
 	}
 	public void addScript(String script) {
 		if(tracing) {
-			this.trace.append("<li>").append("<div  style='border: 1px solid black;'> <code >"+ toHTML(script) + "</code></div>").append("</li>").append("\r\n");
+			this.trace.append("<li>").append("<div  style='border: 1px solid black;'> <pre><code >"+ toHTML(script) + "</code></pre></div>").append("</li>").append("\r\n");
 		}
 	}
 	public static String toHTML(String s) {

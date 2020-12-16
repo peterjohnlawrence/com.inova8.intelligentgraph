@@ -77,16 +77,16 @@ public class FactProvenance extends Evaluator implements Function {
 				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}
 			try{
-				if(!sources.containsKey(tripleSource.getValueFactory()) ){
-					sources.put(tripleSource.getValueFactory(),  new Source(tripleSource));
+				if(!sources.containsKey(tripleSource.hashCode()) ){
+					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
 				}
-				Source source = sources.get(tripleSource.getValueFactory());
+				Source source = sources.get(tripleSource.hashCode());
 				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
 				Tracer tracer = new Tracer();
 				tracer.setTracing(true);
-				Thing subjectThing = source.thingFactory(tracer, subject, new Stack<String>());
+				Thing subjectThing = source.thingFactory(tracer, subject, new Stack<String>(),customQueryOptions);
 				//olgap.Value fact = 
-				subjectThing.getFact( predicate, customQueryOptions);
+				subjectThing.getFact( predicate);
 				logger.debug("Trace\r\n"+tracer.getTrace());
 				return tripleSource.getValueFactory().createLiteral(tracer.getTrace());		
 

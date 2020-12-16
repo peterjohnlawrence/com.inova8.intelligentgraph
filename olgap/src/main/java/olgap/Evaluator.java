@@ -11,13 +11,13 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.eclipse.rdf4j.model.ValueFactory;
 
 //import groovy.lang.GroovyShell;
 
 public class Evaluator {
 	static private final  Logger logger = LogManager.getLogger(Evaluator.class);
-	static protected   HashMap<ValueFactory, Source > sources = new HashMap<ValueFactory, Source>();
+	//static protected   HashMap<ValueFactory, Source > sources = new HashMap<ValueFactory, Source>();
+	static protected   HashMap<Integer, Source > sources = new HashMap<Integer, Source>();
 	static protected ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 	static protected HashMap<String, ScriptEngine> scriptEngines = new HashMap<String, ScriptEngine>();
 	
@@ -26,7 +26,16 @@ public class Evaluator {
 	static protected  boolean initialized = false;
 
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
-
+	public static final String SCRIPT_DATA_GRAPH = "http://inova8.com/script/data/";
+	public static final String OWL_INVERSE_OF = "http://www.w3.org/2002/07/owl#inverseOf";
+	public static final String RDFS_DOMAIN = "http://www.w3.org/2000/01/rdf-schema#domain";
+	public static final String RDFS_SUB_PROPERTY_OF = "http://www.w3.org/2000/01/rdf-schema#subPropertyOf";
+	public static final String RDF_OBJECT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#object";
+	public static final String RDF_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate";
+	public static final String RDF_SUBJECT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject";
+	public static final String RDF_STATEMENT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement";
+	public static final String CACHE_DATE_TIME = "cacheDateTime";
+	
 	public Evaluator() {
 		super();
 		if(!initialized) {

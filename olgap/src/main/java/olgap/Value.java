@@ -7,10 +7,15 @@ import java.util.Stack;
 
 import org.apache.logging.log4j.LogManager;
 public  class Value {
+
 	protected org.eclipse.rdf4j.model.Value superValue;
 	protected final Logger logger = LogManager.getLogger(Value.class);
 	private Tracer tracer;
 	private Stack<String> stack;
+	@Override
+	public String toString() {
+		return superValue.toString() ;
+	}
 	public Tracer getTracer() {
 		return tracer;
 	}

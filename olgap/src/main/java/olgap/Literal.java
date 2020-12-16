@@ -8,60 +8,93 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 
-public class Literal extends olgap.Value{
-//	private final Logger logger = LogManager.getLogger(Literal.class);
+public class Literal extends olgap.Value {
+	//	private final Logger logger = LogManager.getLogger(Literal.class);
 	public Literal(Value value) {
 		superValue = value;
 	}
+
 	public Value getValue() {
 		return superValue;
-		
 	}
 	public String getLabel() {
-		return superValue.stringValue();
+		if(superValue!=null)
+			return superValue.stringValue();
+		else
+			return null;
 	}
 
 	public String stringValue() {
 		return getLabel();
 	}
 
-	public boolean booleanValue() {
-		return XMLDatatypeUtil.parseBoolean(getLabel());
+	public Boolean booleanValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseBoolean(getLabel());
+		else
+			return (Boolean) null;
 	}
 
-	public byte byteValue() {
-		return XMLDatatypeUtil.parseByte(getLabel());
+	public Byte byteValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseByte(getLabel());
+		else
+			return (Byte) null;
 	}
 
-	public short shortValue() {
-		return XMLDatatypeUtil.parseShort(getLabel());
+	public Short shortValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseShort(getLabel());
+		else
+			return (Short) null;
 	}
 
-	public int intValue() {
-		return XMLDatatypeUtil.parseInt(getLabel());
+	public Integer intValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseInt(getLabel());
+		else
+			return (Integer) null;
 	}
 
-	public long longValue() {
-		return XMLDatatypeUtil.parseLong(getLabel());
+	public Long longValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseLong(getLabel());
+		else
+			return (Long) null;
 	}
 
-	public float floatValue() {
-		return XMLDatatypeUtil.parseFloat(getLabel());
+	public Float floatValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseFloat(getLabel());
+		else
+			return (Float)null;
 	}
 
-	public double doubleValue() {
-		return XMLDatatypeUtil.parseDouble(getLabel());
+	public Double doubleValue() {
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseDouble(getLabel());
+		else
+			return (Double) null;
 	}
 
 	public BigInteger integerValue() {
-		return XMLDatatypeUtil.parseInteger(getLabel());
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseInteger(getLabel());
+		else
+			return (BigInteger) null;
 	}
 
 	public BigDecimal decimalValue() {
-		return XMLDatatypeUtil.parseDecimal(getLabel());
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseDecimal(getLabel());
+		else
+			return (BigDecimal) null;
 	}
 
 	public XMLGregorianCalendar calendarValue() {
-		return XMLDatatypeUtil.parseCalendar(getLabel());
+		if (getLabel() != null)
+			return XMLDatatypeUtil.parseCalendar(getLabel());
+		else
+			return (XMLGregorianCalendar) null;
 	}
 }

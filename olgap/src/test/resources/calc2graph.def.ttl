@@ -2,10 +2,11 @@
 
 @prefix : <http://inova8.com/calc2graph/def/> .
 @prefix def: <http://inova8.com/calc2graph/def/> .
+@prefix inova8.olgap: <http://inova8.com/olgap/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix script: <http://inova8.com/calc2graph/def/script/> .
+@prefix script: <http://inova8.com/script/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://inova8.com/calc2graph/def>
@@ -21,10 +22,6 @@ def:Attribute
 def:BatteryLimit
   rdf:type owl:Class ;
   rdfs:label "Battery limit" ;
-.
-def:Script
-  rdf:type owl:Class ;
-  rdfs:label "Script" ;
 .
 def:Signal
   rdf:type owl:Class ;
@@ -59,6 +56,12 @@ def:Unit
   rdfs:domain def:Attribute ;
   rdfs:label "attribute.produced by.Signal" ;
   rdfs:range def:Signal ;
+.
+<http://inova8.com/calc2graph/def/attribute.value>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Attribute ;
+  rdfs:label "attribute.value" ;
+  rdfs:range rdfs:Literal ;
   rdfs:subPropertyOf rdf:object ;
 .
 def:batteryLimits
@@ -86,6 +89,7 @@ def:massFlow
   rdf:type rdf:Property ;
   rdfs:domain def:BatteryLimit ;
   rdfs:label "mass flow" ;
+  rdfs:range xsd:float ;
 .
 def:massFlowBalance
   rdf:type owl:DatatypeProperty ;
@@ -110,29 +114,6 @@ def:maximumMassFlow
   rdfs:domain def:Unit ;
   rdfs:label "maximum mass flow" ;
 .
-def:script
-  rdf:type rdfs:Datatype ;
-  rdfs:label "script" ;
-  rdfs:subClassOf rdfs:Literal ;
-.
-script:groovy
-  rdf:type rdfs:Datatype ;
-  rdfs:comment "groovy;Groovy;" ;
-  rdfs:label "groovy script" ;
-  rdfs:subClassOf def:script ;
-.
-script:javascript
-  rdf:type rdfs:Datatype ;
-  rdfs:comment "nashorn;Nashorn;js;JS;JavaScript;javascript;ECMAScript;ecmascript;" ;
-  rdfs:label "java script" ;
-  rdfs:subClassOf def:script ;
-.
-def:scriptCode
-  rdf:type rdf:Property ;
-  rdfs:domain def:Script ;
-  rdfs:label "script code" ;
-  rdfs:range def:script ;
-.
 <http://inova8.com/calc2graph/def/signal.SignalValue>
   rdf:type owl:ObjectProperty ;
   rdfs:domain def:Signal ;
@@ -143,19 +124,19 @@ def:testProperty1
   rdf:type owl:DatatypeProperty ;
   rdfs:domain def:BatteryLimit ;
   rdfs:label "testProperty1" ;
-  rdfs:range xsd:float ;
+  rdfs:range rdfs:Literal ;
 .
 def:testProperty2
   rdf:type owl:DatatypeProperty ;
   rdfs:domain def:BatteryLimit ;
   rdfs:label "testProperty2" ;
-  rdfs:range xsd:float ;
+  rdfs:range rdfs:Literal ;
 .
 def:testProperty3
   rdf:type owl:DatatypeProperty ;
   rdfs:domain def:BatteryLimit ;
   rdfs:label "testProperty3" ;
-  rdfs:range xsd:float ;
+  rdfs:range rdfs:Literal ;
 .
 def:testProperty4
   rdf:type owl:DatatypeProperty ;
@@ -184,4 +165,36 @@ def:volumeFlow
   rdfs:domain def:BatteryLimit ;
   rdfs:label "volume flow" ;
   rdfs:range xsd:float ;
+.
+<http://inova8.com/calc2graph/id/calculateMassFlow>
+  rdf:type script:Script ;
+.
+<http://inova8.com/calc2graph/id/calculateMassYield>
+  rdf:type script:Script ;
+.
+inova8.olgap:scriptCode
+  rdf:type rdf:Property ;
+  rdfs:label "script code" ;
+  rdfs:range script:script ;
+.
+script:Script
+  rdf:type owl:Class ;
+  rdfs:subClassOf owl:Thing ;
+.
+script:groovy
+  rdf:type rdfs:Datatype ;
+  rdfs:comment "groovy;Groovy;" ;
+  rdfs:label "groovy script" ;
+  rdfs:subClassOf script:script ;
+.
+script:javascript
+  rdf:type rdfs:Datatype ;
+  rdfs:comment "nashorn;Nashorn;js;JS;JavaScript;javascript;ECMAScript;ecmascript;" ;
+  rdfs:label "java script" ;
+  rdfs:subClassOf script:script ;
+.
+script:script
+  rdf:type rdfs:Datatype ;
+  rdfs:label "script" ;
+  rdfs:subClassOf rdfs:Literal ;
 .

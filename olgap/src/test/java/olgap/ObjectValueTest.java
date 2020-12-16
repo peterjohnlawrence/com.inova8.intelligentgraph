@@ -44,9 +44,9 @@ public class ObjectValueTest extends OlgapTest{
 	@Test
 	void test0() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";
-		queryString8 +=	 "  SELECT  ?Script_o \n" 
-		+ "WHERE {  VALUES(?Script_p ?Script_s){(<http://inova8.com/calc2graph/def/scriptCode> <http://inova8.com/calc2graph/id/calculateMassYield>)}.    \n"
-		+ "		?Script_s ?Script_p ?Script_or .   BIND(<http://inova8.com/olgap/objectValue>(?Script_s , ?Script_p, ?Script_or,'service',<http://localhost:8080/rdf4j-server/repositories/olgap?distinct=true>) as ?Script_o ) \n"
+		queryString8 +=	 "  SELECT *\n" 
+		+ "WHERE {  VALUES(?Script_p ?Script_s){(<http://inova8.com/olgap/scriptCode> <http://inova8.com/calc2graph/id/calculateMassYield>)}.    \n"
+		+ "		?Script_s ?Script_p ?Script_or .   BIND(olgap:objectValue(?Script_s , ?Script_p, ?Script_or) as ?Script_o ) \n"
 		+ "}";
 		String result = runQuery(conn, queryString8);
 		assertEquals("p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type;s=http://inova8.com/calc2graph/id/BatteryLimit1;o=http://inova8.com/calc2graph/def/BatteryLimit;result1=http://inova8.com/calc2graph/def/BatteryLimit;\r\n" + 
@@ -56,7 +56,7 @@ public class ObjectValueTest extends OlgapTest{
 	void test1() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";
 		queryString8 +=	 "  SELECT  * \n" 
-		+ "WHERE {  VALUES(?s){(<http://inova8.com/calc2graph/id/BatteryLimit1>)}.    \n"
+		+ "WHERE {  VALUES(?s){(<http://inova8.com/calc2graph/id/BatteryLimit2>)}.    \n"
 		+ "		?s ?p ?o . \n"
 		+ "	 BIND( olgap:objectValue(?s , ?p, ?o, 'abc','def') as ?result1 ). \n"
 		+ "}";

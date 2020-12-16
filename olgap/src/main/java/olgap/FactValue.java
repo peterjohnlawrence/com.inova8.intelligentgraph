@@ -49,14 +49,14 @@ public class FactValue extends Evaluator implements Function {
 				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}
 			try{
-				if(!sources.containsKey(tripleSource.getValueFactory()) ){
-					sources.put(tripleSource.getValueFactory(),  new Source(tripleSource));
+				if(!sources.containsKey(tripleSource.hashCode()) ){
+					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
 				}
-				Source source = sources.get(tripleSource.getValueFactory());
+				Source source = sources.get(tripleSource.hashCode());
 				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
 				
-				Thing subjectThing = source.thingFactory(subject,new Stack<String>());
-				olgap.Value fact = subjectThing.getFact( predicate, customQueryOptions);
+				Thing subjectThing = source.thingFactory(null, subject,new Stack<String>(),customQueryOptions);
+				olgap.Value fact = subjectThing.getFact( predicate);
 				if( fact != null) {
 					Value result = fact.getValue();
 					logger.debug(new ParameterizedMessage("FactValue = {}",result));

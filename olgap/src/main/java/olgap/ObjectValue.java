@@ -34,7 +34,7 @@ public class ObjectValue extends Evaluator implements Function {
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
 	
-		logger.debug(new ParameterizedMessage("Evaluate for <{}> with args <{}>",tripleSource, args));
+		logger.debug(new ParameterizedMessage("Evaluate for <{}> ,{}> with args <{}>",tripleSource, tripleSource.getValueFactory(), args));
 		if(args.length <3) {
 			ParameterizedMessage message = new ParameterizedMessage("At least subject,predicate, and objectscript arguments required");
 			logger.error(message);
@@ -56,15 +56,15 @@ public class ObjectValue extends Evaluator implements Function {
 				literalValue = (SimpleLiteral)args[2];
 				if( scriptEngines.containsKey(literalValue.getDatatype().getLocalName()) ) {
 					Source source;
-					if(!sources.containsKey(tripleSource.getValueFactory()) ){
+					if(!sources.containsKey(tripleSource.hashCode()) ){
 						source = new Source(tripleSource);
-						sources.put(tripleSource.getValueFactory(),  source);
+						sources.put(tripleSource.hashCode(),  source);
 					}else {
-						source = sources.get(tripleSource.getValueFactory());
+						source = sources.get(tripleSource.hashCode());
 					}
 					HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 3, args.length));
-					Thing subjectThing = source.thingFactory( subject, new Stack<String>());
-					olgap.Value fact = subjectThing.getFact( predicate,literalValue, customQueryOptions);
+					Thing subjectThing = source.thingFactory( null, subject, new Stack<String>(),customQueryOptions);
+					olgap.Value fact = subjectThing.getFact( predicate,literalValue);
 					if( fact != null) {
 						Value result = fact.getValue();
 						//source.writeModelToCache(result, cacheContext);
