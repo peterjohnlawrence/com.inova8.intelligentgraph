@@ -200,11 +200,11 @@ public class Source {
 	public olgap.Value valueFactory(Tracer tracer, Stack<String> stack) {
 		return new olgap.Literal(null);
 	}
-	public olgap.Value valueFactory(Tracer tracer, String value, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions) {
-		return this.valueFactory(tracer, Source.getTripleSource().getValueFactory().createLiteral(value), stack,customQueryOptions);
+	public olgap.Value valueFactory(Tracer tracer, String value, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions, HashMap<String,String> prefixes) {
+		return this.valueFactory(tracer, Source.getTripleSource().getValueFactory().createLiteral(value), stack,customQueryOptions,prefixes);
 	}
 
-	public olgap.Value valueFactory(Tracer tracer, Value value, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions) {
+	public olgap.Value valueFactory(Tracer tracer, Value value, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions, HashMap<String,String> prefixes) {
 		switch (value.getClass().getSimpleName()) {
 		case "SimpleLiteral":
 		case "BooleanLiteral":
@@ -223,7 +223,7 @@ public class Source {
 			return new olgap.Literal(value);
 		default:
 			//logger.error(new ParameterizedMessage("No handler found for objectvalue class {}",value.getClass().getSimpleName()));
-			return thingFactory(tracer, (IRI) value, stack,customQueryOptions);
+			return thingFactory(tracer, (IRI) value, stack,customQueryOptions, prefixes);
 		}
 	}
 
@@ -237,7 +237,7 @@ public class Source {
 				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
 				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
 					customQueryOptions.put(customQueryOptionParameter,
-							valueFactory(null, customQueryOptionValue, null,null));//TODO
+							valueFactory(null, customQueryOptionValue, null,null,null));//TODO
 				if (customQueryOptionParameter.equals("service")) {
 					String service = customQueryOptionValue;
 					if (customQueryOptionValue.indexOf('?') > 0) {

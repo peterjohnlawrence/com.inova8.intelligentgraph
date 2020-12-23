@@ -42,6 +42,8 @@ id:Attribute_3
 id:BatteryLimit1
   rdf:type def:BatteryLimit ;
   def:density "$this.getSignal(\"SEEQ://host.docker.internal:34216/api/signals/4BE33085-0C32-41B4-A160-FA5A79B97581\").doubleValue()"^^script:groovy ;
+  def:lat "<http://inova8.com/calc2graph/id/calculateLatitude>"^^script:groovy ;
+  def:long "<http://inova8.com/calc2graph/id/calculateLongitude>"^^script:groovy ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
   def:testProperty1 "$this.prefix(\"calc2graph\",\"http://inova8.com/calc2graph/def/\"); $this.getFact(\"calc2graph:testProperty2\").doubleValue()"^^script:groovy ;
   def:testProperty2 "$this.prefix(\"http://inova8.com/calc2graph/def/\"); $this.getFact(\":testProperty3\").doubleValue()"^^script:groovy ;
@@ -53,6 +55,8 @@ id:BatteryLimit1
 .
 id:BatteryLimit2
   rdf:type def:BatteryLimit ;
+  def:lat 600 ;
+  def:long 600 ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
   def:massYield "<http://inova8.com/calc2graph/id/calculateMassYield>"^^script:javascript ;
   def:testProperty1 "$this.prefix(\"http://inova8.com/calc2graph/def/\").prefix(\"id\",\"http://inova8.com/calc2graph/id/\");return $this.getThing(\"id:BatteryLimit2\").getReifiedFact(\":Attribute\",\":density\").doubleValue();"^^script:groovy ;
@@ -63,10 +67,58 @@ id:BatteryLimit2
 id:BatteryLimit3
   rdf:type def:BatteryLimit ;
   def:density ".56"^^xsd:float ;
+  def:lat 0 ;
+  def:long 0 ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
   def:massYield "<http://inova8.com/calc2graph/id/calculateMassYield>"^^script:groovy ;
   def:volumeFlow "20;"^^script:groovy ;
   rdfs:label "BatteryLimit3" ;
+.
+id:Calc2Graph1
+  rdf:type def:Map ;
+  def:height 720 ;
+  def:width 1280 ;
+  rdfs:isDefinedBy <http://localhost:8070/lens2odata/apartment/calc2graph/maps/Calc2Graph1.png> ;
+  rdfs:label "Calc2Graph1" ;
+.
+id:Calc2Graph2
+  rdf:type def:Map ;
+  def:height 720 ;
+  def:width 1280 ;
+  rdfs:isDefinedBy <http://localhost:8070/lens2odata/apartment/calc2graph/maps/Calc2Graph2.png> ;
+  rdfs:label "Calc2Graph2" ;
+.
+id:Location_BL1
+  rdf:type def:Location ;
+  def:lat 500 ;
+  <http://inova8.com/calc2graph/def/location.Map> id:Calc2Graph1 ;
+  <http://inova8.com/calc2graph/def/location.Property> def:appearsOn ;
+  <http://inova8.com/calc2graph/def/location.of.Item> id:BatteryLimit1 ;
+  def:long 500 ;
+  rdfs:label "Location_BL1" ;
+.
+id:Location_BL2
+  rdf:type def:Location ;
+  <http://inova8.com/calc2graph/def/location.Map> id:Calc2Graph1 ;
+  <http://inova8.com/calc2graph/def/location.Property> def:appearsOn ;
+  <http://inova8.com/calc2graph/def/location.of.Item> id:BatteryLimit2 ;
+  rdfs:label "Location_BL2" ;
+.
+id:Location_BL3
+  rdf:type def:Location ;
+  <http://inova8.com/calc2graph/def/location.Map> id:Calc2Graph1 ;
+  <http://inova8.com/calc2graph/def/location.Property> def:appearsOn ;
+  <http://inova8.com/calc2graph/def/location.of.Item> id:BatteryLimit3 ;
+  rdfs:label "Location_BL3" ;
+.
+id:Location_Unit1
+  rdf:type def:Location ;
+  def:lat 100 ;
+  <http://inova8.com/calc2graph/def/location.Map> id:Calc2Graph1 ;
+  <http://inova8.com/calc2graph/def/location.Property> def:appearsOn ;
+  <http://inova8.com/calc2graph/def/location.of.Item> id:Unit1 ;
+  def:long 100 ;
+  rdfs:label "Location Unit1" ;
 .
 id:ScriptTest
   rdf:type owl:DatatypeProperty ;
@@ -364,6 +416,18 @@ for(batterylimit in $this.getFacts(\"http://inova8.com/calc2graph/def/hasProduct
 	}
 }; 
 return maximumMassFlowBatteryLimit;"""^^<http://inova8.com/olgap/script/groovy> ;
+.
+id:calculateLatitude
+  rdf:type script:Script ;
+  olgap:scriptCode """$this.prefix(\"http://inova8.com/calc2graph/def/\").prefix(\"id\",\"http://inova8.com/calc2graph/id/\");
+return $this.getReifiedStatement(\":Location\", \":appearsOn\",\"id:Calc2Graph1\").getFact(\":lat\").integerValue();"""^^script:groovy ;
+  rdfs:label "calculateLatitude" ;
+.
+id:calculateLongitude
+  rdf:type script:Script ;
+  olgap:scriptCode """$this.prefix(\"http://inova8.com/calc2graph/def/\").prefix(\"id\",\"http://inova8.com/calc2graph/id/\");
+return $this.getReifiedStatement(\":Location\", \":appearsOn\",\"id:Calc2Graph1\").getFact(\":long\");"""^^script:groovy ;
+  rdfs:label "calculateLongitude" ;
 .
 id:calculateMassFlow
   olgap:scriptCode """$this.prefix(\"http://inova8.com/calc2graph/def/\");

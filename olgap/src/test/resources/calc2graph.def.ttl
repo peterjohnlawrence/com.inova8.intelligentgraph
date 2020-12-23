@@ -23,6 +23,16 @@ def:BatteryLimit
   rdf:type owl:Class ;
   rdfs:label "Battery limit" ;
 .
+def:Location
+  rdf:type owl:Class ;
+  rdfs:label "Location" ;
+  rdfs:subClassOf rdf:Statement ;
+  rdfs:subClassOf owl:Thing ;
+.
+def:Map
+  rdf:type owl:Class ;
+  rdfs:label "Map" ;
+.
 def:Signal
   rdf:type owl:Class ;
   rdfs:label "Signal" ;
@@ -36,6 +46,10 @@ def:SignalValue
 def:Unit
   rdf:type owl:Class ;
   rdfs:label "Unit" ;
+.
+def:appearsOn
+  rdf:type rdf:Property ;
+  rdfs:label "appears on" ;
 .
 <http://inova8.com/calc2graph/def/attribute.Property>
   rdf:type owl:ObjectProperty ;
@@ -58,7 +72,7 @@ def:Unit
   rdfs:range def:Signal ;
 .
 <http://inova8.com/calc2graph/def/attribute.value>
-  rdf:type owl:ObjectProperty ;
+  rdf:type rdf:Property ;
   rdfs:domain def:Attribute ;
   rdfs:label "attribute.value" ;
   rdfs:range rdfs:Literal ;
@@ -84,6 +98,52 @@ def:hasProductBatteryLimit
   rdf:type owl:ObjectProperty ;
   rdfs:domain def:Unit ;
   rdfs:range def:BatteryLimit ;
+.
+def:height
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain def:Map ;
+  rdfs:label "height" ;
+  rdfs:range xsd:integer ;
+.
+def:lat
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain def:BatteryLimit ;
+  rdfs:domain def:Location ;
+  rdfs:domain def:Unit ;
+  rdfs:label "lat" ;
+  rdfs:range rdfs:Literal ;
+.
+<http://inova8.com/calc2graph/def/location.Map>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Location ;
+  rdfs:label "location.Map" ;
+  rdfs:range def:Map ;
+  rdfs:subPropertyOf rdf:object ;
+.
+<http://inova8.com/calc2graph/def/location.Property>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Location ;
+  rdfs:label "location.Property" ;
+  rdfs:range rdf:Property ;
+  rdfs:subPropertyOf rdf:predicate ;
+.
+<http://inova8.com/calc2graph/def/location.of.Item>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Location ;
+  rdfs:label "location.of.Item" ;
+  rdfs:range def:Attribute ;
+  rdfs:range def:BatteryLimit ;
+  rdfs:range def:Signal ;
+  rdfs:range def:Unit ;
+  rdfs:subPropertyOf rdf:subject ;
+.
+def:long
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain def:BatteryLimit ;
+  rdfs:domain def:Location ;
+  rdfs:domain def:Unit ;
+  rdfs:label "long" ;
+  rdfs:range rdfs:Literal ;
 .
 def:massFlow
   rdf:type rdf:Property ;
@@ -166,6 +226,12 @@ def:volumeFlow
   rdfs:label "volume flow" ;
   rdfs:range xsd:float ;
 .
+def:width
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain def:Map ;
+  rdfs:label "width" ;
+  rdfs:range xsd:integer ;
+.
 <http://inova8.com/calc2graph/id/calculateMassFlow>
   rdf:type script:Script ;
 .
@@ -175,7 +241,7 @@ def:volumeFlow
 inova8.olgap:scriptCode
   rdf:type rdf:Property ;
   rdfs:label "script code" ;
-  rdfs:range script:script ;
+  rdfs:range script:groovy ;
 .
 script:Script
   rdf:type owl:Class ;

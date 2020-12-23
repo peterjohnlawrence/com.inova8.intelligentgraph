@@ -49,7 +49,7 @@ public class Literal extends olgap.Value {
 			return (Short) null;
 	}
 
-	public Integer intValue() {
+	public Integer integerValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseInt(getLabel());
 		else
@@ -77,7 +77,7 @@ public class Literal extends olgap.Value {
 			return (Double) null;
 	}
 
-	public BigInteger integerValue() {
+	public BigInteger bigIntegerValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseInteger(getLabel());
 		else

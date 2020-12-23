@@ -4,6 +4,7 @@
 package olgap;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -97,7 +98,7 @@ public class Thing extends olgap.Value {
 		HashSet<olgap.Value> values = new HashSet<olgap.Value>();
 		while (objectStatements.hasNext()) {
 			Statement objectStatement = objectStatements.next();
-			values.add(source.valueFactory(getTracer(), objectStatement.getObject(), getStack(),this.customQueryOptions));
+			values.add(source.valueFactory(getTracer(), objectStatement.getObject(), getStack(),this.customQueryOptions,this.prefixes));
 		}
 		addTrace(new ParameterizedMessage("Retrieved objects {} of {} = {}", addIRI(predicate), addIRI(superValue),
 				values));
@@ -153,7 +154,7 @@ public class Thing extends olgap.Value {
 		}else {
 			String namespace = prefixes.get(predicateIRIParts[0]);
 			if(namespace==null) {
-				addTrace(new ParameterizedMessage("Error indetifying namespace of qName {}", predicateIRI));
+				addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
 			}else {
 				predicate = Source.createIRI( namespace, predicateIRIParts[1]);
 			}
@@ -167,7 +168,7 @@ public class Thing extends olgap.Value {
 		HashSet<olgap.Value> values = new HashSet<olgap.Value>();
 		while (objectStatements.hasNext()) {
 			Statement objectStatement = objectStatements.next();
-			values.add(source.valueFactory(getTracer(), objectStatement.getSubject(), getStack(),this.customQueryOptions));
+			values.add(source.valueFactory(getTracer(), objectStatement.getSubject(), getStack(),this.customQueryOptions,this.prefixes));
 		}
 		addTrace(new ParameterizedMessage("Retrieved subjects {} of {} = {}", addIRI(predicate), addIRI(superValue),
 				values));
@@ -291,6 +292,69 @@ public class Thing extends olgap.Value {
 		IRI predicate = Source.getTripleSource().getValueFactory().createIRI(predicateIRI);
 		return this.getReifiedFacts(reificationType,predicate);
 	}
+	public final olgap.Value getReifiedStatement(String reificationTypeIRI, String predicateIRI, String objectIRI) {
+		//TODO
+		String key = predicateIRI.toString() + objectIRI.toString() +  StringUtils.join(customQueryOptions);
+		IRI predicate = convertQName( predicateIRI);
+		IRI object = convertQName( objectIRI);
+		//TODO
+		addTrace(new ParameterizedMessage("Seeking reified {} statement {} of {} using customQueryOptions {}", reificationTypeIRI, addIRI(predicate),
+				addIRI(superValue), addIRI(object), customQueryOptions));
+		if (notTracing() && values.containsKey(key)) {
+			olgap.Value result = values.get(key);
+			//TODO
+			addTrace(new ParameterizedMessage("Retrieved reified {} cache factvalue {} of {} = {}", reificationTypeIRI, addIRI(predicate), addIRI(superValue),
+					getHTMLValue(result.getValue())));
+			return result;
+		} else {
+			IRI reificationType = convertQName( reificationTypeIRI);
+			Value reifiedStatement = getReifiedStatement(reificationType, predicate,object);
+			if(reifiedStatement!=null ) {
+				olgap.Value  returnReifiedStatement = processFactObjectValue(predicate,  key, reifiedStatement);
+				if (returnReifiedStatement != null)
+					return returnReifiedStatement;
+				return null;
+			}
+		}
+		return null;	
+	}
+	private Value getReifiedStatement(IRI reificationType,IRI predicate, IRI object) {
+		/*{
+		 ?reification :reificationSubject  :thing .  :thing   :reificationIsSubjectOf  ?reification .
+		 ?reification :reificationPredicate :predicate . :predicate   :reificationIsPredicateOf ?reification .
+		 ?reification :reificationObject ?reifiedValue .  ?reifiedValue   :reificationIsObjectOf  ?reification .
+		}*/
+		//Check if this thing is associated with one or more attributes that might refer to the required predicate
+		CloseableIteration<? extends Statement, QueryEvaluationException> reificationSubjectStatements = null;
+		String reificationTypeIRI = reificationType.stringValue();
+		if(Source.getReificationSubject(reificationTypeIRI)!=null) reificationSubjectStatements = Source.getTripleSource().getStatements(null, Source.getReificationSubject(reificationTypeIRI), (IRI) superValue);
+		CloseableIteration<? extends Statement, QueryEvaluationException> reificationIsSubjectOfStatements = null ;
+		if(Source.getReificationIsSubjectOf(reificationTypeIRI)!=null) reificationIsSubjectOfStatements = Source.getTripleSource().getStatements((IRI) superValue, Source.getReificationIsSubjectOf(reificationTypeIRI), null );
+		UnionIterator unionReificationSubjectStatements = new UnionIterator(reificationSubjectStatements, reificationIsSubjectOfStatements);
+		while (unionReificationSubjectStatements.hasNext()) {
+			Value reification = unionReificationSubjectStatements.getNextSubjectValue();
+			CloseableIteration<? extends Statement, QueryEvaluationException> reificationPredicateStatements = null;
+			if(Source.getReificationPredicate(reificationTypeIRI)!=null) reificationPredicateStatements =  Source.getTripleSource().getStatements((IRI) reification, Source.getReificationPredicate(reificationTypeIRI), predicate);
+			CloseableIteration<? extends Statement, QueryEvaluationException> reificationIsPredicateOfStatements = null;
+			if(Source.getReificationIsPredicateOf(reificationTypeIRI) !=null) reificationIsPredicateOfStatements =  Source.getTripleSource().getStatements( predicate , Source.getReificationIsPredicateOf(reificationTypeIRI),(IRI) reification);
+			UnionIterator unionReificationPredicateStatements = new UnionIterator(reificationPredicateStatements, reificationIsPredicateOfStatements);
+			while (unionReificationPredicateStatements.hasNext()) {
+				unionReificationPredicateStatements.getNextSubjectValue();
+				//Now check if this attribute/predicate is associated with a reifiedValue 
+				CloseableIteration<? extends Statement, QueryEvaluationException> reificationObjectStatements = null;
+				if(Source.getReificationObject(reificationTypeIRI)!=null) reificationObjectStatements = Source.getTripleSource().getStatements((IRI) reification, Source.getReificationObject(reificationTypeIRI), (IRI) object);
+				CloseableIteration<? extends Statement, QueryEvaluationException> reificationIsObjectOfStatements = null;
+				if(Source.getReificationObject(reificationTypeIRI)!=null) reificationIsObjectOfStatements= Source.getTripleSource().getStatements( (IRI) object , Source.getReificationObject(reificationTypeIRI), (IRI) reification);
+				UnionIterator unionReificationObjectStatements = new UnionIterator(reificationObjectStatements, reificationIsObjectOfStatements);
+				while (unionReificationObjectStatements.hasNext()) {			
+					Value reificationStatement = unionReificationObjectStatements.getNextSubjectValue();
+					return reificationStatement;
+				}
+			}
+		}
+		//No reified values found
+		return null;
+	}
 	private Value getReifiedValue(IRI reificationType,IRI predicate) {
 		/*{
 		 ?reification :reificationSubject  :thing .  :thing   :reificationIsSubjectOf  ?reification .
@@ -359,7 +423,7 @@ public class Thing extends olgap.Value {
 				UnionIterator unionReificationObjectStatements = new UnionIterator(reificationObjectStatements, reificationIsObjectOfStatements);
 				while (unionReificationObjectStatements.hasNext()) {			
 					Value reificationObject = unionReificationObjectStatements.getNextObjectValue();
-					reifiedValues.add(source.valueFactory(getTracer(), reificationObject, getStack(),customQueryOptions));
+					reifiedValues.add(source.valueFactory(getTracer(), reificationObject, getStack(),customQueryOptions,this.prefixes));
 				}
 			}
 		}	
@@ -395,7 +459,7 @@ public class Thing extends olgap.Value {
 				UnionIterator unionReificationSubjectStatements = new UnionIterator(reificationSubjectStatements, reificationIsSubjectOfStatements);
 				while (unionReificationSubjectStatements.hasNext()) {			
 					Value reificationSubject = unionReificationSubjectStatements.getNextObjectValue();
-					reifiedValues.add(source.valueFactory(getTracer(), reificationSubject, getStack(),customQueryOptions));
+					reifiedValues.add(source.valueFactory(getTracer(), reificationSubject, getStack(),customQueryOptions,this.prefixes));
 				}
 			}
 		}	
@@ -417,22 +481,22 @@ public class Thing extends olgap.Value {
 				result = seeqSource.getSignal(elements[5], customQueryOptions);
 				decrementTraceLevel();
 				return source.valueFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),customQueryOptions);
+						Source.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),customQueryOptions,this.prefixes);
 			} catch (ScriptException e) {
-				return source.valueFactory(getTracer(), "**SEEQ Source Error**", getStack(),customQueryOptions);
+				return source.valueFactory(getTracer(), "**SEEQ Source Error**", getStack(),customQueryOptions,this.prefixes);
 			} catch (HandledException e) {
-				return source.valueFactory(getTracer(), e.getCode(), getStack(),customQueryOptions);
+				return source.valueFactory(getTracer(), e.getCode(), getStack(),customQueryOptions,this.prefixes);
 			}
 		case "HTTP:":
 			ParameterizedMessage httpMessage = new ParameterizedMessage("HTTP not supported signal source: {}", signal);
 			logger.error(httpMessage.getFormattedMessage());
 			addTrace(httpMessage);
-			return source.valueFactory(getTracer(), "**HTTP Source Error**", getStack(),customQueryOptions);
+			return source.valueFactory(getTracer(), "**HTTP Source Error**", getStack(),customQueryOptions,this.prefixes);
 		default:
 			ParameterizedMessage defaultMessage = new ParameterizedMessage("Unsupported signal source: {}", signal);
 			logger.error(defaultMessage.getFormattedMessage());
 			addTrace(defaultMessage);
-			return source.valueFactory(getTracer(), "**Unsupported Source Error**", getStack(),customQueryOptions);
+			return source.valueFactory(getTracer(), "**Unsupported Source Error**", getStack(),customQueryOptions,this.prefixes);
 
 		}
 	}
@@ -472,7 +536,7 @@ public class Thing extends olgap.Value {
 			} else {
 				logger.error(
 						new ParameterizedMessage("Reference script <{}> not found for subject {}", scriptIRI, this));
-				return source.valueFactory(getTracer(), "**Script Reference Error**", getStack(),customQueryOptions);
+				return source.valueFactory(getTracer(), "**Script Reference Error**", getStack(),customQueryOptions,this.prefixes);
 			}
 		} else {
 			incrementTraceLevel();
@@ -521,7 +585,7 @@ public class Thing extends olgap.Value {
 							predicate.stringValue(), ((IRI) superValue).stringValue(),
 							getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
 									.toString()));
-					return source.valueFactory(getTracer(), "**Circular Reference**", getStack(),customQueryOptions);
+					return source.valueFactory(getTracer(), "**Circular Reference**", getStack(),customQueryOptions,this.prefixes);
 				}
 			} catch (ScriptException e) {
 				decrementTraceLevel();
@@ -530,7 +594,7 @@ public class Thing extends olgap.Value {
 						StringEscapeUtils.escapeHtml4(e.getMessage()));
 				logger.error(scriptFailedMesssage.getFormattedMessage());
 				addTrace(scriptFailedMesssage);
-				return source.valueFactory(getTracer(), "**Script Error**", getStack(),customQueryOptions);
+				return source.valueFactory(getTracer(), "**Script Error**", getStack(),customQueryOptions,this.prefixes);
 			}
 		}
 	}
@@ -561,12 +625,12 @@ public class Thing extends olgap.Value {
 			} else {
 				addTrace(new ParameterizedMessage("Retrieved literal {} of {} = {}", addIRI(predicate),
 						addIRI(superValue), getHTMLValue(objectValue)));
-				returnResult = source.valueFactory(getTracer(), objectValue, getStack(),customQueryOptions);
+				returnResult = source.valueFactory(getTracer(), objectValue, getStack(),customQueryOptions,this.prefixes);
 			}
 		} catch (Exception e) {
 			addTrace(new ParameterizedMessage("Retrieved resource {} of {} = {}", addIRI(predicate),
 					addIRI(superValue), getHTMLValue(objectValue)));
-			returnResult = source.valueFactory(getTracer(), objectValue, getStack(),customQueryOptions);
+			returnResult = source.valueFactory(getTracer(), objectValue, getStack(),customQueryOptions,this.prefixes);
 		}
 		return returnResult;
 	}
@@ -594,7 +658,7 @@ public class Thing extends olgap.Value {
 		// It could be there are reified attributes associated with scripts or signals
 		Value reifiedValue = getReifiedValue(Source.createIRI(Evaluator.RDF_STATEMENT),predicate);
 		if (reifiedValue != null) {
-			return source.valueFactory(getTracer(), reifiedValue, getStack(),this.customQueryOptions);
+			return source.valueFactory(getTracer(), reifiedValue, getStack(),this.customQueryOptions,this.prefixes);
 		}
 		decrementTraceLevel();
 		return source.valueFactory(getTracer(),getStack());
@@ -612,25 +676,39 @@ public class Thing extends olgap.Value {
 			switch (result.getClass().getSimpleName()) {
 			case "Integer":
 				return source.valueFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Integer) result), getStack(),null);
+						Source.getTripleSource().getValueFactory().createLiteral((Integer) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "Double":
 				return source.valueFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),null);
+						Source.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "Float":
 				return source.valueFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Float) result), getStack(),null);
+						Source.getTripleSource().getValueFactory().createLiteral((Float) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "BigDecimal":
 				return source.valueFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((BigDecimal) result), getStack(),null);
+						Source.getTripleSource().getValueFactory().createLiteral((BigDecimal) result), getStack(),this.customQueryOptions,this.prefixes);
+			case "BigInteger":
+				return source.valueFactory(getTracer(),
+						Source.getTripleSource().getValueFactory().createLiteral((BigInteger) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "Thing":
 				return (Thing) result;
 			case "LinkedHashModel":
 				source.writeModelToCache(this, result, cacheContextIRI);
-				return source.thingFactory(getTracer(), cacheContextIRI, getStack(),this.customQueryOptions);
+				return source.thingFactory(getTracer(), cacheContextIRI, getStack(),this.customQueryOptions,this.prefixes);
+			case "Literal":
+				Value content = ((olgap.Literal)result).getValue();
+				switch (((org.eclipse.rdf4j.model.Literal)content).getDatatype().getLocalName()) {			
+				case "integer":
+					return source.valueFactory(getTracer(),
+							Source.getTripleSource().getValueFactory().createLiteral((BigInteger)(BigInteger)((olgap.Literal)result).bigIntegerValue() ), getStack(),this.customQueryOptions,this.prefixes);
+				case "double":
+				default:
+					logger.error("No literla handler found for result {} of class {}", result.toString(),((org.eclipse.rdf4j.model.Literal)content).getDatatype().getLocalName());
+					return source.valueFactory(getTracer(), "**Handler Error**", getStack(),this.customQueryOptions,this.prefixes);
+				}
 			default:
 				logger.error("No handler found for result {} of class {}", result.toString(),
 						result.getClass().getSimpleName());
-				return source.valueFactory(getTracer(), "**Handler Error**", getStack(),null);
+				return source.valueFactory(getTracer(), "**Handler Error**", getStack(),this.customQueryOptions,this.prefixes);
 			}
 		} else {
 			return null;
@@ -651,5 +729,18 @@ public class Thing extends olgap.Value {
 	public Thing prefix(String IRI) {
 		prefixes.put("",IRI);	
 		return this;
+	}
+	public Statements statements(String query) {
+		try {
+			TreeNode<PathQueryNode> queryParts = Parser.QUERY.parse(query);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;//this.statements(query);
+	}
+	private Object parseStatementQuery(String query) {
+
+		return null;
 	}
 }
