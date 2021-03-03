@@ -1,63 +1,125 @@
 /** 
+ * cd C:\Apps\Antlr\PathPattern
+ * c:\apps\antlr\antlr4 PathPattern.g4
+ * javac PathPattern*.java
+ * // test lexer
+ * c:\apps\antlr\grun PathPattern tokens -tokens    
+ * //test graphPattern parser
+ * c:\apps\antlr\grun PathPattern  pathPattern  -gui  
+ * * //test predicatePattern parser
+ *  c:\apps\antlr\grun PathPattern  pathPattern  -gui  
  * 
- * ?? sequencePath:= pathElement '/' pathElement 
- * ?? alternativePath:= pathElement '|' pathElement 
- * ?? nestedPath := '(' pathElement ')'
- * ?? pathElement := predicatePath | inversePredicatePath | sequencePath | alternativePath | nestedPath
+ * .... teststring
+ * ctrl-Z
  * 
- * Examples
+ * SPARQL Property Path Syntax
  * 
- * { $this :volumeFlow ?A }
- * { $this ^rdf:subject [  rdf:predicate  def:massFlow ;  rdf:object ?A  ] }
- * { <<$this def:massFlow ?A >> a rdf:Statement}
- * <<$this def:massFlow ?A >> 
- * { [ rdf:subject   ?this ; rdf:predicate  def:massFlow ;  rdf:object  ?value ] a rdf:Statement }
- * $this
- * { <<$this :density ?A >> a :Attribute }
- * { :Attribute ^a <<$this :density ?A >>  }
- * { $this ^:hasProductBatteryLimit [:massThroughput ?A] }
- * { <<$this :appearsOn  :Calc2Graph1 >> a :Location ; :long  ?A  } 
- * { <<$this :appearsOn  [ rdfs:label  "Calc2Graph1"] >> a :Location ; :long  ?A  } 
+ * [88] Path	 ::=	PathAlternative
+ * [89] PathAlternative	 ::=	PathSequence ( '|' PathSequence )*
+ * [90] PathSequence	 ::=	PathEltOrInverse ( '/' PathEltOrInverse | '^' PathElt )*
+ * [91] PathElt	 ::=	PathPrimary PathMod?
+ * [92] PathEltOrInverse	 ::=	PathElt | '^' PathElt
+ * [93] PathMod	 ::=	( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) ) )
+ * [94] PathPrimary	  ::=  	iri | 'a' | '!' PathNegatedPropertySet | '(' Path ')'
+ * [95] PathNegatedPropertySet	  ::=  	PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
+ * [96] PathOneInPropertySet	  ::=  	iri | 'a' | '^' ( iri | 'a' )
+ * [101] BlankNodePropertyListPath	  ::=  	'[' PropertyListPathNotEmpty ']'
+ * [136] iri	  ::=  	IRIREF | PrefixedName
+ * [137] PrefixedName	  ::=  	PNAME_LN | PNAME_NS
  * 
+ * 
+ * pathPattern Examples
+ * 
+ * Simple pathPattern Examples
+ * 
+ * :volumeFlow
+ * local:volumeFlow
+ * <http://local#volumeFlow>
+ * ^:volumeFlow
+ * :Attribute@:volumeFlow
+ * ^:Attribute@:volumeFlow
+ * ^:hasProductBatteryLimit/:massThroughput
+ * 
+ * Filtered pathPattern Examples 
+ * 
+ * :volumeFlow [ gt "35" }
+ * :Location@:appearsOn#/:lat
+ * :Location@:appearsOn[ rdfs:label "Calc2Graph1" ]#/:lat
+ * :Location@:appearsOn[ eq :eastman3d ]#/:lat
+ * :Location@:appearsOn#[ :location.Map :Calc2Graph1 ]/:lat
+ * :Location@:appearsOn[ eq [ rdfs:label "Calc2Graph1"] ]#/:lat
+ * :Location@:appearsOn[ eq [ rdfs:label "Calc2Graph1"] ]#/^:lat/:long/^:left/:right
+ * :volumeFlow [ gt "35" ; rdfs:label "Calc2Graph1" ; eq [ rdfs:label "Calc2Graph1"] , :Calc2Graph1 ,"Calc2Graph1" ]
+ * 
+ * Not yet supported
+ * 
+ * :Location@:appearsOn#{ :location.Map  [rdfs:label "Calc2Graph1" ] }/:lat
 */	
 
 grammar PathPattern;
 
-graphPattern  :  source | '{' triples '}' ;         
+pathPattern :  pathPatterns EOF;
+pathPatterns :  pathEltOrInverse cardinality?  #Path  
+				|  pathPatterns '|'  pathPatterns  #PathAlternative  
+				|  pathPatterns '/'  pathPatterns  #PathSequence
+				|   negation? '(' pathPatterns ')'  cardinality? #PathParentheses;
+ 
+//pathNegatedPropertySet	  :  	PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' ;
+//pathOneInPropertySet	  : 	iri | 'a' | '^' ( iri | 'a' );
 
-triples : triple ( '.' triple )* ;
-triple : source  predicateObjects ;
-predicateObjects : predicateObject ( ';' predicateObject )* ;
-predicateObject : predicatePattern target  ;
+cardinality :	  '{'  INTEGER (',' ( INTEGER )? )?  '}'  ;
+negation: '!';
+ 
+pathEltOrInverse :  negation? INVERSE? predicate  ;
+predicate :   ( reifiedPredicate | predicateRef | rdfType | anyPredicate ) factFilterPattern? ;
+anyPredicate : ANYPREDICATE ;
+reifiedPredicate :  iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ;
+predicateRef :  IRI_REF  |  qname | pname_ns ;
+iriRef  : IRI_REF  |  qname | pname_ns ;  
+dereifier : DEREIFIER ;
 
-source : '$this' | var | iriRef | reification | bnode  ;
-target : '$this' | var | iriRef | reification | bnode | literal ;
-reification : '<<' source  predicate target '>>' ; // ?R rdf:subject ?this ;  rdf:predicate  def:massFlow ;   rdf:object  ?A  ;
-bnode : '[' predicateObjects ']' ;
-var : '?' VARNAME ;
-reificate : iriRef ;
-literal : LITERAL ;
+factFilterPattern : '['  propertyListNotEmpty   ']';
+propertyListNotEmpty :   	verbObjectList ( ';' ( verbObjectList )? )* ;  
+verbObjectList : verb objectList;
+verb : operator | pathEltOrInverse ;
+objectList : object ( ',' object )*;
+object : iriRef  | literal | factFilterPattern ;
 
-predicatePattern : predicatePath | inversePredicatePath ;
-predicatePath :  predicate ;
-inversePredicatePath :  '^' predicate ;
-predicate : iriRef | 'a' ;
-iriRef  : IRI_REF  | prefixedName   ;
-prefixedName : PNAME_LN  | PNAME_NS ;   
+qname : PNAME_NS PN_LOCAL; 
+pname_ns : PNAME_NS ;   
+literal : LITERAL | SQLITERAL ;
+operator : OPERATOR ;
+rdfType : RDFTYPE ;
 
 // LEXER RULES
+//CARDINALITY :  INTEGER ;
+//MAXCARDINALITY : (INTEGER |'*')  ;
+
+//fragment  
+INTEGER : DIGIT+ ;
+
+fragment
+DIGIT
+    : [0-9]
+    ;
+    
+INVERSE : '^';
+REIFIER :'@';
+DEREIFIER : '#';
+RDFTYPE : 'a';
+ANYPREDICATE : '*' ;
+OPERATOR : 'lt'|'gt'|'le'|'ge'|'eq'|'ne';
+
 LITERAL:  '"' (~('"' | '\\' | '\r' | '\n') | '\\' ('"' | '\\'))* '"';
+SQLITERAL:  '\'' (~('\'' | '\\' | '\r' | '\n') | '\\' ('\'' | '\\'))* '\'';
+
 IRI_REF
     : '<' ( ~('<' | '>' | '"' | '{' | '}' | '|' | '^' | '\\' | '`') | (PN_CHARS))* '>' 
     ;
        
 PNAME_NS : PN_PREFIX? ':'  ;
-
-PNAME_LN : PNAME_NS PN_LOCAL  ;
     
-VARNAME : [a-zA-Z]+ ;		// match upper-case identifiers for now
-
-//IRI : [a-z]+ ; 		// match lower-case identifiers for now
+VARNAME : '?' [a-zA-Z]+ ;		// match upper-case identifiers for now
 
 fragment
 PN_CHARS_U
@@ -69,6 +131,7 @@ PN_CHARS
     | '-'
     | DIGIT
     ;
+fragment
 PN_PREFIX
     : PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
     ;
@@ -93,8 +156,6 @@ PN_CHARS_BASE
     | '\uFDF0'..'\uFFFD'
     ;
 
-fragment
-DIGIT
-    : '0'..'9'
-    ;
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+
+
+WS : [ \t\r\n]+ -> skip ; 

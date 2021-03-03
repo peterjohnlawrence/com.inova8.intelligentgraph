@@ -13,6 +13,12 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
+
+import pathCalc.Source;
+import pathCalc.Tracer;
+import pathPatternElement.PredicateElement;
+import pathPatternProcessor.Thing;
+
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.ParameterizedMessage;
@@ -32,7 +38,7 @@ public class FactProvenance extends Evaluator implements Function {
 	 *
 	 * @throws NoSuchAlgorithmException the no such algorithm exception
 	 */
-	public FactProvenance() throws NoSuchAlgorithmException {
+	public FactProvenance()  {
 		super();
 		logger.info(new ParameterizedMessage("Initiating FactProvenance"));
 	}
@@ -44,7 +50,7 @@ public class FactProvenance extends Evaluator implements Function {
 	 */
 	@Override
 	public String getURI() {
-		return  NAMESPACE + "factProvenance";
+		return  OLGAPNAMESPACE + "factProvenance";
 	}
 
 	/**
@@ -77,16 +83,20 @@ public class FactProvenance extends Evaluator implements Function {
 				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}
 			try{
-				if(!sources.containsKey(tripleSource.hashCode()) ){
-					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
-				}
-				Source source = sources.get(tripleSource.hashCode());
-				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
+				Value[] argumentArray = Arrays.copyOfRange(args,2, args.length);
+				Source source = sources.getSource(tripleSource, argumentArray );
+				HashMap<String, pathCalc.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
+				
+//				if(!sources.containsKey(tripleSource.hashCode()) ){
+//					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
+//				}
+//				Source source = sources.get(tripleSource.hashCode());
+//				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
 				Tracer tracer = new Tracer();
 				tracer.setTracing(true);
 				Thing subjectThing = source.thingFactory(tracer, subject, new Stack<String>(),customQueryOptions);
 				//olgap.Value fact = 
-				subjectThing.getFact( predicate);
+				subjectThing.getFact( new PredicateElement(predicate));
 				logger.debug("Trace\r\n"+tracer.getTrace());
 				return tripleSource.getValueFactory().createLiteral(tracer.getTrace());		
 

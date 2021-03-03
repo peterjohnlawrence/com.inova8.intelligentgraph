@@ -7,25 +7,28 @@ import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 
-//import groovy.lang.GroovyShell;
+import pathCalc.Sources;
+
 
 public class Evaluator {
 	static private final  Logger logger = LogManager.getLogger(Evaluator.class);
-	//static protected   HashMap<ValueFactory, Source > sources = new HashMap<ValueFactory, Source>();
-	static protected   HashMap<Integer, Source > sources = new HashMap<Integer, Source>();
+	static protected final  Sources sources = new Sources();
 	static protected ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 	static protected HashMap<String, ScriptEngine> scriptEngines = new HashMap<String, ScriptEngine>();
 	
 	static private  MessageDigest digest;
 	static protected  boolean trace = false;
 	static protected  boolean initialized = false;
-
-	public static final String NAMESPACE = "http://inova8.com/olgap/";
+	public static final String CACHE_HASH = "cacheHash";
+	public static final String OLGAPNAMESPACE = "http://inova8.com/olgap/";
+	public static final String SCRIPTNAMESPACE = "http://inova8.com/script/";
+	public static final String SCRIPTPROPERTY = "http://inova8.com/script/scriptCode";
 	public static final String SCRIPT_DATA_GRAPH = "http://inova8.com/script/data/";
 	public static final String OWL_INVERSE_OF = "http://www.w3.org/2002/07/owl#inverseOf";
 	public static final String RDFS_DOMAIN = "http://www.w3.org/2000/01/rdf-schema#domain";
@@ -35,6 +38,7 @@ public class Evaluator {
 	public static final String RDF_SUBJECT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject";
 	public static final String RDF_STATEMENT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement";
 	public static final String CACHE_DATE_TIME = "cacheDateTime";
+
 	
 	public Evaluator() {
 		super();
@@ -50,7 +54,7 @@ public class Evaluator {
 				for (ScriptEngineFactory engineFactory : engineFactories) {
 					for (String engineName : engineFactory.getNames()) {
 						ScriptEngine engine = scriptEngineManager.getEngineByName(engineName);
-						scriptEngines.put(engineName, engine);
+						getScriptEngines().put(engineName, engine);
 						engineNames = engineNames + engineName + ";";
 					}
 				}
@@ -90,7 +94,21 @@ public class Evaluator {
 	protected static byte[] getDigest(String key) {
 		return digest.digest(key.getBytes());
 	}
-	protected static String getHexKey(String key) {
+	public static String getHexKey(String key) {
 		return bytesToHex(getDigest(key));
+	}
+
+
+	protected static HashMap<String, ScriptEngine> getScriptEngines() {
+		return scriptEngines;
+	}
+	public static ScriptEngine getScriptEngine(String engineName) {
+		return scriptEngines.get(engineName);
+	}
+	public static Boolean isScriptEngine(String engineName) {
+		return scriptEngines.containsKey(engineName);
+	}
+	public void clearCache() {
+		sources.clear();
 	}
 }

@@ -33,6 +33,12 @@ def:Map
   rdf:type owl:Class ;
   rdfs:label "Map" ;
 .
+def:Parthood
+  rdf:type owl:Class ;
+  rdfs:label "Parthood" ;
+  rdfs:subClassOf rdf:Statement ;
+  rdfs:subClassOf owl:Thing ;
+.
 def:Signal
   rdf:type owl:Class ;
   rdfs:label "Signal" ;
@@ -57,6 +63,7 @@ def:appearsOn
   rdfs:label "attribute.Property" ;
   rdfs:range rdf:Property ;
   rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/calc2graph/def/property.Attribute> ;
 .
 <http://inova8.com/calc2graph/def/attribute.of.Item>
   rdf:type owl:ObjectProperty ;
@@ -64,6 +71,7 @@ def:appearsOn
   rdfs:label "attribute.of.Item" ;
   rdfs:range def:BatteryLimit ;
   rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/calc2graph/def/item.attribute> ;
 .
 <http://inova8.com/calc2graph/def/attribute.producedBy.Signal>
   rdf:type owl:ObjectProperty ;
@@ -89,6 +97,10 @@ def:density
   rdfs:label "density" ;
   rdfs:range xsd:float ;
 .
+def:feedTo
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "feed to" ;
+.
 def:hasFeedBatteryLimit
   rdf:type owl:ObjectProperty ;
   rdfs:domain def:Unit ;
@@ -104,6 +116,10 @@ def:height
   rdfs:domain def:Map ;
   rdfs:label "height" ;
   rdfs:range xsd:integer ;
+.
+<http://inova8.com/calc2graph/def/item.attribute>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "item.attribute" ;
 .
 def:lat
   rdf:type owl:DatatypeProperty ;
@@ -174,6 +190,39 @@ def:maximumMassFlow
   rdfs:domain def:Unit ;
   rdfs:label "maximum mass flow" ;
 .
+<http://inova8.com/calc2graph/def/parthood.Item>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Parthood ;
+  rdfs:label "parthood.Item" ;
+  rdfs:range def:Attribute ;
+  rdfs:range def:BatteryLimit ;
+  rdfs:range def:Signal ;
+  rdfs:range def:Unit ;
+  rdfs:subPropertyOf rdf:subject ;
+.
+<http://inova8.com/calc2graph/def/parthood.Property>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Parthood ;
+  rdfs:label "location.Property" ;
+  rdfs:range rdf:Property ;
+  rdfs:subPropertyOf rdf:predicate ;
+.
+<http://inova8.com/calc2graph/def/parthood.of.Item>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain def:Parthood ;
+  rdfs:label "parthood.of.Item" ;
+  rdfs:range def:BatteryLimit ;
+  rdfs:range def:Unit ;
+  rdfs:subPropertyOf rdf:object ;
+.
+def:productFrom
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "product from" ;
+.
+<http://inova8.com/calc2graph/def/property.Attribute>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "property.Attribute" ;
+.
 <http://inova8.com/calc2graph/def/signal.SignalValue>
   rdf:type owl:ObjectProperty ;
   rdfs:domain def:Signal ;
@@ -238,11 +287,6 @@ def:width
 <http://inova8.com/calc2graph/id/calculateMassYield>
   rdf:type script:Script ;
 .
-inova8.olgap:scriptCode
-  rdf:type rdf:Property ;
-  rdfs:label "script code" ;
-  rdfs:range script:groovy ;
-.
 script:Script
   rdf:type owl:Class ;
   rdfs:subClassOf owl:Thing ;
@@ -263,4 +307,9 @@ script:script
   rdf:type rdfs:Datatype ;
   rdfs:label "script" ;
   rdfs:subClassOf rdfs:Literal ;
+.
+script:scriptCode
+  rdf:type rdf:Property ;
+  rdfs:label "script code" ;
+  rdfs:range script:script ;
 .

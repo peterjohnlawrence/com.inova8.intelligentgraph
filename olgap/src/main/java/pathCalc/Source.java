@@ -1,4 +1,6 @@
-package olgap;
+package pathCalc;
+
+import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,9 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
+import static org.eclipse.rdf4j.model.util.Values.iri;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
@@ -25,56 +27,68 @@ import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
+import org.eclipse.rdf4j.model.Resource;
+import olgap.Evaluator;
+import pathPatternProcessor.Thing;
 
 public class Source {
 
 	static private final Logger logger = LogManager.getLogger(Source.class);
 	static private Repository cacheRep;
 	static private String cacheService;
+	private static Repository repository;
 	static private RepositoryConnection cacheConnection;
 	static private TripleSource tripleSource; //Not unique per call using the same underlying triplestore
 	static private ModelBuilder modelBuilder;
 	static private HashMap<String, Thing> things = new HashMap<String, Thing>();
-	static private HashMap<String, HashMap<String, olgap.Value>> facts = new HashMap<String, HashMap<String, olgap.Value>>();
+	static private HashMap<String, HashMap<String, pathCalc.Resource>> facts = new HashMap<String, HashMap<String, pathCalc.Resource>>();
 	static private HashMap<String, CompiledScript> compiledScripts = new HashMap<String, CompiledScript>();
 	static private HashMap<String, SEEQSource> seeqSources = new HashMap<String, SEEQSource>();
+	static private Boolean isLazyLoaded = false;
 	static private HashMap<String, ReificationType> reificationTypes = new HashMap<String, ReificationType>();
 	static private HashMap<String, ReificationType> predicateReificationTypes = new HashMap<String, ReificationType>();
-	//	static private IRI reificationSubject;
-	//	static private IRI reificationPredicate;
-	//	static private IRI reificationObject;
+	static private HashMap<String,IRI> prefixes = new HashMap<String,IRI>();
 
+	public Source() {
+		Source.modelBuilder = new ModelBuilder();
+	}
 	public Source(TripleSource tripleSource) {
 		Source.tripleSource = tripleSource;
 		Source.modelBuilder = new ModelBuilder();
-		initializeReificationTypes();
-
-		//		reificationSubject = Source.getTripleSource().getValueFactory()
-		//				.createIRI("http://inova8.com/calc2graph/def/attribute.of.Item");
-		//		reificationPredicate = Source.getTripleSource().getValueFactory()
-		//				.createIRI("http://inova8.com/calc2graph/def/attribute.Property");
-		//		reificationObject = Source.getTripleSource().getValueFactory()
-		//				.createIRI("http://inova8.com/calc2graph/def/attribute.producedBy.Signal");
 	}
-
-	private void initializeReificationTypes() {
+	public Source(Repository repository) {
+		Source.repository = repository;
+		Source.tripleSource = new RepositoryTripleSource(repository.getConnection());
+		Source.modelBuilder = new ModelBuilder();
+	}
+	static HashMap<String, ReificationType> getReificationTypes(){
+		if(!isLazyLoaded &&  Source.getTripleSource()!=null) initializeReificationTypes();
+		return reificationTypes;
+	}
+	static HashMap<String, ReificationType> getPredicateReificationTypes(){
+		if(!isLazyLoaded) initializeReificationTypes();
+		return predicateReificationTypes;
+	}
+	public static void addReificationType(Resource reificationType,Resource reificationSubject,Resource reificationPredicate ,Resource reificationObject, Resource reificationIsSubjectOf,Resource reificationIsPredicateOf,Resource reificationIsObjectOf ) {
+		ReificationType newReificationType = new ReificationType(reificationType,reificationSubject,reificationPredicate ,reificationObject, reificationIsSubjectOf,reificationIsPredicateOf,reificationIsObjectOf  );
+		reificationTypes.put(((IRI)reificationType).stringValue(), newReificationType );
+		predicateReificationTypes.put(((IRI)reificationPredicate).stringValue(), newReificationType );		
+		
+		
+	}
+	private static void initializeReificationTypes() {
 		StringBuilder initializedReifications = new StringBuilder(" reifications initialized: <" + Evaluator.RDF_STATEMENT+"> ");
 		int initializedReification = 1;
-		IRI RDFStatement =  Source.getTripleSource().getValueFactory().createIRI(Evaluator.RDF_STATEMENT);
+		IRI RDFStatement =  iri(Evaluator.RDF_STATEMENT);
 		
-		IRI RDFSsubPropertyOf = Source.getTripleSource().getValueFactory()
-				.createIRI(Evaluator.RDFS_SUB_PROPERTY_OF);
-		IRI RDFsubject = Source.getTripleSource().getValueFactory()
-				.createIRI(Evaluator.RDF_SUBJECT);
-		IRI RDFpredicate = Source.getTripleSource().getValueFactory()
-				.createIRI(Evaluator.RDF_PREDICATE);
-		IRI RDFobject = Source.getTripleSource().getValueFactory()
-				.createIRI(Evaluator.RDF_OBJECT);
-		IRI RDFSdomain = Source.getTripleSource().getValueFactory()
-				.createIRI(Evaluator.RDFS_DOMAIN);
-		IRI OWLinverseOf = Source.getTripleSource().getValueFactory()
-				.createIRI(Evaluator.OWL_INVERSE_OF);
+		IRI RDFSsubPropertyOf = iri(Evaluator.RDFS_SUB_PROPERTY_OF);
+		IRI RDFsubject = iri(Evaluator.RDF_SUBJECT);
+		IRI RDFpredicate = iri(Evaluator.RDF_PREDICATE);
+		IRI RDFobject = iri(Evaluator.RDF_OBJECT);
+		IRI RDFSdomain = iri(Evaluator.RDFS_DOMAIN);
+		IRI OWLinverseOf = iri(Evaluator.OWL_INVERSE_OF);
 		
 		reificationTypes.put(Evaluator.RDF_STATEMENT,
 				new ReificationType(RDFStatement,RDFsubject,RDFpredicate,RDFobject));
@@ -84,12 +98,12 @@ public class Source {
 		while (reificationPredicateStatements.hasNext()) {
 			Value reificationType = null;
 			
-			Resource reificationPredicate;
-			Resource reificationIsPredicateOf = null;
-			Resource reificationSubject = null;
-			Resource reificationIsSubjectOf = null;
-			Resource reificationObject = null;
-			Resource reificationIsObjectOf = null;
+			org.eclipse.rdf4j.model.Resource reificationPredicate;
+			org.eclipse.rdf4j.model.Resource reificationIsPredicateOf = null;
+			org.eclipse.rdf4j.model.Resource reificationSubject = null;
+			org.eclipse.rdf4j.model.Resource reificationIsSubjectOf = null;
+			org.eclipse.rdf4j.model.Resource reificationObject = null;
+			org.eclipse.rdf4j.model.Resource reificationIsObjectOf = null;
 			Statement reificationPredicateStatement = reificationPredicateStatements.next();
 			reificationPredicate = reificationPredicateStatement.getSubject();
 			CloseableIteration<? extends Statement, QueryEvaluationException> reificationTypeStatements = Source
@@ -103,20 +117,20 @@ public class Source {
 					.getTripleSource().getStatements(null, RDFSdomain, reificationType);
 			while (reificationSubjectStatements.hasNext()) {
 				Statement reificationSubjectStatement = reificationSubjectStatements.next();
-				Resource reificationProperty = reificationSubjectStatement.getSubject();
+				org.eclipse.rdf4j.model.Resource reificationProperty = reificationSubjectStatement.getSubject();
 				CloseableIteration<? extends Statement, QueryEvaluationException> reificationSubPropertyOfStatements = Source
 						.getTripleSource().getStatements(reificationProperty, RDFSsubPropertyOf, null);
 				while (reificationSubPropertyOfStatements.hasNext()) {
 					Statement reificationSubPropertyOfStatement = reificationSubPropertyOfStatements.next();
 					CloseableIteration<? extends Statement, QueryEvaluationException> reificationInverseOfStatements = Source
 							.getTripleSource().getStatements(reificationProperty, OWLinverseOf, null);
-					Resource reificationInverseProperty = null;
+					org.eclipse.rdf4j.model.Resource reificationInverseProperty = null;
 					while (reificationInverseOfStatements.hasNext()) {
 						Statement reificationInverseOfStatement = reificationInverseOfStatements.next();
-						reificationInverseProperty = (Resource) reificationInverseOfStatement.getObject();
+						reificationInverseProperty = (org.eclipse.rdf4j.model.Resource) reificationInverseOfStatement.getObject();
 						break;
 					}
-					Resource subPropertyOf = (Resource) reificationSubPropertyOfStatement.getObject();
+					org.eclipse.rdf4j.model.Resource subPropertyOf = (org.eclipse.rdf4j.model.Resource) reificationSubPropertyOfStatement.getObject();
 					switch (subPropertyOf.stringValue()) {
 					case Evaluator.RDF_SUBJECT:
 						reificationSubject = reificationProperty;
@@ -136,10 +150,11 @@ public class Source {
 			}
 			initializedReification++;
 			initializedReifications.append("<").append(((IRI)reificationType).stringValue()).append("> ");
-			ReificationType newReificationType = new ReificationType(reificationType,reificationSubject,reificationPredicate ,reificationObject, reificationIsSubjectOf,reificationIsPredicateOf,reificationIsObjectOf  );
+			ReificationType newReificationType = new ReificationType((org.eclipse.rdf4j.model.Resource)reificationType,reificationSubject,reificationPredicate ,reificationObject, reificationIsSubjectOf,reificationIsPredicateOf,reificationIsObjectOf  );
 			reificationTypes.put(((IRI)reificationType).stringValue(), newReificationType );
 			predicateReificationTypes.put(((IRI)reificationPredicate).stringValue(), newReificationType );
 		}
+		isLazyLoaded=true;
 		Source.logger.debug(initializedReification + initializedReifications.toString());
 	}
 
@@ -163,7 +178,7 @@ public class Source {
 		return tripleSource;
 	}
 
-	public static void setTripleSource(TripleSource tripleSource) {
+	public void setTripleSource(TripleSource tripleSource) {
 		Source.tripleSource = tripleSource;
 	}
 
@@ -171,40 +186,34 @@ public class Source {
 		return modelBuilder;
 	}
 
-//	public Thing thingFactory(Resource subject, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions ) {
-//		return thingFactory(null, subject, stack, customQueryOptions);
-//	}
-
-	public Thing thingFactory(Tracer tracer, Resource subject, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions, HashMap<String,String> prefixes ) {
-		HashMap<String, olgap.Value> values;
-		if (facts.containsKey(subject.toString())) {
-			values = facts.get(subject.toString());
-			//	thing.setTracer(tracer);
-			//	return thing;
-		} else {
-			values = new HashMap<String, olgap.Value>();
-			facts.put(subject.toString(), values);
+	public Thing thingFactory(Tracer tracer, Value subject, Stack<String> stack, HashMap<String, pathCalc.Resource> customQueryOptions, HashMap<String,IRI> prefixes ) {
+		HashMap<String, pathCalc.Resource> values = null;
+		if(subject!=null ) {
+			if (facts.containsKey(subject.toString())) {
+				values = facts.get(subject.toString());
+			} else {
+				values = new HashMap<String, pathCalc.Resource>();
+				facts.put(subject.toString(), values);
+			}
 		}
-		olgap.Thing newThing = new Thing(this, subject,customQueryOptions,prefixes);
+		pathPatternProcessor.Thing newThing = new Thing(this, subject,customQueryOptions,prefixes);
 		newThing.setTracer(tracer);
 		newThing.setStack(stack);
-		newThing.setValues(values);
+		newThing.setCachedValues(values);
 		return newThing;
 
 	}
-	public Thing thingFactory(Tracer tracer, Resource subject, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions  ) {
+	public Thing thingFactory(Tracer tracer, Value subject, Stack<String> stack, HashMap<String, pathCalc.Resource> customQueryOptions  ) {
 		return thingFactory(tracer, subject, stack,  customQueryOptions,null );
-		
-
 	}
-	public olgap.Value valueFactory(Tracer tracer, Stack<String> stack) {
-		return new olgap.Literal(null);
+	public pathCalc.Resource resourceFactory(Tracer tracer, Stack<String> stack) {
+		return new Literal(null);
 	}
-	public olgap.Value valueFactory(Tracer tracer, String value, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions, HashMap<String,String> prefixes) {
-		return this.valueFactory(tracer, Source.getTripleSource().getValueFactory().createLiteral(value), stack,customQueryOptions,prefixes);
+	public pathCalc.Resource resourceFactory(Tracer tracer, String value, Stack<String> stack, HashMap<String, pathCalc.Resource> customQueryOptions, HashMap<String,IRI> prefixes) {
+		return this.resourceFactory(tracer, Source.getTripleSource().getValueFactory().createLiteral(value), stack,customQueryOptions,prefixes);
 	}
 
-	public olgap.Value valueFactory(Tracer tracer, Value value, Stack<String> stack, HashMap<String, olgap.Value> customQueryOptions, HashMap<String,String> prefixes) {
+	public pathCalc.Resource resourceFactory(Tracer tracer, Value value, Stack<String> stack, HashMap<String, pathCalc.Resource> customQueryOptions, HashMap<String,IRI> prefixes) {
 		switch (value.getClass().getSimpleName()) {
 		case "SimpleLiteral":
 		case "BooleanLiteral":
@@ -220,24 +229,27 @@ public class Source {
 		case "NumericMemLiteral":
 		case "NativeLiteral":
 		case "NumericLiteral":
-			return new olgap.Literal(value);
+			return new Literal(value);
 		default:
 			//logger.error(new ParameterizedMessage("No handler found for objectvalue class {}",value.getClass().getSimpleName()));
 			return thingFactory(tracer, (IRI) value, stack,customQueryOptions, prefixes);
 		}
 	}
-
-	public HashMap<String, olgap.Value> getCustomQueryOptions(Value[] customQueryOptionsArray) {
+	
+	public HashMap<String, pathCalc.Resource> getCustomQueryOptions(Value[] customQueryOptionsArray) {
 		if (customQueryOptionsArray.length == 0) {
 			return null;
-		} else {
-			HashMap<String, olgap.Value> customQueryOptions = new HashMap<String, olgap.Value>();
+		} else if(customQueryOptionsArray.length % 2 != 0 ){
+			logger.error(new ParameterizedMessage("Must have matching args tag/value pairs '{}'",	 customQueryOptionsArray.length));
+			return null;
+		}else {
+			HashMap<String, pathCalc.Resource> customQueryOptions = new HashMap<String, pathCalc.Resource>();
 			for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2) {
 				String customQueryOptionParameter = customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue();
 				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
 				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
 					customQueryOptions.put(customQueryOptionParameter,
-							valueFactory(null, customQueryOptionValue, null,null,null));//TODO
+							resourceFactory(null, customQueryOptionValue, null,null,null));//TODO
 				if (customQueryOptionParameter.equals("service")) {
 					String service = customQueryOptionValue;
 					if (customQueryOptionValue.indexOf('?') > 0) {
@@ -256,7 +268,7 @@ public class Source {
 			return compiledScripts.get(scriptCode);
 		} else {
 			try {
-				ScriptEngine scriptEngine = Evaluator.scriptEngines.get(scriptString.getDatatype().getLocalName());
+				ScriptEngine scriptEngine = Evaluator.getScriptEngine(scriptString.getDatatype().getLocalName());
 				if (scriptEngine != null) {
 					CompiledScript compiledScriptCode;
 					compiledScriptCode = ((Compilable) scriptEngine).compile(scriptCode);
@@ -299,15 +311,16 @@ public class Source {
 		seeqSources.clear();
 		if (args.length > 0) {
 			//clear the service if provided
-			HashMap<String, olgap.Value> customQueryOptions = getCustomQueryOptions(args);
+			HashMap<String, pathCalc.Resource> customQueryOptions = getCustomQueryOptions(args);
 			if (customQueryOptions.containsKey("service"))
 				clearServiceCache(customQueryOptions);
 		}
+		logger.debug(new ParameterizedMessage("Caches cleared {}"));
 	}
 
-	private void clearServiceCache(HashMap<String, olgap.Value> customQueryOptions) {
+	private void clearServiceCache(HashMap<String, pathCalc.Resource> customQueryOptions) {
 		if (connected()) {
-			IRI cacheDateTimePredicate = Source.getTripleSource().getValueFactory().createIRI(Evaluator.NAMESPACE,
+			IRI cacheDateTimePredicate = Source.getTripleSource().getValueFactory().createIRI(Evaluator.SCRIPTNAMESPACE,
 					Evaluator.CACHE_DATE_TIME);
 			RepositoryResult<Statement> cacheStatements = cacheConnection.getStatements(null, cacheDateTimePredicate,
 					null);
@@ -330,9 +343,9 @@ public class Source {
 
 	}
 
-	private String getBefore(HashMap<String, olgap.Value> customQueryOptions) {
+	private String getBefore(HashMap<String, pathCalc.Resource> customQueryOptions) {
 		if (customQueryOptions != null && customQueryOptions.containsKey("before")) {
-			olgap.Value beforeDateTime = customQueryOptions.get("before");
+			pathCalc.Resource beforeDateTime = customQueryOptions.get("before");
 			return beforeDateTime.getValue().toString().substring(1, 20);
 		}
 		return null;
@@ -344,7 +357,7 @@ public class Source {
 				cacheConnection.clear(cacheContext);
 				//Source.getTripleSource().getValueFactory().createIRI(Evaluator.NAMESPACE, "cacheDateTime");
 				((Model) result).add(cacheContext,
-						Source.getTripleSource().getValueFactory().createIRI(Evaluator.NAMESPACE, Evaluator.CACHE_DATE_TIME),
+						Source.getTripleSource().getValueFactory().createIRI(Evaluator.SCRIPTNAMESPACE, Evaluator.CACHE_DATE_TIME),
 						Source.getTripleSource().getValueFactory().createLiteral(new Date()), cacheContext);
 				cacheConnection.add((Model) result, cacheContext);
 				thing.addTrace(new ParameterizedMessage("Results cached to service {} in graph {}",
@@ -380,37 +393,131 @@ public class Source {
 			}
 		}
 	}
+	public static IRI createIRI(String namespace, String localName) {
+		return getTripleSource().getValueFactory().createIRI(namespace, localName);
+	}
 	public static ReificationType getPredicateReificationType(String predicate) {
-		if(predicateReificationTypes.containsKey(predicate) ) {
-			return predicateReificationTypes.get(predicate);
+		if(getPredicateReificationTypes().containsKey(predicate) ) {
+			return getPredicateReificationTypes().get(predicate);
 		}else {
 			return null;
 		}
 	}
+	public static IRI createIRI(String iri) {
+	//	return getTripleSource().getValueFactory().createIRI( iri);
+		return iri( iri);
+	}
 
+	private static ReificationType getReificationType(String reificationType) {
+		return getReificationTypes().get(reificationType);
+	}
 	public static IRI getReificationSubject(String reificationType) {
-		return reificationTypes.get(reificationType).getReificationSubject();
+		if(getReificationType(reificationType)!=null)
+			return getReificationType(reificationType).getReificationSubject();
+		else return null;
 	}
 	public static IRI getReificationIsSubjectOf(String reificationType) {
-		return reificationTypes.get(reificationType).getReificationIsSubjectOf();
+		if(getReificationType(reificationType)!=null)
+		return getReificationType(reificationType).getReificationIsSubjectOf();
+		else return null;
 	}
 	public static IRI getReificationPredicate(String reificationType) {
-		return reificationTypes.get(reificationType).getReificationPredicate();
+		if(getReificationType(reificationType)!=null)
+		return getReificationType(reificationType).getReificationPredicate();
+		else return null;
 	}
 	public static IRI getReificationIsPredicateOf(String reificationType) {
-		return reificationTypes.get(reificationType).getReificationIsPredicateOf();
+		if(getReificationType(reificationType)!=null)
+		return getReificationType(reificationType).getReificationIsPredicateOf();
+		else return null;
 	}
-
 	public static IRI getReificationObject(String reificationType) {
-		return reificationTypes.get(reificationType).getReificationObject();
+		if(getReificationType(reificationType)!=null)
+		return getReificationType(reificationType).getReificationObject();
+		else return null;
 	}
 	public static IRI getReificationIsObjectOf(String reificationType) {
-		return reificationTypes.get(reificationType).getReificationIsObjectOf();
+		if(getReificationType(reificationType)!=null)
+		return getReificationType(reificationType).getReificationIsObjectOf();
+		else return null;
 	}
-	public static IRI createIRI(String iri) {
-		return getTripleSource().getValueFactory().createIRI( iri);
+
+	public static IRI getReificationObject(IRI reificationType) {
+		return getReificationObject(reificationType.stringValue());
 	}
-	public static IRI createIRI(String namespace, String localName) {
-		return getTripleSource().getValueFactory().createIRI(namespace, localName);
+	public static IRI getReificationIsObjectOf(IRI reificationType) {
+		return getReificationIsObjectOf(reificationType.stringValue());
+	}
+	public static IRI getReificationSubject(IRI reificationType) {
+		return getReificationSubject(reificationType.stringValue());
+	}
+	public static IRI getReificationIsSubjectOf(IRI reificationType) {
+		return getReificationIsSubjectOf(reificationType.stringValue());
+	}
+	public static IRI getReificationPredicate(IRI reificationType) {
+		return getReificationPredicate(reificationType.stringValue());
+	}
+	public static IRI getReificationIsPredicateOf(IRI reificationType) {
+		return getReificationIsPredicateOf(reificationType.stringValue());
+	}
+	public static HashMap<String, IRI> getPrefixes() {
+		return prefixes;
+	}
+	public Source prefix(String prefix, String IRI) {
+		org.eclipse.rdf4j.model.IRI iri = trimAndCheckIRIString(IRI);
+		if(iri!=null )	{	
+			getPrefixes().put(prefix,iri);	
+			return this;
+		}else {
+			logger.error("Invalid IRI specified. Ensure enclosed in <...> ", IRI);	
+			return null;
+		}
+	}
+
+	public Source prefix(String IRI) {
+		return this.prefix("",IRI);
+	}
+	public static  IRI trimAndCheckIRIString(String IRI) {	
+		return iri(trimIRIString(IRI) );
+	}
+	public static String trimIRIString(String IRI) {
+		IRI = IRI.trim();
+		if( IRI.startsWith("<") && IRI.endsWith(">")) {	
+			IRI=IRI.substring(1,IRI.length()-1);			
+			return IRI ;	
+		}
+		return IRI;
+	}
+	public static IRI convertQName(String predicateIRI, HashMap<String,IRI> localPrefixes) {
+		predicateIRI=Source.trimIRIString( predicateIRI);
+		String[] predicateIRIParts = predicateIRI.split(":");
+		IRI predicate = null;
+		if(predicateIRIParts[0].equals("a")) {
+				predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+			}
+		else if(predicateIRIParts[0].equals("http")||predicateIRIParts[0].equals("urn")) {
+			predicate = iri(predicateIRI);
+		}else {
+			IRI namespace = getNamespace(predicateIRIParts[0],localPrefixes);
+			if(namespace==null) {
+				logger.error(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
+			}else {
+				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
+			}
+		}
+		return predicate;
+	}
+	private static IRI getNamespace(String namespaceString, HashMap<String,IRI> localPrefixes) {
+		IRI namespace;
+		if(localPrefixes!= null ) {
+			namespace = localPrefixes.get(namespaceString);
+			if(namespace!=null)
+				return namespace;
+		}
+		namespace = getPrefixes().get(namespaceString);
+		return namespace;
+	}
+	public static Repository getRepository() {
+		return repository;
 	}
 }

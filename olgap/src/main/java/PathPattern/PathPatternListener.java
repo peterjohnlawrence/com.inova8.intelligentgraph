@@ -1,6 +1,5 @@
-// Generated from PathPattern.g4 by ANTLR 4.4
+// Generated from PathPattern.g4 by ANTLR 4.9
 package PathPattern;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -9,183 +8,261 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface PathPatternListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#predicateObjects}.
+	 * Enter a parse tree produced by {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicateObjects(@NotNull PathPatternParser.PredicateObjectsContext ctx);
+	void enterPathPattern(PathPatternParser.PathPatternContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#predicateObjects}.
+	 * Exit a parse tree produced by {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicateObjects(@NotNull PathPatternParser.PredicateObjectsContext ctx);
+	void exitPathPattern(PathPatternParser.PathPatternContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#triples}.
+	 * Enter a parse tree produced by the {@code Path}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void enterTriples(@NotNull PathPatternParser.TriplesContext ctx);
+	void enterPath(PathPatternParser.PathContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#triples}.
+	 * Exit a parse tree produced by the {@code Path}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void exitTriples(@NotNull PathPatternParser.TriplesContext ctx);
+	void exitPath(PathPatternParser.PathContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#graphPattern}.
+	 * Enter a parse tree produced by the {@code PathAlternative}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void enterGraphPattern(@NotNull PathPatternParser.GraphPatternContext ctx);
+	void enterPathAlternative(PathPatternParser.PathAlternativeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#graphPattern}.
+	 * Exit a parse tree produced by the {@code PathAlternative}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void exitGraphPattern(@NotNull PathPatternParser.GraphPatternContext ctx);
+	void exitPathAlternative(PathPatternParser.PathAlternativeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#var}.
+	 * Enter a parse tree produced by the {@code PathParentheses}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void enterVar(@NotNull PathPatternParser.VarContext ctx);
+	void enterPathParentheses(PathPatternParser.PathParenthesesContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#var}.
+	 * Exit a parse tree produced by the {@code PathParentheses}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void exitVar(@NotNull PathPatternParser.VarContext ctx);
+	void exitPathParentheses(PathPatternParser.PathParenthesesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#prefixedName}.
+	 * Enter a parse tree produced by the {@code PathSequence}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrefixedName(@NotNull PathPatternParser.PrefixedNameContext ctx);
+	void enterPathSequence(PathPatternParser.PathSequenceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#prefixedName}.
+	 * Exit a parse tree produced by the {@code PathSequence}
+	 * labeled alternative in {@link PathPatternParser#pathPatterns}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrefixedName(@NotNull PathPatternParser.PrefixedNameContext ctx);
+	void exitPathSequence(PathPatternParser.PathSequenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#reificate}.
+	 * Enter a parse tree produced by {@link PathPatternParser#cardinality}.
 	 * @param ctx the parse tree
 	 */
-	void enterReificate(@NotNull PathPatternParser.ReificateContext ctx);
+	void enterCardinality(PathPatternParser.CardinalityContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#reificate}.
+	 * Exit a parse tree produced by {@link PathPatternParser#cardinality}.
 	 * @param ctx the parse tree
 	 */
-	void exitReificate(@NotNull PathPatternParser.ReificateContext ctx);
+	void exitCardinality(PathPatternParser.CardinalityContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#predicateObject}.
+	 * Enter a parse tree produced by {@link PathPatternParser#negation}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicateObject(@NotNull PathPatternParser.PredicateObjectContext ctx);
+	void enterNegation(PathPatternParser.NegationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#predicateObject}.
+	 * Exit a parse tree produced by {@link PathPatternParser#negation}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicateObject(@NotNull PathPatternParser.PredicateObjectContext ctx);
+	void exitNegation(PathPatternParser.NegationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#source}.
+	 * Enter a parse tree produced by {@link PathPatternParser#pathEltOrInverse}.
 	 * @param ctx the parse tree
 	 */
-	void enterSource(@NotNull PathPatternParser.SourceContext ctx);
+	void enterPathEltOrInverse(PathPatternParser.PathEltOrInverseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#source}.
+	 * Exit a parse tree produced by {@link PathPatternParser#pathEltOrInverse}.
 	 * @param ctx the parse tree
 	 */
-	void exitSource(@NotNull PathPatternParser.SourceContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#inversePredicatePath}.
-	 * @param ctx the parse tree
-	 */
-	void enterInversePredicatePath(@NotNull PathPatternParser.InversePredicatePathContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#inversePredicatePath}.
-	 * @param ctx the parse tree
-	 */
-	void exitInversePredicatePath(@NotNull PathPatternParser.InversePredicatePathContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#reification}.
-	 * @param ctx the parse tree
-	 */
-	void enterReification(@NotNull PathPatternParser.ReificationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#reification}.
-	 * @param ctx the parse tree
-	 */
-	void exitReification(@NotNull PathPatternParser.ReificationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#target}.
-	 * @param ctx the parse tree
-	 */
-	void enterTarget(@NotNull PathPatternParser.TargetContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#target}.
-	 * @param ctx the parse tree
-	 */
-	void exitTarget(@NotNull PathPatternParser.TargetContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteral(@NotNull PathPatternParser.LiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteral(@NotNull PathPatternParser.LiteralContext ctx);
+	void exitPathEltOrInverse(PathPatternParser.PathEltOrInverseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PathPatternParser#predicate}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicate(@NotNull PathPatternParser.PredicateContext ctx);
+	void enterPredicate(PathPatternParser.PredicateContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link PathPatternParser#predicate}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicate(@NotNull PathPatternParser.PredicateContext ctx);
+	void exitPredicate(PathPatternParser.PredicateContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#triple}.
+	 * Enter a parse tree produced by {@link PathPatternParser#anyPredicate}.
 	 * @param ctx the parse tree
 	 */
-	void enterTriple(@NotNull PathPatternParser.TripleContext ctx);
+	void enterAnyPredicate(PathPatternParser.AnyPredicateContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#triple}.
+	 * Exit a parse tree produced by {@link PathPatternParser#anyPredicate}.
 	 * @param ctx the parse tree
 	 */
-	void exitTriple(@NotNull PathPatternParser.TripleContext ctx);
+	void exitAnyPredicate(PathPatternParser.AnyPredicateContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#reifiedPredicate}.
+	 * @param ctx the parse tree
+	 */
+	void enterReifiedPredicate(PathPatternParser.ReifiedPredicateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#reifiedPredicate}.
+	 * @param ctx the parse tree
+	 */
+	void exitReifiedPredicate(PathPatternParser.ReifiedPredicateContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#predicateRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredicateRef(PathPatternParser.PredicateRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#predicateRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredicateRef(PathPatternParser.PredicateRefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PathPatternParser#iriRef}.
 	 * @param ctx the parse tree
 	 */
-	void enterIriRef(@NotNull PathPatternParser.IriRefContext ctx);
+	void enterIriRef(PathPatternParser.IriRefContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link PathPatternParser#iriRef}.
 	 * @param ctx the parse tree
 	 */
-	void exitIriRef(@NotNull PathPatternParser.IriRefContext ctx);
+	void exitIriRef(PathPatternParser.IriRefContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#predicatePattern}.
+	 * Enter a parse tree produced by {@link PathPatternParser#dereifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicatePattern(@NotNull PathPatternParser.PredicatePatternContext ctx);
+	void enterDereifier(PathPatternParser.DereifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#predicatePattern}.
+	 * Exit a parse tree produced by {@link PathPatternParser#dereifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicatePattern(@NotNull PathPatternParser.PredicatePatternContext ctx);
+	void exitDereifier(PathPatternParser.DereifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#bnode}.
+	 * Enter a parse tree produced by {@link PathPatternParser#factFilterPattern}.
 	 * @param ctx the parse tree
 	 */
-	void enterBnode(@NotNull PathPatternParser.BnodeContext ctx);
+	void enterFactFilterPattern(PathPatternParser.FactFilterPatternContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#bnode}.
+	 * Exit a parse tree produced by {@link PathPatternParser#factFilterPattern}.
 	 * @param ctx the parse tree
 	 */
-	void exitBnode(@NotNull PathPatternParser.BnodeContext ctx);
+	void exitFactFilterPattern(PathPatternParser.FactFilterPatternContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#predicatePath}.
+	 * Enter a parse tree produced by {@link PathPatternParser#propertyListNotEmpty}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicatePath(@NotNull PathPatternParser.PredicatePathContext ctx);
+	void enterPropertyListNotEmpty(PathPatternParser.PropertyListNotEmptyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#predicatePath}.
+	 * Exit a parse tree produced by {@link PathPatternParser#propertyListNotEmpty}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicatePath(@NotNull PathPatternParser.PredicatePathContext ctx);
+	void exitPropertyListNotEmpty(PathPatternParser.PropertyListNotEmptyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#verbObjectList}.
+	 * @param ctx the parse tree
+	 */
+	void enterVerbObjectList(PathPatternParser.VerbObjectListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#verbObjectList}.
+	 * @param ctx the parse tree
+	 */
+	void exitVerbObjectList(PathPatternParser.VerbObjectListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#verb}.
+	 * @param ctx the parse tree
+	 */
+	void enterVerb(PathPatternParser.VerbContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#verb}.
+	 * @param ctx the parse tree
+	 */
+	void exitVerb(PathPatternParser.VerbContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#objectList}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectList(PathPatternParser.ObjectListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#objectList}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectList(PathPatternParser.ObjectListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#object}.
+	 * @param ctx the parse tree
+	 */
+	void enterObject(PathPatternParser.ObjectContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#object}.
+	 * @param ctx the parse tree
+	 */
+	void exitObject(PathPatternParser.ObjectContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#qname}.
+	 * @param ctx the parse tree
+	 */
+	void enterQname(PathPatternParser.QnameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#qname}.
+	 * @param ctx the parse tree
+	 */
+	void exitQname(PathPatternParser.QnameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#pname_ns}.
+	 * @param ctx the parse tree
+	 */
+	void enterPname_ns(PathPatternParser.Pname_nsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#pname_ns}.
+	 * @param ctx the parse tree
+	 */
+	void exitPname_ns(PathPatternParser.Pname_nsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteral(PathPatternParser.LiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteral(PathPatternParser.LiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperator(PathPatternParser.OperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperator(PathPatternParser.OperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#rdfType}.
+	 * @param ctx the parse tree
+	 */
+	void enterRdfType(PathPatternParser.RdfTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#rdfType}.
+	 * @param ctx the parse tree
+	 */
+	void exitRdfType(PathPatternParser.RdfTypeContext ctx);
 }

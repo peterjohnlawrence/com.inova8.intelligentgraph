@@ -1,6 +1,5 @@
 package olgap;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
@@ -10,6 +9,11 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
+
+import pathCalc.Source;
+import pathPatternElement.PredicateElement;
+import pathPatternProcessor.Thing;
+
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.ParameterizedMessage;
@@ -18,14 +22,14 @@ import org.apache.logging.log4j.LogManager;
 
 public class FactValue extends Evaluator implements Function {
 	private final Logger logger = LogManager.getLogger(FactValue.class);
-	public FactValue() throws NoSuchAlgorithmException {
+	public FactValue()  {
 		super();
 		logger.info(new ParameterizedMessage("Initiating FactValue"));
 	}
 
 	@Override
 	public String getURI() {
-		return  NAMESPACE + "factValue";
+		return  OLGAPNAMESPACE + "factValue";
 	}
 
 	@Override
@@ -49,15 +53,19 @@ public class FactValue extends Evaluator implements Function {
 				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}
 			try{
-				if(!sources.containsKey(tripleSource.hashCode()) ){
-					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
-				}
-				Source source = sources.get(tripleSource.hashCode());
-				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
+				Value[] argumentArray = Arrays.copyOfRange(args, 2, args.length);
+				Source source = sources.getSource(tripleSource, argumentArray );
+				HashMap<String, pathCalc.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
+				
+//				if(!sources.containsKey(tripleSource.hashCode()) ){
+//					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
+//				}
+//				Source source = sources.get(tripleSource.hashCode());
+//				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
 				
 				Thing subjectThing = source.thingFactory(null, subject,new Stack<String>(),customQueryOptions);
-				olgap.Value fact = subjectThing.getFact( predicate);
-				if( fact != null) {
+				pathCalc.Resource fact = subjectThing.getFact( new PredicateElement(predicate));
+				if( fact != null && fact.getValue()!=null) {
 					Value result = fact.getValue();
 					logger.debug(new ParameterizedMessage("FactValue = {}",result));
 					return  result;

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
@@ -19,6 +22,11 @@ import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.spin.function.InverseMagicProperty;
 
 public class DegreeDistributionTupleFunction implements InverseMagicProperty{
+	private final Logger logger = LogManager.getLogger(DegreeDistributionTupleFunction.class);
+	public DegreeDistributionTupleFunction()  {
+		super();
+		logger.info(new ParameterizedMessage("Initiating DegreeDistributionTupleFunction"));
+	}	
 	public  RepositoryConnection conn;
 
 	public static final String NAMESPACE = "http://inova8.com/olgap/";

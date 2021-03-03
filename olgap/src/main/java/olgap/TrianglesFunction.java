@@ -1,5 +1,8 @@
 package olgap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
@@ -16,12 +19,14 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
-
+import static org.eclipse.rdf4j.model.util.Values.iri;
 public class TrianglesFunction  implements Function{
+	private final Logger logger = LogManager.getLogger(TrianglesFunction.class);
 	public RepositoryConnection conn;
 	public Repository workingRep;
 	public TrianglesFunction() {
 		super();
+		logger.info(new ParameterizedMessage("Initiating TrianglesFunction"));
 		workingRep = new SailRepository(new MemoryStore());
 		workingRep.init();
 	}
@@ -57,7 +62,7 @@ public class TrianglesFunction  implements Function{
 					+ "}";
 			GraphQueryResult graphResult = conn.prepareGraphQuery(graphQueryString).evaluate();
 			
-			Resource graph = workingRep.getValueFactory().createIRI("ng:temp");
+			Resource graph = iri("ng:temp");
 			while (graphResult.hasNext()) {
 				Statement st = graphResult.next();
 				// ... do something with the resulting statement here.

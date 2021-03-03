@@ -25,7 +25,7 @@ public class EccentricityTest {
 			queryString += "SELECT   ?eccentricitySubject ?eccentricity \n";
 			queryString += "WHERE { \n";
 			queryString += "BIND( <http://in4mium.com/londontube/id/Mornington_Crescent> as ?subject)\n";
-			queryString += "BIND( \"http://localhost:8080/rdf4j-server/repositories/olgap\" as ?service)\n";
+			queryString += "BIND( <http://localhost:8080/rdf4j-server/repositories/tfl> as ?service)\n";
 			queryString += "BIND( ?subject  as ?eccentricitySubject)\n";
 			//queryString += "BIND( <http://inova8.com/olgap/eccentricity> ( ?service, ?subject)  as ?eccentricity)\n";
 			queryString += "BIND( olgap:eccentricity(?service , ?subject) as ?eccentricity)";
