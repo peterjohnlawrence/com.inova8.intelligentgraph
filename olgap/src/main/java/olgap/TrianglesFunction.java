@@ -37,7 +37,7 @@ public class TrianglesFunction  implements Function{
 	}
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
-		Repository rep = new SPARQLRepository(args[0].stringValue());
+		org.eclipse.rdf4j.repository.Repository rep = new SPARQLRepository(args[0].stringValue());
 		rep.init();
 		
 		

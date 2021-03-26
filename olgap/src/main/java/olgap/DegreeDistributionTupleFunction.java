@@ -16,7 +16,6 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.spin.function.InverseMagicProperty;
@@ -39,7 +38,7 @@ public class DegreeDistributionTupleFunction implements InverseMagicProperty{
 			ValueFactory valueFactory, Value... args) throws QueryEvaluationException {
 
 		//Repository rep = new HTTPRepository(args[0].stringValue(),args[1].stringValue());//"http://localhost:8082/rdf4j-server/", "tfl");
-		Repository rep = new SPARQLRepository(args[0].stringValue());
+		org.eclipse.rdf4j.repository.Repository rep = new SPARQLRepository(args[0].stringValue());
 		rep.init();	
 		conn = rep.getConnection();
 		

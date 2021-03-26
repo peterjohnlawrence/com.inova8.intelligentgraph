@@ -2,11 +2,9 @@ package PathPatternProcessor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,21 +16,20 @@ import org.junit.jupiter.api.TestMethodOrder;
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.PathPatternContext;
-import pathCalc.Source;
+import pathCalc.Thing;
 import pathPatternElement.PathElement;
 import pathPatternProcessor.PathErrorListener;
 import pathPatternProcessor.PathPatternVisitor;
-import pathPatternProcessor.PathProcessor;
-import pathPatternProcessor.Thing;
-import resources_Deprecated.PathProcessorOld;
+import pathQL.PathParser;
+import pathQLRepository.PathQLRepository;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternParserTests {
-	static Source source;
+	static PathQLRepository source;
 	static Thing thing;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source = new Source();
+		source = new PathQLRepository();
 		thing = new Thing(source, null, null, null);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/");
 
@@ -55,11 +52,34 @@ class PathPatternParserTests {
 	void test_0() {
 		CharStream input = CharStreams.fromString( ":parent[:gender :female]/:parent[:gender :male; :birthplace [rdfs:label 'Maidstone']]/:parent");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> 'Maidstone' ] ] / <http://default/parent>"
+		assertEquals ("<http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidstone ] ] / <http://default/parent>"
 				 , element.toString());
 	}
 
-
+	@Test
+	@Order(0)
+	void test_01() {
+		CharStream input = CharStreams.fromString( "[eq :Peter]/:parent[:gender :female]/:parent[:gender :male; :birthplace [rdfs:label 'Maidston']]/:parent");
+		PathElement element = prepareElement(input);
+		assertEquals ("[eq <http://default/Peter> ] / <http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidston ] ] / <http://default/parent>"
+				 , element.toString());
+	}
+	@Test
+	@Order(0)
+	void test_02() {
+		CharStream input = CharStreams.fromString( "[like 'Peter']/:parent[:gender :female]/:parent[:gender :male; :birthplace [rdfs:label 'Maidston']]/:parent");
+		PathElement element = prepareElement(input);
+		assertEquals ("[like Peter ] / <http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidston ] ] / <http://default/parent>"
+				 , element.toString());
+	}
+	@Test
+	@Order(0)
+	void test_03() {
+		CharStream input = CharStreams.fromString( "[like [query 'Peter'; property :label]]/:parent[:gender :female]/:parent[:gender :male; :birthplace [rdfs:label 'Maidston']]/:parent");
+		PathElement element = prepareElement(input);
+		assertEquals ("[like [query Peter ;property <http://default/label> ] ] / <http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidston ] ] / <http://default/parent>"
+				 , element.toString());
+	}
 	@Test
 	@Order(0)
 	void test_05() {
@@ -93,35 +113,35 @@ class PathPatternParserTests {
 	void test_4() {
 		CharStream input = CharStreams.fromString( ":volumeFlow [ gt \"35\" ]");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/volumeFlow>[gt \"35\" ]" , element.toString());
+		assertEquals ("<http://default/volumeFlow>[gt 35 ]" , element.toString());
 	}
 	@Test
 	@Order(5)
 	void test_5() {
 		CharStream input = CharStreams.fromString( ":Location@:appearsOn[ rdfs:label \"eastman3d\" ]#/:lat");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/Location>@<http://default/appearsOn>[<http://rdfs/label> \"eastman3d\" ]# / <http://default/lat>" , element.toString());
+		assertEquals ("<http://default/Location>@<http://default/appearsOn>[<http://rdfs/label> eastman3d ]# / <http://default/lat>" , element.toString());
 	}
 	@Test
 	@Order(6)
 	void test_6() {
 		CharStream input = CharStreams.fromString( ":Location@:appearsOn[ eq [ rdfs:label \"Calc2Graph1\"] ]#/^:lat/:long/^:left/:right");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq [<http://rdfs/label> \"Calc2Graph1\" ] ]# / ^<http://default/lat> / <http://default/long> / ^<http://default/left> / <http://default/right>" , element.toString());
+		assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq [<http://rdfs/label> Calc2Graph1 ] ]# / ^<http://default/lat> / <http://default/long> / ^<http://default/left> / <http://default/right>" , element.toString());
 	}
 	@Test
 	@Order(7)
 	void test_7() {
 		CharStream input = CharStreams.fromString( ":volumeFlow [ gt \"35\" ; rdfs:label \"Calc2Graph1\" ; eq [ rdfs:label \"Calc2Graph1\"] , :Calc2Graph1 ,\"Calc2Graph1\" ]");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/volumeFlow>[gt \"35\" ;<http://rdfs/label> \"Calc2Graph1\" ;eq ([<http://rdfs/label> \"Calc2Graph1\" ] , <http://default/Calc2Graph1>  , \"Calc2Graph1\" ) ]" , element.toString());
+		assertEquals ("<http://default/volumeFlow>[gt 35 ;<http://rdfs/label> Calc2Graph1 ;eq ([<http://rdfs/label> Calc2Graph1 ] , <http://default/Calc2Graph1>  , Calc2Graph1 ) ]" , element.toString());
 	}
 	@Test
 	@Order(8)
 	void test_8() {
 		CharStream input = CharStreams.fromString( ":Location@:appearsOn[ rdfs:label \"eastman3d\" ]#[a :Location ]/:lat");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/Location>@<http://default/appearsOn>[<http://rdfs/label> \"eastman3d\" ]#[<http://rdftype> <http://default/Location> ] / <http://default/lat>" , element.toString());
+		assertEquals ("<http://default/Location>@<http://default/appearsOn>[<http://rdfs/label> eastman3d ]#[<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Location> ] / <http://default/lat>" , element.toString());
 	}
 	@Test
 	@Order(9)
@@ -135,7 +155,7 @@ class PathPatternParserTests {
 	void test_10() {
 		CharStream input = CharStreams.fromString( ":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph1']]#/:lat");
 		PathElement element = prepareElement(input);
-		assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq [<http://rdfs/label> 'Calc2Graph1' ] ]# / <http://default/lat>" , element.toString());
+		assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq [<http://rdfs/label> Calc2Graph1 ] ]# / <http://default/lat>" , element.toString());
 	}
 	@Test 
 	@Order(11)
@@ -164,9 +184,9 @@ class PathPatternParserTests {
 	void test_12() {
 		try {
 
-			PathProcessor.parsePathPattern(thing, ":Location@:appearsOn][eq id:Calc2Graph2]#");
+			PathParser.parsePathPattern(thing, ":Location@:appearsOn][eq id:Calc2Graph2]#");
 		}catch(Exception e){
-			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, '|', '/', '{', '[', '#'}]"
+			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, '/', '>', '|', '{', '[', '#'}]"
 					,e.getMessage() );
 		}
 	}
@@ -175,7 +195,7 @@ class PathPatternParserTests {
 	void test_13() {
 		try {
 
-			PathElement element = PathProcessor.parsePathPattern(thing, ":Location@:appearsOn[eq id:Calc2Graph1, id:Calc2Graph2]#");
+			PathElement element = PathParser.parsePathPattern(thing, ":Location@:appearsOn[eq id:Calc2Graph1, id:Calc2Graph2]#");
 			assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq (<http://id/Calc2Graph1> , <http://id/Calc2Graph2> ) ]#" , element.toString());
 		}catch(Exception e){
 			fail();
@@ -187,7 +207,7 @@ class PathPatternParserTests {
 void test_14() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit{1, 42}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1, 42}/:massThroughput");
 		assertEquals ("^<http://default/hasProductBatteryLimit>{1,42} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -198,7 +218,7 @@ void test_14() {
 void test_15() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit{1,}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1,}/:massThroughput");
 		assertEquals ("^<http://default/hasProductBatteryLimit>{1,*} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -209,7 +229,7 @@ void test_15() {
 void test_16() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
+		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>){1,2}" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -220,7 +240,7 @@ void test_16() {
 void test_17() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>){1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -231,7 +251,7 @@ void test_17() {
 void test_18() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
+		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>){1,2} / *" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -242,7 +262,7 @@ void test_18() {
 void test_19() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / *){1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -253,8 +273,8 @@ void test_19() {
 void test_20() {
 	try {
 		
-		new PathProcessor();
-		PathElement element = PathProcessor.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
+		new PathParser();
+		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
 		assertEquals ("*{1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -265,7 +285,7 @@ void test_20() {
 void test_21() {
 	try {
 		thing.prefix("http://default/override/");
-		PathElement element = PathProcessor.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
 		assertEquals ("*{1,2} / <http://default/override/massThroughput>" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -277,7 +297,7 @@ void test_22() {
 	try {
 
 		thing.prefix("http://default/");
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit/*");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/*");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / *" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -288,7 +308,7 @@ void test_22() {
 void test_23() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow)");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow)");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / (<http://default/massFlow> | <http://default/volumeFlow>)" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -299,7 +319,7 @@ void test_23() {
 void test_24() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow  |:density)");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow  |:density)");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / ((<http://default/massFlow> | <http://default/volumeFlow>) | <http://default/density>)" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -310,7 +330,7 @@ void test_24() {
 void test_25() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit/(:temp | (:massFlow |! :volumeFlow  |! :density))");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:temp | (:massFlow |! :volumeFlow  |! :density))");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / (<http://default/temp> | ((<http://default/massFlow> | !<http://default/volumeFlow>) | !<http://default/density>))" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -321,7 +341,7 @@ void test_25() {
 void test_26() {
 	try {
 
-		PathElement element = PathProcessor.parsePathPattern(thing, "^:hasProductBatteryLimit/(* | !(:massFlow |:volumeFlow  |:density))");
+		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(* | !(:massFlow |:volumeFlow  |:density))");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / (* | !((<http://default/massFlow> | <http://default/volumeFlow>) | <http://default/density>))" , element.toString());
 	}catch(Exception e){
 		fail();
@@ -332,7 +352,7 @@ void test_26() {
 void test_27() {
 	try {
 		
-		PathElement element = PathProcessor.parsePathPattern(thing, "(* | !^:hasProductBatteryLimit)/(* | !(:massFlow |:volumeFlow  |:density))");
+		PathElement element = PathParser.parsePathPattern(thing, "(* | !^:hasProductBatteryLimit)/(* | !(:massFlow |:volumeFlow  |:density))");
 		assertEquals ("(* | !^<http://default/hasProductBatteryLimit>) / (* | !((<http://default/massFlow> | <http://default/volumeFlow>) | <http://default/density>))" , element.toString());
 	}catch(Exception e){
 		fail();

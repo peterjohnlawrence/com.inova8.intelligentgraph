@@ -169,7 +169,6 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.query.Update;
 import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -203,7 +202,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
 	protected static final String SHORTEST_PATH_PROPERTY = "shortestPath";
 
-	public static Repository workingRep;
+	public static org.eclipse.rdf4j.repository.Repository workingRep;
 
 
 	final String propertyPathRegex = "([!^]*)?\\(([^)]*)\\)";

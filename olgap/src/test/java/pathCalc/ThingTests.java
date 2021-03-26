@@ -8,21 +8,26 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Stack;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.sail.NotifyingSailConnection;
+import org.eclipse.rdf4j.sail.Sail;
+import org.eclipse.rdf4j.sail.lucene.LuceneSail;
+import org.eclipse.rdf4j.sail.lucene.QuerySpec;
+import org.eclipse.rdf4j.sail.lucene.SearchIndex;
+import org.eclipse.rdf4j.sail.lucene.SearchQueryEvaluator;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,44 +35,52 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import olgap.ClearCache;
 import olgap.Evaluator;
-import olgap.FactValue;
-import olgap.ObjectValue;
-import pathPatternElement.PathElement;
-import pathPatternProcessor.PathProcessor;
-import pathPatternProcessor.Resources;
-import pathPatternProcessor.Thing;
-import searchProcessor.Search;
-import searchProcessor.SearchResultsIterator;
+import pathQL.Match;
+import pathQLModel.MatchFact;
+import pathQLModel.Resource;
+import pathQLRepository.PathQLRepository;
+import pathQLResults.MatchResults;
+import pathQLResults.ResourceResults;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ThingTests {
+	static LuceneSail lucenesail ;
 	private static RepositoryConnection conn;
 	static RepositoryTripleSource repositoryTripleSource;
-	private static Source source;
+	private static PathQLRepository source;
 	private static Evaluator evaluator;
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
 		FileUtils.deleteDirectory(dataDir);
-		Repository workingRep = new SailRepository(new NativeStore(dataDir));
+
+		Sail baseSail = new NativeStore(dataDir);
+	    lucenesail = new LuceneSail();
+		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
+		lucenesail.setBaseSail(baseSail);
+
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
+		//org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
 
 		String dataFilename = "src/test/resources/calc2graph.data.ttl";
 		InputStream dataInput = new FileInputStream(dataFilename);
 		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
 		conn = workingRep.getConnection();
 		conn.add(dataModel.getStatements(null, null, null));
-		
+
 		String modelFilename = "src/test/resources/calc2graph.def.ttl";
 		InputStream modelInput = new FileInputStream(modelFilename);
 		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
 		conn = workingRep.getConnection();
 		conn.add(modelModel.getStatements(null, null, null));
 		repositoryTripleSource = new RepositoryTripleSource(conn);
-		//source = new Source(repositoryTripleSource);
-		source = new Source(workingRep);
+		source = new PathQLRepository(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
-		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
+		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 		evaluator = new Evaluator();
 	}
+
 	@Test
 	@Order(0)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
@@ -79,22 +92,40 @@ class ThingTests {
 			e.printStackTrace();
 		}
 	}
+
 	@Test
 	@Order(1)
-	void search_1() {
-		
+	void match_1() {
+
 		try {
-			SearchResultsIterator searchResultsIterator = Search.entitySearch("Unit2");
-			while(searchResultsIterator.hasNext()) {
-				 BindingSet nextSearchResultBindingSet = searchResultsIterator.nextBindingSet();
-				int i=1;
+//			NotifyingSailConnection luceneConnection = lucenesail.getConnection();
+//			SearchIndex luceneIndex = lucenesail.getLuceneIndex();
+//			
+//			String matchesVarName = "anon";
+//			String propertyVarName = "property";
+//			String scoreVarName = "score";
+//			String snippetVarName = "snippet";
+//			//IRI subject = iri("entity");
+//			String queryString = "Unit1";
+//			IRI propertyURI = null;
+//			SearchQueryEvaluator querySpec = new QuerySpec(matchesVarName, propertyVarName, scoreVarName, snippetVarName, null,
+//					queryString, propertyURI);
+//			Collection<BindingSet> queryResultSet = luceneIndex.evaluate(querySpec);
+
+			MatchResults matchResultsIterator = Match.entityMatch("Unit1");
+			while (matchResultsIterator.hasNext()) {
+				MatchFact nextMatch = matchResultsIterator.nextResource();
+				assertEquals(
+						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.5126757621765137]",
+						nextMatch.toString());
+				break;
 			}
-			int i=1;
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	@Test
 	@Order(1)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
@@ -108,6 +139,7 @@ class ThingTests {
 			e.printStackTrace();
 		}
 	}
+
 	@Test
 	@Order(2)
 	void test_2() {
@@ -119,8 +151,9 @@ class ThingTests {
 			fail();
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	@Test
 	@Order(21)
 	void test_2_1() {
@@ -132,35 +165,39 @@ class ThingTests {
 			fail();
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	@Test
 	@Order(3)
 	void test_3() {
-		
+
 		try {
-			Thing $this = source.thingFactory( null, iri("http://inova8.com/calc2graph/id/Unit1"), new Stack<String>(),null);
+			Thing $this = source.thingFactory(null, iri("http://inova8.com/calc2graph/id/Unit1"), new Stack<String>(),
+					null);
 			$this.prefix("http://inova8.com/calc2graph/def/");
 			Double fact = 0.0;
-			for( Resource batterylimit: $this.getFacts(":hasProductBatteryLimit")) {
+			for (Resource batterylimit : $this.getFacts(":hasProductBatteryLimit")) {
 				fact += batterylimit.getFact(":massFlow").doubleValue();
 			}
-			Resources batterylimits = $this.getFacts(":hasProductBatteryLimit");
-			Resource batterylimit; 
-			while(batterylimits.hasNext() ) {
+			ResourceResults batterylimits = $this.getFacts(":hasProductBatteryLimit");
+			Resource batterylimit;
+			while (batterylimits.hasNext()) {
 				batterylimit = batterylimits.next();
 				fact -= batterylimit.getFact(":massFlow").doubleValue();
-			}; 
+			}
+			;
 			assertEquals(0.0, fact);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	@Test
 	@Order(4)
 	void test_4() {
-		
+
 		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact(":massThroughput");
@@ -168,29 +205,31 @@ class ThingTests {
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	@Test
 	@Order(5)
 	void test_5() {
-		
+
 		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("def","<http://inova8.com/calc2graph/def/>");
+			$this.prefix("def", "<http://inova8.com/calc2graph/def/>");
 			Resource result = $this.getFact("def:Attribute@def:density");
-			if(result!=null) 
-					assertEquals(".42", result.stringValue());
+			if (result != null)
+				assertEquals(".42", result.stringValue());
 			else
 				fail();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	@Test
 	@Order(6)
 	void test_6() {
-		
+
 		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massFlow>");
@@ -198,12 +237,13 @@ class ThingTests {
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	@Test
 	@Order(7)
 	void test_7() {
-		
+
 		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massThroughput>");
@@ -211,316 +251,338 @@ class ThingTests {
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	@Test
 	@Order(8)
 	void test_8() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Resource result = $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput");
 
 			assertEquals("23.43999981880188", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(9)
-	void test_9() {		
-		try{
+	void test_9() {
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
-			Float result = $this.getFact(":massFlow").floatValue()/$this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput").floatValue();
-			
+			Float result = $this.getFact(":massFlow").floatValue()
+					/ $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput").floatValue();
+
 			assertEquals("0.52218425", result.toString());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(10)
-	void test_10() {		
-		try{
+	void test_10() {
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Float result = $this.getFact("^:hasProductBatteryLimit/:massThroughput").floatValue();
-			
-			 assertEquals("23.44",result.toString());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+
+			assertEquals("23.44", result.toString());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(11)
-	void test_11() {		
-		try{
+	void test_11() {
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			Resource result = $this.getFact(":lat");
-			
-			 assertEquals("400",result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+
+			assertEquals("400", result.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(12)
 	void test_12() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
 
 			assertEquals("400", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(13)
 	void test_13() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#").getFact(":lat");
-			
+
 			assertEquals("400", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(14)
 	void test_14() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph2]#"); //""
-				
-			if(result!=null) 
+
+			if (result != null)
 				assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
-			
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(15)
-	void test_15() {		
-		try{
+	void test_15() {
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/long>");
 
-			 assertEquals("501",result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+			assertEquals("501", result.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	@Order(16)
 	void test_16() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]#");
-				
+
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL2", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(17)
 	void test_17() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]");
-				
+
 			assertEquals("http://inova8.com/calc2graph/id/BatteryLimit2", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(18)
 	void test_18() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit1]#/:lat");
-			
+
 			assertEquals("400", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(19)
 	void test_19() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[ rdfs:label 'Calc2Graph2']#");
-			
+
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(20)
 	void test_20() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#/:lat");
-			
+
 			assertEquals("400", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(21)
 	void test_21() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph1 ]/:long");
-			
+
 			assertEquals("501", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(22)
 	void test_22() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long");
-			
+
 			assertEquals("502", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(23)
 	void test_23() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]");
-			
+
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(24)
 	void test_24() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit2"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
-			
+
 			assertEquals("23.43999981880188", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(25)
 	void test_25() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit2"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
-			
+
 			assertEquals("23.43999981880188", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(26)
 	void test_26() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit3"), null);
 
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
-			
+
 			assertEquals("24.77999922633171", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
+
 	@Test
 	@Order(27)
 	void test_27() {
-		
-		try{
+
+		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit3"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
+			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massFlowBalance");
-			
+
 			assertEquals("1.339999407529831", result.stringValue());
-			}catch(Exception e){
-				fail();
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
-	@Test 
+
+	@Test
 	@Order(28)
 	void test_28() {
 		try {
 			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resources results = $this.getFacts("(:Attribute@:density  |:density)");
-			for(Resource result:results) {
+			ResourceResults results = $this.getFacts("(:Attribute@:density  |:density)");
+			for (Resource result : results) {
 				assertEquals(".42", result.stringValue());
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			fail();
 		}
 	}
+
 	@Test
 	@Order(100)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",

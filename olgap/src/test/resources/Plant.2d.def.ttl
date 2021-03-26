@@ -1,0 +1,977 @@
+# baseURI: http://inova8.com/plant.2d/def/
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix plant: <http://inova8.com/plant/def/> .
+@prefix plant.AttachmentType: <http://inova8.com/plant/def/AttachmentType/> .
+@prefix plant.LineupType: <http://inova8.com/plant/def/LineupType/> .
+@prefix plant.MeasurementType: <http://inova8.com/plant/def/MeasurementType/> .
+@prefix plant.MovementType: <http://inova8.com/plant/def/MovementType/> .
+@prefix plant.OperationType: <http://inova8.com/plant/def/OperationType/> .
+@prefix plant.PlanMaterialType: <http://inova8.com/plant/def/PlanMaterialType/> .
+@prefix plant.QuantityKind: <http://inova8.com/plant/def/QuantityKind/> .
+@prefix plant.StorageType: <http://inova8.com/plant/def/StorageType/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+plant:
+  rdf:type owl:Ontology ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+plant:Attachment
+  rdf:type owl:Class ;
+  rdfs:label "Attachment" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:AttachmentType
+  rdf:type owl:Class ;
+  rdfs:label "AttachmentType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+  rdfs:subClassOf owl:ObjectProperty ;
+.
+plant.AttachmentType:ContainsWithin
+  rdf:type plant:AttachmentType ;
+  rdfs:label "ContainsWithin" ;
+.
+plant.AttachmentType:FeedsTo
+  rdf:type plant:AttachmentType ;
+  rdfs:label "FeedsTo" ;
+.
+plant.AttachmentType:ProducesFrom
+  rdf:type plant:AttachmentType ;
+  rdfs:label "ProducesFrom" ;
+.
+plant.AttachmentType:ReturnsFrom
+  rdf:type plant:AttachmentType ;
+  rdfs:label "ReturnsFrom" ;
+.
+plant.AttachmentType:SuppliesTo
+  rdf:type plant:AttachmentType ;
+  rdfs:label "SuppliesTo" ;
+.
+plant:Attribute
+  rdf:type owl:Class ;
+  rdfs:label "Attribute" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:BatteryLimit
+  rdf:type owl:Class ;
+  rdfs:label "Battery limit" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Boiler
+  rdf:type owl:Class ;
+  rdfs:label "Boiler" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Composition
+  rdf:type owl:Class ;
+  rdfs:label "Composition" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:CompositionType
+  rdf:type owl:Class ;
+  rdfs:label "Composition type" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant:Compressor
+  rdf:type owl:Class ;
+  rdfs:label "Compressor" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Connection
+  rdf:type owl:Class ;
+  rdfs:label "Connection" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:ConnectionType
+  rdf:type owl:Class ;
+  rdfs:label "Connection type" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant:Heater
+  rdf:type owl:Class ;
+  rdfs:label "Heater" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Item
+  rdf:type owl:Class ;
+  rdfs:label "Item" ;
+.
+plant:Lineup
+  rdf:type owl:Class ;
+  rdfs:label "Lineup" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:LineupType
+  rdf:type owl:Class ;
+  rdfs:label "LineupType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.LineupType:Feed-Tank
+  rdf:type plant:LineupType ;
+  rdfs:label "Feed-Tank" ;
+.
+plant.LineupType:Feed-Unit
+  rdf:type plant:LineupType ;
+  rdfs:label "Feed-Unit" ;
+.
+plant.LineupType:Tank-Product
+  rdf:type plant:LineupType ;
+  rdfs:label "Tank-Product" ;
+.
+plant.LineupType:Tank-Tank
+  rdf:type plant:LineupType ;
+  rdfs:label "Tank-Tank" ;
+.
+plant.LineupType:Tank-Unit
+  rdf:type plant:LineupType ;
+  rdfs:label "Tank-Unit" ;
+.
+plant.LineupType:Unit-Product
+  rdf:type plant:LineupType ;
+  rdfs:label "Unit-Product" ;
+.
+plant.LineupType:Unit-Tank
+  rdf:type plant:LineupType ;
+  rdfs:label "Unit-Tank" ;
+.
+plant.LineupType:Unit-Unit
+  rdf:type plant:LineupType ;
+  rdfs:label "Unit-Unit" ;
+.
+plant:Material
+  rdf:type owl:Class ;
+  rdfs:label "Material" ;
+  rdfs:subClassOf plant:PlanItem ;
+.
+plant:Materialization
+  rdf:type owl:Class ;
+  rdfs:label "Materialization" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:MaterializationType
+  rdf:type owl:Class ;
+  rdfs:label "Materialization type" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant:Measurement
+  rdf:type owl:Class ;
+  rdfs:label "Measurement" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:MeasurementItem
+  rdf:type owl:Class ;
+  rdfs:label "MeasurementItem" ;
+  rdfs:subClassOf plant:Item ;
+.
+plant:MeasurementType
+  rdf:type owl:Class ;
+  rdfs:label "MeasurementType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.MeasurementType:MeasuredValue
+  rdf:type plant:MeasurementType ;
+  rdfs:label "Measured value" ;
+.
+plant:Mode
+  rdf:type owl:Class ;
+  rdfs:label "Mode" ;
+  rdfs:subClassOf plant:PlanItem ;
+.
+plant:Movement
+  rdf:type owl:Class ;
+  rdfs:label "Movement" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:MovementType
+  rdf:type owl:Class ;
+  rdfs:label "MovementType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.MovementType:Operational
+  rdf:type plant:MovementType ;
+  rdfs:label "Operational" ;
+.
+plant:Operation
+  rdf:type owl:Class ;
+  rdfs:label "Operation" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:OperationType
+  rdf:type owl:Class ;
+  rdfs:label "OperationType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.OperationType:Operational
+  rdf:type plant:OperationType ;
+  rdfs:label "Operational" ;
+.
+plant:Plan
+  rdf:type owl:Class ;
+  rdfs:label "Plan" ;
+  rdfs:subClassOf plant:PlanItem ;
+.
+plant:PlanItem
+  rdf:type owl:Class ;
+  rdfs:label "PlanItem" ;
+  rdfs:subClassOf plant:Item ;
+.
+plant:PlanMaterial
+  rdf:type owl:Class ;
+  rdfs:label "PlanMaterial" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:PlanMaterialType
+  rdf:type owl:Class ;
+  rdfs:label "PlanMaterialType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.PlanMaterialType:ClosingInventory
+  rdf:type plant:PlanMaterialType ;
+  rdfs:label "Closing inventory" ;
+.
+plant.PlanMaterialType:Consumption
+  rdf:type plant:PlanMaterialType ;
+  rdfs:label "Consumption" ;
+.
+plant.PlanMaterialType:Loss
+  rdf:type plant:PlanMaterialType ;
+  rdfs:label "Loss" ;
+.
+plant.PlanMaterialType:OpeningInventory
+  rdf:type plant:PlanMaterialType ;
+  rdfs:label "Opening inventory" ;
+.
+plant.PlanMaterialType:Production
+  rdf:type plant:PlanMaterialType ;
+  rdfs:label "Production" ;
+.
+plant:PlantAsset
+  rdf:type owl:Class ;
+  rdfs:comment "A plant asset really exists. It is also known as an asset. It can be touched, painted, installed, replaced, maintained, and so on. It can often have a serial number which appears on the assets nameplate. A PlantItem (tag or functional thing) might be materialized (for a period of time) by one or more PlantAssets. For example Tank101 is partially materialized by vessel V101; G-101 is partially materialized by Centrifugal Pump-49732 with Electrical Drive-89675; Compressor G102 comprises AxialFlow Compressor Delco-123455, a recycle line, a recycle valve, and so on.  A PlantAsset might be further composed of of subsidery plant assets. " ;
+  rdfs:label "Plant Asset" ;
+  rdfs:subClassOf plant:Item ;
+.
+plant:PlantItem
+  rdf:type owl:Class ;
+  rdfs:comment """Functional things or 'tags' within a plant. These appear on a PFD and P&ID diagram. However they are not necessarily a phsyical thing. For example Tank101 is a 'tag' or functional item (PlantItem) but it is materialized as a vessel, with stirrers, feed and product nozzles, level gauges and more.
+Not all functional things would have a materialization. For exzample a battery limit to an area or unit might not corrspond to anything physical. Instead it might just be a painted ring around the pipe!""" ;
+  rdfs:label "PlantItem" ;
+  rdfs:subClassOf plant:Item ;
+.
+plant:Pump
+  rdf:type owl:Class ;
+  rdfs:label "Pump" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:QuantityKind
+  rdf:type owl:Class ;
+  rdfs:label "QuantityKind" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.QuantityKind:Flow
+  rdf:type plant:QuantityKind ;
+  rdfs:label "Flow" ;
+.
+plant.QuantityKind:Level
+  rdf:type plant:QuantityKind ;
+  rdfs:label "Level" ;
+.
+plant.QuantityKind:LiquidVolume
+  rdf:type plant:QuantityKind ;
+  rdfs:label "LiquidVolume" ;
+.
+plant.QuantityKind:MassFlow
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MassFlow" ;
+.
+plant.QuantityKind:MolarFlow
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MolarFlow" ;
+.
+plant.QuantityKind:MolarFlowBalance
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MolarFlowBalance" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.A>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.A" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.B>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.B" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.C>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.C" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.D>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.D" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.E>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.E" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.F>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.F" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.G>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.G" ;
+.
+<http://inova8.com/plant/def/QuantityKind/MoleFraction.H>
+  rdf:type plant:QuantityKind ;
+  rdfs:label "MoleFraction.H" ;
+.
+plant.QuantityKind:Power
+  rdf:type plant:QuantityKind ;
+  rdfs:label "Power" ;
+.
+plant.QuantityKind:Pressure
+  rdf:type plant:QuantityKind ;
+  rdfs:label "Pressure" ;
+.
+plant.QuantityKind:SteamFlow
+  rdf:type plant:QuantityKind ;
+  rdfs:label "SteamFlow" ;
+.
+plant.QuantityKind:Temperature
+  rdf:type plant:QuantityKind ;
+  rdfs:label "Temperature" ;
+.
+plant.QuantityKind:ValvePosition
+  rdf:type plant:QuantityKind ;
+  rdfs:label "ValvePosition" ;
+.
+plant.QuantityKind:VolumeFlow
+  rdf:type plant:QuantityKind ;
+  rdfs:label "VolumeFlow" ;
+.
+plant:Relationship
+  rdf:type owl:Class ;
+  rdfs:label "Relationship" ;
+  rdfs:subClassOf plant:Item ;
+  rdfs:subClassOf rdf:Statement ;
+.
+plant:RelationshipType
+  rdf:type owl:Class ;
+  rdfs:label "RelationshipType" ;
+  rdfs:subClassOf plant:Item ;
+.
+plant:Schedule
+  rdf:type owl:Class ;
+  rdfs:label "Schedule" ;
+  rdfs:subClassOf plant:PlanItem ;
+.
+plant:SensingDevice
+  rdf:type owl:Class ;
+  rdfs:label "SensingDevice" ;
+  rdfs:subClassOf plant:MeasurementItem ;
+.
+plant:Signal
+  rdf:type owl:Class ;
+  rdfs:label "Signal" ;
+  rdfs:subClassOf plant:MeasurementItem ;
+.
+plant:Stirrer
+  rdf:type owl:Class ;
+  rdfs:label "Stirrer" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Storage
+  rdf:type owl:Class ;
+  rdfs:label "Storage" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:StorageType
+  rdf:type owl:Class ;
+  rdfs:label "StorageType" ;
+  rdfs:subClassOf plant:RelationshipType ;
+.
+plant.StorageType:Stratified
+  rdf:type plant:StorageType ;
+  rdfs:label "Stratified" ;
+.
+plant:Tank
+  rdf:type owl:Class ;
+  rdfs:label "Tank" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Unit
+  rdf:type owl:Class ;
+  rdfs:label "Unit" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Valve
+  rdf:type owl:Class ;
+  rdfs:label "Valve" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+plant:Vessel
+  rdf:type owl:Class ;
+  rdfs:label "Vessel" ;
+  rdfs:subClassOf plant:PlantItem ;
+.
+<http://inova8.com/plant/def/attachment.AttachmentType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Attachment ;
+  rdfs:label "attachment.AttachmentType" ;
+  rdfs:range plant:AttachmentType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/attachmentType.Attachment> ;
+.
+<http://inova8.com/plant/def/attachment.from.PlantItem>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Attachment ;
+  rdfs:label "attachment.from.PlantItem" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.from.Attachment> ;
+.
+<http://inova8.com/plant/def/attachment.to.PlantItem>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Attachment ;
+  rdfs:label "attachment.to.PlantItem" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.to.Attachment> ;
+.
+<http://inova8.com/plant/def/attachmentType.Attachment>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "attachmentType.Attachment" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/attribute.QuantityKind>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "attribute.QuantityKind" ;
+  rdfs:range plant:QuantityKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/quantityKind.Attribute> ;
+.
+<http://inova8.com/plant/def/attribute.of.Item>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "attribute.of.Item" ;
+  rdfs:range plant:Item ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/item.has.Attribute> ;
+.
+<http://inova8.com/plant/def/attribute.providedBy>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "attribute.providedBy" ;
+  rdfs:range plant:Signal ;
+  owl:inverseOf <http://inova8.com/plant/def/provides.Attribute> ;
+.
+<http://inova8.com/plant/def/attribute.value>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "attribute.value" ;
+  rdfs:range rdfs:Literal ;
+  rdfs:subPropertyOf rdf:object ;
+.
+<http://inova8.com/plant/def/composition.CompositionType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Composition ;
+  rdfs:label "composition.CompositionType" ;
+  rdfs:range plant:CompositionType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/compositionType.Composition> ;
+.
+<http://inova8.com/plant/def/composition.by.PlantAsset>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Composition ;
+  rdfs:label "composition.by.PlantAsset" ;
+  rdfs:range plant:PlantAsset ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantAsset.usedIn.Composition> ;
+.
+<http://inova8.com/plant/def/composition.of.PlantAsset>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Composition ;
+  rdfs:label "composition.of.PlantAsset" ;
+  rdfs:range plant:PlantAsset ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantAsset.partOf.Composition> ;
+.
+<http://inova8.com/plant/def/compositionType.Composition>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "composition type.Composition" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/connection.ConnectionType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Connection ;
+  rdfs:label "connection.ConnectionType" ;
+  rdfs:range plant:ConnectionType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/connectionType.Connection> ;
+.
+<http://inova8.com/plant/def/connection.from.PlantAsset>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Connection ;
+  rdfs:label "connection.from.PlantAsset" ;
+  rdfs:range plant:PlantAsset ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantAsset.to.Connection> ;
+.
+<http://inova8.com/plant/def/connection.to.PlantAsset>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Connection ;
+  rdfs:label "connection.to.Plant asset" ;
+  rdfs:range plant:PlantAsset ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantAsset.from.Connection> ;
+.
+<http://inova8.com/plant/def/connectionType.Connection>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "connection type.Connection" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+plant:isObjectOf
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "isObjectOf" ;
+.
+plant:isPredicateOf
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "isPredicateOf" ;
+.
+plant:isSubjectOf
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "isSubjectOf" ;
+.
+<http://inova8.com/plant/def/item.has.Attribute>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "item.has.Attribute" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/lineup.LineupType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Lineup ;
+  rdfs:label "lineup.LineupType" ;
+  rdfs:range plant:LineupType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/lineupType.Lineup> ;
+.
+<http://inova8.com/plant/def/lineup.conveys.Movement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "lineup.conveys.Movement" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/lineup.from.PlantItem>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Lineup ;
+  rdfs:label "lineup.from.PlantItem" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.to.Lineup> ;
+.
+<http://inova8.com/plant/def/lineup.to.PlantItem>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Lineup ;
+  rdfs:label "lineup.to.PlantItem" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.from.Lineup> ;
+.
+<http://inova8.com/plant/def/lineupType.Lineup>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "lineupType.Lineup" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/material.PlanMaterial>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "material.Plan material" ;
+.
+<http://inova8.com/plant/def/material.sub.Material>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "material.sub.Material" ;
+.
+<http://inova8.com/plant/def/material.super.Material>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Material ;
+  rdfs:label "material.super.Material" ;
+  rdfs:range plant:Material ;
+  owl:inverseOf <http://inova8.com/plant/def/material.sub.Material> ;
+.
+<http://inova8.com/plant/def/material.within.Movement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "material.within.Movement" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/material.within.PlanMaterial>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "material.within.PlanMaterial" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/material.within.Storage>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "material.within.Storage" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/materialization.MaterializationType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Materialization ;
+  rdfs:label "materialization.MaterializationType" ;
+  rdfs:range plant:MaterializationType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/materializationType.Materialization> ;
+.
+<http://inova8.com/plant/def/materialization.by.PlantAsset>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Materialization ;
+  rdfs:label "materialization.by.PlantAsset" ;
+  rdfs:range plant:PlantAsset ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/planAsset.usedIn.Materialization> ;
+.
+<http://inova8.com/plant/def/materialization.of.PlantItem>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Materialization ;
+  rdfs:label "materialization.of.PlantItem" ;
+  rdfs:range plant:Item ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.has.Materialization> ;
+.
+<http://inova8.com/plant/def/materializationType.Materialization>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "materialization type.Materialization" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/measurement.MeasurementType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Measurement ;
+  rdfs:label "measurement.MeasurementType" ;
+  rdfs:range plant:MeasurementType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/measurementType.Measurement> ;
+.
+<http://inova8.com/plant/def/measurement.from.SensingDevice>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Measurement ;
+  rdfs:label "measurement.from.SensingDevice" ;
+  rdfs:range plant:SensingDevice ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/sensingDevice.produces.Measurement> ;
+.
+<http://inova8.com/plant/def/measurement.output.Signal>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Measurement ;
+  rdfs:label "measurement.output.Signal" ;
+  rdfs:range plant:Signal ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/signal.from.Measurement> ;
+.
+<http://inova8.com/plant/def/measurementType.Measurement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "measurementType.Measurement" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/mode.usedBy.Operation>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "mode.used by.Operation" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/movement.MovementType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Movement ;
+  rdfs:label "movement.MovementType" ;
+  rdfs:range plant:MovementType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/movementType.Movement> ;
+.
+<http://inova8.com/plant/def/movement.Schedule>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "movement.Schedule" ;
+.
+<http://inova8.com/plant/def/movement.active.from>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Movement ;
+  rdfs:label "movement.active.from" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/movement.active.until>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Movement ;
+  rdfs:label "movement.active.until" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/movement.of.Material>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Movement ;
+  rdfs:label "movement.of.Material" ;
+  rdfs:range plant:Material ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/material.within.Movement> ;
+.
+<http://inova8.com/plant/def/movement.via.Lineup>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Movement ;
+  rdfs:label "movement.via.Lineup" ;
+  rdfs:range plant:Lineup ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/lineup.conveys.Movement> ;
+.
+<http://inova8.com/plant/def/movementType.Movement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "movementType.Movement" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/operation.OperationType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Operation ;
+  rdfs:label "operation.OperationType" ;
+  rdfs:range plant:OperationType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/operationType.Operation> ;
+.
+<http://inova8.com/plant/def/operation.Schedule>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "operation.Schedule" ;
+.
+<http://inova8.com/plant/def/operation.has.Mode>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Operation ;
+  rdfs:label "operation.has.Mode" ;
+  rdfs:range plant:Mode ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/mode.usedBy.Operation> ;
+.
+<http://inova8.com/plant/def/operation.of.Unit>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Operation ;
+  rdfs:label "operation.of.Unit" ;
+  rdfs:range plant:Unit ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/unit.has.Operation> ;
+.
+<http://inova8.com/plant/def/operationType.Operation>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "operationType.Operation" ;
+.
+<http://inova8.com/plant/def/plan.PlanMaterial>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plan.Plan material" ;
+.
+<http://inova8.com/plant/def/plan.active.from>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Plan ;
+  rdfs:label "plan.active.from" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/plan.active.to>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Plan ;
+  rdfs:label "plan.active.to" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/plan.hasPlanMaterial>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plan.hasPlanMaterial" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/planAsset.usedIn.Materialization>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "planAsset.usedIn.Materialization" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/planMaterial.PlanMaterialType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:PlanMaterial ;
+  rdfs:label "planMaterial.PlanMaterialType" ;
+  rdfs:range plant:PlanMaterialType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/planMaterialType.PlanMaterial> ;
+.
+<http://inova8.com/plant/def/planMaterial.of.Material>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:PlanMaterial ;
+  rdfs:label "planMaterial.of.Material" ;
+  rdfs:range plant:Material ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/material.PlanMaterial> ;
+  owl:inverseOf <http://inova8.com/plant/def/material.within.PlanMaterial> ;
+.
+<http://inova8.com/plant/def/planMaterial.of.Plan>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:PlanMaterial ;
+  rdfs:label "planMaterial.of.Plan" ;
+  rdfs:range plant:Plan ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plan.PlanMaterial> ;
+  owl:inverseOf <http://inova8.com/plant/def/plan.hasPlanMaterial> ;
+.
+<http://inova8.com/plant/def/planMaterialType.PlanMaterial>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "planMaterialType.PlanMaterial" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/plantAsset.from.Connection>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plant asset.from.Connection" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantAsset.partOf.Composition>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plantAsset.partOf.Composition" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantAsset.to.Connection>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plant asset.to.Connection" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantAsset.usedIn.Composition>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plantAsset.usedIn.Composition" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.from.Attachment>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plantItem.from.Attachment" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.from.Lineup>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plantItem.from.Lineup" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.has.Materialization>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plant item.has.Materialization" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.to.Attachment>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plantItem.to.Attachment" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.to.Lineup>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "plantItem.to.Lineup" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/provides.Attribute>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "provides.Attribute" ;
+.
+<http://inova8.com/plant/def/quantityKind.Attribute>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "quantityKind.Attribute" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/schedule.Movement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Schedule ;
+  rdfs:label "schedule.Movement" ;
+  rdfs:range plant:Movement ;
+  owl:inverseOf <http://inova8.com/plant/def/movement.Schedule> ;
+.
+<http://inova8.com/plant/def/schedule.Operation>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Schedule ;
+  rdfs:label "schedule.Operation" ;
+  rdfs:range plant:Operation ;
+  owl:inverseOf <http://inova8.com/plant/def/operation.Schedule> ;
+.
+<http://inova8.com/plant/def/schedule.Storage>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Schedule ;
+  rdfs:label "schedule.Storage" ;
+  rdfs:range plant:Storage ;
+  owl:inverseOf <http://inova8.com/plant/def/storage.Schedule> ;
+.
+<http://inova8.com/plant/def/schedule.active.from>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Schedule ;
+  rdfs:label "schedule.active.from" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/schedule.active.to>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain plant:Schedule ;
+  rdfs:label "schedule.active.to" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/sensingDevice.produces.Measurement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "sensingDevice.produces.Measurement" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/signal.from.Measurement>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "signal.from.Measurement" ;
+  rdfs:subPropertyOf plant:isObjectOf ;
+.
+<http://inova8.com/plant/def/storage.Schedule>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "storage.Schedule" ;
+.
+<http://inova8.com/plant/def/storage.StorageType>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Storage ;
+  rdfs:label "storage.StorageType" ;
+  rdfs:range plant:StorageType ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/storageType.Storage> ;
+.
+<http://inova8.com/plant/def/storage.in.Tank>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Storage ;
+  rdfs:label "storage.in.Tank" ;
+  rdfs:range plant:Tank ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/tank.as.Storage> ;
+.
+<http://inova8.com/plant/def/storage.of.Material>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain plant:Storage ;
+  rdfs:label "storage.of.Material" ;
+  rdfs:range plant:Material ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/material.within.Storage> ;
+.
+<http://inova8.com/plant/def/storageType.Storage>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "storageType.Storage" ;
+  rdfs:subPropertyOf plant:isPredicateOf ;
+.
+<http://inova8.com/plant/def/tank.as.Storage>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "tank.as.Storage" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+<http://inova8.com/plant/def/unit.has.Operation>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "unit.has.Operation" ;
+  rdfs:subPropertyOf plant:isSubjectOf ;
+.
+script:groovy
+  rdf:type rdfs:Class ;
+  rdfs:label "groovy" ;
+  rdfs:subClassOf script:script ;
+.
+script:javascript
+  rdf:type rdfs:Class ;
+  rdfs:label "javascript" ;
+  rdfs:subClassOf script:script ;
+.
+script:script
+  rdf:type rdfs:Class ;
+  rdfs:label "script" ;
+  rdfs:subClassOf rdfs:Literal ;
+.
+rdf:object
+  owl:inverseOf plant:isObjectOf ;
+.
+rdf:predicate
+  owl:inverseOf plant:isPredicateOf ;
+.
+rdf:subject
+  owl:inverseOf plant:isSubjectOf ;
+.

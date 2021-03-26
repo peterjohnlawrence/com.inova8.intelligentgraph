@@ -16,13 +16,49 @@ public class PathPatternBaseListener implements PathPatternListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathPattern(PathPatternParser.PathPatternContext ctx) { }
+	@Override public void enterBoundPattern(PathPatternParser.BoundPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPathPattern(PathPatternParser.PathPatternContext ctx) { }
+	@Override public void exitBoundPattern(PathPatternParser.BoundPatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBinding(PathPatternParser.BindingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBinding(PathPatternParser.BindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

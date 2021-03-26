@@ -58,10 +58,14 @@
 
 grammar PathPattern;
 
-pathPattern :  pathPatterns EOF;
+pathPattern : binding ('/'|'>') pathPatterns EOF #boundPattern
+ 			| binding  EOF #matchOnlyPattern
+ 			| pathPatterns  EOF #pathOnlyPattern;
+
+binding : factFilterPattern  ;
 pathPatterns :  pathEltOrInverse cardinality?  #Path  
 				|  pathPatterns '|'  pathPatterns  #PathAlternative  
-				|  pathPatterns '/'  pathPatterns  #PathSequence
+				|  pathPatterns ('/'|'>')  pathPatterns  #PathSequence
 				|   negation? '(' pathPatterns ')'  cardinality? #PathParentheses;
  
 //pathNegatedPropertySet	  :  	PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' ;
@@ -74,8 +78,8 @@ pathEltOrInverse :  negation? INVERSE? predicate  ;
 predicate :   ( reifiedPredicate | predicateRef | rdfType | anyPredicate ) factFilterPattern? ;
 anyPredicate : ANYPREDICATE ;
 reifiedPredicate :  iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ;
-predicateRef :  IRI_REF  |  qname | pname_ns ;
-iriRef  : IRI_REF  |  qname | pname_ns ;  
+predicateRef :  IRI_REF  | rdfType  |  qname | pname_ns ;
+iriRef  : IRI_REF |  qname | pname_ns ;  
 dereifier : DEREIFIER ;
 
 factFilterPattern : '['  propertyListNotEmpty   ']';
@@ -87,7 +91,7 @@ object : iriRef  | literal | factFilterPattern ;
 
 qname : PNAME_NS PN_LOCAL; 
 pname_ns : PNAME_NS ;   
-literal : LITERAL | SQLITERAL ;
+literal : DQLITERAL | SQLITERAL ;
 operator : OPERATOR ;
 rdfType : RDFTYPE ;
 
@@ -96,7 +100,7 @@ rdfType : RDFTYPE ;
 //MAXCARDINALITY : (INTEGER |'*')  ;
 
 //fragment  
-INTEGER : DIGIT+ ;
+INTEGER : DIGIT+ ; 
 
 fragment
 DIGIT
@@ -108,16 +112,16 @@ REIFIER :'@';
 DEREIFIER : '#';
 RDFTYPE : 'a';
 ANYPREDICATE : '*' ;
-OPERATOR : 'lt'|'gt'|'le'|'ge'|'eq'|'ne';
+OPERATOR : 'lt'|'gt'|'le'|'ge'|'eq'|'ne'|'like'|'query'|'property';
 
-LITERAL:  '"' (~('"' | '\\' | '\r' | '\n') | '\\' ('"' | '\\'))* '"';
+DQLITERAL:  '"' (~('"' | '\\' | '\r' | '\n') | '\\' ('"' | '\\'))* '"';
 SQLITERAL:  '\'' (~('\'' | '\\' | '\r' | '\n') | '\\' ('\'' | '\\'))* '\'';
 
 IRI_REF
     : '<' ( ~('<' | '>' | '"' | '{' | '}' | '|' | '^' | '\\' | '`') | (PN_CHARS))* '>' 
     ;
        
-PNAME_NS : PN_PREFIX? ':'  ;
+PNAME_NS : PN_PREFIX? (':'|'~')  ;
     
 VARNAME : '?' [a-zA-Z]+ ;		// match upper-case identifiers for now
 

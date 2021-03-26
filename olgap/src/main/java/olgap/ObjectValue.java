@@ -11,9 +11,9 @@ import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
-import pathCalc.Source;
+import pathCalc.Thing;
 import pathPatternElement.PredicateElement;
-import pathPatternProcessor.Thing;
+import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.apache.logging.log4j.Logger;
@@ -59,12 +59,12 @@ public class ObjectValue extends Evaluator implements Function {
 				literalValue = (SimpleLiteral)args[2];
 				if( isScriptEngine(literalValue.getDatatype().getLocalName()) ) {		
 					Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
-					Source source = sources.getSource(tripleSource, argumentArray );
-					HashMap<String, pathCalc.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
+					PathQLRepository source = sources.getSource(tripleSource, argumentArray );
+					HashMap<String, pathQLModel.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				
 					Thing subjectThing = source.thingFactory( null, subject, new Stack<String>(),customQueryOptions);	
 					
-					pathCalc.Resource fact = subjectThing.getFact(new PredicateElement(predicate),literalValue); 
+					pathQLModel.Resource fact = subjectThing.getFact(new PredicateElement(predicate),literalValue); 
 					if( fact != null) {
 						Value result = fact.getValue();
 						//source.writeModelToCache(result, cacheContext);

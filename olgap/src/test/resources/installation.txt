@@ -1,0 +1,1 @@
+docker cp C:\Users\peter\git\com.inova8.olgap\olgap\target\olgap-0.0.1-jar-with-dependencies.jar rdf4j343:/usr/local/tomcat/webapps/rdf4j-server/WEB-INF/lib/olgap.jar

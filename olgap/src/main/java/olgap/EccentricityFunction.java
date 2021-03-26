@@ -13,7 +13,6 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.query.Update;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -53,7 +52,7 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 public class EccentricityFunction  implements Function{
 	private final Logger logger = LogManager.getLogger(EccentricityFunction.class);
 	public RepositoryConnection conn;
-	public Repository workingRep;
+	public org.eclipse.rdf4j.repository.Repository workingRep;
 	private String service;
 	public EccentricityFunction() {
 		super();
@@ -69,7 +68,7 @@ public class EccentricityFunction  implements Function{
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
 
-		Repository rep = new HTTPRepository(args[0].stringValue(),args[1].stringValue());
+		org.eclipse.rdf4j.repository.Repository rep = new HTTPRepository(args[0].stringValue(),args[1].stringValue());
 		rep.init();	
 		int iter_no = 0;
 		int count = 1;

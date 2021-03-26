@@ -1,4 +1,4 @@
-package pathCalc;
+package pathQLModel;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
@@ -6,9 +6,11 @@ import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 
+import pathCalc.Tracer;
 import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathPatternException;
-import pathPatternProcessor.Resources;
+import pathQLRepository.PathQLRepository;
+import pathQLResults.ResourceResults;
 
 import org.eclipse.rdf4j.model.Value;
 
@@ -16,6 +18,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -23,15 +26,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.logging.log4j.LogManager;
 
-abstract public class Resource {
+ public  abstract class Resource {
 	private Value superValue;
 	protected final Logger logger = LogManager.getLogger(Resource.class);
 	private Tracer tracer;
 	private Stack<String> stack;
 	protected HashMap<String,IRI> prefixes = new HashMap<String,IRI>();
-	private Source source;
+	private static PathQLRepository source;
 	private HashMap<String, Resource> cachedResources;
-	protected HashMap<String, Resource> customQueryOptions;
+	protected static HashMap<String, Resource> customQueryOptions;
+	
+	public Resource(Value value) {
+		super();
+		this.superValue = value;
+	}
 	@Override
 	public String toString() {
 		if(getValue()!=null)
@@ -39,13 +47,13 @@ abstract public class Resource {
 		else
 			return null;
 	}
-	public Source getSource() {
+	public static PathQLRepository getSource() {
 		return source;
 	}
 	public HashMap<String, Resource> getCachedValues() {
 		return getCachedResources();
 	}
-	public HashMap<String, Resource> getCustomQueryOptions() {
+	public static HashMap<String, Resource> getCustomQueryOptions() {
 		return customQueryOptions;
 	}
 	public Tracer getTracer() {
@@ -171,26 +179,18 @@ abstract public class Resource {
 		this.stack = stack;
 	}
 
-	public Resource getFact(String predicatePattern) throws PathPatternException {
-		return null;
-	}
+	public abstract  Resource getFact(String predicatePattern) throws PathPatternException ;
 
-	public Resources getFacts(String predicatePattern) throws PathPatternException {
-		return null;
-	}
-	public Resources getFacts( PredicateElement path) {
-		return null;
-	}
-	public Resources getReifiedFacts(PredicateElement path) {
-		return null;
-	}
-	public Resources getIsFactsOf( PredicateElement path) {
-		return null;
-	}
-	public Resources getIsReifiedFactsOf(PredicateElement path) {
-		return null;
-	}
-	public pathCalc.Resource getSignal(String signal) {
+	public abstract  ResourceResults getFacts(String predicatePattern) throws PathPatternException ;
+	
+	public abstract ResourceResults getFacts( PredicateElement path) ;
+//	@Deprecated
+//	public abstract Resources getReifiedFacts(PredicateElement path) ;
+//	@Deprecated
+//	public abstract Resources getIsFactsOf( PredicateElement path) ;
+//	@Deprecated
+//	public abstract Resources getIsReifiedFactsOf(PredicateElement path) ;
+	public pathQLModel.Resource getSignal(String signal) {
 		return null;
 	}
 	String getLabel() {
@@ -275,7 +275,7 @@ abstract public class Resource {
 	}
 
 	public IRI convertQName(String predicateIRI) {
-		predicateIRI=Source.trimIRIString( predicateIRI);
+		predicateIRI=PathQLRepository.trimIRIString( predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":");
 		IRI predicate = null;
 		if(predicateIRIParts[0].equals("a")) {
@@ -318,7 +318,12 @@ abstract public class Resource {
 	public void setSuperValue(Value superValue) {
 		this.superValue = superValue;
 	}
-	public void setSource(Source source) {
+	public void setSource(PathQLRepository source) {
 		this.source = source;
 	}
+	public abstract Resource getSubject();
+	public abstract Resource getPredicate();
+	public abstract Object getSnippet();
+	public abstract Object getScore();
+	public abstract URI getId();
 }

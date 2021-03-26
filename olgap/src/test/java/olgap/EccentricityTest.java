@@ -5,7 +5,6 @@ import java.util.List;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
@@ -14,7 +13,7 @@ import org.eclipse.rdf4j.sail.spin.SpinSail;
 public class EccentricityTest {
 	public static void main(String[] args) {
 		
-		Repository workingRep = new SailRepository(new SpinSail(new MemoryStore()));
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new SpinSail(new MemoryStore()));
 		workingRep.init();
 
 

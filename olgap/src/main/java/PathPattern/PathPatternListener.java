@@ -8,15 +8,51 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface PathPatternListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#pathPattern}.
+	 * Enter a parse tree produced by the {@code boundPattern}
+	 * labeled alternative in {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree
 	 */
-	void enterPathPattern(PathPatternParser.PathPatternContext ctx);
+	void enterBoundPattern(PathPatternParser.BoundPatternContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#pathPattern}.
+	 * Exit a parse tree produced by the {@code boundPattern}
+	 * labeled alternative in {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree
 	 */
-	void exitPathPattern(PathPatternParser.PathPatternContext ctx);
+	void exitBoundPattern(PathPatternParser.BoundPatternContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code matchOnlyPattern}
+	 * labeled alternative in {@link PathPatternParser#pathPattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code matchOnlyPattern}
+	 * labeled alternative in {@link PathPatternParser#pathPattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code pathOnlyPattern}
+	 * labeled alternative in {@link PathPatternParser#pathPattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code pathOnlyPattern}
+	 * labeled alternative in {@link PathPatternParser#pathPattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#binding}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinding(PathPatternParser.BindingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#binding}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinding(PathPatternParser.BindingContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Path}
 	 * labeled alternative in {@link PathPatternParser#pathPatterns}.

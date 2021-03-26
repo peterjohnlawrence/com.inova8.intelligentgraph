@@ -8,11 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Stack;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -20,7 +17,6 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,17 +26,16 @@ import olgap.ClearCache;
 import olgap.Evaluator;
 import olgap.FactValue;
 import olgap.ObjectValue;
+import pathQLRepository.PathQLRepository;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathCalcTests {
 	private static RepositoryConnection conn;
 	static RepositoryTripleSource repositoryTripleSource;
-	private static Source source;
-	private static Evaluator evaluator;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
 		FileUtils.deleteDirectory(dataDir);
-		Repository workingRep = new SailRepository(new NativeStore(dataDir));
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
 
 		String dataFilename = "src/test/resources/calc2graph.data.ttl";
 		InputStream dataInput = new FileInputStream(dataFilename);
@@ -54,8 +49,8 @@ class PathCalcTests {
 		conn = workingRep.getConnection();
 		conn.add(modelModel.getStatements(null, null, null));
 		repositoryTripleSource = new RepositoryTripleSource(conn);
-		source = new Source(repositoryTripleSource);
-		evaluator = new Evaluator();
+		new PathQLRepository(repositoryTripleSource);
+		new Evaluator();
 	}
 	@Test
 	@Order(0)

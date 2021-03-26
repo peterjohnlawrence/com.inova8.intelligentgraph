@@ -5,26 +5,13 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Stack;
 
-import org.apache.commons.io.FileUtils;
-import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.http.HTTPRepository;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -32,24 +19,22 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import olgap.ClearCache;
 import olgap.Evaluator;
-import olgap.FactValue;
-import olgap.ObjectValue;
-import pathPatternProcessor.Resources;
-import pathPatternProcessor.Thing;
-import searchProcessor.Search;
-import searchProcessor.SearchResultsIterator;
+import pathQL.Match;
+import pathQLModel.Resource;
+import pathQLRepository.PathQLRepository;
+import pathQLResults.MatchResults;
+import pathQLResults.ResourceResults;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RemoteThingTests {
-	private static RepositoryConnection conn;
 	static RepositoryTripleSource repositoryTripleSource;
-	private static Source source;
+	private static PathQLRepository source;
 	private static Evaluator evaluator;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
 		//Repository workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","calc2graph");
-		Repository workingRep = new SPARQLRepository("http://localhost:8080/rdf4j-server/repositories/calc2graph");
-		source = new Source(workingRep);
+		org.eclipse.rdf4j.repository.Repository workingRep = new SPARQLRepository("http://localhost:8080/rdf4j-server/repositories/calc2graph");
+		source = new PathQLRepository(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 		evaluator = new Evaluator();
@@ -70,7 +55,7 @@ class RemoteThingTests {
 	void search_1() {
 		
 		try {
-			SearchResultsIterator searchResultsIterator = Search.entitySearch("Unit2");
+			MatchResults searchResultsIterator = Match.entityMatch("Unit2");
 			while(searchResultsIterator.hasNext()) {
 				 BindingSet nextSearchResultBindingSet = searchResultsIterator.nextBindingSet();
 				int i=1;
@@ -131,7 +116,7 @@ class RemoteThingTests {
 			for( Resource batterylimit: $this.getFacts(":hasProductBatteryLimit")) {
 				fact += batterylimit.getFact(":massFlow").doubleValue();
 			}
-			Resources batterylimits = $this.getFacts(":hasProductBatteryLimit");
+			ResourceResults batterylimits = $this.getFacts(":hasProductBatteryLimit");
 			Resource batterylimit; 
 			while(batterylimits.hasNext() ) {
 				batterylimit = batterylimits.next();

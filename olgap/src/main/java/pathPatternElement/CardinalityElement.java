@@ -1,12 +1,10 @@
 package pathPatternElement;
 
-import java.util.ArrayList;
-
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
+import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
-import pathPatternProcessor.Thing;
 
 public class CardinalityElement extends PathElement {
 	Integer minCardinality;
@@ -51,13 +49,6 @@ public class CardinalityElement extends PathElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void buildIndices(ArrayList<Integer> indices, EdgeCode edgeCode) {
-		setLevel(indices.size() - 1);
-		setIndex(indices.get(getLevel()));	
-	}
-
 	@Override
 	public Boolean getIsNegated() {
 		return null;
@@ -66,6 +57,15 @@ public class CardinalityElement extends PathElement {
 	@Override
 	public void setIsNegated(Boolean isDereified) {
 		
+	}
+
+	@Override
+	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode) {
+		setEntryIndex(entryIndex);
+		Integer leftExitIndex = getLeftPathElement().indexVisitor(baseIndex, entryIndex, edgeCode);
+		Integer rightExitIndex = getRightPathElement().indexVisitor(baseIndex, leftExitIndex, edgeCode);
+		setExitIndex(rightExitIndex) ;
+		return rightExitIndex;
 	}
 
 

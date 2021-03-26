@@ -13,7 +13,6 @@ import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -28,7 +27,7 @@ public class FactValueTest extends OlgapTest{
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
 		FileUtils.deleteDirectory(dataDir);
-		Repository workingRep = new SailRepository(new NativeStore(dataDir));
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
 
 		String dataFilename = "src/test/resources/calc2graph.data.ttl";
 		InputStream dataInput = new FileInputStream(dataFilename);

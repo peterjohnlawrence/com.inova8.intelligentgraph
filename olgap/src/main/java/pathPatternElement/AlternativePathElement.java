@@ -1,13 +1,11 @@
 package pathPatternElement;
 
-import java.util.ArrayList;
-
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
 
+import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
-import pathPatternProcessor.Thing;
 
 public class AlternativePathElement extends PathElement{
 	private Boolean isNegated=false;
@@ -49,13 +47,14 @@ public class AlternativePathElement extends PathElement{
 		Union unionPattern = new Union(leftPattern,rightPattern); 
 		return unionPattern;
 	}
-
 	@Override
-	public void buildIndices(ArrayList<Integer> indices, EdgeCode edgeCode) {
-		setLevel(indices.size() - 1);
-		setIndex(indices.get(getLevel()));
-		getLeftPathElement().buildIndices(indices, edgeCode);
-		getRightPathElement().buildIndices(indices, edgeCode);
+	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode ) {
+		setBaseIndex(baseIndex);
+		setEntryIndex(entryIndex);
+		getLeftPathElement().indexVisitor(baseIndex, entryIndex, edgeCode);
+		Integer rightPathIndex = getRightPathElement().indexVisitor(baseIndex, entryIndex, edgeCode);
+		setExitIndex(rightPathIndex);
+		return rightPathIndex;
 	}
 	public Boolean getIsNegated() {
 		return isNegated;
@@ -64,5 +63,9 @@ public class AlternativePathElement extends PathElement{
 	public void setIsNegated(Boolean isNegated) {
 		this.isNegated = isNegated;
 	}
+
+
+
+
 
 }

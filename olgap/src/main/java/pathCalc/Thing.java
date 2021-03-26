@@ -1,12 +1,14 @@
 /*
  * inova8 2020
  */
-package pathPatternProcessor;
+package pathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
+import static org.eclipse.rdf4j.model.util.Values.literal;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.HashMap;
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
@@ -27,28 +29,30 @@ import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import olgap.Evaluator;
-import pathCalc.HandledException;
-import pathCalc.NullValue;
-import pathCalc.Resource;
-import pathCalc.SEEQSource;
-import pathCalc.Source;
 import pathPatternElement.PredicateElement;
+import pathPatternProcessor.PathPatternException;
+import pathQL.PathQL;
+import pathQLModel.NullValue;
+import pathQLModel.Resource;
+import pathQLRepository.PathQLRepository;
+import pathQLRepository.SEEQSource;
+import pathQLResults.ResourceResults;
 
 public class Thing extends Resource {
 
 	protected final Logger logger = LogManager.getLogger(Thing.class);
-	public Thing(Source source, String iri, HashMap<String, Resource> customQueryOptions ) {
-		this.setSuperValue(iri(iri));
+	public Thing(PathQLRepository source, String iri, HashMap<String, Resource> customQueryOptions ) {
+		super(iri(iri));
 		this.setSource(source);
 		this.customQueryOptions = customQueryOptions;
 	}
-	public Thing(Source source, org.eclipse.rdf4j.model.Value superValue, HashMap<String, Resource> customQueryOptions ) {
-		this.setSuperValue(superValue);
+	public Thing(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue, HashMap<String, Resource> customQueryOptions ) {
+		super(superValue);
 		this.setSource(source);
 		this.customQueryOptions = customQueryOptions;
 	}
-	public Thing(Source source, Value superValue, HashMap<String, Resource> customQueryOptions, HashMap<String,IRI> prefixes ) {
-		this.setSuperValue(superValue);
+	public Thing(PathQLRepository source, Value superValue, HashMap<String, Resource> customQueryOptions, HashMap<String,IRI> prefixes ) {
+		super(superValue);
 		this.setSource(source);
 		this.customQueryOptions = customQueryOptions;
 		mergePrexfixes(prefixes);
@@ -109,7 +113,7 @@ public class Thing extends Resource {
 
 	public final Resource getFact(String predicatePattern) throws PathPatternException {
 		logger.debug(new ParameterizedMessage("getFact{}\n",predicatePattern));
-		Resources factValues = PathProcessor.parseProcessPath(this, predicatePattern);
+		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);
 		if(factValues==null) {
 			return new NullValue();
 		}else if(factValues.hasNext()) {
@@ -119,14 +123,14 @@ public class Thing extends Resource {
 			return new NullValue();
 		}
 	}
-	public final Resources getFacts(String predicatePattern) throws PathPatternException {
+	public final ResourceResults getFacts(String predicatePattern) throws PathPatternException {
 
-		return PathProcessor.parseProcessPath(this, predicatePattern);
+		return PathQL.evaluate(this, predicatePattern);
 	}
 
 	public Resource getSignal(String signal) {
 		incrementTraceLevel();
-		signal=Source.trimIRIString(signal); 
+		signal=PathQLRepository.trimIRIString(signal); 
 		String[] elements = signal.split("/");
 		Object result;
 		switch (elements[0].toUpperCase()) {
@@ -138,8 +142,8 @@ public class Thing extends Resource {
 				seeqSource = getSource().seeqSourceFactory(elements[2]);
 				result = seeqSource.getSignal(elements[5], customQueryOptions);
 				decrementTraceLevel();
-				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),customQueryOptions,this.prefixes);
+				//return getSource().resourceFactory(getTracer(),PathQLRepository.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),customQueryOptions,this.prefixes);
+				return getSource().resourceFactory(getTracer(),	literal((Double) result), getStack(),customQueryOptions,this.prefixes);
 			} catch (ScriptException e) {
 				return getSource().resourceFactory(getTracer(), "**SEEQ Source Error**", getStack(),customQueryOptions,this.prefixes);
 			} catch (HandledException e) {
@@ -158,7 +162,7 @@ public class Thing extends Resource {
 
 		}
 	}
-	public final pathPatternProcessor.Thing getThing(String subjectIRI) {
+	public final pathCalc.Thing getThing(String subjectIRI) {
 		return getSource().thingFactory(getTracer(),convertQName( subjectIRI), this.getStack(),this.customQueryOptions,this.prefixes);
 	}
 
@@ -172,7 +176,7 @@ public class Thing extends Resource {
 			Statement scriptStatement;
 			SimpleLiteral scriptCodeliteral = null;
 			try {
-				CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = Source
+				CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = PathQLRepository
 						.getTripleSource().getStatements(scriptResource, scriptPropertyIRI, null);
 
 				while (scriptStatements.hasNext()) {
@@ -208,7 +212,7 @@ public class Thing extends Resource {
 					getStack().push(stackKey);
 					CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
 					ScriptContext scriptContext = new SimpleScriptContext();
-					scriptContext.setAttribute("$tripleSource", Source.getTripleSource(), ScriptContext.ENGINE_SCOPE);
+					scriptContext.setAttribute("$tripleSource", PathQLRepository.getTripleSource(), ScriptContext.ENGINE_SCOPE);
 					scriptContext.setAttribute("$this", this, ScriptContext.ENGINE_SCOPE);
 					scriptContext.setAttribute("$property",
 							getSource().thingFactory(getTracer(), predicate, this.getStack(),customQueryOptions), ScriptContext.ENGINE_SCOPE);
@@ -273,7 +277,7 @@ public class Thing extends Resource {
 	 * @param objectValue the object value
 	 * @return Processes the objectValue
 	 */
-	Resource processFactObjectValue(IRI predicate, String key, Value objectValue) {
+	public Resource processFactObjectValue(IRI predicate, String key, Value objectValue) {
 		Resource returnResult;
 		SimpleLiteral literalValue;
 		try {
@@ -310,7 +314,7 @@ public class Thing extends Resource {
 	@Deprecated
 	private Resource retrieveFact(IRI predicate,  String key)
 			throws QueryEvaluationException {
-		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = Source
+		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = PathQLRepository
 				.getTripleSource().getStatements((IRI) getSuperValue(), predicate, null);
 		Resource returnResult = null;
 		while (objectStatements.hasNext()) {
@@ -323,7 +327,7 @@ public class Thing extends Resource {
 		addTrace(new ParameterizedMessage("Error: No predicate {} found for subject {}", addIRI(predicate),
 				addThisIRI()));
 		// It could be there are reified attributes associated with scripts or signals
-		Resource reifiedValue = getReifiedValue(Source.createIRI(Evaluator.RDF_STATEMENT),predicate);
+		Resource reifiedValue = getReifiedValue(PathQLRepository.createIRI(Evaluator.RDF_STATEMENT),predicate);
 		if (reifiedValue != null) {
 			return reifiedValue;//source.valueFactory(getTracer(), reifiedValue, getStack(),this.customQueryOptions,this.prefixes);
 		}
@@ -347,42 +351,42 @@ public class Thing extends Resource {
 			switch (result.getClass().getSimpleName()) {
 			case "NullValue":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((String) "null"), getStack(),this.customQueryOptions,this.prefixes);
+						literal((String) "null"), getStack(),this.customQueryOptions,this.prefixes);
 			case "Integer":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Integer) result), getStack(),this.customQueryOptions,this.prefixes);
+						literal((Integer) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "Double":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),this.customQueryOptions,this.prefixes);
+						literal((Double) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "Float":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((Float) result), getStack(),this.customQueryOptions,this.prefixes);
+						literal((Float) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "decimal":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((BigDecimal) result), getStack(),this.customQueryOptions,this.prefixes);
+						literal((BigDecimal) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "BigDecimal":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((BigDecimal) result), getStack(),this.customQueryOptions,this.prefixes);
+						literal((BigDecimal) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "BigInteger":
 				return getSource().resourceFactory(getTracer(),
-						Source.getTripleSource().getValueFactory().createLiteral((BigInteger) result), getStack(),this.customQueryOptions,this.prefixes);
+						literal((BigInteger) result), getStack(),this.customQueryOptions,this.prefixes);
 			case "Thing":
 				return (Thing) result;
 			case "LinkedHashModel":
 				getSource().writeModelToCache(this, result, cacheContextIRI);
 				return getSource().thingFactory(getTracer(), cacheContextIRI, getStack(),this.customQueryOptions,this.prefixes);
 			case "Literal":
-				Value content = ((pathCalc.Literal)result).getValue();
+				Value content = ((pathQLModel.Literal)result).getValue();
 				switch (((org.eclipse.rdf4j.model.Literal)content).getDatatype().getLocalName()) {			
 				case "integer":
 					return getSource().resourceFactory(getTracer(),
-							Source.getTripleSource().getValueFactory().createLiteral((BigInteger)((pathCalc.Literal)result).bigIntegerValue() ), getStack(),this.customQueryOptions,this.prefixes);
+							literal((BigInteger)((pathQLModel.Literal)result).bigIntegerValue() ), getStack(),this.customQueryOptions,this.prefixes);
 				case "decimal":
 					return getSource().resourceFactory(getTracer(),
-							Source.getTripleSource().getValueFactory().createLiteral(((pathCalc.Literal)result).decimalValue() ), getStack(),this.customQueryOptions,this.prefixes);
+							literal(((pathQLModel.Literal)result).decimalValue() ), getStack(),this.customQueryOptions,this.prefixes);
 				case "double":
 					return getSource().resourceFactory(getTracer(),
-							Source.getTripleSource().getValueFactory().createLiteral(((pathCalc.Literal)result).doubleValue() ), getStack(),this.customQueryOptions,this.prefixes);
+							literal(((pathQLModel.Literal)result).doubleValue() ), getStack(),this.customQueryOptions,this.prefixes);
 				default:
 					logger.error("No literal handler found for result {} of class {}", result.toString(),((org.eclipse.rdf4j.model.Literal)content).getDatatype().getLocalName());
 					return getSource().resourceFactory(getTracer(), "**Handler Error**", getStack(),this.customQueryOptions,this.prefixes);
@@ -403,7 +407,7 @@ public class Thing extends Resource {
 
 
 	public Thing prefix(String prefix, String IRI) {
-		org.eclipse.rdf4j.model.IRI iri = Source.trimAndCheckIRIString(IRI);
+		org.eclipse.rdf4j.model.IRI iri = PathQLRepository.trimAndCheckIRIString(IRI);
 		if(iri!=null )	{	
 			getPrefixes().put(prefix,iri);	
 			return this;
@@ -415,6 +419,36 @@ public class Thing extends Resource {
 
 	public Thing prefix(String IRI) {
 		return this.prefix("",IRI);
+	}
+	@Override
+	public ResourceResults getFacts(PredicateElement path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Resource getSubject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Resource getPredicate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Object getSnippet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Object getScore() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public URI getId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

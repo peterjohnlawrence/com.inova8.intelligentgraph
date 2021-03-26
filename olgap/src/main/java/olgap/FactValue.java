@@ -10,9 +10,9 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
-import pathCalc.Source;
+import pathCalc.Thing;
 import pathPatternElement.PredicateElement;
-import pathPatternProcessor.Thing;
+import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.apache.logging.log4j.Logger;
@@ -54,8 +54,8 @@ public class FactValue extends Evaluator implements Function {
 			}
 			try{
 				Value[] argumentArray = Arrays.copyOfRange(args, 2, args.length);
-				Source source = sources.getSource(tripleSource, argumentArray );
-				HashMap<String, pathCalc.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
+				PathQLRepository source = sources.getSource(tripleSource, argumentArray );
+				HashMap<String, pathQLModel.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				
 //				if(!sources.containsKey(tripleSource.hashCode()) ){
 //					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
@@ -64,7 +64,7 @@ public class FactValue extends Evaluator implements Function {
 //				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
 				
 				Thing subjectThing = source.thingFactory(null, subject,new Stack<String>(),customQueryOptions);
-				pathCalc.Resource fact = subjectThing.getFact( new PredicateElement(predicate));
+				pathQLModel.Resource fact = subjectThing.getFact( new PredicateElement(predicate));
 				if( fact != null && fact.getValue()!=null) {
 					Value result = fact.getValue();
 					logger.debug(new ParameterizedMessage("FactValue = {}",result));
