@@ -30,7 +30,7 @@ import pathQLResults.FactResults;
 import pathQLResults.PathQLResults;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PathQLTests {
+class PathQLTests { 
 	static LuceneSail lucenesail ;
 	private static RepositoryConnection conn;
 	static RepositoryTripleSource repositoryTripleSource;
