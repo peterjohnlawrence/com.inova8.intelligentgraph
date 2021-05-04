@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package PathPatternProcessor;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,22 +25,48 @@ import pathPatternProcessor.PathErrorListener;
 import pathPatternProcessor.PathPatternVisitor;
 import pathQL.PathParser;
 import pathQLRepository.PathQLRepository;
+
+/**
+ * The Class PathPatternParserTests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternParserTests {
+	
+	/** The source. */
 	static PathQLRepository source;
+	
+	/** The thing. */
 	static Thing thing;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source = new PathQLRepository();
-		thing = new Thing(source, null, null, null);
+		source = new PathQLRepository(null);
+		thing = new Thing(source, null);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/");
 
 	}
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 	}
+	
+	/**
+	 * Prepare element.
+	 *
+	 * @param input the input
+	 * @return the path element
+	 * @throws RecognitionException the recognition exception
+	 */
 	private PathElement prepareElement(CharStream input) throws RecognitionException {
 		PathPatternLexer lexer = new PathPatternLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -47,6 +76,10 @@ class PathPatternParserTests {
 		PathElement element = pathPatternVisitor.visit(pathPatternTree);
 		return element;
 	}
+	
+	/**
+	 * Test 0.
+	 */
 	@Test
 	@Order(0)
 	void test_0() {
@@ -56,6 +89,9 @@ class PathPatternParserTests {
 				 , element.toString());
 	}
 
+	/**
+	 * Test 01.
+	 */
 	@Test
 	@Order(0)
 	void test_01() {
@@ -64,6 +100,10 @@ class PathPatternParserTests {
 		assertEquals ("[eq <http://default/Peter> ] / <http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidston ] ] / <http://default/parent>"
 				 , element.toString());
 	}
+	
+	/**
+	 * Test 02.
+	 */
 	@Test
 	@Order(0)
 	void test_02() {
@@ -72,6 +112,10 @@ class PathPatternParserTests {
 		assertEquals ("[like Peter ] / <http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidston ] ] / <http://default/parent>"
 				 , element.toString());
 	}
+	
+	/**
+	 * Test 03.
+	 */
 	@Test
 	@Order(0)
 	void test_03() {
@@ -80,6 +124,10 @@ class PathPatternParserTests {
 		assertEquals ("[like [query Peter ;property <http://default/label> ] ] / <http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidston ] ] / <http://default/parent>"
 				 , element.toString());
 	}
+	
+	/**
+	 * Test 05.
+	 */
 	@Test
 	@Order(0)
 	void test_05() {
@@ -87,6 +135,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/parent> / <http://default/parent> / <http://default/parent>" , element.toString());
 	}
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -94,6 +146,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("^<http://default/Attribute>@<http://default/volumeFlow>" , element.toString());
 	}
+	
+	/**
+	 * Test 2.
+	 */
 	@Test
 	@Order(2)
 	void test_2() {
@@ -101,6 +157,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://local#volumeFlow>" , element.toString());
 	}
+	
+	/**
+	 * Test 3.
+	 */
 	@Test
 	@Order(3)
 	void test_3() {
@@ -108,6 +168,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>" ,((PathElement)element).toString());
 	}
+	
+	/**
+	 * Test 4.
+	 */
 	@Test
 	@Order(4)
 	void test_4() {
@@ -115,6 +179,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/volumeFlow>[gt 35 ]" , element.toString());
 	}
+	
+	/**
+	 * Test 5.
+	 */
 	@Test
 	@Order(5)
 	void test_5() {
@@ -122,6 +190,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/Location>@<http://default/appearsOn>[<http://rdfs/label> eastman3d ]# / <http://default/lat>" , element.toString());
 	}
+	
+	/**
+	 * Test 6.
+	 */
 	@Test
 	@Order(6)
 	void test_6() {
@@ -129,6 +201,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq [<http://rdfs/label> Calc2Graph1 ] ]# / ^<http://default/lat> / <http://default/long> / ^<http://default/left> / <http://default/right>" , element.toString());
 	}
+	
+	/**
+	 * Test 7.
+	 */
 	@Test
 	@Order(7)
 	void test_7() {
@@ -136,6 +212,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/volumeFlow>[gt 35 ;<http://rdfs/label> Calc2Graph1 ;eq ([<http://rdfs/label> Calc2Graph1 ] , <http://default/Calc2Graph1>  , Calc2Graph1 ) ]" , element.toString());
 	}
+	
+	/**
+	 * Test 8.
+	 */
 	@Test
 	@Order(8)
 	void test_8() {
@@ -143,6 +223,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/Location>@<http://default/appearsOn>[<http://rdfs/label> eastman3d ]#[<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Location> ] / <http://default/lat>" , element.toString());
 	}
+	
+	/**
+	 * Test 9.
+	 */
 	@Test
 	@Order(9)
 	void test_9() {
@@ -150,6 +234,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/Location>@<http://default/appearsOn>#[<http://default/location.Map> <http://id/Calc2Graph2> ] / <http://default/long>" , element.toString());
 	}
+	
+	/**
+	 * Test 10.
+	 */
 	@Test
 	@Order(10)
 	void test_10() {
@@ -157,6 +245,10 @@ class PathPatternParserTests {
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq [<http://rdfs/label> Calc2Graph1 ] ]# / <http://default/lat>" , element.toString());
 	}
+	
+	/**
+	 * Test 11.
+	 */
 	@Test 
 	@Order(11)
 	void test_11() {
@@ -179,6 +271,10 @@ class PathPatternParserTests {
 			assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
 		}
 	}
+	
+	/**
+	 * Test 12.
+	 */
 	@Test 
 	@Order(12)
 	void test_12() {
@@ -190,6 +286,10 @@ class PathPatternParserTests {
 					,e.getMessage() );
 		}
 	}
+	
+	/**
+	 * Test 13.
+	 */
 	@Test 
 	@Order(13)
 	void test_13() {
@@ -202,6 +302,9 @@ class PathPatternParserTests {
 		}
 	}
 
+/**
+ * Test 14.
+ */
 @Test 
 @Order(14)
 void test_14() {
@@ -213,6 +316,10 @@ void test_14() {
 		fail();
 	}
 }
+
+/**
+ * Test 15.
+ */
 @Test 
 @Order(15)
 void test_15() {
@@ -224,6 +331,10 @@ void test_15() {
 		fail();
 	}
 }
+
+/**
+ * Test 16.
+ */
 @Test 
 @Order(16)
 void test_16() {
@@ -235,6 +346,10 @@ void test_16() {
 		fail();
 	}
 }
+
+/**
+ * Test 17.
+ */
 @Test 
 @Order(17)
 void test_17() {
@@ -246,6 +361,10 @@ void test_17() {
 		fail();
 	}
 }
+
+/**
+ * Test 18.
+ */
 @Test 
 @Order(18)
 void test_18() {
@@ -257,6 +376,10 @@ void test_18() {
 		fail();
 	}
 }
+
+/**
+ * Test 19.
+ */
 @Test 
 @Order(19)
 void test_19() {
@@ -268,6 +391,10 @@ void test_19() {
 		fail();
 	}
 }
+
+/**
+ * Test 20.
+ */
 @Test 
 @Order(20)
 void test_20() {
@@ -280,6 +407,10 @@ void test_20() {
 		fail();
 	}
 }
+
+/**
+ * Test 21.
+ */
 @Test 
 @Order(21)
 void test_21() {
@@ -291,6 +422,10 @@ void test_21() {
 		fail();
 	}
 }
+
+/**
+ * Test 22.
+ */
 @Test 
 @Order(22)
 void test_22() {
@@ -303,6 +438,10 @@ void test_22() {
 		fail();
 	}
 }
+
+/**
+ * Test 23.
+ */
 @Test 
 @Order(23)
 void test_23() {
@@ -314,6 +453,10 @@ void test_23() {
 		fail();
 	}
 }
+
+/**
+ * Test 24.
+ */
 @Test 
 @Order(24)
 void test_24() {
@@ -325,6 +468,10 @@ void test_24() {
 		fail();
 	}
 }
+
+/**
+ * Test 25.
+ */
 @Test 
 @Order(25)
 void test_25() {
@@ -336,6 +483,10 @@ void test_25() {
 		fail();
 	}
 }
+
+/**
+ * Test 26.
+ */
 @Test 
 @Order(26)
 void test_26() {
@@ -347,6 +498,10 @@ void test_26() {
 		fail();
 	}
 }
+
+/**
+ * Test 27.
+ */
 @Test 
 @Order(27)
 void test_27() {

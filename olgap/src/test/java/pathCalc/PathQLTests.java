@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathCalc;
 
 import static org.junit.Assert.fail;
@@ -22,21 +25,38 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import olgap.Evaluator;
 import pathQL.PathQL;
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
 import pathQLResults.FactResults;
 import pathQLResults.PathQLResults;
 
+/**
+ * The Class PathQLTests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PathQLTests { 
+class PathQLTests {
+	
+	/** The lucenesail. */
 	static LuceneSail lucenesail ;
+	
+	/** The conn. */
 	private static RepositoryConnection conn;
+	
+	/** The repository triple source. */
 	static RepositoryTripleSource repositoryTripleSource;
+	
+	/** The source. */
 	private static PathQLRepository source;
+	
+	/** The evaluator. */
 	private static Evaluator evaluator;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
@@ -68,6 +88,9 @@ class PathQLTests {
 		evaluator = new Evaluator();
 	}
 
+	/**
+	 * Test 0.
+	 */
 	@Test
 	@Order(0)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
@@ -80,6 +103,9 @@ class PathQLTests {
 		}
 	}
 
+	/**
+	 * Pathql 1.
+	 */
 	@Test
 	@Order(1)
 	void pathql_1() {
@@ -98,6 +124,9 @@ class PathQLTests {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Pathql 2.
+	 */
 	@Test
 	@Order(2)
 	void pathql_2() {
@@ -116,6 +145,10 @@ class PathQLTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Pathql 3.
+	 */
 	@Test
 	@Order(3)
 	void pathql_3() {
@@ -134,6 +167,10 @@ class PathQLTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Pathql 4.
+	 */
 	@Test
 	@Order(4)
 	void pathql_4() {
@@ -152,6 +189,10 @@ class PathQLTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Pathql 5.
+	 */
 	@Test
 	@Order(5)
 	void pathql_5() {

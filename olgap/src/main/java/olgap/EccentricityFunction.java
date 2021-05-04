@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import org.apache.logging.log4j.LogManager;
@@ -49,22 +52,54 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 	}	
 */		
 		
+/**
+ * The Class EccentricityFunction.
+ */
 public class EccentricityFunction  implements Function{
+	
+	/** The logger. */
 	private final Logger logger = LogManager.getLogger(EccentricityFunction.class);
+	
+	/** The conn. */
 	public RepositoryConnection conn;
+	
+	/** The working rep. */
 	public org.eclipse.rdf4j.repository.Repository workingRep;
+	
+	/** The service. */
 	private String service;
+	
+	/**
+	 * Instantiates a new eccentricity function.
+	 */
 	public EccentricityFunction() {
 		super();
 		logger.info(new ParameterizedMessage("Initiating EccentricityFunction"));
 		workingRep = new SailRepository(new MemoryStore());
 		workingRep.init();
 	}
+	
+	/** The Constant NAMESPACE. */
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
+	
+	/**
+	 * Gets the uri.
+	 *
+	 * @return the uri
+	 */
 	@Override
 	public String getURI() {
 		return NAMESPACE + "eccentricity";
 	}
+	
+	/**
+	 * Evaluate.
+	 *
+	 * @param valueFactory the value factory
+	 * @param args the args
+	 * @return the value
+	 * @throws ValueExprEvaluationException the value expr evaluation exception
+	 */
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
 

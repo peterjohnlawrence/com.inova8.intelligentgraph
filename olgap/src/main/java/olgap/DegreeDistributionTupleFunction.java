@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import java.util.ArrayList;
@@ -20,19 +23,46 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.spin.function.InverseMagicProperty;
 
+/**
+ * The Class DegreeDistributionTupleFunction.
+ */
 public class DegreeDistributionTupleFunction implements InverseMagicProperty{
+	
+	/** The logger. */
 	private final Logger logger = LogManager.getLogger(DegreeDistributionTupleFunction.class);
+	
+	/**
+	 * Instantiates a new degree distribution tuple function.
+	 */
 	public DegreeDistributionTupleFunction()  {
 		super();
 		logger.info(new ParameterizedMessage("Initiating DegreeDistributionTupleFunction"));
 	}	
+	
+	/** The conn. */
 	public  RepositoryConnection conn;
 
+	/** The Constant NAMESPACE. */
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
+	
+	/**
+	 * Gets the uri.
+	 *
+	 * @return the uri
+	 */
 	@Override
 	public String getURI() {
 		return NAMESPACE + "degreeDistribution";
 	}
+	
+	/**
+	 * Evaluate.
+	 *
+	 * @param valueFactory the value factory
+	 * @param args the args
+	 * @return the closeable iteration<? extends list<? extends value>, query evaluation exception>
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public CloseableIteration<? extends List<? extends Value>, QueryEvaluationException> evaluate(
 			ValueFactory valueFactory, Value... args) throws QueryEvaluationException {

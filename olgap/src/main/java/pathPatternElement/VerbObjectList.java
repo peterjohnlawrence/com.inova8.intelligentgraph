@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathPatternElement;
 
 import java.util.ArrayList;
@@ -8,41 +11,89 @@ import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
 import pathPatternProcessor.PathConstants.FilterOperator;
+import pathQLRepository.PathQLRepository;
 
+/**
+ * The Class VerbObjectList.
+ */
 public class VerbObjectList extends FactFilterElement {
-	public VerbObjectList() {
-		super();
+	
+	/**
+	 * Instantiates a new verb object list.
+	 */
+	public VerbObjectList(PathQLRepository source) {
+		super(source);
 		operator = PathConstants.Operator.VERBOBJECTLIST;
 	}
 
+	/** The filter operator. */
 	FilterOperator filterOperator;
+	
+	/** The predicate. */
 	PredicateElement predicate;
+	
+	/** The object list. */
 	ArrayList<ObjectElement> objectList;
 
+	/**
+	 * Gets the filter operator.
+	 *
+	 * @return the filter operator
+	 */
 	public FilterOperator getFilterOperator() {
 		return filterOperator;
 	}
 
+	/**
+	 * Sets the filter operator.
+	 *
+	 * @param filterOperator the new filter operator
+	 */
 	public void setFilterOperator(FilterOperator filterOperator) {
 		this.filterOperator = filterOperator;
 	}
 
+	/**
+	 * Gets the predicate.
+	 *
+	 * @return the predicate
+	 */
 	public PredicateElement getPredicate() {
 		return predicate;
 	}
 
+	/**
+	 * Sets the predicate.
+	 *
+	 * @param predicate the new predicate
+	 */
 	public void setPredicate(PredicateElement predicate) {
 		this.predicate = predicate;
 	}
 
+	/**
+	 * Gets the object list.
+	 *
+	 * @return the object list
+	 */
 	public ArrayList<ObjectElement> getObjectList() {
 		return objectList;
 	}
 
+	/**
+	 * Sets the object list.
+	 *
+	 * @param objectList the new object list
+	 */
 	public void setObjectList(ArrayList<ObjectElement> objectList) {
 		this.objectList = objectList;
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		String verbObjectList = "";
 		if (filterOperator != null) {
@@ -67,6 +118,14 @@ public class VerbObjectList extends FactFilterElement {
 
 	}
 
+	/**
+	 * Index visitor.
+	 *
+	 * @param baseIndex the base index
+	 * @param entryIndex the entry index
+	 * @param edgeCode the edge code
+	 * @return the integer
+	 */
 	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode) {
 		setBaseIndex(baseIndex);
 		setEntryIndex(entryIndex);
@@ -83,6 +142,12 @@ public class VerbObjectList extends FactFilterElement {
 		return getExitIndex();
 	}
 
+	/**
+	 * Bind target value.
+	 *
+	 * @param targetValue the target value
+	 * @return the array list
+	 */
 	public ArrayList<String> bindTargetValue(String targetValue) {
 		ArrayList<String> targetValues = new ArrayList<String>();
 		if (filterOperator != null) {
@@ -103,6 +168,12 @@ public class VerbObjectList extends FactFilterElement {
 		return targetValues;
 	};
 
+	/**
+	 * Bind target variable.
+	 *
+	 * @param targetVariable the target variable
+	 * @return the array list
+	 */
 	public ArrayList<Variable> bindTargetVariable(Variable targetVariable) {
 		ArrayList<Variable> targetVariables = new ArrayList<Variable>();
 		if (filterOperator != null) {
@@ -123,6 +194,12 @@ public class VerbObjectList extends FactFilterElement {
 		return targetVariables;
 	};
 
+	/**
+	 * To SPARQL.
+	 *
+	 * @param sourceValue the source value
+	 * @return the string
+	 */
 	public String toSPARQL(String sourceValue) {
 
 		String verbObjectList = "";
@@ -192,13 +269,27 @@ public class VerbObjectList extends FactFilterElement {
 		return verbObjectList;
 	};
 
+	/**
+	 * Bound target variable.
+	 *
+	 * @param predicate the predicate
+	 * @return the variable
+	 */
 	private Variable boundTargetVariable(PredicateElement predicate) {
 		//predicate.getExitIndex()
-		Variable boundTargetVariable = new Variable("?n" + getBaseIndex() + "_" + predicate.getExitIndex());
+		Variable boundTargetVariable = new Variable("n" + getBaseIndex() + "_" + predicate.getExitIndex());
 		return boundTargetVariable;
 
 	}
 
+	/**
+	 * Path pattern query.
+	 *
+	 * @param thing the thing
+	 * @param sourceVariable the source variable
+	 * @param targetVariable the target variable
+	 * @return the tuple expr
+	 */
 	@Override
 	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		TupleExpr verbObjectListPattern = null;
@@ -248,6 +339,14 @@ public class VerbObjectList extends FactFilterElement {
 
 	};
 
+	/**
+	 * Bound pattern query.
+	 *
+	 * @param thing the thing
+	 * @param sourceVariable the source variable
+	 * @param targetVariable the target variable
+	 * @return the tuple expr
+	 */
 	@Override
 	public TupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		TupleExpr verbObjectListPattern = null;

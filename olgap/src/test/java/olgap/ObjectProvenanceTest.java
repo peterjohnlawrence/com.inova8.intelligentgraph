@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,9 +23,19 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 
+/**
+ * The Class ObjectProvenanceTest.
+ */
 public class ObjectProvenanceTest extends OlgapTest{
+	
+	/** The conn. */
 	static RepositoryConnection conn;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
@@ -36,11 +49,19 @@ public class ObjectProvenanceTest extends OlgapTest{
 		conn.add(model.getStatements(null, null, null));
 	}
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 
 	}
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	void test1() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";
@@ -63,6 +84,9 @@ public class ObjectProvenanceTest extends OlgapTest{
 	
 	
 	
+	/**
+	 * Test 2.
+	 */
 	@Test
 	void test2() {
 		String queryString8 = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n";
@@ -84,6 +108,10 @@ public class ObjectProvenanceTest extends OlgapTest{
 				"" ,
 				result);
 	}
+	
+	/**
+	 * Test 3.
+	 */
 	@Test
 	void test3() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";

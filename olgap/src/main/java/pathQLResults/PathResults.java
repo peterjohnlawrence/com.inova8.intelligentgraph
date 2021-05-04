@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathQLResults;
 
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
@@ -10,12 +13,28 @@ import pathCalc.Thing;
 import pathPatternElement.PathElement;
 import pathQLModel.Resource;
 
+/**
+ * The Class PathResults.
+ */
 public class PathResults extends ResourceResults{
+	
+	/**
+	 * Instantiates a new path results.
+	 *
+	 * @param pathSet the path set
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 */
 	public PathResults(CloseableIteration<BindingSet, QueryEvaluationException> pathSet,Thing thing, PathElement pathElement  ) {
 		super(pathSet, thing);
 		this.pathElement = pathElement;
 	}
 
+	/**
+	 * Next resource.
+	 *
+	 * @return the resource
+	 */
 	@Override
 	public Resource nextResource() {
 		BindingSet next = getResourceSet().next();
@@ -25,9 +44,8 @@ public class PathResults extends ResourceResults{
 		else {
 			Value factPredicate = next.getValue(getPathElement().getTargetPredicate().getName());
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
-			Thing thing = getThing().getSource().thingFactory(this.getTracer(), factThing, this.getStack(),
-					this.getCustomQueryOptions(), this.getPrefixes());
-			return thing.processFactObjectValue((IRI) factPredicate, null, factValue);
+			Thing thing = Thing.create(getThing().getSource(), factThing,this.getEvaluationContext());
+			return thing.processFactObjectValue((IRI) factPredicate,  factValue);
 		} 
 	}
 

@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathPatternProcessor;
 
 import static org.eclipse.rdf4j.model.util.Values.*;
@@ -50,50 +53,110 @@ import pathPatternElement.ValueElement;
 import pathPatternElement.VerbObjectList;
 import pathQLRepository.PathQLRepository;
 
+/**
+ * The Class PathPatternVisitor.
+ */
 public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
+	
+	/** The thing. */
 	Thing thing;
-//	private PathQLRepository source;
+	private PathQLRepository source;
 
-	public PathPatternVisitor(Thing thing) {
+	/**
+ * Instantiates a new path pattern visitor.
+ *
+ * @param thing the thing
+ */
+public PathPatternVisitor(Thing thing) {
 		super();
 		this.thing = thing;
+		this.source = thing.getSource();
 	}
-	public PathPatternVisitor() {
+	
+	public PathQLRepository getSource() {
+		return source;
+	}
+
+	/**
+	 * Instantiates a new path pattern visitor.
+	 */
+	public PathPatternVisitor(PathQLRepository source) {
 		super();
-//		this.source = source;
+	this.source = source;
 	}
+	
+	/**
+	 * Gets the prefixes.
+	 *
+	 * @return the prefixes
+	 */
 	private HashMap<String, IRI> getPrefixes() {
 		if (thing!=null) 
 			return thing.getPrefixes();
 		else
-			return PathQLRepository.getPrefixes();
+			return getSource().getPrefixes();
 	}
+	
+	/**
+	 * Visit bound pattern.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override 
 	public PathElement visitBoundPattern(PathPatternParser.BoundPatternContext ctx) { 
 		// boundPattern :  binding ('/'|'>') pathPatterns EOF 
-		PathElement pathElement = new BoundPathElement();
+		PathElement pathElement = new BoundPathElement(getSource());
 		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
 		pathElement.setRightPathElement(visit(ctx.pathPatterns()));
 		return pathElement;	
 	}
+	
+	/**
+	 * Visit match only pattern.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override 
 	public PathElement visitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { 
 		// matchOnlyPattern: pathPattern :  binding  EOF 
-		PathElement pathElement = new BoundPathElement();
+		PathElement pathElement = new BoundPathElement(getSource());
 		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
 		return pathElement;	
 	}
+	
+	/**
+	 * Visit path only pattern.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override 
 	public PathElement visitPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { 
 		//pathOnlyPattern: pathPatterns  EOF #pathOnlyPattern
 		PathElement pathPatterns = visit(ctx.pathPatterns());
 		return pathPatterns;
 		}
+	
+	/**
+	 * Visit binding.
+	 *
+	 * @param ctx the ctx
+	 * @return the fact filter element
+	 */
 	@Override
 	public FactFilterElement  visitBinding(BindingContext ctx) {
 		//binding : factFilterPattern ('/'|'>') ;	
 		return (FactFilterElement) visit(ctx.factFilterPattern());
 	}
+	
+	/**
+	 * Visit path.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override
 	public PathElement visitPath(PathContext ctx) {
 		//pathPattern :  pathEltOrInverse cardinality?  #Path  
@@ -108,10 +171,16 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return pathElement;
 	}
 
+	/**
+	 * Visit cardinality.
+	 *
+	 * @param ctx the ctx
+	 * @return the cardinality element
+	 */
 	@Override
 	public CardinalityElement visitCardinality(CardinalityContext ctx) {
 		//cardinality :	  '{'  INTEGER (',' ( INTEGER )? )?  '}'  
-		CardinalityElement cardinalityElement = new CardinalityElement();
+		CardinalityElement cardinalityElement = new CardinalityElement(getSource());
 		cardinalityElement.setMinCardinality(Integer.decode(ctx.getChild(1).getText()));
 		 String maxCardinalityText = ctx.getChild(3).getText();
 		 if(maxCardinalityText.equals("}")) {
@@ -122,32 +191,50 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return cardinalityElement;
 	}
 
+	/**
+	 * Visit path sequence.
+	 *
+	 * @param ctx the ctx
+	 * @return the sequence path element
+	 */
 	@Override
 	public SequencePathElement visitPathSequence(PathSequenceContext ctx) {
 		//pathPatterns :   pathPatterns '/'  pathPatterns  #PathSequence
 		if (ctx.pathPatterns().size() == 1) {
 			return (SequencePathElement)visit(ctx.pathPatterns(0));
 		} else {
-			SequencePathElement pathSequenceElement = new SequencePathElement();
+			SequencePathElement pathSequenceElement = new SequencePathElement(getSource());
 			pathSequenceElement.setLeftPathElement( visit(ctx.pathPatterns(0)));
 			pathSequenceElement.setRightPathElement( visit(ctx.pathPatterns(1)));
 			return pathSequenceElement;
 		}
 	}
 
+	/**
+	 * Visit path alternative.
+	 *
+	 * @param ctx the ctx
+	 * @return the alternative path element
+	 */
 	@Override
 	public AlternativePathElement visitPathAlternative(PathAlternativeContext ctx) {
 		// pathPatterns :  pathPatterns '|'  pathPatterns  #PathAlternative 
 		if (ctx.pathPatterns().size() == 1) {
 			return (AlternativePathElement) visit(ctx.pathPatterns(0));
 		} else {
-			AlternativePathElement pathAlternativeElement = new AlternativePathElement();
+			AlternativePathElement pathAlternativeElement = new AlternativePathElement(getSource());
 			pathAlternativeElement.setLeftPathElement( visit(ctx.pathPatterns(0)));
 			pathAlternativeElement.setRightPathElement( visit(ctx.pathPatterns(1)));
 			return pathAlternativeElement;
 		}
 	}
 
+	/**
+	 * Visit path parentheses.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override
 	public PathElement visitPathParentheses(PathParenthesesContext ctx) {
 		// pathPatterns :    '(' pathPatterns ')' cardinality?  #PathParentheses;
@@ -166,6 +253,12 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return pathParentheses;
 	}
 
+	/**
+	 * Visit path elt or inverse.
+	 *
+	 * @param ctx the ctx
+	 * @return the predicate element
+	 */
 	@Override
 	public PredicateElement visitPathEltOrInverse(PathEltOrInverseContext ctx) {
 		// pathEltOrInverse : negation? INVERSE? predicate ;
@@ -184,6 +277,12 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return pathEltOrInverseElement;
 	}
 
+	/**
+	 * Visit predicate.
+	 *
+	 * @param ctx the ctx
+	 * @return the predicate element
+	 */
 	@Override
 	public PredicateElement visitPredicate(PredicateContext ctx) {
 		// predicate :   ( reifiedPredicate | predicateRef | rdfType | '*' ) factFilterPattern? #objectFilterPattern
@@ -192,15 +291,16 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 			predicateElement = (PredicateElement) visit(ctx.reifiedPredicate());
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 		} else if (ctx.predicateRef() != null) {
-			predicateElement = new PredicateElement();
+			predicateElement = new PredicateElement(getSource());
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
-			predicateElement.setPredicate(((IriRefValueElement) visit(ctx.predicateRef())).getIri());
+			IriRefValueElement predicateRef = ((IriRefValueElement) visit(ctx.predicateRef()));
+			predicateElement.setPredicate(predicateRef.getIri());
 		}else if (ctx.rdfType() != null) {
-			predicateElement = new PredicateElement();
+			predicateElement = new PredicateElement(getSource());
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 			predicateElement.setPredicate((iri("http://rdftype")));
 		}else if (ctx.anyPredicate() != null) {
-			predicateElement = new PredicateElement();
+			predicateElement = new PredicateElement(getSource());
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 			predicateElement.setAnyPredicate(true);
 		}
@@ -215,10 +315,16 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return predicateElement;
 	}
 
+	/**
+	 * Visit reified predicate.
+	 *
+	 * @param ctx the ctx
+	 * @return the predicate element
+	 */
 	@Override
 	public PredicateElement visitReifiedPredicate(ReifiedPredicateContext ctx) {
 		// reifiedPredicate :  iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ; #statementFilterPattern
-		PredicateElement reifiedPredicateElement = new PredicateElement();
+		PredicateElement reifiedPredicateElement = new PredicateElement(getSource());
 		reifiedPredicateElement.setIsReified(true);
 		if (ctx.iriRef() != null) {
 			reifiedPredicateElement.setReification(((IriRefValueElement) visit(ctx.iriRef())).getIri());
@@ -235,6 +341,12 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return reifiedPredicateElement;
 	}
 
+	/**
+	 * Visit predicate ref.
+	 *
+	 * @param ctx the ctx
+	 * @return the iri ref value element
+	 */
 	@Override
 	public IriRefValueElement visitPredicateRef(PredicateRefContext ctx) {
 		// predicateRef :  IRI_REF  | rdfType  |  qname | pname_ns ;
@@ -245,10 +357,10 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 			predicateRefElement = (IriRefValueElement) visit(ctx.pname_ns());
 
 		} else if(ctx.rdfType() != null) {
-			predicateRefElement = new IriRefValueElement();
+			predicateRefElement = new IriRefValueElement(getSource());
 			predicateRefElement.setIri(iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
 		}else {
-			predicateRefElement = new IriRefValueElement();
+			predicateRefElement = new IriRefValueElement(getSource());
 			String iri = ctx.IRI_REF().getText();
 			iri = iri.substring(1, iri.length() - 1);
 			predicateRefElement.setIri(iri(iri));
@@ -256,10 +368,16 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return predicateRefElement;
 	}
 
+	/**
+	 * Visit iri ref.
+	 *
+	 * @param ctx the ctx
+	 * @return the iri ref value element
+	 */
 	@Override
 	public IriRefValueElement visitIriRef(IriRefContext ctx) {
 		// iriRef  : IRI_REF  |  qname | pname_ns ;  
-		IriRefValueElement iriRefElement = new IriRefValueElement();
+		IriRefValueElement iriRefElement = new IriRefValueElement(getSource());
 		if (ctx.qname() != null) {
 			iriRefElement.setIri(((IriRefValueElement)visit(ctx.qname())).getIri());
 		} else if (ctx.pname_ns() != null) {
@@ -273,29 +391,47 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return iriRefElement;
 	}
 
+	/**
+	 * Visit dereifier.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override
 	public PathElement visitDereifier(DereifierContext ctx) {
 		//dereifier : DEREIFIER ; 
 		return super.visitDereifier(ctx);
 	}
 
+	/**
+	 * Visit fact filter pattern.
+	 *
+	 * @param ctx the ctx
+	 * @return the fact filter element
+	 */
 	@Override
 	public FactFilterElement visitFactFilterPattern(FactFilterPatternContext ctx) {
 		// factFilterPattern : '['  propertyListNotEmpty   ']';
 		return (FactFilterElement) visit(ctx.propertyListNotEmpty());
 	}
 
+	/**
+	 * Visit property list not empty.
+	 *
+	 * @param ctx the ctx
+	 * @return the fact filter element
+	 */
 	@Override
 	public FactFilterElement visitPropertyListNotEmpty(PropertyListNotEmptyContext ctx) {
 		// propertyListNotEmpty :   verbObjectList ( ';' ( verbObjectList )? )* ;  
-		FactFilterElement propertyListNotEmptyElement = new FactFilterElement();
+		FactFilterElement propertyListNotEmptyElement = new FactFilterElement(getSource());
 		ArrayList<VerbObjectList> propertyListNotEmpty = new ArrayList<VerbObjectList>();
 		for (VerbObjectListContext verbObjectListContext : ctx.verbObjectList()) {
 
 			PathElement verb = visit(verbObjectListContext.verb());
 			ObjectListValueElement objectList =  (ObjectListValueElement) visit(verbObjectListContext.objectList());
 			
-			VerbObjectList verbObjectList = new VerbObjectList();
+			VerbObjectList verbObjectList = new VerbObjectList(getSource());
 			if(verb instanceof ValueElement) {
 				verbObjectList.setFilterOperator(((FilterOperatorValueElement) verb).getFilterOperator());
 			}else if(verb instanceof PredicateElement) {
@@ -308,6 +444,12 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return propertyListNotEmptyElement;
 	}
 
+	/**
+	 * Visit verb.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override
 	public PathElement visitVerb(VerbContext ctx) {
 		// verb : operator | pathEltOrInverse 
@@ -321,6 +463,12 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return null;
 	}
 
+	/**
+	 * Visit object list.
+	 *
+	 * @param ctx the ctx
+	 * @return the object list value element
+	 */
 	@Override
 	public ObjectListValueElement visitObjectList(ObjectListContext ctx) {
 		// objectList : object ( ',' object )*;
@@ -335,11 +483,17 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 				objectList.add((ObjectElement) visit(objectContext.factFilterPattern()));
 			}		
 		}
-		ObjectListValueElement objectListElement = new ObjectListValueElement();
+		ObjectListValueElement objectListElement = new ObjectListValueElement(getSource());
 		objectListElement.setObjectList(objectList);
 		return objectListElement;
 	}
 
+	/**
+	 * Visit object.
+	 *
+	 * @param ctx the ctx
+	 * @return the value element
+	 */
 	@Override
 	public ValueElement visitObject(ObjectContext ctx) {
 		// object : iriRef  | literal | blankNodePropertyListPath ;
@@ -354,11 +508,17 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		return null;
 	}
 
+	/**
+	 * Visit qname.
+	 *
+	 * @param ctx the ctx
+	 * @return the iri ref value element
+	 */
 	@Override
 	public IriRefValueElement visitQname(QnameContext ctx) {
 		//qname : PNAME_NS PN_LOCAL; 
-		IriRefValueElement qnameElement = new IriRefValueElement();
-		IRI qname = PathQLRepository.convertQName(ctx.getText(),getPrefixes());
+		IriRefValueElement qnameElement = new IriRefValueElement(getSource());
+		IRI qname = getSource().convertQName(ctx.getText(),getPrefixes());
 		if (qname!=null) {
 			qnameElement.setIri(qname);
 			return qnameElement;
@@ -368,11 +528,17 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		}
 	}
 
+	/**
+	 * Visit pname ns.
+	 *
+	 * @param ctx the ctx
+	 * @return the iri ref value element
+	 */
 	@Override
 	public IriRefValueElement visitPname_ns(Pname_nsContext ctx) {
 		// pname_ns : PNAME_NS ;   
-		IriRefValueElement pname_nsElement = new IriRefValueElement();
-		IRI qname = PathQLRepository.convertQName(ctx.getText(),thing.getPrefixes());
+		IriRefValueElement pname_nsElement = new IriRefValueElement(getSource());
+		IRI qname = getSource().convertQName(ctx.getText(),thing.getPrefixes());
 		if (qname!=null) {
 			pname_nsElement.setIri(qname);
 			return pname_nsElement;
@@ -382,31 +548,55 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 		}
 	}
 
+	/**
+	 * Visit literal.
+	 *
+	 * @param ctx the ctx
+	 * @return the literal value element
+	 */
 	@Override
 	public LiteralValueElement visitLiteral(LiteralContext ctx) {
 		//literal : LITERAL ;
-		LiteralValueElement literalElement = new LiteralValueElement();
+		LiteralValueElement literalElement = new LiteralValueElement(getSource());
 		String literalValue = ctx.getText();
 		literalValue =  literalValue.substring(1, literalValue.length() - 1); 
 		literalElement.setLiteral(literal(literalValue));
 		return literalElement;
 	}
 
+	/**
+	 * Visit verb object list.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override
 	public PathElement visitVerbObjectList(VerbObjectListContext ctx) {
 		// TODO Auto-generated method stub
 		return super.visitVerbObjectList(ctx);
 	}
 
+	/**
+	 * Visit operator.
+	 *
+	 * @param ctx the ctx
+	 * @return the filter operator value element
+	 */
 	@Override
 	public FilterOperatorValueElement visitOperator(OperatorContext ctx) {
 		// operator : OPERATOR ;
 		// OPERATOR : 'lt'|'gt'|'le'|'ge'|'eq'|'ne'|'like';
-		FilterOperatorValueElement operatorElement = new FilterOperatorValueElement();
+		FilterOperatorValueElement operatorElement = new FilterOperatorValueElement(getSource());
 		operatorElement.setFilterOperator(PathConstants.filterOperators.get(ctx.getText()));
 		return operatorElement;
 	}
 
+	/**
+	 * Visit rdf type.
+	 *
+	 * @param ctx the ctx
+	 * @return the path element
+	 */
 	@Override
 	public PathElement visitRdfType(RdfTypeContext ctx) {
 		//rdfType : RDFTYPE ;

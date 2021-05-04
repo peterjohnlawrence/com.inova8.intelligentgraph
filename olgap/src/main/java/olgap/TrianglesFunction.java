@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import org.apache.logging.log4j.LogManager;
@@ -20,21 +23,52 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import static org.eclipse.rdf4j.model.util.Values.iri;
+
+/**
+ * The Class TrianglesFunction.
+ */
 public class TrianglesFunction  implements Function{
+	
+	/** The logger. */
 	private final Logger logger = LogManager.getLogger(TrianglesFunction.class);
+	
+	/** The conn. */
 	public RepositoryConnection conn;
+	
+	/** The working rep. */
 	public Repository workingRep;
+	
+	/**
+	 * Instantiates a new triangles function.
+	 */
 	public TrianglesFunction() {
 		super();
 		logger.info(new ParameterizedMessage("Initiating TrianglesFunction"));
 		workingRep = new SailRepository(new MemoryStore());
 		workingRep.init();
 	}
+	
+	/** The Constant NAMESPACE. */
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
+	
+	/**
+	 * Gets the uri.
+	 *
+	 * @return the uri
+	 */
 	@Override
 	public String getURI() {
 		return NAMESPACE + "triangles";
 	}
+	
+	/**
+	 * Evaluate.
+	 *
+	 * @param valueFactory the value factory
+	 * @param args the args
+	 * @return the value
+	 * @throws ValueExprEvaluationException the value expr evaluation exception
+	 */
 	@Override
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
 		org.eclipse.rdf4j.repository.Repository rep = new SPARQLRepository(args[0].stringValue());

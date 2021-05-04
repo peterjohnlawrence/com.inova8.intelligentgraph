@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import java.util.List;
@@ -10,8 +13,17 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.spin.SpinSail;
 
+/**
+ * The Class ShortestPathTest.
+ */
 @SuppressWarnings("deprecation")
 public class ShortestPathTest {
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new SpinSail(new MemoryStore()));

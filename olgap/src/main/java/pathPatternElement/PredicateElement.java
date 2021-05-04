@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathPatternElement;
 
 import java.util.ArrayList;
@@ -19,21 +22,51 @@ import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
 import pathQLRepository.PathQLRepository;
 
+/**
+ * The Class PredicateElement.
+ */
 public class PredicateElement extends PathElement {
+	
+	/** The is inverse of. */
 	private Boolean isInverseOf = false;
+	
+	/** The is reified. */
 	private Boolean isReified = false;
+	
+	/** The is dereified. */
 	private Boolean isDereified = false;
+	
+	/** The is negated. */
 	private Boolean isNegated = false;
+	
+	/** The predicate. */
 	private IRI predicate;
+	
+	/** The any predicate. */
 	private Boolean anyPredicate;
+	
+	/** The reification. */
 	private IRI reification;
 
+	/** The object filter element. */
 	private FactFilterElement objectFilterElement;
+	
+	/** The statement filter element. */
 	private FactFilterElement statementFilterElement;
+	
+	/** The target object. */
 	private Variable targetObject = new Variable();
 
-	public PredicateElement(Boolean isInverseOf, Boolean isReified, IRI predicate, IRI reification) {
-		super();
+	/**
+	 * Instantiates a new predicate element.
+	 *
+	 * @param isInverseOf the is inverse of
+	 * @param isReified the is reified
+	 * @param predicate the predicate
+	 * @param reification the reification
+	 */
+	public PredicateElement(PathQLRepository source, Boolean isInverseOf, Boolean isReified, IRI predicate, IRI reification) {
+		super(source);
 		operator = PathConstants.Operator.PREDICATE;
 		this.isInverseOf = isInverseOf;
 		this.isReified = isReified;
@@ -42,72 +75,142 @@ public class PredicateElement extends PathElement {
 
 	}
 
-	public PredicateElement() {
-		super();
+	/**
+	 * Instantiates a new predicate element.
+	 */
+	public PredicateElement(PathQLRepository source) {
+		super(source);
 		operator = PathConstants.Operator.PREDICATE;
 	}
 
-	public PredicateElement(IRI predicate) {
-		super();
+	/**
+	 * Instantiates a new predicate element.
+	 *
+	 * @param predicate the predicate
+	 */
+	public PredicateElement(PathQLRepository source,IRI predicate) {
+		super(source);
 		operator = PathConstants.Operator.PREDICATE;
 		setPredicate(predicate);
 	}
 
+	/**
+	 * Gets the checks if is inverse of.
+	 *
+	 * @return the checks if is inverse of
+	 */
 	public Boolean getIsInverseOf() {
 		return isInverseOf;
 	}
 
+	/**
+	 * Sets the checks if is inverse of.
+	 *
+	 * @param isInverseOf the new checks if is inverse of
+	 */
 	public void setIsInverseOf(Boolean isInverseOf) {
 		this.isInverseOf = isInverseOf;
 	}
 
+	/**
+	 * Gets the checks if is reified.
+	 *
+	 * @return the checks if is reified
+	 */
 	public Boolean getIsReified() {
 		return isReified;
 	}
 
+	/**
+	 * Sets the checks if is reified.
+	 *
+	 * @param isReified the new checks if is reified
+	 */
 	public void setIsReified(Boolean isReified) {
 		this.isReified = isReified;
 	}
 
+	/**
+	 * Gets the predicate.
+	 *
+	 * @return the predicate
+	 */
 	public IRI getPredicate() {
 		return predicate;
 	}
 
+	/**
+	 * Gets the predicate SPARQL.
+	 *
+	 * @return the predicate SPARQL
+	 */
 	public String getPredicateSPARQL() {
 		if (getAnyPredicate()) {
-			return getPredicateSPARQLVariable();
+			return "?"+ getPredicateSPARQLVariable();
 		} else {
 			return "<" + predicate.stringValue() + ">";
 		}
 
 	}
 
+	/**
+	 * Gets the predicate SPARQL variable.
+	 *
+	 * @return the predicate SPARQL variable
+	 */
 	public String getPredicateSPARQLVariable() {
 	//	return "?p" + getIndex() + "_" + (getIndex()+1);
 		if(getBaseIndex() == null)
-			return "?p" + getEntryIndex() + "_" + getExitIndex();
+			return "p" + getEntryIndex() + "_" + getExitIndex();
 		else 
-			return "?p" + getBaseIndex() + "_" + getEntryIndex() + "_" + getExitIndex();
+			return "p" + getBaseIndex() + "_" + getEntryIndex() + "_" + getExitIndex();
 //		else
 //			return "?p" + getIndex();
 	}
 
+	/**
+	 * Sets the predicate.
+	 *
+	 * @param predicate the new predicate
+	 */
 	public void setPredicate(IRI predicate) {
 		this.predicate = predicate;
 	}
 
+	/**
+	 * Gets the reification.
+	 *
+	 * @return the reification
+	 */
 	public IRI getReification() {
 		return reification;
 	}
 
+	/**
+	 * Sets the reification.
+	 *
+	 * @param reification the new reification
+	 */
 	public void setReification(IRI reification) {
 		this.reification = reification;
 	}
+	
+	/**
+	 * Gets the reified variable.
+	 *
+	 * @return the reified variable
+	 */
 	private Variable getReifiedVariable() {
-		String reificationValue = "?r" + getExitIndex();//(getIndex() + 1);
+		String reificationValue = "r" + getExitIndex();//(getIndex() + 1);
 		Variable reificationVariable = new Variable(reificationValue);
 		return reificationVariable;
 	}
+	
+	/**
+	 * Gets the target variable.
+	 *
+	 * @return the target variable
+	 */
 	public Variable getTargetVariable() {
 		if(getRightPathElement()!=null)
 			return getRightPathElement().getTargetVariable();
@@ -116,43 +219,89 @@ public class PredicateElement extends PathElement {
 			if (getIsDereified()) {
 				return (Variable) getReifiedVariable();
 			}else {
-				targetVariable.setName("?n"+ getExitIndex());
+				targetVariable.setName("n"+ getExitIndex());
 				return targetVariable;
 			}
 		}
 	}
+	
+	/**
+	 * Gets the checks if is dereified.
+	 *
+	 * @return the checks if is dereified
+	 */
 	public Boolean getIsDereified() {
 		return isDereified;
 	}
 
+	/**
+	 * Sets the checks if is dereified.
+	 *
+	 * @param isDereified the new checks if is dereified
+	 */
 	public void setIsDereified(Boolean isDereified) {
 		this.isDereified = isDereified;
 	}
 
+	/**
+	 * Gets the checks if is negated.
+	 *
+	 * @return the checks if is negated
+	 */
 	public Boolean getIsNegated() {
 		return isNegated;
 	}
 
+	/**
+	 * Sets the checks if is negated.
+	 *
+	 * @param isDereified the new checks if is negated
+	 */
 	public void setIsNegated(Boolean isDereified) {
 		this.isNegated = isDereified;
 	}
 
+	/**
+	 * Gets the object filter element.
+	 *
+	 * @return the object filter element
+	 */
 	public FactFilterElement getObjectFilterElement() {
 		return objectFilterElement;
 	}
 
+	/**
+	 * Sets the object filter element.
+	 *
+	 * @param objectFilterElement the new object filter element
+	 */
 	public void setObjectFilterElement(FactFilterElement objectFilterElement) {
 		this.objectFilterElement = objectFilterElement;
 	}
 
+	/**
+	 * Gets the statement filter element.
+	 *
+	 * @return the statement filter element
+	 */
 	public FactFilterElement getStatementFilterElement() {
 		return statementFilterElement;
 	}
 
+	/**
+	 * Sets the statement filter element.
+	 *
+	 * @param statementFilterElement the new statement filter element
+	 */
 	public void setStatementFilterElement(FactFilterElement statementFilterElement) {
 		this.statementFilterElement = statementFilterElement;
 	}
 
+	/**
+	 * To HTML.
+	 *
+	 * @return the string
+	 */
 	public String toHTML() {
 
 		String predicateString = "";
@@ -184,6 +333,11 @@ public class PredicateElement extends PathElement {
 
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 
 		String predicateString = "";
@@ -217,17 +371,34 @@ public class PredicateElement extends PathElement {
 
 	}
 
+	/**
+	 * To SPARQL.
+	 *
+	 * @return the string
+	 */
 	public String toSPARQL() {
 		return unboundPredicateToSPARQL();
 	}
 
 
 
+	/**
+	 * Gets the target object.
+	 *
+	 * @return the target object
+	 */
 	private Variable getTargetObject() {
-		targetObject.setName("?n" + getExitIndex());
+		targetObject.setName("n" + getExitIndex());
 		return targetObject;
 	}
 
+	/**
+	 * Bound predicate to SPARQL.
+	 *
+	 * @param sourceValue the source value
+	 * @param targetValue the target value
+	 * @return the string
+	 */
 	protected String boundPredicateToSPARQL(String sourceValue, String targetValue) {
 		String predicateString = "";
 
@@ -242,12 +413,12 @@ public class PredicateElement extends PathElement {
 
 		if (isReified) {
 			String reificationValue = "?r" + getExitIndex(); //(getIndex() + 1);
-			IRI subject = PathQLRepository.getReificationSubject(reification);
-			IRI isSubjectOf = PathQLRepository.getReificationIsSubjectOf(reification);
-			IRI property = PathQLRepository.getReificationPredicate(reification);
-			IRI isPropertyOf = PathQLRepository.getReificationIsPredicateOf(reification);
-			IRI object = PathQLRepository.getReificationObject(reification);
-			IRI isObjectOf = PathQLRepository.getReificationIsObjectOf(reification);
+			IRI subject = getSource().getReificationSubject(reification);
+			IRI isSubjectOf = getSource().getReificationIsSubjectOf(reification);
+			IRI property = getSource().getReificationPredicate(reification);
+			IRI isPropertyOf = getSource().getReificationIsPredicateOf(reification);
+			IRI object = getSource().getReificationObject(reification);
+			IRI isObjectOf = getSource().getReificationIsObjectOf(reification);
 
 			if (isInverseOf) {
 				// ?reification :reificationObject  :thing .  :thing   :reificationIsObjectOf  ?reification .
@@ -332,11 +503,11 @@ public class PredicateElement extends PathElement {
 			for (String aTargetValue : targetValues) {
 				if (isNegated) {
 					if (isInverseOf) {
-						predicateString += aTargetValue + getPredicateSPARQLVariable() + " " + sourceValue + ". FILTER("
-								+ getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ").\n";
+						predicateString += aTargetValue + "?"+ getPredicateSPARQLVariable() + " " + sourceValue + ". FILTER("
+								+ "?"+ getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ").\n";
 					} else {
-						predicateString += sourceValue + " " + getPredicateSPARQLVariable() + " " + aTargetValue
-								+ ". FILTER(" + getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ")\n";
+						predicateString += sourceValue + " ?" + getPredicateSPARQLVariable() + " " + aTargetValue
+								+ ". FILTER(?" + getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ")\n";
 					}
 				} else {
 					if (isInverseOf) {
@@ -353,6 +524,12 @@ public class PredicateElement extends PathElement {
 		return predicateString;
 	}
 
+
+	/**
+	 * Unbound predicate to SPARQL.
+	 *
+	 * @return the string
+	 */
 	protected String unboundPredicateToSPARQL() {
 		String targetValue = "?n" + getExitIndex();// (getIndex() + 1);
 		String sourceValue;
@@ -364,11 +541,26 @@ public class PredicateElement extends PathElement {
 
 		return boundPredicateToSPARQL(sourceValue, targetValue);
 	}
+	
+	/**
+	 * Unbound path pattern query.
+	 *
+	 * @param thing the thing
+	 * @return the tuple expr
+	 */
 	@Deprecated
 	public TupleExpr unboundPathPatternQuery(Thing thing) {
 		return pathPatternQuery(thing, this.sourceVariable,this.targetVariable);
 	}
 
+	/**
+	 * Path pattern query.
+	 *
+	 * @param thing the thing
+	 * @param sourceVariable the source variable
+	 * @param targetVariable the target variable
+	 * @return the tuple expr
+	 */
 	@Override
 	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		if(sourceVariable==null)sourceVariable = this.getSourceVariable();
@@ -382,24 +574,19 @@ public class PredicateElement extends PathElement {
 		if (isReified) {
 			TupleExpr reifiedPredicatePattern = null;
 			Variable reificationVariable = getReifiedVariable();
-			Variable predicateVariable;
-			if (getAnyPredicate()) {
-				predicateVariable = new Variable(getPredicateSPARQLVariable());
-			} else {
-				predicateVariable = new Variable(getPredicateSPARQLVariable(), getPredicate());
-			}
-			IRI subject = PathQLRepository.getReificationSubject(reification);
-			IRI isSubjectOf = PathQLRepository.getReificationIsSubjectOf(reification);
-			IRI property = PathQLRepository.getReificationPredicate(reification);
-			IRI isPropertyOf = PathQLRepository.getReificationIsPredicateOf(reification);
-			IRI object = PathQLRepository.getReificationObject(reification);
-			IRI isObjectOf = PathQLRepository.getReificationIsObjectOf(reification);
-			Var subjectVariable = new Var("?subject" + getExitIndex(),subject);//(getIndex() + 1), subject);
-			Var isSubjectOfVariable = new Var("?isSubjectOf" +  getExitIndex(),isSubjectOf);// (getIndex() + 1), isSubjectOf);
-			Var propertyVariable = new Var("?property" +   getExitIndex(),property);//  (getIndex() + 1), property);
-			Var isPropertyOfVariable = new Var("?isPropertyOf" +   getExitIndex(),isPropertyOf);//  (getIndex() + 1), isPropertyOf);
-			Var objectVariable = new Var("?object" + getExitIndex(),object);// (getIndex() + 1), object);
-			Var isObjectOfVariable = new Var("?isObjectOf" + getExitIndex(),isObjectOf);// (getIndex() + 1), isObjectOf);
+			Variable predicateVariable = getPredicateVariable();
+			IRI subject = thing.getSource().getReificationSubject(reification);
+			IRI isSubjectOf = thing.getSource().getReificationIsSubjectOf(reification);
+			IRI property = thing.getSource().getReificationPredicate(reification);
+			IRI isPropertyOf = thing.getSource().getReificationIsPredicateOf(reification);
+			IRI object = thing.getSource().getReificationObject(reification);
+			IRI isObjectOf = thing.getSource().getReificationIsObjectOf(reification);
+			Var subjectVariable = new Var("subject" + getExitIndex(),subject);//(getIndex() + 1), subject);
+			Var isSubjectOfVariable = new Var("isSubjectOf" +  getExitIndex(),isSubjectOf);// (getIndex() + 1), isSubjectOf);
+			Var propertyVariable = new Var("property" +   getExitIndex(),property);//  (getIndex() + 1), property);
+			Var isPropertyOfVariable = new Var("isPropertyOf" +   getExitIndex(),isPropertyOf);//  (getIndex() + 1), isPropertyOf);
+			Var objectVariable = new Var("object" + getExitIndex(),object);// (getIndex() + 1), object);
+			Var isObjectOfVariable = new Var("isObjectOf" + getExitIndex(),isObjectOf);// (getIndex() + 1), isObjectOf);
 			//Part1
 			TupleExpr part1Pattern = null;
 			if (isInverseOf) {
@@ -600,7 +787,27 @@ public class PredicateElement extends PathElement {
 		}
 	}
 
+	/**
+	 * Gets the predicate variable.
+	 *
+	 * @return the predicate variable
+	 */
+	private Variable getPredicateVariable() {
+		Variable predicateVariable;
+		if (getAnyPredicate()) {
+			predicateVariable = new Variable(getPredicateSPARQLVariable());
+		} else {
+			predicateVariable = new Variable(getPredicateSPARQLVariable(), getPredicate());
+		}
+		return predicateVariable;
+	}
 
+
+	/**
+	 * Gets the any predicate.
+	 *
+	 * @return the any predicate
+	 */
 	public Boolean getAnyPredicate() {
 		if (anyPredicate != null) {
 			return anyPredicate;
@@ -611,9 +818,23 @@ public class PredicateElement extends PathElement {
 		}
 	}
 
+	/**
+	 * Sets the any predicate.
+	 *
+	 * @param anyPredicate the new any predicate
+	 */
 	public void setAnyPredicate(Boolean anyPredicate) {
 		this.anyPredicate = anyPredicate;
 	}
+	
+	/**
+	 * Index visitor.
+	 *
+	 * @param baseIndex the base index
+	 * @param entryIndex the entry index
+	 * @param edgeCode the edge code
+	 * @return the integer
+	 */
 	@Override
 	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode) {
 		setBaseIndex(baseIndex);
@@ -631,11 +852,29 @@ public class PredicateElement extends PathElement {
 		if(statementFilterElement!=null) statementFilterElement.indexVisitor(entryIndex, 0,edgeCode);
 		setExitIndex(entryIndex+1) ;
 		
+		
 		if (edgeCode != null && isReified && isDereified)
 			setEdgeCode(EdgeCode.DEREIFIED);
 		else
 			setEdgeCode(edgeCode);
 		return getExitIndex();
+	}
+
+	/**
+	 * Visit path.
+	 *
+	 * @param path the path
+	 * @return the path
+	 */
+	@Override
+	public Path visitPath(Path path) {
+		Edge predicateEdge;
+		if( getIsReified())
+			predicateEdge = new Edge( getSourceVariable(),getReification(), getPredicateVariable(), getTargetVariable(),getIsInverseOf(),getIsDereified());
+		else
+			predicateEdge = new Edge( getSourceVariable(),getPredicateVariable(), getTargetVariable(),getIsInverseOf());
+		path.add(predicateEdge);
+		return path;
 	}
 
 }

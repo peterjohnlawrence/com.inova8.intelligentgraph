@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -34,7 +37,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import olgap.ClearCache;
-import olgap.Evaluator;
 import pathQL.Match;
 import pathQLModel.MatchFact;
 import pathQLModel.Resource;
@@ -42,14 +44,34 @@ import pathQLRepository.PathQLRepository;
 import pathQLResults.MatchResults;
 import pathQLResults.ResourceResults;
 
+/**
+ * The Class ThingTests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ThingTests {
+	
+	/** The lucenesail. */
 	static LuceneSail lucenesail ;
+	
+	/** The conn. */
 	private static RepositoryConnection conn;
+	
+	/** The repository triple source. */
 	static RepositoryTripleSource repositoryTripleSource;
+	
+	/** The source. */
 	private static PathQLRepository source;
+	
+	/** The evaluator. */
 	private static Evaluator evaluator;
 
+	private static Match match;
+
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
@@ -79,8 +101,18 @@ class ThingTests {
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 		evaluator = new Evaluator();
+		match = new Match(source);
 	}
-
+	String removeWhiteSpaces(String input) {
+	    return input.replaceAll("\\s+", "");
+	    //return input;
+	}
+	void assertEqualsWOSpaces(String actual, String expected){
+		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
+}	
+	/**
+	 * Test 0.
+	 */
 	@Test
 	@Order(0)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
@@ -93,6 +125,9 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Match 1.
+	 */
 	@Test
 	@Order(1)
 	void match_1() {
@@ -112,7 +147,7 @@ class ThingTests {
 //					queryString, propertyURI);
 //			Collection<BindingSet> queryResultSet = luceneIndex.evaluate(querySpec);
 
-			MatchResults matchResultsIterator = Match.entityMatch("Unit1");
+			MatchResults matchResultsIterator = match.entityMatch("Unit1");
 			while (matchResultsIterator.hasNext()) {
 				MatchFact nextMatch = matchResultsIterator.nextResource();
 				assertEquals(
@@ -126,12 +161,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
 	void test_1() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/volumeFlow>");
 			assertEquals("59", result.stringValue());
 		} catch (Exception e) {
@@ -140,11 +178,14 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 2.
+	 */
 	@Test
 	@Order(2)
 	void test_2() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Resource result = $this.getFact(":volumeFlow");
 			assertEquals("40", result.stringValue());
 		} catch (Exception e) {
@@ -154,11 +195,14 @@ class ThingTests {
 
 	}
 
+	/**
+	 * Test 2 1.
+	 */
 	@Test
 	@Order(21)
 	void test_2_1() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact(":hasFeedBatteryLimit/:volumeFlow");
 			assertEquals("59", result.stringValue());
 		} catch (Exception e) {
@@ -168,13 +212,15 @@ class ThingTests {
 
 	}
 
+	/**
+	 * Test 3.
+	 */
 	@Test
 	@Order(3)
 	void test_3() {
 
 		try {
-			Thing $this = source.thingFactory(null, iri("http://inova8.com/calc2graph/id/Unit1"), new Stack<String>(),
-					null);
+			Thing $this = Thing.create(source, iri("http://inova8.com/calc2graph/id/Unit1"), 	null);
 			$this.prefix("http://inova8.com/calc2graph/def/");
 			Double fact = 0.0;
 			for (Resource batterylimit : $this.getFacts(":hasProductBatteryLimit")) {
@@ -194,12 +240,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 4.
+	 */
 	@Test
 	@Order(4)
 	void test_4() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact(":massThroughput");
 			assertEquals("23.43999981880188", result.stringValue());
 		} catch (Exception e) {
@@ -207,13 +256,44 @@ class ThingTests {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Test 4.1.
+	 */
+	@Test
+	@Order(4)
+	void test_4_1() {
 
+		try {
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			String trace = $this.traceFact(":massThroughput");
+			assertEqualsWOSpaces("<olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/massThroughput'target='_blank'>massThroughput</a>of<ahref='http://inova8.com/calc2graph/id/Unit1'target='_blank'>Unit1</a>,byinvoking<b>groovy</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>$this.prefix(&quot;&lt;http://inova8.com/calc2graph/def/&gt;&quot;);<br>varmassThroughput=0.0;<br>for(batterylimitin$this.getFacts(&quot;:hasProductBatteryLimit&quot;)){<br>&nbsp;&nbsp;&nbsp;massThroughput+=batterylimit.getFact(&quot;:massFlow&quot;).doubleValue()<br>};<br>massThroughput;</code></pre></div></li><olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>,byinvoking<b>groovy</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>$this.prefix(&quot;&lt;http://inova8.com/calc2graph/def/&gt;&quot;);<br>varresult=$this.getFact(&quot;:volumeFlow&quot;).floatValue()*$this.getFact(&quot;:Attribute@:density&quot;).floatValue();&nbsp;<br>result;</code></pre></div></li><olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>,byinvoking<b>javascript</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>40;</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=40^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=40^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>,byinvoking<b>groovy</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>$this.prefix(&quot;&lt;http://inova8.com/calc2graph/def/&gt;&quot;);<br>varresult=$this.getFact(&quot;:density&quot;).floatValue();&nbsp;<br>result;</code></pre></div></li><olstyle='list-style-type:none;'><li>Retrievedliteral<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=.306^^<ahref='http://www.w3.org/2001/XMLSchema#float'target='_blank'>float</a></li></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=0.306^^<ahref='http://www.w3.org/2001/XMLSchema#float'target='_blank'>float</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=0.306^^<ahref='http://www.w3.org/2001/XMLSchema#float'target='_blank'>float</a></li></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=12.239999771118164^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit2'target='_blank'>BatteryLimit2</a>=12.239999771118164^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>,byinvoking<b>groovy</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>$this.prefix(&quot;&lt;http://inova8.com/calc2graph/def/&gt;&quot;);<br>varresult=$this.getFact(&quot;:volumeFlow&quot;).floatValue()*$this.getFact(&quot;:Attribute@:density&quot;).floatValue();&nbsp;<br>result;</code></pre></div></li><olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>,byinvoking<b>groovy</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>20;</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=20^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=20^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>,byinvoking<b>script</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>$this.prefix(&quot;&lt;http://inova8.com/calc2graph/def/&gt;&quot;);<br>varresult=$this.getFact(&quot;:density&quot;).floatValue();&nbsp;<br>result;</code></pre></div></li><olstyle='list-style-type:none;'><li>Retrievedliteral<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=.56^^<ahref='http://www.w3.org/2001/XMLSchema#float'target='_blank'>float</a></li></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=0.56^^<ahref='http://www.w3.org/2001/XMLSchema#float'target='_blank'>float</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=0.56^^<ahref='http://www.w3.org/2001/XMLSchema#float'target='_blank'>float</a></li></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=11.200000047683716^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit3'target='_blank'>BatteryLimit3</a>=11.200000047683716^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/massThroughput'target='_blank'>massThroughput</a>of<ahref='http://inova8.com/calc2graph/id/Unit1'target='_blank'>Unit1</a>=23.43999981880188^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/massThroughput'target='_blank'>massThroughput</a>of<ahref='http://inova8.com/calc2graph/id/Unit1'target='_blank'>Unit1</a>=23.43999981880188^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol>", trace);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(4)
+	void test_4_2() {
+
+		try {
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			String trace = $this.traceFact(":massFlow");
+			assertEqualsWOSpaces("<olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>$this.prefix(&quot;&lt;http://inova8.com/calc2graph/def/&gt;&quot;);<br>varresult=$this.getFact(&quot;:volumeFlow&quot;).floatValue()*$this.getFact(&quot;:Attribute@:density&quot;).floatValue();&nbsp;<br>result;</code></pre></div></li><olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>javascript</b>script</li><li><divstyle='border:1pxsolidblack;'><pre><code>59;</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=59^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=59^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li><li>Retrievedliteral<ahref='http://inova8.com/calc2graph/def/density'target='_blank'>density</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=.42^^<ahref='http://www.w3.org/2001/XMLSchema#string'target='_blank'>string</a></li></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=24.77999922633171^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/massFlow'target='_blank'>massFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=24.77999922633171^^<ahref='http://www.w3.org/2001/XMLSchema#double'target='_blank'>double</a></li></ol>", trace);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Test 5.
+	 */
 	@Test
 	@Order(5)
 	void test_5() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("def", "<http://inova8.com/calc2graph/def/>");
 			Resource result = $this.getFact("def:Attribute@def:density");
 			if (result != null)
@@ -226,12 +306,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 6.
+	 */
 	@Test
 	@Order(6)
 	void test_6() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massFlow>");
 			assertEquals("11.200000047683716", result.stringValue());
 		} catch (Exception e) {
@@ -240,12 +323,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 7.
+	 */
 	@Test
 	@Order(7)
 	void test_7() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massThroughput>");
 			assertEquals("23.43999981880188", result.stringValue());
 		} catch (Exception e) {
@@ -254,12 +340,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 8.
+	 */
 	@Test
 	@Order(8)
 	void test_8() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Resource result = $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput");
 
 			assertEquals("23.43999981880188", result.stringValue());
@@ -269,11 +358,14 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 9.
+	 */
 	@Test
 	@Order(9)
 	void test_9() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Float result = $this.getFact(":massFlow").floatValue()
 					/ $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput").floatValue();
 
@@ -284,11 +376,14 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 10.
+	 */
 	@Test
 	@Order(10)
 	void test_10() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Float result = $this.getFact("^:hasProductBatteryLimit/:massThroughput").floatValue();
 
 			assertEquals("23.44", result.toString());
@@ -298,11 +393,14 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 11.
+	 */
 	@Test
 	@Order(11)
 	void test_11() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			Resource result = $this.getFact(":lat");
 
 			assertEquals("400", result.stringValue());
@@ -312,12 +410,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 12.
+	 */
 	@Test
 	@Order(12)
 	void test_12() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
 
@@ -328,12 +429,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 13.
+	 */
 	@Test
 	@Order(13)
 	void test_13() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#").getFact(":lat");
 
@@ -344,12 +448,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 14.
+	 */
 	@Test
 	@Order(14)
 	void test_14() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph2]#"); //""
 
@@ -362,11 +469,14 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 15.
+	 */
 	@Test
 	@Order(15)
 	void test_15() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/long>");
 
 			assertEquals("501", result.stringValue());
@@ -376,12 +486,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 16.
+	 */
 	@Test
 	@Order(16)
 	void test_16() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]#");
 
@@ -392,12 +505,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 17.
+	 */
 	@Test
 	@Order(17)
 	void test_17() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]");
 
@@ -408,12 +524,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 18.
+	 */
 	@Test
 	@Order(18)
 	void test_18() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit1]#/:lat");
 
@@ -424,12 +543,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 19.
+	 */
 	@Test
 	@Order(19)
 	void test_19() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[ rdfs:label 'Calc2Graph2']#");
 
@@ -440,12 +562,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 20.
+	 */
 	@Test
 	@Order(20)
 	void test_20() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#/:lat");
 
@@ -456,12 +581,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 21.
+	 */
 	@Test
 	@Order(21)
 	void test_21() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph1 ]/:long");
 
@@ -472,12 +600,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 22.
+	 */
 	@Test
 	@Order(22)
 	void test_22() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long");
 
@@ -488,12 +619,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 23.
+	 */
 	@Test
 	@Order(23)
 	void test_23() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]");
 
@@ -504,12 +638,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 24.
+	 */
 	@Test
 	@Order(24)
 	void test_24() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit2"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 
@@ -520,12 +657,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 25.
+	 */
 	@Test
 	@Order(25)
 	void test_25() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit2"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 
@@ -536,12 +676,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 26.
+	 */
 	@Test
 	@Order(26)
 	void test_26() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit3"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit3"), null);
 
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
@@ -553,12 +696,15 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 27.
+	 */
 	@Test
 	@Order(27)
 	void test_27() {
 
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/Unit3"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit3"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massFlowBalance");
 
@@ -569,11 +715,14 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 28.
+	 */
 	@Test
 	@Order(28)
 	void test_28() {
 		try {
-			Thing $this = new Thing(source, iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			ResourceResults results = $this.getFacts("(:Attribute@:density  |:density)");
 			for (Resource result : results) {
 				assertEquals(".42", result.stringValue());
@@ -583,6 +732,40 @@ class ThingTests {
 		}
 	}
 
+	/**
+	 * Test 30.
+	 */
+	@Test
+	@Order(30)
+	void test_30() {
+		try {
+			source.addGraph("http://inova8.com/calc2graph/testGraph");
+			
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			ResourceResults results = $this.getFacts("(:Attribute@:density  |:density)");
+			for (Resource result : results) {
+				assertEquals(".42", result.stringValue());
+			}
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	@Test
+	@Order(34)
+	void test_34() {
+		
+		try {
+			Thing $this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit3"),null);
+			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massYield>");
+			assertEquals("0.4778156952152066", result.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		} 
+	}
+	/**
+	 * Test 100.
+	 */
 	@Test
 	@Order(100)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",

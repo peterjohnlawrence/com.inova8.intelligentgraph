@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import java.util.Set;
@@ -9,7 +12,18 @@ import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.algebra.evaluation.iterator.QueryContextIteration;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
+/**
+ * The Class OlgapTest.
+ */
 public class OlgapTest {
+	
+	/**
+	 * Run query.
+	 *
+	 * @param conn the conn
+	 * @param queryString the query string
+	 * @return the string
+	 */
 	@SuppressWarnings("deprecation")
 	public static String runQuery(RepositoryConnection conn, String queryString) {
 		TupleQuery query = conn.prepareTupleQuery(queryString);

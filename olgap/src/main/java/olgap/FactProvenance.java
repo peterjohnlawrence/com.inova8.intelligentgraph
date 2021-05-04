@@ -3,19 +3,17 @@
  */
 package olgap;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Stack;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
+import pathCalc.EvaluationContext;
+import pathCalc.Evaluator;
 import pathCalc.Thing;
-import pathCalc.Tracer;
 import pathPatternElement.PredicateElement;
 import pathQLRepository.PathQLRepository;
 
@@ -35,8 +33,6 @@ public class FactProvenance extends Evaluator implements Function {
 
 	/**
 	 * Instantiates a new fact provenance.
-	 *
-	 * @throws NoSuchAlgorithmException the no such algorithm exception
 	 */
 	public FactProvenance()  {
 		super();
@@ -86,19 +82,13 @@ public class FactProvenance extends Evaluator implements Function {
 				Value[] argumentArray = Arrays.copyOfRange(args,2, args.length);
 				PathQLRepository source = sources.getSource(tripleSource, argumentArray );
 				HashMap<String, pathQLModel.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
-				
-//				if(!sources.containsKey(tripleSource.hashCode()) ){
-//					sources.put(tripleSource.hashCode(),  new Source(tripleSource));
-//				}
-//				Source source = sources.get(tripleSource.hashCode());
-//				HashMap<String, olgap.Value> customQueryOptions = source.getCustomQueryOptions(Arrays.copyOfRange(args, 2, args.length));
-				Tracer tracer = new Tracer();
-				tracer.setTracing(true);
-				Thing subjectThing = source.thingFactory(tracer, subject, new Stack<String>(),customQueryOptions);
+				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
+				evaluationContext.setTracing(true);
+				Thing subjectThing = Thing.create(source, subject, evaluationContext);
 				//olgap.Value fact = 
-				subjectThing.getFact( new PredicateElement(predicate));
-				logger.debug("Trace\r\n"+tracer.getTrace());
-				return tripleSource.getValueFactory().createLiteral(tracer.getTrace());		
+				subjectThing.getFact( new PredicateElement(source,predicate));
+				logger.debug("Trace\r\n"+evaluationContext.getTrace());
+				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());		
 
 			}catch(Exception e) {
 				return args[2];

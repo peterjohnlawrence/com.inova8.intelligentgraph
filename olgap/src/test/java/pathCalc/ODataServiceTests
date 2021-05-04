@@ -1,39 +1,31 @@
 
+Postman prerequest scripts to encode
 
-MatchQuery
+pm.request.url.query.each((q) => {
+     q.update(encodeURI(q.toString()))
+});
 
-http://localhost:8070/odata2sparql/calc2graph/matchQuery(pathql='Unit* NOT (location OR product*)')?$select=literal&$format=json
-http://localhost:8070/odata2sparql/calc2graph/matchQuery(pathql=@p)?@p='Unit* NOT (location OR product*)'&$format=json
+OData Search
 
+http://localhost:8070/odata2sparql/calc2graph/$all?$search=Unit* NOT location OR product*&$format=json
+http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource?$search=Unit* NOT location OR product*&$format=json
 
-$This
+pathql.fact  $This
 
-http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource('calc2graphData~Unit1')/pathql.factQuery(pathql=':hasProductBatteryLimit>:massFlow')?$select=*&$format=json
-
-
-All members of a class ?????????
-
-http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource/pathql.factQuerym(pathql=':hasProductBatteryLimit>:massFlow')?$select=*&$format=json
-
-All members of a MatchQuery
-
-http://localhost:8070/odata2sparql/calc2graph/matchQuery(pathql='Unit1')/pathql.factQuerys(pathql=':hasProductBatteryLimit>:volumeFlow')?$select=literal&$format=json
-http://localhost:8070/odata2sparql/calc2graph/matchQuery(pathql='BatteryLimit1')/pathql.factQuerys(pathql=':volumeFlow')?$select=literal&$format=json
+http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource('calc2graphData~Unit1')/pathql.fact(pathql=':hasProductBatteryLimit')?$select=*&$format=json
+http://localhost:8070/odata2sparql/calc2graph/Unit('calc2graphData~Unit1')/pathql.fact(pathql=':hasProductBatteryLimit>:massFlow')?$select=*&$format=json
 
 
-Combined Query?????????
+pathql.facts All members of a class
 
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql='[ eq :Unit1]>:hasProductBatteryLimit')?$select=literal&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq :Unit1]>:hasProductBatteryLimit')&$select=*&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql='[ like "Unit1"]>:hasProductBatteryLimit')?$select=literal&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql='[ like "Unit" ; a :Unit ]>:hasProductBatteryLimit')?$select=literal&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql='[ like "Unit* NOT (location OR product*)"]>:hasProductBatteryLimit>:volumeFlow')?$select=literal&$format=json
+http://localhost:8070/odata2sparql/calc2graph/Unit/pathql.facts(pathql=':hasProductBatteryLimit')?$select=*&$format=json
 
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq :Unit1]>:hasProductBatteryLimit'&$select=literal&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq :Unit1]>:hasProductBatteryLimit>:massFlow'&$format=json
+pathQL Combined Query
+
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq calc2graphData~Unit1]>:hasProductBatteryLimit'&$select=*&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq calc2graphData~Unit1]>:hasProductBatteryLimit>:massFlow'&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit*"]'&$format=json
 http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit* NOT (location OR product*)"]>:hasProductBatteryLimit>:massFlow'&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit* NOT (location OR product*)"; a :Unit ]>:hasProductBatteryLimit>:massFlow'&$format=json
 
-
-
-http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource(@p)?$select=*&@p='calc2graphData~Unit1'&$format=json
-http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource('calc2graphData~Unit1)?$select=*&$format=json
+http://localhost:8070/odata2sparql/eastman3d/pathQL(pathql=@p)?@p='[ like "Unit*"]'&$format=json&$select=*

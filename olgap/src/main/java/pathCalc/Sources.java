@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathCalc;
 
 import java.util.HashMap;
@@ -10,24 +13,58 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 
-import olgap.Evaluator;
 import pathQLRepository.PathQLRepository;
 
+/**
+ * The Class Sources.
+ */
 public class Sources {
 
+	/** The logger. */
 	private final Logger logger = LogManager.getLogger(Sources.class);
+	
+	/** The sources. */
 	static protected   HashMap<Integer, PathQLRepository > sources = new HashMap<Integer, PathQLRepository>();
 	
+	/**
+	 * Contains key.
+	 *
+	 * @param cacheHash the cache hash
+	 * @return the boolean
+	 */
 	Boolean containsKey(Integer cacheHash){
 		return sources.containsKey(cacheHash);
 	}
-	 PathQLRepository put(Integer cacheHash,PathQLRepository source){
+	 
+ 	/**
+ 	 * Put.
+ 	 *
+ 	 * @param cacheHash the cache hash
+ 	 * @param source the source
+ 	 * @return the path QL repository
+ 	 */
+ 	PathQLRepository put(Integer cacheHash,PathQLRepository source){
 		return sources.put(cacheHash,  source);
 	}
-	 PathQLRepository get(Integer cacheHash){
+	 
+ 	/**
+ 	 * Gets the.
+ 	 *
+ 	 * @param cacheHash the cache hash
+ 	 * @return the path QL repository
+ 	 */
+ 	PathQLRepository get(Integer cacheHash){
 		 return sources.get(cacheHash);
 	 }
-	 public PathQLRepository getSource(TripleSource tripleSource,Value[] args){
+	 
+ 	/**
+ 	 * Gets the source.
+ 	 *
+ 	 * @param tripleSource the triple source
+ 	 * @param args the args
+ 	 * @return the source
+ 	 */
+ 	public PathQLRepository getSource(TripleSource tripleSource,Value[] args){
 		 Integer cacheHash;
 		 
 		 if(args.length>0) {
@@ -48,7 +85,14 @@ public class Sources {
 			}
 		 return source;
 	 } 
-	 Integer locateCachHashArgument(Value[] args){
+	 
+ 	/**
+ 	 * Locate cach hash argument.
+ 	 *
+ 	 * @param args the args
+ 	 * @return the integer
+ 	 */
+ 	Integer locateCachHashArgument(Value[] args){
 		 for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < args.length; customQueryOptionsArrayIndex += 2) {
 			 if(args[customQueryOptionsArrayIndex].stringValue().equals(Evaluator.CACHE_HASH)) {
 				 try {
@@ -60,10 +104,20 @@ public class Sources {
 		 }
 		return (Integer) null;
 	 }
-	 public Set<Integer> getKeys (){
+	 
+ 	/**
+ 	 * Gets the keys.
+ 	 *
+ 	 * @return the keys
+ 	 */
+ 	public Set<Integer> getKeys (){
 		 return sources.keySet(); 
 	 }
-	 public void clear (){
+	 
+ 	/**
+ 	 * Clear.
+ 	 */
+ 	public void clear (){
 		 sources.clear();
 	 }
 }

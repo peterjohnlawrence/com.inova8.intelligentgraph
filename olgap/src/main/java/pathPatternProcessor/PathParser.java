@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathPatternProcessor;
 
 import static org.eclipse.rdf4j.model.util.Values.*;
@@ -17,14 +20,30 @@ import org.eclipse.rdf4j.model.IRI;
 
 import pathPatternProcessor.PathConstants.FilterOperator;
 
+/**
+ * The Class PathParser.
+ */
 @Deprecated
 public class PathParser {
+
+/** The thing. */
 Thing thing;
 
+	/**
+	 * Instantiates a new path parser.
+	 *
+	 * @param thing the thing
+	 */
 	public PathParser(Thing thing) {
 		this.thing = thing;
 	}
 
+	/**
+	 * Parses the path.
+	 *
+	 * @param path the path
+	 * @return the predicate element
+	 */
 	public PredicateElement parsePath(String path) {
 		String pathAlternatives[] = path.split("[|]");
 		PredicateElement pathElement = null;
@@ -35,16 +54,22 @@ Thing thing;
 		return pathElement;	
 	}
 
+	/**
+	 * Parses the path alternative.
+	 *
+	 * @param pathAlternative the path alternative
+	 * @return the predicate element
+	 */
 	private PredicateElement parsePathAlternative (String pathAlternative) {
 		String pathSequences[] = pathAlternative.split("[/]");
 		PredicateElement firstPathSequenceElement = parsePathSequence(pathSequences[0]);
 		if(pathSequences.length>1 ) {
-			PredicateElement rootPathSequenceElement = new PredicateElement();
+			PredicateElement rootPathSequenceElement = new PredicateElement(thing.getSource());
 			rootPathSequenceElement.setOperator(PathConstants.Operator.SEQUENCE);
 			rootPathSequenceElement.setLeftPathElement(firstPathSequenceElement);
 			PredicateElement nestedPathSequenceElement = rootPathSequenceElement;
 			for(int i = 1; i< pathSequences.length-1; i++) { 
-				PredicateElement newPathSequenceElement = new PredicateElement();
+				PredicateElement newPathSequenceElement = new PredicateElement(thing.getSource());
 				newPathSequenceElement.setOperator(PathConstants.Operator.SEQUENCE);
 				nestedPathSequenceElement.setLeftPathElement(parsePathSequence(pathSequences[i]));
 				nestedPathSequenceElement.setLeftPathElement(newPathSequenceElement);
@@ -57,13 +82,25 @@ Thing thing;
 		}	
 	}
 
+	/**
+	 * Parses the path sequence.
+	 *
+	 * @param pathSequence the path sequence
+	 * @return the predicate element
+	 */
 	private PredicateElement parsePathSequence(String pathSequence) {
 		String pathEltOrInverse = pathSequence.trim();	
 		return parsePathEltOrInverse(pathEltOrInverse);	
 	}
 	
+	/**
+	 * Parses the path elt or inverse.
+	 *
+	 * @param predicatePath the predicate path
+	 * @return the predicate element
+	 */
 	private PredicateElement parsePathEltOrInverse(String predicatePath) {
-		PredicateElement pathElement = new PredicateElement();	
+		PredicateElement pathElement = new PredicateElement(thing.getSource());	
 		//pathElement.toString();
 		pathElement.setOperator(PathConstants.Operator.PREDICATE);
 		if(predicatePath.startsWith("^")) {
@@ -96,12 +133,26 @@ Thing thing;
 		}
 		return pathElement;
 	}
+	
+	/**
+	 * Parses the filter.
+	 *
+	 * @param filter the filter
+	 * @return the fact filter element
+	 */
 	private FactFilterElement  parseFilter(String filter) {
 		filter = filter.trim();
 		return parseFactFilterPattern(filter);	
 	}
+	
+	/**
+	 * Parses the fact filter pattern.
+	 *
+	 * @param factFilterPattern the fact filter pattern
+	 * @return the fact filter element
+	 */
 	private FactFilterElement parseFactFilterPattern(String factFilterPattern) {
-		FactFilterElement pathElement = new FactFilterElement();		
+		FactFilterElement pathElement = new FactFilterElement(thing.getSource());		
 
 		String[] factFilterPatternParts = factFilterPattern.trim().split("\\s+");
 		if(factFilterPatternParts[0].matches("^.*?(lt|gt|le|ge|eq|ne).*$")) {	
@@ -126,18 +177,24 @@ Thing thing;
 		return pathElement	;
 	}
 
+	/**
+	 * Parses the property list not empty.
+	 *
+	 * @param pathElement the path element
+	 * @param factFilterPatternParts the fact filter pattern parts
+	 */
 	private void parsePropertyListNotEmpty(FactFilterElement pathElement, String[] factFilterPatternParts) {
 		FilterOperator filterOperator = PathConstants.filterOperators.get(factFilterPatternParts[0]);
 		IRI filterPredicate = thing.convertQName(factFilterPatternParts[0]);
 		Value filterOperand = parseFilterOperand(factFilterPatternParts[1]);
 		ArrayList<VerbObjectList> propertyListNotEmpty = new ArrayList<VerbObjectList>();
-		VerbObjectList verbObjectList = new VerbObjectList();
+		VerbObjectList verbObjectList = new VerbObjectList(thing.getSource());
 		verbObjectList.setFilterOperator(filterOperator);
-		PredicateElement filterPredicateElement = new PredicateElement();
+		PredicateElement filterPredicateElement = new PredicateElement(thing.getSource());
 		filterPredicateElement.setPredicate(filterPredicate);
 		verbObjectList.setPredicate(filterPredicateElement);
 		ArrayList<ObjectElement> objectList = new  ArrayList<ObjectElement>();
-		ObjectElement object = new ObjectElement();
+		ObjectElement object = new ObjectElement(thing.getSource());
 		if(filterOperand.isLiteral()) {
 			object.setLiteral((Literal)filterOperand);
 		}else {
@@ -148,6 +205,13 @@ Thing thing;
 		propertyListNotEmpty.add(verbObjectList);
 		pathElement.setPropertyListNotEmpty(propertyListNotEmpty);
 	}
+	
+	/**
+	 * Parses the filter operand.
+	 *
+	 * @param value the value
+	 * @return the org.eclipse.rdf 4 j.model. value
+	 */
 	private  org.eclipse.rdf4j.model.Value parseFilterOperand(String value){
 		org.eclipse.rdf4j.model.Value operand = thing.convertQName(value); 
 		if(operand==null) {

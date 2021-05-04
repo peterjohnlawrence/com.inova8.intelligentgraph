@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,9 +23,19 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 
+/**
+ * The Class ObjectValueTest.
+ */
 public class ObjectValueTest extends OlgapTest{
+	
+	/** The conn. */
 	static RepositoryConnection conn;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
@@ -36,10 +49,19 @@ public class ObjectValueTest extends OlgapTest{
 		conn.add(model.getStatements(null, null, null));
 	}
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 
 	}
+	
+	/**
+	 * Test 0.
+	 */
 	@Test
 	void test0() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";
@@ -51,6 +73,10 @@ public class ObjectValueTest extends OlgapTest{
 		assertEquals("p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type;s=http://inova8.com/calc2graph/id/BatteryLimit1;o=http://inova8.com/calc2graph/def/BatteryLimit;result1=http://inova8.com/calc2graph/def/BatteryLimit;\r\n" + 
 				"" ,result);
 	}
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	void test1() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";
@@ -67,6 +93,10 @@ public class ObjectValueTest extends OlgapTest{
 				"p=http://www.w3.org/2000/01/rdf-schema#label;s=http://inova8.com/calc2graph/id/BatteryLimit1;o=BatteryLimit1;result1=BatteryLimit1;\r\n" + 
 				"" ,result);
 	}
+	
+	/**
+	 * Test 2.
+	 */
 	@Test
 	void test2() {
 		String queryString8 = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n";
@@ -88,6 +118,10 @@ public class ObjectValueTest extends OlgapTest{
 				"" ,
 				result);
 	}
+	
+	/**
+	 * Test 3.
+	 */
 	@Test
 	void test3() {
 		String queryString8 = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n";

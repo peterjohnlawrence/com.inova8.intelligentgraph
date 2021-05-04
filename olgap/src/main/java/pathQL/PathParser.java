@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathQL;
 
 import org.antlr.v4.runtime.CharStream;
@@ -9,31 +12,72 @@ import org.apache.logging.log4j.Logger;
 
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
+import PathPattern.PathPatternParser.IriRefContext;
+import PathPattern.PathPatternParser.PathEltOrInverseContext;
 import PathPattern.PathPatternParser.PathPatternContext;
 import pathCalc.Thing;
+import pathPatternElement.IriRefValueElement;
 import pathPatternElement.PathElement;
+import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathErrorListener;
 import pathPatternProcessor.PathPatternException;
 import pathPatternProcessor.PathPatternVisitor;
 import pathQLRepository.PathQLRepository;
 import pathPatternProcessor.PathConstants.ErrorCode;
 
+/**
+ * The Class PathParser.
+ */
 public class PathParser {
+	
+	/** The Constant logger. */
 	private final static Logger logger = LogManager.getLogger(PathParser.class);
+	static PathPatternVisitor pathPatternVisitor ;//= new PathPatternVisitor();
+	private static PathQLRepository source;
+	
+	/**
+	 * Parses the path pattern.
+	 *
+	 * @param thing the thing
+	 * @param pathPattern the path pattern
+	 * @return the path element
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	public static PathElement parsePathPattern(Thing thing, String pathPattern)
 			throws RecognitionException, PathPatternException {
+		source = thing.getSource();
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);		
 		PathElement pathElement = parser(pathPattern, pathPatternVisitor);	
 		return pathElement;
 	}
 
+	/**
+	 * Parses the path pattern.
+	 *
+	 * @param source the source
+	 * @param pathPattern the path pattern
+	 * @return the path element
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	public static PathElement parsePathPattern(PathQLRepository source, String pathPattern)
 			throws RecognitionException, PathPatternException {
-		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor();//source);
+		PathParser.source=source;
+		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(source);
 		PathElement pathElement = parser(pathPattern, pathPatternVisitor);	
 		return pathElement;
 	}
 	
+	/**
+	 * Parser.
+	 *
+	 * @param pathPattern the path pattern
+	 * @param pathPatternVisitor the path pattern visitor
+	 * @return the path element
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	private static PathElement parser(String pathPattern, PathPatternVisitor pathPatternVisitor)
 			throws RecognitionException, PathPatternException {
 		PathErrorListener errorListener = new PathErrorListener(pathPattern);
@@ -47,7 +91,7 @@ public class PathParser {
 		parser.addErrorListener(errorListener); 
 		PathPatternContext pathPatternTree = parser.pathPattern();
 		PathElement pathElement = pathPatternVisitor.visit(pathPatternTree);
-		pathElement.setPathPattern(pathPattern);
+
 		if( errorListener.toString()!=null) {
 			if(parser.getNumberOfSyntaxErrors()==0) {
 				//Lexer only error
@@ -57,7 +101,31 @@ public class PathParser {
 				throw new PathPatternException(errorListener.toString(),ErrorCode.PARSER);
 			}
 		}
+		pathElement.setPathPattern(pathPattern);
 		pathElement.indexVisitor(null,0,null);
 		return pathElement;
+
+	}
+	public static IriRefValueElement parseIriRef(PathQLRepository source,String uriPattern)
+			throws RecognitionException, PathPatternException {
+		pathPatternVisitor = new PathPatternVisitor(source);
+		CharStream input = CharStreams.fromString( uriPattern);
+		PathPatternLexer lexer = new PathPatternLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		PathPatternParser parser = new PathPatternParser(tokens);
+		IriRefContext pathPatternTree = parser.iriRef();
+		PathElement iriRefValueElement = pathPatternVisitor.visit(pathPatternTree);
+		return (IriRefValueElement) iriRefValueElement;
+	}
+	public static PredicateElement parsePredicate(PathQLRepository source,String uriPattern)
+			throws RecognitionException, PathPatternException {
+		pathPatternVisitor = new PathPatternVisitor(source);
+		CharStream input = CharStreams.fromString( uriPattern);
+		PathPatternLexer lexer = new PathPatternLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		PathPatternParser parser = new PathPatternParser(tokens);
+		PathEltOrInverseContext pathPatternTree = parser.pathEltOrInverse();
+		PathElement iriRefValueElement = pathPatternVisitor.visit(pathPatternTree);
+		return (PredicateElement) iriRefValueElement;
 	}
 }

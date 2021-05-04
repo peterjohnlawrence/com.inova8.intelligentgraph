@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package pathQL;
 
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -9,8 +12,22 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The Class Match.
+ */
+@Deprecated
 public class Match {
+	
+	/** The Constant logger. */
 	private final static Logger logger = LogManager.getLogger(Match.class);
+	public Match(PathQLRepository source) {
+		super();
+		this.source = source;
+	}
+
+	PathQLRepository source;
+	
+	/** The match query. */
 	private static String matchQuery = "select ?entity ?property ?value ?snippet  ?score\n" + "{ \n"
 			+ "  ?entity <http://www.openrdf.org/contrib/lucenesail#matches> [\n"
 			+ "      <http://www.openrdf.org/contrib/lucenesail#query>  ?matchString; \n"
@@ -18,8 +35,14 @@ public class Match {
 			+ "      <http://www.openrdf.org/contrib/lucenesail#score> ?score;\n"
 			+ "      <http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet] .\n" + "?entity ?property ?value }";
 
-	public static MatchResults entityMatch(String matchString) {
-		TupleQuery tupleMatchQuery = PathQLRepository.getRepository().getConnection().prepareTupleQuery(matchQuery);
+	/**
+	 * Entity match.
+	 *
+	 * @param matchString the match string
+	 * @return the match results
+	 */
+	public  MatchResults entityMatch(String matchString) {
+		TupleQuery tupleMatchQuery = source.getContextAwareConnection().prepareTupleQuery(matchQuery);
 		tupleMatchQuery.setBinding("matchString", literal(matchString));
 		logger.debug("matchPattern=\n" + tupleMatchQuery.toString());
 		return new MatchResults(tupleMatchQuery.evaluate());

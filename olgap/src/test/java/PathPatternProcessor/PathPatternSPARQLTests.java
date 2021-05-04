@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package PathPatternProcessor;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,24 +22,52 @@ import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
 import pathQLRepository.PathQLRepository;
 
+/**
+ * The Class PathPatternSPARQLTests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternSPARQLTests {
+	
+	/** The thing. */
 	static Thing thing;
+	
+	/** The source. */
 	static PathQLRepository source;
+	
+	/** The indices. */
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
+	
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source= new PathQLRepository();
-		PathQLRepository.addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
-		PathQLRepository.addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
-		PathQLRepository.addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		source= new PathQLRepository(null);
+		source.addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		source.addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
+		source.addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		source.setIsLazyLoaded(true);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/");
-		thing = new Thing(source, null, null, null);
+		thing = new Thing(source, null);
 	}
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 	}
+	
+	/**
+	 * Test 05.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(0)
 	void test_05() throws RecognitionException, PathPatternException {
@@ -48,6 +79,12 @@ class PathPatternSPARQLTests {
 	}
 
 
+	/**
+	 * Test 0.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(0)
 	void test_0() throws RecognitionException, PathPatternException {
@@ -63,6 +100,12 @@ class PathPatternSPARQLTests {
 				 , element.toSPARQL());
 	}
 
+	/**
+	 * Test 1.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(1)
 	void test_1() throws RecognitionException, PathPatternException {
@@ -72,6 +115,13 @@ class PathPatternSPARQLTests {
 				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n1 }UNION{ ?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?r1 }}\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 2.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(2)
 	void test_2()  throws RecognitionException, PathPatternException{
@@ -79,6 +129,13 @@ class PathPatternSPARQLTests {
 		assertEquals ("?n0 <http://local#volumeFlow> ?n1 .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 3.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(3)
 	void test_3()  throws RecognitionException, PathPatternException{
@@ -87,6 +144,13 @@ class PathPatternSPARQLTests {
 				+ "?n1 <http://default/massThroughput> ?n2 .\n"
 				+ "" ,((PathElement)element).toSPARQL());
 	}
+	
+	/**
+	 * Test 4.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(4)
 	void test_4()  throws RecognitionException, PathPatternException{
@@ -95,6 +159,13 @@ class PathPatternSPARQLTests {
 				+ "FILTER(?n1 gt '35')\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 5.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(5)
 	void test_5()  throws RecognitionException, PathPatternException{
@@ -106,6 +177,13 @@ class PathPatternSPARQLTests {
 				+ "?r1 <http://default/lat> ?n2 .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 6.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(6)
 	void test_6()  throws RecognitionException, PathPatternException{
@@ -120,6 +198,13 @@ class PathPatternSPARQLTests {
 				+ "?n4 <http://default/right> ?n5 .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 7.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(7)
 	void test_7()  throws RecognitionException, PathPatternException{
@@ -134,6 +219,13 @@ class PathPatternSPARQLTests {
 				+ "'Calc2Graph4' <http://rdfs/label> 'Calc2Graph2' .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 8.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(8)
 	void test_8() throws RecognitionException, PathPatternException {
@@ -147,6 +239,13 @@ class PathPatternSPARQLTests {
 				+ "?r1 <http://default/lat> ?n2 .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 9.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(9)
 	void test_9()  throws RecognitionException, PathPatternException{
@@ -158,6 +257,13 @@ class PathPatternSPARQLTests {
 				+ "?r1 <http://default/long> ?n2 .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 10.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(10)
 	void test_10()  throws RecognitionException, PathPatternException {
@@ -170,6 +276,10 @@ class PathPatternSPARQLTests {
 				+ "?r1 <http://default/lat> ?n2 .\n"
 				+ "" , element.toSPARQL());
 	}
+	
+	/**
+	 * Test 11.
+	 */
 	@Test 
 	@Order(11)
 	void test_11() {
@@ -196,6 +306,9 @@ class PathPatternSPARQLTests {
 //			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, '|', '/', '{', '[', '#'}]"
 //					,e.getMessage() );
 //		}
+/**
+ * Test 13.
+ */
 //	}
 	@Test 
 	@Order(13)
@@ -215,6 +328,9 @@ class PathPatternSPARQLTests {
 		}
 	}
 
+/**
+ * Test 14.
+ */
 @Test 
 @Order(14)
 void test_14() {
@@ -230,6 +346,10 @@ void test_14() {
 		fail();
 	}
 }
+
+/**
+ * Test 15.
+ */
 @Test 
 @Order(15)
 void test_15() {
@@ -245,6 +365,10 @@ void test_15() {
 		fail();
 	}
 }
+
+/**
+ * Test 16.
+ */
 @Test 
 @Order(16)
 void test_16() {
@@ -259,6 +383,10 @@ void test_16() {
 		fail();
 	}
 }
+
+/**
+ * Test 17.
+ */
 @Test 
 @Order(17)
 void test_17() {
@@ -275,6 +403,10 @@ void test_17() {
 		fail();
 	}
 }
+
+/**
+ * Test 18.
+ */
 @Test 
 @Order(18)
 void test_18() {
@@ -286,7 +418,11 @@ void test_18() {
 	}catch(Exception e){
 		fail();
 	}
-}@Test 
+}
+/**
+ * Test 19.
+ */
+@Test 
 @Order(19)
 void test_19() {
 	try {
@@ -302,6 +438,10 @@ void test_19() {
 		fail();
 	}
 }
+
+/**
+ * Test 20.
+ */
 @Test 
 @Order(20)
 void test_20() {
@@ -318,6 +458,10 @@ void test_20() {
 		fail();
 	}
 }
+
+/**
+ * Test 21.
+ */
 @Test 
 @Order(21)
 void test_21() {
@@ -333,6 +477,10 @@ void test_21() {
 		fail();
 	}
 }
+
+/**
+ * Test 22.
+ */
 @Test 
 @Order(22)
 void test_22() {
@@ -346,6 +494,10 @@ void test_22() {
 		fail();
 	}
 }
+
+/**
+ * Test 23.
+ */
 @Test 
 @Order(23)
 void test_23() {
@@ -361,6 +513,10 @@ void test_23() {
 		fail();
 	}
 }
+
+/**
+ * Test 24.
+ */
 @Test 
 @Order(24)
 void test_24() {
@@ -378,6 +534,10 @@ void test_24() {
 		fail();
 	}
 }
+
+/**
+ * Test 25.
+ */
 @Test 
 @Order(25)
 void test_25() {
@@ -397,6 +557,10 @@ void test_25() {
 		fail();
 	}
 }
+
+/**
+ * Test 26.
+ */
 @Test 
 @Order(26)
 void test_26() {
@@ -416,6 +580,10 @@ void test_26() {
 		fail();
 	}
 }
+
+/**
+ * Test 27.
+ */
 @Test 
 @Order(27)
 void test_27() {
@@ -437,6 +605,10 @@ void test_27() {
 		fail();
 	}
 }
+
+/**
+ * Test 28.
+ */
 @Test 
 @Order(28)
 void test_28() {
@@ -453,6 +625,10 @@ void test_28() {
 		fail();
 	}
 }
+
+/**
+ * Test 29.
+ */
 @Test 
 @Order(29)
 void test_29() {
@@ -466,6 +642,10 @@ void test_29() {
 		fail();
 	}
 }
+
+/**
+ * Test 30.
+ */
 @Test 
 @Order(30)
 void test_30() {
@@ -479,6 +659,10 @@ void test_30() {
 		fail();
 	}
 }
+
+/**
+ * Test 31.
+ */
 @Test 
 @Order(31)
 void test_31() {
@@ -492,6 +676,10 @@ void test_31() {
 		fail();
 	}
 }
+
+/**
+ * Test 32.
+ */
 @Test 
 @Order(32)
 void test_32() {
@@ -504,6 +692,10 @@ void test_32() {
 		fail();
 	}
 }
+
+/**
+ * Test 33.
+ */
 @Test 
 @Order(33)
 void test_33() {
@@ -517,6 +709,10 @@ void test_33() {
 		fail();
 	}
 }
+
+/**
+ * Test 34.
+ */
 @Test 
 @Order(34)
 void test_34() {
@@ -529,6 +725,10 @@ void test_34() {
 		fail();
 	}
 }
+
+/**
+ * Test 35.
+ */
 @Test 
 @Order(35)
 void test_35() {

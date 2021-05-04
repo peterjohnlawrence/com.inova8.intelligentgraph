@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 /*
  
@@ -178,13 +181,36 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 
 
+/**
+ * The Class ShortestPathTupleFunction.
+ */
 public class ShortestPathTupleFunction implements InverseMagicProperty {
+	
+	/** The logger. */
 	private final Logger logger = LogManager.getLogger(ShortestPathTupleFunction.class);
+	
+	/**
+	 * The Class ResultsIterator.
+	 */
 	private final class ResultsIterator extends ConvertingIteration<BindingSet, List<Value>, QueryEvaluationException> {
+		
+		/**
+		 * Instantiates a new results iterator.
+		 *
+		 * @param iter the iter
+		 */
 		private ResultsIterator(Iteration<? extends BindingSet, ? extends QueryEvaluationException> iter) {
 			super(iter);
 			logger.info(new ParameterizedMessage("Initiating ShortestPathTupleFunction"));
 		}
+		
+		/**
+		 * Convert.
+		 *
+		 * @param bindings the bindings
+		 * @return the list
+		 * @throws QueryEvaluationException the query evaluation exception
+		 */
 		@Override
 		protected List<Value> convert(BindingSet bindings) throws QueryEvaluationException {
 			List<Value> results = new ArrayList<Value>();
@@ -194,33 +220,65 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 			return results;
 		}
 	}
+	
+	/** The Constant hosted. */
 	private static final boolean hosted = false;
+	
+	/** The Constant MAX_UPDATE_STRING. */
 	private static final int MAX_UPDATE_STRING = 100000;
 
+	/** The Constant LT. */
 	protected static final String LT = "<";
+	
+	/** The Constant GT. */
 	protected static final String GT = ">";
+	
+	/** The Constant NAMESPACE. */
 	public static final String NAMESPACE = "http://inova8.com/olgap/";
+	
+	/** The Constant SHORTEST_PATH_PROPERTY. */
 	protected static final String SHORTEST_PATH_PROPERTY = "shortestPath";
 
+	/** The working rep. */
 	public static org.eclipse.rdf4j.repository.Repository workingRep;
 
 
+	/** The property path regex. */
 	final String propertyPathRegex = "([!^]*)?\\(([^)]*)\\)";
+	
+	/** The property path. */
 	String propertyPath;
+	
+	/** The pattern. */
 	final Pattern pattern = Pattern.compile(propertyPathRegex, Pattern.MULTILINE);
 
+	/** The predicate filter clause. */
 	String predicateFilterClause;
+	
+	/** The not predicate filter clause. */
 	String notPredicateFilterClause;
+	
+	/** The inverse predicate filter clause. */
 	String inversePredicateFilterClause;
+	
+	/** The not inverse predicate filter clause. */
 	String notInversePredicateFilterClause;
 	
+	/** The query context. */
 	QueryContext queryContext;
 
+	/** The service. */
 	private String service;
+	
+	/** The olgap service. */
 	private String olgapService;
 
+	/** The results cache. */
 	static private HashMap<Integer,Collection<BindingSet>> resultsCache = new HashMap<Integer,Collection<BindingSet>>();
 	
+	/**
+	 * Instantiates a new shortest path tuple function.
+	 */
 	public ShortestPathTupleFunction() {
 		super();
 		/*		
@@ -245,10 +303,25 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		}	
 		workingRep.init();
 	}
+	
+	/**
+	 * Gets the uri.
+	 *
+	 * @return the uri
+	 */
 	@Override
 	public String getURI() {
 		return NAMESPACE + SHORTEST_PATH_PROPERTY;
 	}
+	
+	/**
+	 * Evaluate.
+	 *
+	 * @param valueFactory the value factory
+	 * @param args the args
+	 * @return the closeable iteration<? extends list<? extends value>, query evaluation exception>
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public CloseableIteration<? extends List<? extends Value>, QueryEvaluationException> evaluate(
 			ValueFactory valueFactory, Value... args) throws QueryEvaluationException {
@@ -339,14 +412,37 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		workingConn.close();
 		return new ResultsIterator(new CloseableIteratorIteration<>(path.iterator()));
 	}
+	
+	/**
+	 * Drop graphs.
+	 *
+	 * @param workingConn the working conn
+	 * @param contexts the contexts
+	 */
 	public void dropGraphs(RepositoryConnection workingConn,ArrayList<Resource> contexts) {
 		for (Resource context: contexts) workingConn.clear(context);
 
 	}
+	
+	/**
+	 * Predicate filter.
+	 *
+	 * @param filterVariable the filter variable
+	 * @param filterPredicate the filter predicate
+	 * @return the string
+	 */
 	public String predicateFilter(String filterVariable, String filterPredicate) {
 		return predicateFilter(filterVariable, filterPredicate, "");
 	}
 
+	/**
+	 * Predicate filter.
+	 *
+	 * @param filterVariable the filter variable
+	 * @param filterPredicate the filter predicate
+	 * @param negation the negation
+	 * @return the string
+	 */
 	public String predicateFilter(String filterVariable, String filterPredicate, String negation) {
 		String predicateFilter = "";
 		if (filterPredicate != "") {
@@ -363,6 +459,11 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		return predicateFilter;
 	}
 
+	/**
+	 * Prepare filters.
+	 *
+	 * @param filter the filter
+	 */
 	public void prepareFilters(String filter) {
 		
 		final Matcher matcher = pattern.matcher(filter);
@@ -399,6 +500,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		logger.debug("notInversePredicateFilterClause " + notInversePredicateFilterClause );
 	}
 
+	/**
+	 * Increment front.
+	 *
+	 * @param workingConn the working conn
+	 * @param frontIndex the front index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	private ArrayList<BindingSet> incrementFront(RepositoryConnection workingConn, int frontIndex, String HTTP_FRONT,String HTTP_BACK  ) {
 		String graphA = LT + HTTP_FRONT + frontIndex + GT;
 		String graphB = LT + HTTP_FRONT + (frontIndex - 1) + GT;
@@ -441,6 +551,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		return path;
 	}
 
+	/**
+	 * Increment front using service.
+	 *
+	 * @param workingConn the working conn
+	 * @param frontIndex the front index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	@SuppressWarnings("unused")
 	private ArrayList<BindingSet> incrementFrontUsingService(RepositoryConnection workingConn, int frontIndex, String HTTP_FRONT,String HTTP_BACK  ) {
 		String graphA = LT + HTTP_FRONT + frontIndex + GT;
@@ -456,6 +575,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		path = checkFrontToBack(workingConn, frontIndex, frontIndex - 1, HTTP_FRONT,HTTP_BACK);
 		return path;
 	}
+	
+	/**
+	 * Execute increment front.
+	 *
+	 * @param workingConn the working conn
+	 * @param frontIndex the front index
+	 * @param graphA the graph A
+	 * @param startNodesValues the start nodes values
+	 */
 	protected void executeIncrementFront(RepositoryConnection workingConn, int frontIndex, String graphA,
 			StringBuilder startNodesValues) {
 		workingConn.begin();
@@ -494,6 +622,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		workingConn.commit();
 	}
 
+	/**
+	 * Increment back.
+	 *
+	 * @param workingConn the working conn
+	 * @param backIndex the back index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	@SuppressWarnings("unused")
 	private ArrayList<BindingSet> incrementBack(RepositoryConnection workingConn, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
@@ -533,6 +670,16 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		path = checkFrontToBack(workingConn, backIndex, backIndex, HTTP_FRONT,HTTP_BACK);
 		return path;
 	}
+	
+	/**
+	 * Increment back using service.
+	 *
+	 * @param workingConn the working conn
+	 * @param backIndex the back index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	@SuppressWarnings("unused")
 	private ArrayList<BindingSet> incrementBackUsingService(RepositoryConnection workingConn, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
@@ -544,6 +691,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		path = checkFrontToBack(workingConn, backIndex, backIndex, HTTP_FRONT,HTTP_BACK);
 		return path;
 	}
+	
+	/**
+	 * Execute increment back.
+	 *
+	 * @param workingConn the working conn
+	 * @param backIndex the back index
+	 * @param graphA the graph A
+	 * @param endNodesValues the end nodes values
+	 */
 	protected void executeIncrementBack(RepositoryConnection workingConn, int backIndex, String graphA,
 			StringBuilder endNodesValues) {
 		workingConn.begin();
@@ -583,6 +739,16 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		workingConn.commit();
 	}
 
+	/**
+	 * Check front to back.
+	 *
+	 * @param workingConn the working conn
+	 * @param frontIndex the front index
+	 * @param backIndex the back index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	private ArrayList<BindingSet> checkFrontToBack(RepositoryConnection workingConn, int frontIndex, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		ArrayList<BindingSet> results = null;
 		Boolean pathFound = false;

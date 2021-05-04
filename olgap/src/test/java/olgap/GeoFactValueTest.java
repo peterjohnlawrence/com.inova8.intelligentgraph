@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,11 +21,21 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+
+/**
+ * The Class GeoFactValueTest.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GeoFactValueTest extends OlgapTest{
 
+	/** The conn. */
 	private static RepositoryConnection conn;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		File dataDir = new File("src/test/resources/datadir/");
@@ -47,6 +60,10 @@ public class GeoFactValueTest extends OlgapTest{
 //		conn = workingRep.getConnection();
 //		conn.add(plantModel.getStatements(null, null, null));
 	}
+	
+	/**
+	 * Test clear cache.
+	 */
 	@Test
 	@Order(1)
 	void Test_ClearCache() {
@@ -58,6 +75,10 @@ public class GeoFactValueTest extends OlgapTest{
 		String result = runQuery(conn, queryString);
 		assertEquals("true",result);
 	}
+	
+	/**
+	 * Test clear cache service.
+	 */
 	@Test
 	@Order(2)
 	void Test_ClearCacheService() {
@@ -69,6 +90,10 @@ public class GeoFactValueTest extends OlgapTest{
 		String result = runQuery(conn, queryString);
 		assertEquals("true",result);
 	}
+	
+	/**
+	 * Test 1 lat.
+	 */
 	@Test
 	@Order(3)
 	void test1_lat() {
@@ -86,6 +111,10 @@ public class GeoFactValueTest extends OlgapTest{
 			 fail(result);
 			}
 	}
+	
+	/**
+	 * Test 1 long.
+	 */
 	@Test
 	void test1_long() {
 		String queryString = "";
@@ -101,6 +130,10 @@ public class GeoFactValueTest extends OlgapTest{
 			 fail(result);
 			}
 	}
+	
+	/**
+	 * Test 2 lat.
+	 */
 	@Test
 
 	void test2_lat() {
@@ -118,6 +151,10 @@ public class GeoFactValueTest extends OlgapTest{
 			 fail(result);
 			}
 	}
+	
+	/**
+	 * Test 2 long.
+	 */
 	@Test
 	void test2_long() {
 		String queryString = "";
