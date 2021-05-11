@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package pathCalc;
+package remotePathCalc;
 
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import pathCalc.Evaluator;
+import pathCalc.Thing;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
@@ -21,7 +23,7 @@ import pathQLResults.ResourceResults;
  * The Class RemoteThingTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class StandaloneTests {
+class Remote_PathQL_MultiGraphTests {
 	
 	/** The repository triple source. */
 //	static RepositoryTripleSource repositoryTripleSource;
@@ -87,7 +89,7 @@ class StandaloneTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			myCountry.addFact(":sales", "60");
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\":sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
@@ -109,16 +111,16 @@ class StandaloneTests {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
 			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":sales", "1");
-			myCountry.addFact(":sales", "2");
-			myCountry.addFact(":sales", "3");
-			myCountry.addFact(":sales", "4");
-			myCountry.addFact(":sales", "5");
+			myCountry.addFact(":sales", "10");
+			myCountry.addFact(":sales", "20");
+			myCountry.addFact(":sales", "30");
+			myCountry.addFact(":sales", "40");
+			myCountry.addFact(":sales", "50");
 			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
-			assertEquals(15.0, totalCountrySales);
+			assertEquals(150.0, totalCountrySales);
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			
 		} catch (Exception e) {
@@ -135,21 +137,21 @@ class StandaloneTests {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph4>");
 			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":sales", "1");
-			myCountry.addFact(":sales", "2");
-			myCountry.addFact(":sales", "3");
-			myCountry.addFact(":sales", "4");
-			myCountry.addFact(":sales", "5");
+			myCountry.addFact(":sales", "100");
+			myCountry.addFact(":sales", "200");
+			myCountry.addFact(":sales", "300");
+			myCountry.addFact(":sales", "400");
+			myCountry.addFact(":sales", "500");
 			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
-			assertEquals(3.0, averageCountrySales);
+			assertEquals(300.0, averageCountrySales);
 		    averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
-			assertEquals(3.0, averageCountrySales);
-			myCountry.addFact(":sales", "60");
+			assertEquals(300.0, averageCountrySales);
+			myCountry.addFact(":sales", "600");
 			 averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
-			assertEquals(12.5, averageCountrySales);
+			assertEquals(350, averageCountrySales);
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			
 		} catch (Exception e) {

@@ -24,7 +24,7 @@ public class IntelligentGraphFactory implements SailFactory {
             throw new SailConfigException("Invalid Sail type: " + config.getType());
         }
         if (config instanceof IntelligentGraphConfig) {
-        	IntelligentGraphConfig intelligentGraphConfig = (IntelligentGraphConfig) config;
+        	//IntelligentGraphConfig intelligentGraphConfig = (IntelligentGraphConfig) config;
             //instantiate the sail
         	IntelligentGraphSail sail = new IntelligentGraphSail();
             return sail;

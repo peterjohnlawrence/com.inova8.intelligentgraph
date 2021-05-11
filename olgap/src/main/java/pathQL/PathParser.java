@@ -7,9 +7,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.IriRefContext;
@@ -30,10 +27,8 @@ import pathPatternProcessor.PathConstants.ErrorCode;
  */
 public class PathParser {
 	
-	/** The Constant logger. */
-	private final static Logger logger = LogManager.getLogger(PathParser.class);
+	//private final static Logger logger = LogManager.getLogger(PathParser.class);
 	static PathPatternVisitor pathPatternVisitor ;//= new PathPatternVisitor();
-	private static PathQLRepository source;
 	
 	/**
 	 * Parses the path pattern.
@@ -46,7 +41,6 @@ public class PathParser {
 	 */
 	public static PathElement parsePathPattern(Thing thing, String pathPattern)
 			throws RecognitionException, PathPatternException {
-		source = thing.getSource();
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);		
 		PathElement pathElement = parser(pathPattern, pathPatternVisitor);	
 		return pathElement;
@@ -63,7 +57,6 @@ public class PathParser {
 	 */
 	public static PathElement parsePathPattern(PathQLRepository source, String pathPattern)
 			throws RecognitionException, PathPatternException {
-		PathParser.source=source;
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(source);
 		PathElement pathElement = parser(pathPattern, pathPatternVisitor);	
 		return pathElement;

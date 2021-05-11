@@ -3,11 +3,11 @@ package intelligentGraph;
 import java.util.Properties;
 
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.sail.SailException;
-import org.eclipse.rdf4j.sail.evaluation.SailTripleSource;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 import pathCalc.EvaluationContext;
 import pathCalc.Evaluator;
@@ -17,14 +17,18 @@ import pathQLRepository.PathQLRepository;
 
 public class IntelligentGraphStatementsIterator implements CloseableIteration< Statement, SailException> {
 	private CloseableIteration<? extends Statement, SailException> statementsIterator;
+	//private AbstractCloseableIteration<? extends Statement, SailException> statementsIterator;
 	private IntelligentGraphSail intelligentGraphSail;
 	private IntelligentGraphConnection intelligentGraphConnection;
+	private Resource[] contexts;
 	public IntelligentGraphStatementsIterator(
-			CloseableIteration<? extends Statement, SailException> statementsIterator, IntelligentGraphSail intelligentGraphSail, IntelligentGraphConnection intelligentGraphConnection) {
+			CloseableIteration<? extends Statement, SailException> statementsIterator, 
+			IntelligentGraphSail intelligentGraphSail, IntelligentGraphConnection intelligentGraphConnection, Resource... contexts) {
 		super();
-		this.statementsIterator = statementsIterator;
+		this.statementsIterator = 	statementsIterator;
 		this.intelligentGraphSail = intelligentGraphSail;
 		this.intelligentGraphConnection = intelligentGraphConnection;
+		this.contexts = contexts;
 	}
 	public CloseableIteration<? extends Statement, SailException> getStatementsIterator() {
 		return statementsIterator;
@@ -36,7 +40,7 @@ public class IntelligentGraphStatementsIterator implements CloseableIteration< S
 		return intelligentGraphSail.getParameters();
 	}
 	public PathQLRepository getSource() {
-		return new PathQLRepository(new SailTripleSource(intelligentGraphConnection,true,null));
+		return new PathQLRepository(intelligentGraphConnection);
 	}
 	@Override
 	public boolean hasNext() throws SailException {
@@ -50,15 +54,15 @@ public class IntelligentGraphStatementsIterator implements CloseableIteration< S
 		if( nextStatement.getObject().isLiteral()) {
 			SimpleLiteral literalValue = (SimpleLiteral)(nextStatement.getObject());
 			if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
-				//TODO evaluate the script and replace literal with value
-				
-				EvaluationContext evaluationContext = new EvaluationContext();
-				Thing subjectThing = Thing.create(getSource(), nextStatement.getSubject(), evaluationContext);	
-				 pathQLModel.Resource fact = subjectThing.getFact(new PredicateElement(getSource(),nextStatement.getPredicate()),literalValue);
-				 if( fact !=null) {
+				PathQLRepository source = getSource();
+				EvaluationContext evaluationContext = new EvaluationContext(source.getPrefixes(), contexts);
+				Thing subjectThing = Thing.create(source, nextStatement.getSubject(), evaluationContext);	
+				 try {
+					 pathQLModel.Resource fact = subjectThing.getFact(new PredicateElement(getSource(),nextStatement.getPredicate()),literalValue);
 					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), fact.getSuperValue(), nextStatement.getContext());
-				 }else {
-					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), literal("null"), nextStatement.getContext());
+				 }catch (Exception e) {
+					// return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), literal(StringEscapeUtils.escapeEcmaScript(e.getMessage())), nextStatement.getContext());
+					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), literal(e.getMessage()), nextStatement.getContext());
 				 }
 			}else {
 				return nextStatement;

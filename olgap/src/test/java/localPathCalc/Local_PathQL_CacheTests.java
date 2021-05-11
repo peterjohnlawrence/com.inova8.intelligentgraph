@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package pathCalc;
+package localPathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
@@ -37,6 +37,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import olgap.ClearCache;
+import pathCalc.Evaluator;
+import pathCalc.Thing;
 import pathQL.Match;
 import pathQLModel.MatchFact;
 import pathQLModel.Resource;
@@ -48,7 +50,7 @@ import pathQLResults.ResourceResults;
  * The Class ThingTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CacheThingTests {
+class Local_PathQL_CacheTests {
 	
 	/** The lucenesail. */
 	static LuceneSail lucenesail ;
@@ -74,7 +76,7 @@ class CacheThingTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/");
+		File dataDir = new File("src/test/resources/datadir/Local_PathQL_CacheTests/");
 		FileUtils.deleteDirectory(dataDir);
 
 		Sail baseSail = new NativeStore(dataDir);

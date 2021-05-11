@@ -3,8 +3,6 @@
  */
 package pathQLModel;
 
-import java.net.URI;
-
 import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathPatternException;
 import pathQLResults.ResourceResults;
@@ -103,14 +101,4 @@ public Object getScore() {
 	return null;
 }
 
-/**
- * Gets the id.
- *
- * @return the id
- */
-@Override
-public URI getId() {
-	// TODO Auto-generated method stub
-	return null;
-}
 }

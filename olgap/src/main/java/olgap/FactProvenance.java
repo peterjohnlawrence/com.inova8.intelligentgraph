@@ -91,7 +91,7 @@ public class FactProvenance extends Evaluator implements Function {
 				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());		
 
 			}catch(Exception e) {
-				return args[2];
+				return tripleSource.getValueFactory().createLiteral(e.getMessage());
 			}
 		}
 	}

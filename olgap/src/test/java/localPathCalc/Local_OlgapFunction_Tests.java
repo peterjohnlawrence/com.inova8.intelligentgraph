@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package pathCalc;
+package localPathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
@@ -28,13 +28,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import olgap.ClearCache;
 import olgap.FactValue;
 import olgap.ObjectValue;
+import pathCalc.Evaluator;
 import pathQLRepository.PathQLRepository;
 
 /**
  * The Class PathCalcTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PathCalcTests {
+class Local_OlgapFunction_Tests {
 	
 	/** The conn. */
 	private static RepositoryConnection conn;
@@ -49,7 +50,7 @@ class PathCalcTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/");
+		File dataDir = new File("src/test/resources/datadir/Local_OlgapFunction_Tests/");
 		FileUtils.deleteDirectory(dataDir);
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
 
@@ -139,7 +140,8 @@ class PathCalcTests {
 			org.eclipse.rdf4j.model.Value result = factValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
 					iri("http://inova8.com/calc2graph/def/testProperty3"));
-			assertEquals("Script failed with <br/><code ><span style=\"white-space: pre-wrap\">java.lang.NumberFormatException: For input string: &quot;Script failed with &lt;br/&gt;&lt;code &gt;&lt;span style=&quot;white-space: pre-wrap&quot;&gt;java.lang.NumberFormatException: For input string: &amp;quot;**Circular Reference**&amp;quot;&lt;/span&gt;&lt;/code &gt;&quot;</span></code >", result.stringValue());
+			assertEquals("javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.CircularReferenceException: Circular reference encountered when evaluating <http://inova8.com/calc2graph/def/testProperty3> of <http://inova8.com/calc2graph/id/BatteryLimit1>.\r\n"
+					+ "[<http://inova8.com/calc2graph/def/testProperty3>, <http://inova8.com/calc2graph/def/testProperty2>]", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

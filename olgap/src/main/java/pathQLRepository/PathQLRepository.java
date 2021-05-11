@@ -20,6 +20,7 @@ import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
@@ -33,6 +34,11 @@ import org.eclipse.rdf4j.repository.RepositoryResult;
 import org.eclipse.rdf4j.repository.contextaware.ContextAwareConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
+import org.eclipse.rdf4j.sail.SailException;
+import org.eclipse.rdf4j.sail.evaluation.SailTripleSource;
+
+import intelligentGraph.IntelligentGraphConnection;
+
 import org.eclipse.rdf4j.model.Resource;
 
 import pathCalc.Evaluator;
@@ -90,12 +96,14 @@ public class PathQLRepository {
 	 private HashMap<String, ReificationType> predicateReificationTypes = new HashMap<String, ReificationType>();
 	
 	/** The prefixes. */
-	 private HashMap<String, IRI> prefixes = new HashMap<String, IRI>();
+	private HashMap<String, IRI> prefixes = new HashMap<String, IRI>();
 
 	private  HashSet<IRI>  publicContexts= new HashSet<IRI>();
 
 	private  HashSet<IRI>  privateContexts= new HashSet<IRI>();
-
+	public PathQLRepository() {
+		this.modelBuilder = new ModelBuilder();
+	}
 	/**
 	 * Instantiates a new path QL repository.
 	 *
@@ -105,6 +113,12 @@ public class PathQLRepository {
 		this.tripleSource = tripleSource;
 		this.modelBuilder = new ModelBuilder();
 	}
+	public PathQLRepository(IntelligentGraphConnection intelligentGraphConnection) {
+		this.tripleSource = new SailTripleSource(intelligentGraphConnection,true,null);
+		this.modelBuilder = new ModelBuilder();
+		initializePrefixes(intelligentGraphConnection);
+	}
+	
 
 	/**
 	 * Instantiates a new path QL repository.
@@ -113,10 +127,10 @@ public class PathQLRepository {
 	 */
 	public PathQLRepository(org.eclipse.rdf4j.repository.Repository repository,  Resource... contexts) {
 		this.repository = repository;
-		//this.contexts = contexts;
 		ContextAwareConnection contextAwareConnection = publicContextAwareConnection();
 		this.tripleSource = new RepositoryTripleSource(contextAwareConnection);
 		this.modelBuilder = new ModelBuilder();
+		initializePrefixes(contextAwareConnection);
 	}
 
 	/**
@@ -126,10 +140,10 @@ public class PathQLRepository {
 	 */
 	public PathQLRepository(String serverURL, String repositoryId ,  Resource... contexts) {
 		this.repository =  new HTTPRepository(serverURL, repositoryId);
-		//this.contexts = contexts;
 		ContextAwareConnection contextAwareConnection = publicContextAwareConnection();
 		this.tripleSource = new RepositoryTripleSource(contextAwareConnection);
 		this.modelBuilder = new ModelBuilder();
+		initializePrefixes(contextAwareConnection);
 
 	}
 	public HashMap<String, Thing> getThings() {
@@ -706,17 +720,28 @@ public class PathQLRepository {
 	 * @return the prefixes
 	 */
 	public  HashMap<String, IRI> getPrefixes() {
+
 		return prefixes;
 	}
-
-	/**
-	 * Sets the prefixes.
-	 *
-	 * @param prefixes the prefixes
-	 */
-	public  void setPrefixes(HashMap<String, IRI> prefixes) {
-		this.prefixes = prefixes;
+	private void initializePrefixes(IntelligentGraphConnection connection) {
+		CloseableIteration<? extends Namespace, SailException> namespaces = connection.getNamespaces();
+		while (namespaces.hasNext()) {
+			Namespace namespace = namespaces.next();
+			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
+		}
+		
 	}
+	private void initializePrefixes(ContextAwareConnection connection) throws RepositoryException, IllegalArgumentException {
+		
+			//ContextAwareConnection connection = this.getContextAwareConnection();
+		RepositoryResult<Namespace> namespaces = connection.getNamespaces();
+		while (namespaces.hasNext()) {
+			Namespace namespace = namespaces.next();
+			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
+		}
+
+	}
+
 
 	/**
 	 * Prefix.
@@ -850,9 +875,6 @@ public class PathQLRepository {
 		 }
 		return contextAwareConnection;
 	}
-//	public Thing getThing(IRI iri,HashMap<String, pathQLModel.Resource> customQueryOptions, HashMap<String,IRI> prefixes) {
-//		return new Thing(this, iri, customQueryOptions,prefixes);
-//	}
 	public Thing getThing(IRI iri,HashMap<String, pathQLModel.Resource> customQueryOptions) {
 		return Thing.create(this, iri,null );
 	}
@@ -903,7 +925,7 @@ public class PathQLRepository {
 	}
 	public Graph openGraph(String graphName ) {
 		RepositoryConnection connection = this.getContextAwareConnection();
-		Model result;
+
 		IRI graphNameIri = null;
 		try {
 			graphNameIri = PathParser.parseIriRef(this,graphName).getIri();

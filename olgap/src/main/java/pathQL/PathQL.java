@@ -119,7 +119,8 @@ public class PathQL {
 	 * @return the path QL results. resource results
 	 */
 	public static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement) {
-		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(thing.getSource().getTripleSource(), null);
+
+		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(thing.getSource().getTripleSource(),thing.getDataset(), null);
 		TupleExpr pathElementPattern = pathElement.pathPatternQuery(thing,null,null);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		BindingSet bindings = new QueryBindingSet();

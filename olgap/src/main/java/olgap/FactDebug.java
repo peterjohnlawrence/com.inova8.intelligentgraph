@@ -90,7 +90,7 @@ public class FactDebug extends Evaluator implements Function {
 				logger.debug("Trace\r\n"+evaluationContext.getTrace());
 				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());
 			}catch(Exception e) {
-				return args[2];
+				return tripleSource.getValueFactory().createLiteral(e.getMessage());
 			}
 		}
 	}

@@ -22,7 +22,7 @@ import com.seeq.model.AuthInputV1;
 import com.seeq.model.FormulaRunOutputV1;
 import com.seeq.model.GetSampleOutputV1;
 
-import pathCalc.HandledException;
+import Exceptions.HandledException;
 import pathQLModel.Resource;
 
 /**

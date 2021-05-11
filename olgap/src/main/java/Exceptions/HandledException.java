@@ -1,12 +1,15 @@
 /*
  * inova8 2020
  */
-package pathCalc;
+package Exceptions;
+
+import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.eclipse.rdf4j.RDF4JException;
 
 /**
  * The Class HandledException.
  */
-public class HandledException extends Exception {
+public class HandledException extends RDF4JException {
 	  
   	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
@@ -18,10 +21,10 @@ public class HandledException extends Exception {
     	 * Instantiates a new handled exception.
     	 *
     	 * @param code the code
-    	 * @param message the message
+    	 * @param e the message
     	 */
-    	public HandledException(String code, String message) {
-	        super(message);
+    	public HandledException(String code, Throwable e) {
+	        super(e);
 	        this.setCode(code);
 	    }
 
@@ -36,8 +39,20 @@ public class HandledException extends Exception {
 	        super(message, cause);
 	        this.setCode(code);
 	    }
+    	public HandledException(String code, ParameterizedMessage parameterizedMessage) {
+	        super(parameterizedMessage.getFormattedMessage());
+	        this.setCode(code);
+    	}
+    	public HandledException(String code, ParameterizedMessage parameterizedMessage, Throwable cause) {
+	        super(parameterizedMessage.getFormattedMessage(),cause);
+	        this.setCode(code);
+    	}
+	    public HandledException(String code, String message) {
+	        super(message);
+	        this.setCode(code);
+		}
 
-	    /**
+		/**
     	 * Gets the code.
     	 *
     	 * @return the code

@@ -18,10 +18,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
@@ -29,7 +26,6 @@
 		<dependency>
 			<groupId>org.eclipse.rdf4j</groupId>
 			<artifactId>rdf4j-runtime</artifactId>
-
 			<type>pom</type>
 		</dependency>
 		<dependency>
@@ -52,8 +48,6 @@
 			<artifactId>antlr4-runtime</artifactId>
 			<version>4.9.1</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.python</groupId>
 			<artifactId>jython</artifactId>
@@ -67,8 +61,30 @@
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js-scriptengine</artifactId>
-			<version>21.0.0.2</version>
+			<version>21.1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.graalvm.js</groupId>
+			<artifactId>js</artifactId>
+			<version>21.1.0</version>
+		</dependency>
+		<!-- log4j2 -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>2.14.1</version>
+			<type>pom</type>
+		</dependency>
+		<!-- SLF4J Bridge -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.14.1</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>jcl-over-slf4j</artifactId> -->
+		<!-- </dependency> -->
 		<!-- <dependency> -->
 		<!-- <groupId>org.apache.logging.log4j</groupId> -->
 		<!-- <artifactId>log4j-slf4j-impl</artifactId> -->
@@ -132,6 +148,7 @@
 							</excludes>
 						</filter>
 					</filters>
+
 				</configuration>
 				<executions>
 					<execution>
@@ -155,7 +172,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<rdf4j.version>3.6.1</rdf4j.version>
+		<rdf4j.version>3.6.3</rdf4j.version>
 		<gpg.keyname>lusterthief</gpg.keyname>
 	</properties>
 	<repositories>

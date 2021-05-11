@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package pathCalc;
+package localPathCalc;
 
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+
 import org.apache.commons.io.FileUtils;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import pathCalc.Evaluator;
 import pathQL.PathQL;
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
@@ -35,7 +37,7 @@ import pathQLResults.PathQLResults;
  * The Class PathQLTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PathQLTests {
+class Local_Evaluate_Tests {
 	
 	/** The lucenesail. */
 	static LuceneSail lucenesail ;
@@ -51,42 +53,6 @@ class PathQLTests {
 	
 	/** The evaluator. */
 	private static Evaluator evaluator;
-
-	/**
-	 * Sets the up before class.
-	 *
-	 * @throws Exception the exception
-	 */
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/");
-		FileUtils.deleteDirectory(dataDir);
-
-		Sail baseSail = new NativeStore(dataDir);
-	    lucenesail = new LuceneSail();
-		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
-		lucenesail.setBaseSail(baseSail);
-
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
-		//org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
-
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null));
-
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null));
-		repositoryTripleSource = new RepositoryTripleSource(conn);
-		source = new PathQLRepository(workingRep);
-		source.prefix("<http://inova8.com/calc2graph/def/>");
-		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
-		evaluator = new Evaluator();
-	}
 
 	/**
 	 * Test 0.
@@ -136,7 +102,7 @@ class PathQLTests {
 			while (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
-						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.5126757621765137]",
+						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.314387798309326]",
 						nextMatch.toString());
 				break;
 			}
@@ -210,5 +176,41 @@ class PathQLTests {
 			fail();
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+		File dataDir = new File("src/test/resources/datadir/Local_Evaluate_Tests/");
+		FileUtils.deleteDirectory(dataDir);
+	
+		Sail baseSail = new NativeStore(dataDir);
+	    lucenesail = new LuceneSail();
+		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
+		lucenesail.setBaseSail(baseSail);
+	
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
+		//org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
+	
+		String dataFilename = "src/test/resources/calc2graph.data.ttl";
+		InputStream dataInput = new FileInputStream(dataFilename);
+		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
+		conn = workingRep.getConnection();
+		conn.add(dataModel.getStatements(null, null, null));
+	
+		String modelFilename = "src/test/resources/calc2graph.def.ttl";
+		InputStream modelInput = new FileInputStream(modelFilename);
+		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
+		conn = workingRep.getConnection();
+		conn.add(modelModel.getStatements(null, null, null));
+		repositoryTripleSource = new RepositoryTripleSource(conn);
+		source = new PathQLRepository(workingRep);
+		source.prefix("<http://inova8.com/calc2graph/def/>");
+		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
+		evaluator = new Evaluator();
 	}
 }

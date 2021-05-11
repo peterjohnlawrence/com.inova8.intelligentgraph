@@ -93,7 +93,7 @@ public class FactValue extends Evaluator implements Function {
 				}			
 
 			}catch(Exception e) {
-				return args[2];
+				return tripleSource.getValueFactory().createLiteral(e.getMessage());
 			}
 		}
 	}

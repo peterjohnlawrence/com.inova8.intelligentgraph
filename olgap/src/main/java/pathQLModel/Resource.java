@@ -23,7 +23,6 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -176,8 +175,12 @@ import org.apache.logging.log4j.LogManager;
 	 */
 	public String getHTMLValue() {
 		switch (getValue().getClass().getSimpleName()) {
+		case "AbstractIRI":
 		case "MemIRI":
+		case "SimpleIRI":
 		case "NativeIRI":
+		case "GenericIRI":
+		case "URIImpl":
 			return "<a href='" + ((IRI) getValue()).getLocalName() + "'>" + ((IRI) getValue()).stringValue() + "</a>";
 		default:
 			try {
@@ -353,21 +356,24 @@ import org.apache.logging.log4j.LogManager;
 		}else {
 			return null;
 		}
-//		if(stack==null) {
-//			stack = new  Stack<String>();
-//		}
-//		return stack;
 	}
-
-//	/**
-//	 * Sets the stack.
-//	 *
-//	 * @param stack the new stack
-//	 */
-//	public void setStack(Stack<String> stack) {
-//		this.stack = stack;
-//	}
-
+	public boolean searchStack(String stackKey) {
+		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+			return evaluationContext.getStack().contains(stackKey);
+		}else {
+			return true;
+		}
+	}
+	public void pushStack(String stackKey) {
+		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+			evaluationContext.getStack().push(stackKey);
+		}
+	}
+	public void popStack() {
+		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+			evaluationContext.getStack().pop();
+		}
+	}
 	/**
 	 * Gets the fact.
 	 *
@@ -678,5 +684,5 @@ import org.apache.logging.log4j.LogManager;
 	 *
 	 * @return the id
 	 */
-	public abstract URI getId();
+//	public abstract URI getId();
 }

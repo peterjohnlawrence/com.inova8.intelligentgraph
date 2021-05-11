@@ -8,8 +8,8 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
@@ -28,10 +28,16 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
+import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
+import Exceptions.CircularReferenceException;
+import Exceptions.HandledException;
+import Exceptions.NullValueReturnedException;
+import Exceptions.ScriptFailedException;
 import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
@@ -48,6 +54,11 @@ import pathQLResults.ResourceResults;
  */
 public class Thing extends Resource {
 
+	private static final String NULLVALUERETURNED_EXCEPTION = "NullValueReturned";
+	private static final String SCRIPTFAILED_EXCEPTION = "ScriptFailed";
+	private static final String CIRCULARREFERENCE_EXCEPTION = "CircularReference";
+	private static final String SCRIPTNOTFOUND_EXCEPTION = null;
+	private static final String NULLVALUESCRIPT_EXCEPTION = null;
 	/** The logger. */
 	protected final Logger logger = LogManager.getLogger(Thing.class);
 	private Graph graph;
@@ -57,7 +68,7 @@ public class Thing extends Resource {
 			thing = source.getThings().get(superValue.stringValue());				
 		}else {
 			thing = new Thing(source, superValue, evaluationContext);
-			source.getThings().put(superValue.stringValue(), thing);	
+			if(source!=null)source.getThings().put(superValue.stringValue(), thing);	
 		}
 		if(evaluationContext!=null)
 			thing.evaluationContext=evaluationContext;
@@ -173,11 +184,14 @@ public class Thing extends Resource {
 		logger.debug(new ParameterizedMessage("getFact{}\n",predicatePattern));
 		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);
 		if(factValues==null) {
+			//throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION, new ParameterizedMessage("getFact evaluated to null for {} of {}", predicatePattern, getSuperValue()));
 			return new NullValue();
 		}else if(factValues.hasNext()) {
 			return factValues.next();
 		}else {
 			factValues.close();
+			//TODO Is this the best way of handling errors
+			//throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION, new ParameterizedMessage("getFact evaluated to empty for {} of {}", predicatePattern, getSuperValue()));
 			return new NullValue();
 		}
 	}
@@ -245,103 +259,108 @@ public class Thing extends Resource {
 //		return getSource().thingFactory(getTracer(),convertQName( subjectIRI), this.getStack(),this.getCustomQueryOptions(),this.prefixes);
 //	}
 
-	/**
-	 * Handle script.
-	 *
-	 * @param scriptString the script string
-	 * @param predicate the predicate
-	 * @return the resource
-	 */
 	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate) {
-		String scriptCode = scriptString.getLabel();
-		scriptCode = scriptCode.trim();
-		if (scriptCode.startsWith("<")) {
-			String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
-			org.eclipse.rdf4j.model.Resource scriptResource =convertQName( scriptIRI);
-			IRI scriptPropertyIRI = iri(Evaluator.SCRIPTPROPERTY);
-			Statement scriptStatement;
-			SimpleLiteral scriptCodeliteral = null;
-			try {
-				CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = getSource()
-						.getTripleSource().getStatements(scriptResource, scriptPropertyIRI, null);
-
-				while (scriptStatements.hasNext()) {
-					scriptStatement = scriptStatements.next();
-					scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
+		if (predicate.equals(iri(Evaluator.SCRIPTPROPERTY))) {
+			return  Resource.create(getSource(),scriptString, this.getEvaluationContext());
+		}else {
+			String scriptCode = scriptString.getLabel();
+			scriptCode = scriptCode.trim();
+			if (scriptCode.startsWith("<")) {
+				String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
+				org.eclipse.rdf4j.model.Resource scriptResource =convertQName( scriptIRI);
+				IRI scriptPropertyIRI = iri(Evaluator.SCRIPTPROPERTY);
+				Statement scriptStatement;
+				SimpleLiteral scriptCodeliteral = null;
+				try {
+					CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = getSource()
+							.getTripleSource().getStatements(scriptResource, scriptPropertyIRI, null);
+	
+					while (scriptStatements.hasNext()) {
+						scriptStatement = scriptStatements.next();
+						scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
+					}
+				} catch (QueryEvaluationException qe) {
+					throw new ScriptFailedException(SCRIPTNOTFOUND_EXCEPTION,new ParameterizedMessage("Reference script <{}> not found for  {} of  subject {}", scriptIRI, predicate,  this),qe);
 				}
-			} catch (QueryEvaluationException qe) {
-				logger.error("Script query fails");
-			}
-			if (scriptCodeliteral != null) {
-				return handleScript(scriptCodeliteral, predicate);
-			} else {
-				logger.error(
-						new ParameterizedMessage("Reference script <{}> not found for subject {}", scriptIRI, this));
-				return Resource.create(getSource(),literal("**Script Reference Error**"), this.getEvaluationContext());
-			}
-		} else {
-			incrementTraceLevel();
-			IRI cacheContextIRI = generateCacheContext(predicate);
-			String scripttype = scriptString.getDatatype().getLocalName();
-			addTrace(new ParameterizedMessage("Evaluating predicate {} of {}, by invoking <b>{}</b> script\n",
-					addIRI(predicate), addIRI(getSuperValue()), scripttype));
-
-			addScript(scriptString.getLabel());
-			incrementTraceLevel();
-			Object scriptResult = null;
-			try {
-				//Test to see if the same 'call' is on the stack
-				//If so report that circular reference encountered
-				//If not push on stack
-				String stackKey = generateStackKey(predicate);
-				if (getStack().search(stackKey) < 1) {
-					getStack().push(stackKey);
-					CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
-					ScriptContext scriptContext = new SimpleScriptContext();
-					scriptContext.setAttribute("$tripleSource", getSource().getTripleSource(), ScriptContext.ENGINE_SCOPE);
-					scriptContext.setAttribute("$this", this, ScriptContext.ENGINE_SCOPE);
-					scriptContext.setAttribute("$property",
-							Thing.create(getSource(), predicate, this.getEvaluationContext()), ScriptContext.ENGINE_SCOPE);
-					//scriptContext.setAttribute("$customQueryOptions", customQueryOptions, ScriptContext.ENGINE_SCOPE);
-					scriptContext.setAttribute("$customQueryOptions", getCustomQueryOptions(), ScriptContext.ENGINE_SCOPE);
-					scriptContext.setAttribute("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI),
-							ScriptContext.ENGINE_SCOPE);
-					scriptResult = compiledScriptCode.eval(scriptContext);
-					Resource result = returnResult(scriptResult, cacheContextIRI);
-					//Since script complete, pop from stack
-					getStack().pop();
-					decrementTraceLevel();
-					if(result!=null )
-						addTrace(new ParameterizedMessage("Evaluated {} of {} =  {}", addIRI(predicate), addIRI(getSuperValue()),
-							result.getHTMLValue()));
-					else
-						addTrace(new ParameterizedMessage("Evaluated null {} of {}", addIRI(predicate), addIRI(getSuperValue())));
-					decrementTraceLevel();
-					return result;
+				if (scriptCodeliteral != null) {
+					return handleScript(scriptCodeliteral, predicate);
 				} else {
-					ParameterizedMessage circularReferenceMessage = new ParameterizedMessage(
-							"Circular reference encountered when evaluating {} of {}:", addIRI(predicate),
-							addIRI(getSuperValue()));
-					addTrace(circularReferenceMessage);
-					addScript(getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
-							.toString());
-					logger.error(new ParameterizedMessage(
-							"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
-							predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
-							getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
-									.toString()));
-					return Resource.create(getSource(), literal("**Circular Reference**"), this.getEvaluationContext());
+					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION,new ParameterizedMessage("Reference script null <{}> for {} of subject {}", scriptIRI, predicate, this ));
 				}
-			} catch (ScriptException e) {
-				decrementTraceLevel();
-				ParameterizedMessage scriptFailedMesssage = new ParameterizedMessage(
-						"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">{}</span></code >",
-						StringEscapeUtils.escapeHtml4(e.getMessage()));
-				logger.error(scriptFailedMesssage.getFormattedMessage());
-				addTrace(scriptFailedMesssage);
-				return Resource.create(getSource(),literal(scriptFailedMesssage.getFormattedMessage()), this.getEvaluationContext());
+			} else {
+				incrementTraceLevel();
+				IRI cacheContextIRI = generateCacheContext(predicate);
+				String scripttype = scriptString.getDatatype().getLocalName();
+				addTrace(new ParameterizedMessage("Evaluating predicate {} of {}, by invoking <b>{}</b> script\n",
+						addIRI(predicate), addIRI(getSuperValue()), scripttype));
+	
+				addScript(scriptString.getLabel());
+				incrementTraceLevel();
+				Object scriptResult = null;
+				try {
+					//Test to see if the same 'call' is on the stack
+					//If so report that circular reference encountered
+					//If not push on stack
+					String stackKey = generateStackKey(predicate);
+					if (!searchStack(stackKey)) {
+						pushStack(stackKey);
+						CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
+						ScriptContext scriptContext = new SimpleScriptContext();
+						scriptContext.setAttribute("$tripleSource", getSource().getTripleSource(), ScriptContext.ENGINE_SCOPE);
+						scriptContext.setAttribute("$this", this, ScriptContext.ENGINE_SCOPE);
+						scriptContext.setAttribute("$property",
+								Thing.create(getSource(), predicate, this.getEvaluationContext()), ScriptContext.ENGINE_SCOPE);
+						scriptContext.setAttribute("$customQueryOptions", getCustomQueryOptions(), ScriptContext.ENGINE_SCOPE);
+						scriptContext.setAttribute("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI),
+								ScriptContext.ENGINE_SCOPE);
+						scriptResult = compiledScriptCode.eval(scriptContext);
+						Resource result = returnResult(scriptResult, cacheContextIRI);
+						//Since script complete, pop from stack
+						popStack();
+						decrementTraceLevel();
+						if(result!=null )
+							addTrace(new ParameterizedMessage("Evaluated {} of {} =  {}", addIRI(predicate), addIRI(getSuperValue()),
+								result.getHTMLValue()));
+						else {
+							throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION, new ParameterizedMessage("Evaluated null for {} of {}, using script {}", predicate, getSuperValue(),scriptString));
+     					//		addTrace(new ParameterizedMessage("Evaluated null {} of {}", addIRI(predicate), addIRI(getSuperValue())));
+						}
+						decrementTraceLevel();
+						return result;
+					} else {
+						ParameterizedMessage circularReferenceMessage = new ParameterizedMessage(
+								"Circular reference encountered when evaluating {} of {}:", addIRI(predicate),
+								addIRI(getSuperValue()));
+						addTrace(circularReferenceMessage);
+						addScript(getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
+								.toString());
+						logger.error(new ParameterizedMessage(
+								"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
+								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
+								getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
+										.toString()));
+						throw new CircularReferenceException(CIRCULARREFERENCE_EXCEPTION, new ParameterizedMessage(
+								"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
+								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
+								getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())));
+
+					//	return Resource.create(getSource(), literal("**Circular Reference**"), this.getEvaluationContext());
+					}
+				} 
+				catch (ScriptException e) {
+					decrementTraceLevel();
+					ParameterizedMessage scriptFailedMesssage = new ParameterizedMessage(
+							"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">{}</span></code >",
+							StringEscapeUtils.escapeHtml4(e.getMessage()));
+					logger.error(scriptFailedMesssage.getFormattedMessage());
+					addTrace(scriptFailedMesssage);
+					//throw e;
+					throw new ScriptFailedException(SCRIPTFAILED_EXCEPTION,e);
+					//return Resource.create(getSource(),literal(scriptFailedMesssage.getFormattedMessage()), this.getEvaluationContext());
+				}
 			}
 		}
+
 	}
 	
 	/**
@@ -352,14 +371,19 @@ public class Thing extends Resource {
 	 */
 	private String generateStackKey(IRI predicate) {
 		String stackKey ;
+//		if(predicate!=null) {
+//			 stackKey = "<" + predicate.stringValue() + "> <" + this.toString() + ">; queryOptions="
+//					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
+//		}else {
+//			 stackKey = "<NULL> <" + this.toString() + ">; queryOptions="
+//					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
+//		}
+		//TODO Debug only
 		if(predicate!=null) {
-			 stackKey = "<" + predicate.stringValue() + "> <" + this.toString() + ">; queryOptions="
-					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
-		}else {
-			 stackKey = "<NULL> <" + this.toString() + ">; queryOptions="
-					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
-		}
-
+		 stackKey = "<" + predicate.stringValue() + ">";
+	}else {
+		 stackKey = "<NULL>" ;
+	}
 		return stackKey;
 	}
 
@@ -372,7 +396,7 @@ public class Thing extends Resource {
 	 * @return Processes the objectValue
 	 */
 	public Resource processFactObjectValue(IRI predicate,  Value objectValue) {
-		Resource returnResult;
+		Resource returnResult = null;
 		SimpleLiteral literalValue;
 		try {
 			literalValue = (SimpleLiteral) objectValue;
@@ -401,10 +425,15 @@ public class Thing extends Resource {
 				returnResult = Resource.create(getSource(), objectValue,  this.getEvaluationContext());
 			}
 		} catch (Exception e) {
-			addTrace(new ParameterizedMessage("Retrieved resource {} of {} = {}", addIRI(predicate),
-					addIRI(getSuperValue()), getHTMLValue(objectValue)));
-			returnResult = Resource.create(getSource(), objectValue,  this.getEvaluationContext());
+			throw e;
+		//	addTrace(new ParameterizedMessage("Retrieved resource {} of {} = {}", addIRI(predicate),
+		//			addIRI(getSuperValue()), getHTMLValue(objectValue)));
+		//	returnResult = Resource.create(getSource(), objectValue,  this.getEvaluationContext());
 		}
+		finally {
+			
+		}
+		//return returnResult;
 		return returnResult;
 	}
 
@@ -642,7 +671,8 @@ public class Thing extends Resource {
 	private void addFact(Literal literal, PredicateElement predicateElement) throws RepositoryException {
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
 		if(predicateElement.getIsReified()) {
-			logger.error("Reified statement insert nt yet supported");
+			//TODO
+			logger.error("Reified statement insert not yet supported:" + predicateElement.toString());
 			//IRI propertyIri = PathParser.parsePredicate(property).getIri();
 			//connection.add(this.getIRI(), propertyIri,literal, this.getGraph().getGraphName());
 		}else {
@@ -650,15 +680,40 @@ public class Thing extends Resource {
 			connection.add(this.getIRI(), propertyIri,literal, this.getGraph().getGraphName());
 		}
 		//Since changed the database, we need to xclear any cache values.
-		getSource().clearCache(null);
+		getSource().clearCache();
 	}
-	@Override
-	public URI getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	public IRI getIRI() {
 		return (IRI)getSuperValue();
 	}
 
+	public Dataset getDataset() {
+		//The graphs can be defined in three ways: as the dataset of a tuplequery, as contexts in getStatements query, or as explicitly defined graphs in a PathCalc query
+		SimpleDataset dataset = (SimpleDataset) getEvaluationContext().getDataset();
+		if(dataset!=null)
+				return dataset;
+		else {
+			HashSet<IRI> publicContexts = getSource().getPublicContexts();
+			if (publicContexts==null || publicContexts.isEmpty()) {
+				org.eclipse.rdf4j.model.Resource[] contexts = getEvaluationContext().getContexts();
+				if(contexts==null ||contexts.length==0 ) {
+					return null;
+				}else {
+					dataset = new SimpleDataset();
+					for( org.eclipse.rdf4j.model.Resource resource: contexts) {
+						dataset.addDefaultGraph((IRI)resource);
+					}
+					getEvaluationContext().setDataset(dataset);
+					return dataset;	
+				}
+			}else {
+				dataset = new SimpleDataset();
+				for( IRI graph: publicContexts) {
+					dataset.addDefaultGraph(graph);
+				}
+				getEvaluationContext().setDataset(dataset);
+				return dataset;
+			}		
+		}
+	}
 }

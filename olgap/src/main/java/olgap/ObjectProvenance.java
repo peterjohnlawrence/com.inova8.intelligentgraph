@@ -102,7 +102,7 @@ public class ObjectProvenance extends Evaluator implements Function {
 					return  args[2];
 				}
 			}catch(Exception e) {
-				return args[2];
+				return tripleSource.getValueFactory().createLiteral(e.getMessage());
 			}
 			
 		}

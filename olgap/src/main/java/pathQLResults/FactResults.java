@@ -93,14 +93,14 @@ public class FactResults extends ResourceResults {
 		path = pathElement.visitPath(path);
 		for(Edge edge:path) {
 			
-
-			Value sourceValue = next.getBinding(edge.getSourceVariable().getName()).getValue();
-			Value predicateValue = next.getBinding(edge.getPredicateVariable().getName()).getValue();
-			Value reificationValue = edge.getReification();
-			Value targetValue = next.getBinding(edge.getTargetVariable().getName()).getValue();
-			Boolean direction = edge.isInverse();
-			Boolean isDereified = edge.getIsDereified();
-			Fact edgeFact = new Fact(sourceValue, predicateValue, targetValue);
+//TODO
+//			Value sourceValue = next.getBinding(edge.getSourceVariable().getName()).getValue();
+//			Value predicateValue = next.getBinding(edge.getPredicateVariable().getName()).getValue();
+//			Value reificationValue = edge.getReification();
+//			Value targetValue = next.getBinding(edge.getTargetVariable().getName()).getValue();
+//			Boolean direction = edge.isInverse();
+//			Boolean isDereified = edge.getIsDereified();
+//			Fact edgeFact = new Fact(sourceValue, predicateValue, targetValue);
 			
 		}
 		Resource objectValue = calculateValue(next);

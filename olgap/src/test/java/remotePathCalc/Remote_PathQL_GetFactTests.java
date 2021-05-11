@@ -1,13 +1,15 @@
 /*
  * inova8 2020
  */
-package pathCalc;
+package remotePathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.rdf4j.model.Value;
@@ -23,6 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import olgap.ClearCache;
+import pathCalc.Evaluator;
+import pathCalc.Thing;
 import pathQL.Match;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
@@ -34,7 +38,7 @@ import pathQLResults.ResourceResults;
  * The Class RemoteThingTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class RemoteThingTests {
+class Remote_PathQL_GetFactTests {
 	
 	/** The repository triple source. */
 	static RepositoryTripleSource repositoryTripleSource;
@@ -54,9 +58,14 @@ class RemoteThingTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-
-		org.eclipse.rdf4j.repository.Repository workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","calc2graph");
 		//org.eclipse.rdf4j.repository.Repository workingRep = new SPARQLRepository("http://localhost:8080/rdf4j-server/repositories/calc2graph");
+		SPARQLRepository  workingRep = new SPARQLRepository("http://localhost:8080/rdf4j-server/repositories/calc2graph");
+		//org.eclipse.rdf4j.repository.Repository workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","calc2graph");
+		//HTTPRepository workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","calc2graph");
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Accept", "text/plain");
+		workingRep.setAdditionalHttpHeaders(headers);
+
 		source = new PathQLRepository(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
@@ -162,6 +171,7 @@ class RemoteThingTests {
 			$this.prefix("http://inova8.com/calc2graph/def/");
 			Double fact = 0.0;
 			for( Resource batterylimit: $this.getFacts(":hasProductBatteryLimit")) {
+				Resource factValue = batterylimit.getFact(":massFlow");
 				fact += batterylimit.getFact(":massFlow").doubleValue();
 			}
 			ResourceResults batterylimits = $this.getFacts(":hasProductBatteryLimit");

@@ -4,12 +4,10 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.sail.NotifyingSailConnection;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.helpers.NotifyingSailWrapper;
 
 import pathCalc.Evaluator;
-import pathQLRepository.PathQLRepository;
 
 
 public class IntelligentGraphSail extends NotifyingSailWrapper {
@@ -22,7 +20,11 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 	protected final Properties parameters = new Properties();
 	protected final Evaluator evaluator = new Evaluator();
-	private PathQLRepository source;
+	
+	public IntelligentGraphSail() {
+		super();
+
+	}
 	public void setParameter(String key, String value) {
 		parameters.setProperty(key, value);
 	}
@@ -46,8 +48,8 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public ValueFactory getValueFactory() {
 		return getBaseSail().getValueFactory();
 	}
-	public PathQLRepository getSource() {
-		return source;
-	}
+//	public PathQLRepository getSource() {
+//		return source;
+//	}
 	
 }

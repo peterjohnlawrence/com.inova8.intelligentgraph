@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.query.Dataset;
 
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
@@ -20,7 +21,10 @@ public class EvaluationContext {
 	private Stack<String> stack = new Stack<String>();
 	private HashMap<String, Resource> customQueryOptions = new   HashMap<String, Resource>();	
 	private HashMap<String, IRI> prefixes = new HashMap<String, IRI>();
-	private HashMap<String, IRI> defaultPrefixes = new HashMap<String, IRI>();
+	private Dataset dataset;
+	private org.eclipse.rdf4j.model.Resource[] contexts;
+
+	//	private HashMap<String, IRI> defaultPrefixes = new HashMap<String, IRI>();
 	public EvaluationContext(Tracer tracer, Stack<String> stack, HashMap<String, Resource> customQueryOptions,
 			HashMap<String, IRI> prefixes) {
 		super();
@@ -33,6 +37,22 @@ public class EvaluationContext {
 		this.customQueryOptions = customQueryOptions;
 	}
 	public EvaluationContext() {
+	}
+	public EvaluationContext(HashMap<String, Resource> customQueryOptions, Dataset dataset) {
+		this.customQueryOptions = customQueryOptions;
+		this.dataset =dataset;
+	}
+	public EvaluationContext(HashMap<String, Resource> customQueryOptions, Dataset dataset, HashMap<String,IRI> prefixes) {
+		this.customQueryOptions = customQueryOptions;
+		this.dataset =dataset;
+		this.prefixes = prefixes;
+	}
+	public EvaluationContext(HashMap<String, IRI> prefixes, org.eclipse.rdf4j.model.Resource[] contexts) {
+		this.prefixes = prefixes;
+		this.contexts = contexts;
+	}
+	public void setPrefixes(HashMap<String, IRI> prefixes) {
+		this.prefixes = prefixes;
 	}
 	public Tracer getTracer() {
 		return tracer;
@@ -130,5 +150,15 @@ public class EvaluationContext {
 		else
 			return false;
 	}
+	public Dataset getDataset() {
+		return dataset;
+	}
+	public void setDataset(Dataset dataset) {
+		this.dataset = dataset;
+	}
+	public org.eclipse.rdf4j.model.Resource[] getContexts() {
+		return contexts;
+	}
+
 }
 

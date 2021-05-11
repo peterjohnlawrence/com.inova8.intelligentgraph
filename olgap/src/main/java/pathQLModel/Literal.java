@@ -3,8 +3,6 @@
  */
 package pathQLModel;
 
-import java.net.URI;
-
 import org.eclipse.rdf4j.model.Value;
 
 import pathPatternElement.PredicateElement;
@@ -107,14 +105,5 @@ public class Literal extends Resource {
 		return null;
 	}
 
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
-	@Override
-	public URI getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }
