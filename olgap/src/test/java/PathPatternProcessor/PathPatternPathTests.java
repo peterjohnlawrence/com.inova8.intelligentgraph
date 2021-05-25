@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import pathCalc.Thing;
-import pathPatternElement.Edge;
 import pathPatternElement.Path;
 import pathPatternElement.PathElement;
 import pathPatternProcessor.PathConstants;

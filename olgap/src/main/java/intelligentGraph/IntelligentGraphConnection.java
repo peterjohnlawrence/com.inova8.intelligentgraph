@@ -27,6 +27,8 @@ import org.eclipse.rdf4j.sail.helpers.NotifyingSailConnectionWrapper;
 
 import pathCalc.Prefixes;
 
+//import pathCalc.Prefixes;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**

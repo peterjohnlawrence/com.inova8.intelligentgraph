@@ -52,7 +52,7 @@ public class FactDebugTest extends OlgapTest{
 	@Test
 	void test0_1() {
 		String queryString = "";
-		String script = "42;";
+		//String script = "42;";
 		queryString += "PREFIX olgap: <http://inova8.com/olgap/> PREFIX script: <http://inova8.com/calc2graph/def/script/>\n";
 		queryString += "select ?subject  ?property ?object  ?trace ?scripttype\r\n" + 
 				"{VALUES(?object ?property ?service ?subject ){(\'0.56;\'^^<http://inova8.com/calc2graph/def/script/groovy> <http://inova8.com/calc2graph/def/volumeFlow> <http://localhost:8080/rdf4j-server/repositories/olgap?distinct=true> <http://inova8.com/calc2graph/id/BatteryLimit2> )} \r\n" + 

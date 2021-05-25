@@ -10,13 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
-
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -37,6 +33,7 @@ import pathQLResults.ResourceResults;
 /**
  * The Class RemoteThingTests.
  */
+@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_PathQL_GetFactTests {
 	

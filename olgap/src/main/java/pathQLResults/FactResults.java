@@ -10,7 +10,6 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import pathCalc.Thing;
-import pathPatternElement.Edge;
 import pathPatternElement.Path;
 import pathPatternElement.PathElement;
 import pathQLModel.Fact;
@@ -91,7 +90,7 @@ public class FactResults extends ResourceResults {
 		BindingSet next = getResourceSet().next();
 		Path path = new Path();
 		path = pathElement.visitPath(path);
-		for(Edge edge:path) {
+//		for(Edge edge:path) {
 			
 //TODO
 //			Value sourceValue = next.getBinding(edge.getSourceVariable().getName()).getValue();
@@ -102,7 +101,7 @@ public class FactResults extends ResourceResults {
 //			Boolean isDereified = edge.getIsDereified();
 //			Fact edgeFact = new Fact(sourceValue, predicateValue, targetValue);
 			
-		}
+//		}
 		Resource objectValue = calculateValue(next);
 		return new Fact(next.getBinding(getPathElement().getTargetSubject().getName()).getValue(),
 				next.getBinding(getPathElement().getTargetPredicate().getName()).getValue(),

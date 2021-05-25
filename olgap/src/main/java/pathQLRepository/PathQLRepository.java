@@ -250,7 +250,7 @@ public class PathQLRepository {
 	}
 	static void clearCaches() {
 		for( PathQLRepository pathRepository:pathQLRepositories.values()) {
-			pathRepository.clearCache(null);
+			pathRepository.clearCache();
 		}
 	}
 	/**
@@ -581,6 +581,7 @@ public class PathQLRepository {
 	 *            the custom query options
 	 */
 
+	@SuppressWarnings("unused")
 	private void clearServiceCache(ConcurrentHashMap<String, pathQLModel.Resource> customQueryOptions) {
 		if (connected()) {
 			IRI cacheDateTimePredicate = iri(Evaluator.SCRIPTNAMESPACE, Evaluator.CACHE_DATE_TIME);
@@ -1156,6 +1157,7 @@ public class PathQLRepository {
 		return graphNameIri;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Boolean closeGraph(String graphName) {
 		RepositoryConnection connection = this.getContextAwareConnection();
 		IRI graphNameIri = null;

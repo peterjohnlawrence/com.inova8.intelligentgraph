@@ -6,12 +6,14 @@ import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
+import pathCalc.Evaluator;
+
 @Deprecated
 public class Trace extends Evaluator implements Function{
 
 	@Override
 	public String getURI() {
-		return NAMESPACE + "trace";
+		return OLGAPNAMESPACE + "trace";
 	}
 
 	@SuppressWarnings("static-access")

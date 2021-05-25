@@ -5,7 +5,6 @@ package olgap;
 
 import java.util.Set;
 
-import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
@@ -24,7 +23,6 @@ public class OlgapTest {
 	 * @param queryString the query string
 	 * @return the string
 	 */
-	@SuppressWarnings("deprecation")
 	public static String runQuery(RepositoryConnection conn, String queryString) {
 		TupleQuery query = conn.prepareTupleQuery(queryString);
 		QueryContext queryContext = new QueryContext();

@@ -16,6 +16,7 @@ import org.eclipse.rdf4j.sail.spin.SpinSail;
 /**
  * The Class DegreeDistributionTest.
  */
+@SuppressWarnings("deprecation")
 public class DegreeDistributionTest {
 	
 	/**
