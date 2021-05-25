@@ -1,4 +1,6 @@
-// Generated from PathPattern.g4 by ANTLR 4.9
+/*
+ * inova8 2020
+ */
 package PathPattern;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -9,18 +11,28 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+/**
+ * The Class PathPatternParser.
+ */
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class PathPatternParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.9", RuntimeMetaData.VERSION); }
 
+	/** The Constant _decisionToDFA. */
 	protected static final DFA[] _decisionToDFA;
+	
+	/** The Constant _sharedContextCache. */
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
+	
+	/** The Constant WS. */
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, INTEGER=13, INVERSE=14, REIFIER=15, DEREIFIER=16, 
 		RDFTYPE=17, ANYPREDICATE=18, OPERATOR=19, DQLITERAL=20, SQLITERAL=21, 
 		IRI_REF=22, PNAME_NS=23, VARNAME=24, PN_LOCAL=25, WS=26;
+	
+	/** The Constant RULE_rdfType. */
 	public static final int
 		RULE_pathPattern = 0, RULE_binding = 1, RULE_pathPatterns = 2, RULE_cardinality = 3, 
 		RULE_negation = 4, RULE_pathEltOrInverse = 5, RULE_predicate = 6, RULE_anyPredicate = 7, 
@@ -28,6 +40,12 @@ public class PathPatternParser extends Parser {
 		RULE_factFilterPattern = 12, RULE_propertyListNotEmpty = 13, RULE_verbObjectList = 14, 
 		RULE_verb = 15, RULE_objectList = 16, RULE_object = 17, RULE_qname = 18, 
 		RULE_pname_ns = 19, RULE_literal = 20, RULE_operator = 21, RULE_rdfType = 22;
+	
+	/**
+	 * Make rule names.
+	 *
+	 * @return the string[]
+	 */
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"pathPattern", "binding", "pathPatterns", "cardinality", "negation", 
@@ -37,15 +55,30 @@ public class PathPatternParser extends Parser {
 			"literal", "operator", "rdfType"
 		};
 	}
+	
+	/** The Constant ruleNames. */
 	public static final String[] ruleNames = makeRuleNames();
 
+	/**
+	 * Make literal names.
+	 *
+	 * @return the string[]
+	 */
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'/'", "'>'", "'|'", "'('", "')'", "'{'", "','", "'}'", "'!'", 
 			"'['", "']'", "';'", null, "'^'", "'@'", "'#'", "'a'", "'*'"
 		};
 	}
+	
+	/** The Constant _LITERAL_NAMES. */
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	
+	/**
+	 * Make symbolic names.
+	 *
+	 * @return the string[]
+	 */
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -54,10 +87,16 @@ public class PathPatternParser extends Parser {
 			"PN_LOCAL", "WS"
 		};
 	}
+	
+	/** The Constant _SYMBOLIC_NAMES. */
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	
+	/** The Constant VOCABULARY. */
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
+	 * The Constant tokenNames.
+	 *
 	 * @deprecated Use {@link #VOCABULARY} instead.
 	 */
 	@Deprecated
@@ -76,103 +115,295 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Gets the token names.
+	 *
+	 * @return the token names
+	 */
 	@Override
 	@Deprecated
 	public String[] getTokenNames() {
 		return tokenNames;
 	}
 
+	/**
+	 * Gets the vocabulary.
+	 *
+	 * @return the vocabulary
+	 */
 	@Override
 
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
 
+	/**
+	 * Gets the grammar file name.
+	 *
+	 * @return the grammar file name
+	 */
 	@Override
 	public String getGrammarFileName() { return "PathPattern.g4"; }
 
+	/**
+	 * Gets the rule names.
+	 *
+	 * @return the rule names
+	 */
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
+	/**
+	 * Gets the serialized ATN.
+	 *
+	 * @return the serialized ATN
+	 */
 	@Override
 	public String getSerializedATN() { return _serializedATN; }
 
+	/**
+	 * Gets the atn.
+	 *
+	 * @return the atn
+	 */
 	@Override
 	public ATN getATN() { return _ATN; }
 
+	/**
+	 * Instantiates a new path pattern parser.
+	 *
+	 * @param input the input
+	 */
 	public PathPatternParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
+	/**
+	 * The Class PathPatternContext.
+	 */
 	public static class PathPatternContext extends ParserRuleContext {
+		
+		/**
+		 * Instantiates a new path pattern context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public PathPatternContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_pathPattern; }
 	 
+		/**
+		 * Instantiates a new path pattern context.
+		 */
 		public PathPatternContext() { }
+		
+		/**
+		 * Copy from.
+		 *
+		 * @param ctx the ctx
+		 */
 		public void copyFrom(PathPatternContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
+	
+	/**
+	 * The Class BoundPatternContext.
+	 */
 	public static class BoundPatternContext extends PathPatternContext {
+		
+		/**
+		 * Binding.
+		 *
+		 * @return the binding context
+		 */
 		public BindingContext binding() {
 			return getRuleContext(BindingContext.class,0);
 		}
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @return the path patterns context
+		 */
 		public PathPatternsContext pathPatterns() {
 			return getRuleContext(PathPatternsContext.class,0);
 		}
+		
+		/**
+		 * Eof.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode EOF() { return getToken(PathPatternParser.EOF, 0); }
+		
+		/**
+		 * Instantiates a new bound pattern context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public BoundPatternContext(PathPatternContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterBoundPattern(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitBoundPattern(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitBoundPattern(this);
 			else return visitor.visitChildren(this);
 		}
 	}
+	
+	/**
+	 * The Class MatchOnlyPatternContext.
+	 */
 	public static class MatchOnlyPatternContext extends PathPatternContext {
+		
+		/**
+		 * Binding.
+		 *
+		 * @return the binding context
+		 */
 		public BindingContext binding() {
 			return getRuleContext(BindingContext.class,0);
 		}
+		
+		/**
+		 * Eof.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode EOF() { return getToken(PathPatternParser.EOF, 0); }
+		
+		/**
+		 * Instantiates a new match only pattern context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public MatchOnlyPatternContext(PathPatternContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterMatchOnlyPattern(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitMatchOnlyPattern(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitMatchOnlyPattern(this);
 			else return visitor.visitChildren(this);
 		}
 	}
+	
+	/**
+	 * The Class PathOnlyPatternContext.
+	 */
 	public static class PathOnlyPatternContext extends PathPatternContext {
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @return the path patterns context
+		 */
 		public PathPatternsContext pathPatterns() {
 			return getRuleContext(PathPatternsContext.class,0);
 		}
+		
+		/**
+		 * Eof.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode EOF() { return getToken(PathPatternParser.EOF, 0); }
+		
+		/**
+		 * Instantiates a new path only pattern context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public PathOnlyPatternContext(PathPatternContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPathOnlyPattern(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPathOnlyPattern(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPathOnlyPattern(this);
@@ -180,6 +411,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Path pattern.
+	 *
+	 * @return the path pattern context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final PathPatternContext pathPattern() throws RecognitionException {
 		PathPatternContext _localctx = new PathPatternContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_pathPattern);
@@ -243,22 +480,64 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class BindingContext.
+	 */
 	public static class BindingContext extends ParserRuleContext {
+		
+		/**
+		 * Fact filter pattern.
+		 *
+		 * @return the fact filter pattern context
+		 */
 		public FactFilterPatternContext factFilterPattern() {
 			return getRuleContext(FactFilterPatternContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new binding context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public BindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_binding; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterBinding(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitBinding(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitBinding(this);
@@ -266,6 +545,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Binding.
+	 *
+	 * @return the binding context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final BindingContext binding() throws RecognitionException {
 		BindingContext _localctx = new BindingContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_binding);
@@ -287,102 +572,303 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class PathPatternsContext.
+	 */
 	public static class PathPatternsContext extends ParserRuleContext {
+		
+		/**
+		 * Instantiates a new path patterns context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public PathPatternsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_pathPatterns; }
 	 
+		/**
+		 * Instantiates a new path patterns context.
+		 */
 		public PathPatternsContext() { }
+		
+		/**
+		 * Copy from.
+		 *
+		 * @param ctx the ctx
+		 */
 		public void copyFrom(PathPatternsContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
+	
+	/**
+	 * The Class PathContext.
+	 */
 	public static class PathContext extends PathPatternsContext {
+		
+		/**
+		 * Path elt or inverse.
+		 *
+		 * @return the path elt or inverse context
+		 */
 		public PathEltOrInverseContext pathEltOrInverse() {
 			return getRuleContext(PathEltOrInverseContext.class,0);
 		}
+		
+		/**
+		 * Cardinality.
+		 *
+		 * @return the cardinality context
+		 */
 		public CardinalityContext cardinality() {
 			return getRuleContext(CardinalityContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new path context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public PathContext(PathPatternsContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPath(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPath(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPath(this);
 			else return visitor.visitChildren(this);
 		}
 	}
+	
+	/**
+	 * The Class PathAlternativeContext.
+	 */
 	public static class PathAlternativeContext extends PathPatternsContext {
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @return the list
+		 */
 		public List<PathPatternsContext> pathPatterns() {
 			return getRuleContexts(PathPatternsContext.class);
 		}
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @param i the i
+		 * @return the path patterns context
+		 */
 		public PathPatternsContext pathPatterns(int i) {
 			return getRuleContext(PathPatternsContext.class,i);
 		}
+		
+		/**
+		 * Instantiates a new path alternative context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public PathAlternativeContext(PathPatternsContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPathAlternative(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPathAlternative(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPathAlternative(this);
 			else return visitor.visitChildren(this);
 		}
 	}
+	
+	/**
+	 * The Class PathParenthesesContext.
+	 */
 	public static class PathParenthesesContext extends PathPatternsContext {
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @return the path patterns context
+		 */
 		public PathPatternsContext pathPatterns() {
 			return getRuleContext(PathPatternsContext.class,0);
 		}
+		
+		/**
+		 * Negation.
+		 *
+		 * @return the negation context
+		 */
 		public NegationContext negation() {
 			return getRuleContext(NegationContext.class,0);
 		}
+		
+		/**
+		 * Cardinality.
+		 *
+		 * @return the cardinality context
+		 */
 		public CardinalityContext cardinality() {
 			return getRuleContext(CardinalityContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new path parentheses context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public PathParenthesesContext(PathPatternsContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPathParentheses(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPathParentheses(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPathParentheses(this);
 			else return visitor.visitChildren(this);
 		}
 	}
+	
+	/**
+	 * The Class PathSequenceContext.
+	 */
 	public static class PathSequenceContext extends PathPatternsContext {
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @return the list
+		 */
 		public List<PathPatternsContext> pathPatterns() {
 			return getRuleContexts(PathPatternsContext.class);
 		}
+		
+		/**
+		 * Path patterns.
+		 *
+		 * @param i the i
+		 * @return the path patterns context
+		 */
 		public PathPatternsContext pathPatterns(int i) {
 			return getRuleContext(PathPatternsContext.class,i);
 		}
+		
+		/**
+		 * Instantiates a new path sequence context.
+		 *
+		 * @param ctx the ctx
+		 */
 		public PathSequenceContext(PathPatternsContext ctx) { copyFrom(ctx); }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPathSequence(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPathSequence(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPathSequence(this);
@@ -390,10 +876,23 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Path patterns.
+	 *
+	 * @return the path patterns context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final PathPatternsContext pathPatterns() throws RecognitionException {
 		return pathPatterns(0);
 	}
 
+	/**
+	 * Path patterns.
+	 *
+	 * @param _p the p
+	 * @return the path patterns context
+	 * @throws RecognitionException the recognition exception
+	 */
 	private PathPatternsContext pathPatterns(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
@@ -527,23 +1026,72 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class CardinalityContext.
+	 */
 	public static class CardinalityContext extends ParserRuleContext {
+		
+		/**
+		 * Integer.
+		 *
+		 * @return the list
+		 */
 		public List<TerminalNode> INTEGER() { return getTokens(PathPatternParser.INTEGER); }
+		
+		/**
+		 * Integer.
+		 *
+		 * @param i the i
+		 * @return the terminal node
+		 */
 		public TerminalNode INTEGER(int i) {
 			return getToken(PathPatternParser.INTEGER, i);
 		}
+		
+		/**
+		 * Instantiates a new cardinality context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public CardinalityContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_cardinality; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterCardinality(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitCardinality(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitCardinality(this);
@@ -551,6 +1099,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Cardinality.
+	 *
+	 * @return the cardinality context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final CardinalityContext cardinality() throws RecognitionException {
 		CardinalityContext _localctx = new CardinalityContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_cardinality);
@@ -597,19 +1151,55 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class NegationContext.
+	 */
 	public static class NegationContext extends ParserRuleContext {
+		
+		/**
+		 * Instantiates a new negation context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public NegationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_negation; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterNegation(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitNegation(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitNegation(this);
@@ -617,6 +1207,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Negation.
+	 *
+	 * @return the negation context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final NegationContext negation() throws RecognitionException {
 		NegationContext _localctx = new NegationContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_negation);
@@ -638,26 +1234,80 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class PathEltOrInverseContext.
+	 */
 	public static class PathEltOrInverseContext extends ParserRuleContext {
+		
+		/**
+		 * Predicate.
+		 *
+		 * @return the predicate context
+		 */
 		public PredicateContext predicate() {
 			return getRuleContext(PredicateContext.class,0);
 		}
+		
+		/**
+		 * Negation.
+		 *
+		 * @return the negation context
+		 */
 		public NegationContext negation() {
 			return getRuleContext(NegationContext.class,0);
 		}
+		
+		/**
+		 * Inverse.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode INVERSE() { return getToken(PathPatternParser.INVERSE, 0); }
+		
+		/**
+		 * Instantiates a new path elt or inverse context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public PathEltOrInverseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_pathEltOrInverse; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPathEltOrInverse(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPathEltOrInverse(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPathEltOrInverse(this);
@@ -665,6 +1315,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Path elt or inverse.
+	 *
+	 * @return the path elt or inverse context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final PathEltOrInverseContext pathEltOrInverse() throws RecognitionException {
 		PathEltOrInverseContext _localctx = new PathEltOrInverseContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_pathEltOrInverse);
@@ -707,34 +1363,100 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class PredicateContext.
+	 */
 	public static class PredicateContext extends ParserRuleContext {
+		
+		/**
+		 * Reified predicate.
+		 *
+		 * @return the reified predicate context
+		 */
 		public ReifiedPredicateContext reifiedPredicate() {
 			return getRuleContext(ReifiedPredicateContext.class,0);
 		}
+		
+		/**
+		 * Predicate ref.
+		 *
+		 * @return the predicate ref context
+		 */
 		public PredicateRefContext predicateRef() {
 			return getRuleContext(PredicateRefContext.class,0);
 		}
+		
+		/**
+		 * Rdf type.
+		 *
+		 * @return the rdf type context
+		 */
 		public RdfTypeContext rdfType() {
 			return getRuleContext(RdfTypeContext.class,0);
 		}
+		
+		/**
+		 * Any predicate.
+		 *
+		 * @return the any predicate context
+		 */
 		public AnyPredicateContext anyPredicate() {
 			return getRuleContext(AnyPredicateContext.class,0);
 		}
+		
+		/**
+		 * Fact filter pattern.
+		 *
+		 * @return the fact filter pattern context
+		 */
 		public FactFilterPatternContext factFilterPattern() {
 			return getRuleContext(FactFilterPatternContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new predicate context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public PredicateContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_predicate; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPredicate(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPredicate(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPredicate(this);
@@ -742,6 +1464,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Predicate.
+	 *
+	 * @return the predicate context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final PredicateContext predicate() throws RecognitionException {
 		PredicateContext _localctx = new PredicateContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_predicate);
@@ -799,20 +1527,62 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class AnyPredicateContext.
+	 */
 	public static class AnyPredicateContext extends ParserRuleContext {
+		
+		/**
+		 * Anypredicate.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode ANYPREDICATE() { return getToken(PathPatternParser.ANYPREDICATE, 0); }
+		
+		/**
+		 * Instantiates a new any predicate context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public AnyPredicateContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_anyPredicate; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterAnyPredicate(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitAnyPredicate(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitAnyPredicate(this);
@@ -820,6 +1590,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Any predicate.
+	 *
+	 * @return the any predicate context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final AnyPredicateContext anyPredicate() throws RecognitionException {
 		AnyPredicateContext _localctx = new AnyPredicateContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_anyPredicate);
@@ -841,32 +1617,98 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class ReifiedPredicateContext.
+	 */
 	public static class ReifiedPredicateContext extends ParserRuleContext {
+		
+		/**
+		 * Reifier.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode REIFIER() { return getToken(PathPatternParser.REIFIER, 0); }
+		
+		/**
+		 * Predicate ref.
+		 *
+		 * @return the predicate ref context
+		 */
 		public PredicateRefContext predicateRef() {
 			return getRuleContext(PredicateRefContext.class,0);
 		}
+		
+		/**
+		 * Iri ref.
+		 *
+		 * @return the iri ref context
+		 */
 		public IriRefContext iriRef() {
 			return getRuleContext(IriRefContext.class,0);
 		}
+		
+		/**
+		 * Fact filter pattern.
+		 *
+		 * @return the fact filter pattern context
+		 */
 		public FactFilterPatternContext factFilterPattern() {
 			return getRuleContext(FactFilterPatternContext.class,0);
 		}
+		
+		/**
+		 * Dereifier.
+		 *
+		 * @return the dereifier context
+		 */
 		public DereifierContext dereifier() {
 			return getRuleContext(DereifierContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new reified predicate context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public ReifiedPredicateContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_reifiedPredicate; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterReifiedPredicate(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitReifiedPredicate(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitReifiedPredicate(this);
@@ -874,6 +1716,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Reified predicate.
+	 *
+	 * @return the reified predicate context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final ReifiedPredicateContext reifiedPredicate() throws RecognitionException {
 		ReifiedPredicateContext _localctx = new ReifiedPredicateContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_reifiedPredicate);
@@ -928,29 +1776,89 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class PredicateRefContext.
+	 */
 	public static class PredicateRefContext extends ParserRuleContext {
+		
+		/**
+		 * Iri ref.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode IRI_REF() { return getToken(PathPatternParser.IRI_REF, 0); }
+		
+		/**
+		 * Rdf type.
+		 *
+		 * @return the rdf type context
+		 */
 		public RdfTypeContext rdfType() {
 			return getRuleContext(RdfTypeContext.class,0);
 		}
+		
+		/**
+		 * Qname.
+		 *
+		 * @return the qname context
+		 */
 		public QnameContext qname() {
 			return getRuleContext(QnameContext.class,0);
 		}
+		
+		/**
+		 * Pname ns.
+		 *
+		 * @return the pname ns context
+		 */
 		public Pname_nsContext pname_ns() {
 			return getRuleContext(Pname_nsContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new predicate ref context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public PredicateRefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_predicateRef; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPredicateRef(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPredicateRef(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPredicateRef(this);
@@ -958,6 +1866,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Predicate ref.
+	 *
+	 * @return the predicate ref context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final PredicateRefContext predicateRef() throws RecognitionException {
 		PredicateRefContext _localctx = new PredicateRefContext(_ctx, getState());
 		enterRule(_localctx, 18, RULE_predicateRef);
@@ -1006,26 +1920,80 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class IriRefContext.
+	 */
 	public static class IriRefContext extends ParserRuleContext {
+		
+		/**
+		 * Iri ref.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode IRI_REF() { return getToken(PathPatternParser.IRI_REF, 0); }
+		
+		/**
+		 * Qname.
+		 *
+		 * @return the qname context
+		 */
 		public QnameContext qname() {
 			return getRuleContext(QnameContext.class,0);
 		}
+		
+		/**
+		 * Pname ns.
+		 *
+		 * @return the pname ns context
+		 */
 		public Pname_nsContext pname_ns() {
 			return getRuleContext(Pname_nsContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new iri ref context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public IriRefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_iriRef; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterIriRef(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitIriRef(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitIriRef(this);
@@ -1033,6 +2001,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Iri ref.
+	 *
+	 * @return the iri ref context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final IriRefContext iriRef() throws RecognitionException {
 		IriRefContext _localctx = new IriRefContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_iriRef);
@@ -1074,20 +2048,62 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class DereifierContext.
+	 */
 	public static class DereifierContext extends ParserRuleContext {
+		
+		/**
+		 * Dereifier.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode DEREIFIER() { return getToken(PathPatternParser.DEREIFIER, 0); }
+		
+		/**
+		 * Instantiates a new dereifier context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public DereifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_dereifier; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterDereifier(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitDereifier(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitDereifier(this);
@@ -1095,6 +2111,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Dereifier.
+	 *
+	 * @return the dereifier context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final DereifierContext dereifier() throws RecognitionException {
 		DereifierContext _localctx = new DereifierContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_dereifier);
@@ -1116,22 +2138,64 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class FactFilterPatternContext.
+	 */
 	public static class FactFilterPatternContext extends ParserRuleContext {
+		
+		/**
+		 * Property list not empty.
+		 *
+		 * @return the property list not empty context
+		 */
 		public PropertyListNotEmptyContext propertyListNotEmpty() {
 			return getRuleContext(PropertyListNotEmptyContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new fact filter pattern context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public FactFilterPatternContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_factFilterPattern; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterFactFilterPattern(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitFactFilterPattern(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitFactFilterPattern(this);
@@ -1139,6 +2203,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Fact filter pattern.
+	 *
+	 * @return the fact filter pattern context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final FactFilterPatternContext factFilterPattern() throws RecognitionException {
 		FactFilterPatternContext _localctx = new FactFilterPatternContext(_ctx, getState());
 		enterRule(_localctx, 24, RULE_factFilterPattern);
@@ -1164,25 +2234,74 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class PropertyListNotEmptyContext.
+	 */
 	public static class PropertyListNotEmptyContext extends ParserRuleContext {
+		
+		/**
+		 * Verb object list.
+		 *
+		 * @return the list
+		 */
 		public List<VerbObjectListContext> verbObjectList() {
 			return getRuleContexts(VerbObjectListContext.class);
 		}
+		
+		/**
+		 * Verb object list.
+		 *
+		 * @param i the i
+		 * @return the verb object list context
+		 */
 		public VerbObjectListContext verbObjectList(int i) {
 			return getRuleContext(VerbObjectListContext.class,i);
 		}
+		
+		/**
+		 * Instantiates a new property list not empty context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public PropertyListNotEmptyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_propertyListNotEmpty; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPropertyListNotEmpty(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPropertyListNotEmpty(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPropertyListNotEmpty(this);
@@ -1190,6 +2309,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Property list not empty.
+	 *
+	 * @return the property list not empty context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final PropertyListNotEmptyContext propertyListNotEmpty() throws RecognitionException {
 		PropertyListNotEmptyContext _localctx = new PropertyListNotEmptyContext(_ctx, getState());
 		enterRule(_localctx, 26, RULE_propertyListNotEmpty);
@@ -1236,25 +2361,73 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class VerbObjectListContext.
+	 */
 	public static class VerbObjectListContext extends ParserRuleContext {
+		
+		/**
+		 * Verb.
+		 *
+		 * @return the verb context
+		 */
 		public VerbContext verb() {
 			return getRuleContext(VerbContext.class,0);
 		}
+		
+		/**
+		 * Object list.
+		 *
+		 * @return the object list context
+		 */
 		public ObjectListContext objectList() {
 			return getRuleContext(ObjectListContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new verb object list context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public VerbObjectListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_verbObjectList; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterVerbObjectList(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitVerbObjectList(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitVerbObjectList(this);
@@ -1262,6 +2435,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Verb object list.
+	 *
+	 * @return the verb object list context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final VerbObjectListContext verbObjectList() throws RecognitionException {
 		VerbObjectListContext _localctx = new VerbObjectListContext(_ctx, getState());
 		enterRule(_localctx, 28, RULE_verbObjectList);
@@ -1285,25 +2464,73 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class VerbContext.
+	 */
 	public static class VerbContext extends ParserRuleContext {
+		
+		/**
+		 * Operator.
+		 *
+		 * @return the operator context
+		 */
 		public OperatorContext operator() {
 			return getRuleContext(OperatorContext.class,0);
 		}
+		
+		/**
+		 * Path elt or inverse.
+		 *
+		 * @return the path elt or inverse context
+		 */
 		public PathEltOrInverseContext pathEltOrInverse() {
 			return getRuleContext(PathEltOrInverseContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new verb context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public VerbContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_verb; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterVerb(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitVerb(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitVerb(this);
@@ -1311,6 +2538,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Verb.
+	 *
+	 * @return the verb context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final VerbContext verb() throws RecognitionException {
 		VerbContext _localctx = new VerbContext(_ctx, getState());
 		enterRule(_localctx, 30, RULE_verb);
@@ -1353,25 +2586,74 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class ObjectListContext.
+	 */
 	public static class ObjectListContext extends ParserRuleContext {
+		
+		/**
+		 * Object.
+		 *
+		 * @return the list
+		 */
 		public List<ObjectContext> object() {
 			return getRuleContexts(ObjectContext.class);
 		}
+		
+		/**
+		 * Object.
+		 *
+		 * @param i the i
+		 * @return the object context
+		 */
 		public ObjectContext object(int i) {
 			return getRuleContext(ObjectContext.class,i);
 		}
+		
+		/**
+		 * Instantiates a new object list context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public ObjectListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_objectList; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterObjectList(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitObjectList(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitObjectList(this);
@@ -1379,6 +2661,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Object list.
+	 *
+	 * @return the object list context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final ObjectListContext objectList() throws RecognitionException {
 		ObjectListContext _localctx = new ObjectListContext(_ctx, getState());
 		enterRule(_localctx, 32, RULE_objectList);
@@ -1417,28 +2705,82 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class ObjectContext.
+	 */
 	public static class ObjectContext extends ParserRuleContext {
+		
+		/**
+		 * Iri ref.
+		 *
+		 * @return the iri ref context
+		 */
 		public IriRefContext iriRef() {
 			return getRuleContext(IriRefContext.class,0);
 		}
+		
+		/**
+		 * Literal.
+		 *
+		 * @return the literal context
+		 */
 		public LiteralContext literal() {
 			return getRuleContext(LiteralContext.class,0);
 		}
+		
+		/**
+		 * Fact filter pattern.
+		 *
+		 * @return the fact filter pattern context
+		 */
 		public FactFilterPatternContext factFilterPattern() {
 			return getRuleContext(FactFilterPatternContext.class,0);
 		}
+		
+		/**
+		 * Instantiates a new object context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public ObjectContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_object; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterObject(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitObject(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitObject(this);
@@ -1446,6 +2788,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Object.
+	 *
+	 * @return the object context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final ObjectContext object() throws RecognitionException {
 		ObjectContext _localctx = new ObjectContext(_ctx, getState());
 		enterRule(_localctx, 34, RULE_object);
@@ -1491,21 +2839,69 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class QnameContext.
+	 */
 	public static class QnameContext extends ParserRuleContext {
+		
+		/**
+		 * Pname ns.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode PNAME_NS() { return getToken(PathPatternParser.PNAME_NS, 0); }
+		
+		/**
+		 * Pn local.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode PN_LOCAL() { return getToken(PathPatternParser.PN_LOCAL, 0); }
+		
+		/**
+		 * Instantiates a new qname context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public QnameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_qname; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterQname(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitQname(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitQname(this);
@@ -1513,6 +2909,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Qname.
+	 *
+	 * @return the qname context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final QnameContext qname() throws RecognitionException {
 		QnameContext _localctx = new QnameContext(_ctx, getState());
 		enterRule(_localctx, 36, RULE_qname);
@@ -1536,20 +2938,62 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class Pname_nsContext.
+	 */
 	public static class Pname_nsContext extends ParserRuleContext {
+		
+		/**
+		 * Pname ns.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode PNAME_NS() { return getToken(PathPatternParser.PNAME_NS, 0); }
+		
+		/**
+		 * Instantiates a new pname ns context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public Pname_nsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_pname_ns; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterPname_ns(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitPname_ns(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitPname_ns(this);
@@ -1557,6 +3001,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Pname ns.
+	 *
+	 * @return the pname ns context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final Pname_nsContext pname_ns() throws RecognitionException {
 		Pname_nsContext _localctx = new Pname_nsContext(_ctx, getState());
 		enterRule(_localctx, 38, RULE_pname_ns);
@@ -1578,21 +3028,69 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class LiteralContext.
+	 */
 	public static class LiteralContext extends ParserRuleContext {
+		
+		/**
+		 * Dqliteral.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode DQLITERAL() { return getToken(PathPatternParser.DQLITERAL, 0); }
+		
+		/**
+		 * Sqliteral.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode SQLITERAL() { return getToken(PathPatternParser.SQLITERAL, 0); }
+		
+		/**
+		 * Instantiates a new literal context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public LiteralContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_literal; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterLiteral(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitLiteral(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitLiteral(this);
@@ -1600,6 +3098,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Literal.
+	 *
+	 * @return the literal context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final LiteralContext literal() throws RecognitionException {
 		LiteralContext _localctx = new LiteralContext(_ctx, getState());
 		enterRule(_localctx, 40, RULE_literal);
@@ -1630,20 +3134,62 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class OperatorContext.
+	 */
 	public static class OperatorContext extends ParserRuleContext {
+		
+		/**
+		 * Operator.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode OPERATOR() { return getToken(PathPatternParser.OPERATOR, 0); }
+		
+		/**
+		 * Instantiates a new operator context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public OperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_operator; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterOperator(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitOperator(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitOperator(this);
@@ -1651,6 +3197,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Operator.
+	 *
+	 * @return the operator context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final OperatorContext operator() throws RecognitionException {
 		OperatorContext _localctx = new OperatorContext(_ctx, getState());
 		enterRule(_localctx, 42, RULE_operator);
@@ -1672,20 +3224,62 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * The Class RdfTypeContext.
+	 */
 	public static class RdfTypeContext extends ParserRuleContext {
+		
+		/**
+		 * Rdftype.
+		 *
+		 * @return the terminal node
+		 */
 		public TerminalNode RDFTYPE() { return getToken(PathPatternParser.RDFTYPE, 0); }
+		
+		/**
+		 * Instantiates a new rdf type context.
+		 *
+		 * @param parent the parent
+		 * @param invokingState the invoking state
+		 */
 		public RdfTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
+		
+		/**
+		 * Gets the rule index.
+		 *
+		 * @return the rule index
+		 */
 		@Override public int getRuleIndex() { return RULE_rdfType; }
+		
+		/**
+		 * Enter rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).enterRdfType(this);
 		}
+		
+		/**
+		 * Exit rule.
+		 *
+		 * @param listener the listener
+		 */
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PathPatternListener ) ((PathPatternListener)listener).exitRdfType(this);
 		}
+		
+		/**
+		 * Accept.
+		 *
+		 * @param <T> the generic type
+		 * @param visitor the visitor
+		 * @return the t
+		 */
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof PathPatternVisitor ) return ((PathPatternVisitor<? extends T>)visitor).visitRdfType(this);
@@ -1693,6 +3287,12 @@ public class PathPatternParser extends Parser {
 		}
 	}
 
+	/**
+	 * Rdf type.
+	 *
+	 * @return the rdf type context
+	 * @throws RecognitionException the recognition exception
+	 */
 	public final RdfTypeContext rdfType() throws RecognitionException {
 		RdfTypeContext _localctx = new RdfTypeContext(_ctx, getState());
 		enterRule(_localctx, 44, RULE_rdfType);
@@ -1714,6 +3314,14 @@ public class PathPatternParser extends Parser {
 		return _localctx;
 	}
 
+	/**
+	 * Sempred.
+	 *
+	 * @param _localctx the localctx
+	 * @param ruleIndex the rule index
+	 * @param predIndex the pred index
+	 * @return true, if successful
+	 */
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 2:
@@ -1721,6 +3329,14 @@ public class PathPatternParser extends Parser {
 		}
 		return true;
 	}
+	
+	/**
+	 * Path patterns sempred.
+	 *
+	 * @param _localctx the localctx
+	 * @param predIndex the pred index
+	 * @return true, if successful
+	 */
 	private boolean pathPatterns_sempred(PathPatternsContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
@@ -1731,6 +3347,7 @@ public class PathPatternParser extends Parser {
 		return true;
 	}
 
+	/** The Constant _serializedATN. */
 	public static final String _serializedATN =
 		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\u00bf\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
@@ -1789,6 +3406,8 @@ public class PathPatternParser extends Parser {
 		"\t\3\2\2\u00b9+\3\2\2\2\u00ba\u00bb\7\25\2\2\u00bb-\3\2\2\2\u00bc\u00bd"+
 		"\7\23\2\2\u00bd/\3\2\2\2\31;BEKMUW^`gjruz\177\u0082\u0088\u008d\u0098"+
 		"\u009c\u00a4\u00ab\u00b1";
+	
+	/** The Constant _ATN. */
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

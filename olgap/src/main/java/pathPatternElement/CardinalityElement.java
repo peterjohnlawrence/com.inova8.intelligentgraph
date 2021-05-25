@@ -26,6 +26,8 @@ public class CardinalityElement extends PathElement {
 
 	/**
 	 * Instantiates a new cardinality element.
+	 *
+	 * @param source the source
 	 */
 	public CardinalityElement(PathQLRepository source) {
 		super(source);

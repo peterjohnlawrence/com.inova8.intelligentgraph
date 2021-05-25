@@ -49,6 +49,7 @@ class Remote_PathQL_GetFactTests {
 	/** The evaluator. */
 	private static Evaluator evaluator;
 
+	/** The match. */
 	private static Match match;
 	
 	/**
@@ -66,7 +67,7 @@ class Remote_PathQL_GetFactTests {
 		headers.put("Accept", "text/plain");
 		workingRep.setAdditionalHttpHeaders(headers);
 
-		source = new PathQLRepository(workingRep);
+		source = PathQLRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 		match = new Match(source);
@@ -672,6 +673,10 @@ class Remote_PathQL_GetFactTests {
 			fail();
 		}
 	}
+	
+	/**
+	 * Test 32.
+	 */
 	@Test
 	@Order(32)
 	void test_32() {
@@ -695,6 +700,10 @@ class Remote_PathQL_GetFactTests {
 			fail();
 		}
 	}
+	
+	/**
+	 * Test 33.
+	 */
 	@Test
 	@Order(33)
 	void test_33() {
@@ -718,6 +727,10 @@ class Remote_PathQL_GetFactTests {
 			fail();
 		}
 	}
+	
+	/**
+	 * Test 34.
+	 */
 	@Test
 	@Order(34)
 	void test_34() {

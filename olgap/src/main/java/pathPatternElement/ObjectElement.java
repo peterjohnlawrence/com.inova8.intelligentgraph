@@ -30,6 +30,8 @@ public class ObjectElement extends PathElement{
 	
 	/**
 	 * Instantiates a new object element.
+	 *
+	 * @param source the source
 	 */
 	public ObjectElement(PathQLRepository source) {
 		super(source);

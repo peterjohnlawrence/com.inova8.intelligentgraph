@@ -37,11 +37,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import olgap.ClearCache;
+import pathCalc.CustomQueryOptions;
+import pathCalc.EvaluationContext;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
 import pathQL.Match;
 import pathQLModel.MatchFact;
 import pathQLModel.Resource;
+import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
 import pathQLResults.MatchResults;
 import pathQLResults.ResourceResults;
@@ -67,8 +70,9 @@ class Local_PathQL_GetFactTests {
 	/** The evaluator. */
 	private static Evaluator evaluator;
 
+	/** The match. */
 	private static Match match;
-
+	static org.eclipse.rdf4j.repository.Repository workingRep ;
 	/**
 	 * Sets the up before class.
 	 *
@@ -84,7 +88,7 @@ class Local_PathQL_GetFactTests {
 		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
 		lucenesail.setBaseSail(baseSail);
 
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
+		workingRep = new SailRepository(lucenesail);
 		//org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
 
 		String dataFilename = "src/test/resources/calc2graph.data.ttl";
@@ -99,16 +103,30 @@ class Local_PathQL_GetFactTests {
 		conn = workingRep.getConnection();
 		conn.add(modelModel.getStatements(null, null, null));
 		repositoryTripleSource = new RepositoryTripleSource(conn);
-		source = new PathQLRepository(workingRep);
+		source = PathQLRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 		evaluator = new Evaluator();
 		match = new Match(source);
 	}
+	
+	/**
+	 * Removes the white spaces.
+	 *
+	 * @param input the input
+	 * @return the string
+	 */
 	String removeWhiteSpaces(String input) {
 	    return input.replaceAll("\\s+", "");
 	    //return input;
 	}
+	
+	/**
+	 * Assert equals WO spaces.
+	 *
+	 * @param actual the actual
+	 * @param expected the expected
+	 */
 	void assertEqualsWOSpaces(String actual, String expected){
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
@@ -153,7 +171,7 @@ class Local_PathQL_GetFactTests {
 			while (matchResultsIterator.hasNext()) {
 				MatchFact nextMatch = matchResultsIterator.nextResource();
 				assertEquals(
-						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.314387798309326]",
+						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.309943199157715]",
 						nextMatch.toString());
 				break;
 			}
@@ -172,7 +190,7 @@ class Local_PathQL_GetFactTests {
 	void test_1() {
 		try {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/volumeFlow>");
+			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/testProperty1>");
 			assertEquals("59", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -252,7 +270,7 @@ class Local_PathQL_GetFactTests {
 		try {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact(":massThroughput");
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -274,6 +292,10 @@ class Local_PathQL_GetFactTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 4 2.
+	 */
 	@Test
 	@Order(4)
 	void test_4_2() {
@@ -318,7 +340,7 @@ class Local_PathQL_GetFactTests {
 		try {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massFlow>");
-			assertEquals("11.200000047683716", result.stringValue());
+			assertEquals("10.0", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -335,7 +357,7 @@ class Local_PathQL_GetFactTests {
 		try {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massThroughput>");
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -353,7 +375,7 @@ class Local_PathQL_GetFactTests {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Resource result = $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput");
 
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -371,7 +393,7 @@ class Local_PathQL_GetFactTests {
 			Float result = $this.getFact(":massFlow").floatValue()
 					/ $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput").floatValue();
 
-			assertEquals("0.52218425", result.toString());
+			assertEquals("0.7368421", result.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -388,7 +410,7 @@ class Local_PathQL_GetFactTests {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
 			Float result = $this.getFact("^:hasProductBatteryLimit/:massThroughput").floatValue();
 
-			assertEquals("23.44", result.toString());
+			assertEquals("38.0", result.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -652,7 +674,7 @@ class Local_PathQL_GetFactTests {
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -667,11 +689,12 @@ class Local_PathQL_GetFactTests {
 	void test_25() {
 
 		try {
+			String averageSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -710,7 +733,7 @@ class Local_PathQL_GetFactTests {
 			$this.prefix("id", "<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massFlowBalance");
 
-			assertEquals("1.339999407529831", result.stringValue());
+			assertEquals("-13.220000296831131", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -752,14 +775,46 @@ class Local_PathQL_GetFactTests {
 			fail();
 		}
 	}
+	
+	/**
+	 * Test 34.
+	 */
 	@Test
 	@Order(34)
 	void test_34() {
 		
 		try {
+			source = PathQLRepository.create(workingRep);
+
 			Thing $this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit3"),null);
 			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massYield>");
-			assertEquals("0.4778156952152066", result.stringValue());
+			assertEquals("0.26315789803903855", result.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		} 
+	}
+	/**
+	 * Test 35.
+	 */
+	@Test
+	@Order(35)
+	void test_35() {
+		
+		try {
+			source = PathQLRepository.create(workingRep);
+			source.prefix("<http://inova8.com/calc2graph/def/>");
+			source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
+			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
+			Thing myCountry = graph.getThing(":Country1");
+			myCountry.addFact(":time", "$customQueryOptions.get(\"time\") ;", Evaluator.GROOVY);
+			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
+			customQueryOptions.put("time",42);
+			customQueryOptions.put("name","Peter");
+			Thing myCountry1 = graph.getThing( ":Country1",customQueryOptions);
+			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>");
+			assertEquals("42", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

@@ -57,7 +57,8 @@ class PathPatternQueryExpressionTests {
 		source.addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
 		source.setIsLazyLoaded(true);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/");
-		thing = new Thing(source, null);
+		//Dummy
+		thing = source.getThing( "http://",null);
 		indices.add(0, 0);
 	}
 
@@ -141,28 +142,38 @@ class PathPatternQueryExpressionTests {
 	@Test
 	@Order(0)
 	void test_0() {
-		CharStream input = CharStreams.fromString( ":parent1[:gender :female]/:parent2[:gender :male; :birthplace [rdfs:label 'Maidstone']]/:parent3");
+		CharStream input = CharStreams.fromString( ":parent1[:gender :female; :birthplace [rdfs:label 'Maidstone']]/:parent2[:gender :male]/:parent3");
 		PathElement element = prepareElement(input);
 		assertEqualsWOSpaces ("Join\r\n"
 				+ "   Join\r\n"
 				+ "      Join\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Var (name=p1_0_1, value=http://default/gender)\r\n"
-				+ "            Variable (name=n1_1, value=http://default/female)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n0)\r\n"
-				+ "            Var (name=p0_1, value=http://default/parent1)\r\n"
-				+ "            Variable (name=n1)\r\n"
+				+ "         Join\r\n"
+				+ "            StatementPattern\r\n"
+				+ "               Variable (name=n0)\r\n"
+				+ "               Var (name=p0_1, value=http://default/parent1)\r\n"
+				+ "               Variable (name=n1)\r\n"
+				+ "            StatementPattern\r\n"
+				+ "               Variable (name=n1)\r\n"
+				+ "               Var (name=p1_0_1, value=http://default/gender)\r\n"
+				+ "               Variable (name=n1_1, value=http://default/female)\r\n"
+				+ "         Join\r\n"
+				+ "            StatementPattern\r\n"
+				+ "               Variable (name=n1)\r\n"
+				+ "               Var (name=p1_0_1, value=http://default/birthplace)\r\n"
+				+ "               Variable (name=n1_1)\r\n"
+				+ "            StatementPattern\r\n"
+				+ "               Variable (name=n1_1)\r\n"
+				+ "               Var (name=p1_0_1, value=http://rdfs/label)\r\n"
+				+ "               Variable (name=n1_1, value=\"Maidstone\")\r\n"
 				+ "      Join\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "            Var (name=p2_0_1, value=http://default/gender)\r\n"
-				+ "            Variable (name=n2_1, value=http://default/male)\r\n"
 				+ "         StatementPattern\r\n"
 				+ "            Variable (name=n1)\r\n"
 				+ "            Var (name=p1_2, value=http://default/parent2)\r\n"
 				+ "            Variable (name=n2)\r\n"
+				+ "         StatementPattern\r\n"
+				+ "            Variable (name=n2)\r\n"
+				+ "            Var (name=p2_0_1, value=http://default/gender)\r\n"
+				+ "            Variable (name=n2_1, value=http://default/male)\r\n"
 				+ "   StatementPattern\r\n"
 				+ "      Variable (name=n2)\r\n"
 				+ "      Var (name=p2_3, value=http://default/parent3)\r\n"
@@ -254,10 +265,14 @@ class PathPatternQueryExpressionTests {
 	void test_4() {
 		CharStream input = CharStreams.fromString( ":volumeFlow [ gt \"35\" ]");
 		PathElement element = prepareElement(input);
-		assertEqualsWOSpaces ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Var (name=p0_1, value=http://default/volumeFlow)\r\n"
-				+ "   Variable (name=n1)\r\n"
+		assertEqualsWOSpaces ("Filter\r\n"
+				+ "   Compare (>)\r\n"
+				+ "      Variable (name=n1)\r\n"
+				+ "      ValueConstant (value=\"35\")\r\n"
+				+ "   StatementPattern\r\n"
+				+ "      Variable (name=n0)\r\n"
+				+ "      Var (name=p0_1, value=http://default/volumeFlow)\r\n"
+				+ "      Variable (name=n1)\r\n"
 				+ "" ,element.pathPatternQuery(thing,null,null).toString());
 	}
 	
@@ -271,10 +286,6 @@ class PathPatternQueryExpressionTests {
 		PathElement element = prepareElement(input);
 		assertEqualsWOSpaces ("Join\r\n"
 				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Var (name=p1_0_1, value=http://rdfs/label)\r\n"
-				+ "         Variable (name=n1_1, value=\"eastman3d\")\r\n"
 				+ "      Join\r\n"
 				+ "         Join\r\n"
 				+ "            StatementPattern\r\n"
@@ -289,6 +300,10 @@ class PathPatternQueryExpressionTests {
 				+ "            Variable (name=r1)\r\n"
 				+ "            Var (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 				+ "            Variable (name=n1)\r\n"
+				+ "      StatementPattern\r\n"
+				+ "         Variable (name=n1)\r\n"
+				+ "         Var (name=p1_0_1, value=http://rdfs/label)\r\n"
+				+ "         Variable (name=n1_1, value=\"eastman3d\")\r\n"
 				+ "   StatementPattern\r\n"
 				+ "      Variable (name=r1)\r\n"
 				+ "      Var (name=p1_2, value=http://default/lat)\r\n"
@@ -347,17 +362,21 @@ class PathPatternQueryExpressionTests {
 	@Test
 	@Order(7)
 	void test_7() {
-		CharStream input = CharStreams.fromString( ":volumeFlow [ gt \"35\" ; rdfs:label \"Calc2Graph1\" ; eq [ rdfs:label \"Calc2Graph2\"] , :Calc2Graph3 ,\"Calc2Graph4\" ]");
+		CharStream input = CharStreams.fromString( ":volumeFlow [ eq \"36\" ; gt \"35\" ; rdfs:label \"Calc2Graph1\" ; eq [ rdfs:label \"Calc2Graph2\"] , :Calc2Graph3 ,\"Calc2Graph4\" ]");
 		PathElement element = prepareElement(input);
 		assertEqualsWOSpaces ("Join\r\n"
+				+ "   Filter\r\n"
+				+ "      Compare (>)\r\n"
+				+ "         Variable (name=n1, value=\"36\")\r\n"
+				+ "         ValueConstant (value=\"35\")\r\n"
+				+ "      StatementPattern\r\n"
+				+ "         Variable (name=n0)\r\n"
+				+ "         Var (name=p0_1, value=http://default/volumeFlow)\r\n"
+				+ "         Variable (name=n1, value=\"36\")\r\n"
 				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
+				+ "      Variable (name=n1, value=\"36\")\r\n"
 				+ "      Var (name=p1_0_1, value=http://rdfs/label)\r\n"
 				+ "      Variable (name=n1_1, value=\"Calc2Graph1\")\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "      Var (name=p0_1, value=http://default/volumeFlow)\r\n"
-				+ "      Variable (name=n1)\r\n"
 				+ "" ,element.pathPatternQuery(thing,null,null).toString());
 	}
 	
@@ -371,15 +390,7 @@ class PathPatternQueryExpressionTests {
 		PathElement element = prepareElement(input);
 		assertEqualsWOSpaces ("Join\r\n"
 				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "         Var (name=p0_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
-				+ "         Variable (name=n0_1, value=http://default/Location)\r\n"
 				+ "      Join\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Var (name=p1_0_1, value=http://rdfs/label)\r\n"
-				+ "            Variable (name=n1_1, value=\"eastman3d\")\r\n"
 				+ "         Join\r\n"
 				+ "            Join\r\n"
 				+ "               StatementPattern\r\n"
@@ -394,6 +405,14 @@ class PathPatternQueryExpressionTests {
 				+ "               Variable (name=r1)\r\n"
 				+ "               Var (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 				+ "               Variable (name=n1)\r\n"
+				+ "         StatementPattern\r\n"
+				+ "            Variable (name=n1)\r\n"
+				+ "            Var (name=p1_0_1, value=http://rdfs/label)\r\n"
+				+ "            Variable (name=n1_1, value=\"eastman3d\")\r\n"
+				+ "      StatementPattern\r\n"
+				+ "         Variable (name=r1)\r\n"
+				+ "         Var (name=p0_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
+				+ "         Variable (name=n0_1, value=http://default/Location)\r\n"
 				+ "   StatementPattern\r\n"
 				+ "      Variable (name=r1)\r\n"
 				+ "      Var (name=p1_2, value=http://default/lat)\r\n"
@@ -411,10 +430,6 @@ class PathPatternQueryExpressionTests {
 		PathElement element = prepareElement(input);
 		assertEqualsWOSpaces ("Join\r\n"
 				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "         Var (name=p0_0_1, value=http://default/location.Map)\r\n"
-				+ "         Variable (name=n0_1, value=http://id/Calc2Graph2)\r\n"
 				+ "      Join\r\n"
 				+ "         Join\r\n"
 				+ "            StatementPattern\r\n"
@@ -429,6 +444,10 @@ class PathPatternQueryExpressionTests {
 				+ "            Variable (name=r1)\r\n"
 				+ "            Var (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 				+ "            Variable (name=n1)\r\n"
+				+ "      StatementPattern\r\n"
+				+ "         Variable (name=r1)\r\n"
+				+ "         Var (name=p0_0_1, value=http://default/location.Map)\r\n"
+				+ "         Variable (name=n0_1, value=http://id/Calc2Graph2)\r\n"
 				+ "   StatementPattern\r\n"
 				+ "      Variable (name=r1)\r\n"
 				+ "      Var (name=p1_2, value=http://default/long)\r\n"
@@ -1149,13 +1168,13 @@ void test_35() {
 		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit[a  :BatteryLimit]");
 		assertEqualsWOSpaces ("Join\r\n"
 				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Var (name=p1_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
-				+ "      Variable (name=n1_1, value=http://default/BatteryLimit)\r\n"
-				+ "   StatementPattern\r\n"
 				+ "      Variable (name=n0)\r\n"
 				+ "      Var (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "      Variable (name=n1)\r\n"
+				+ "   StatementPattern\r\n"
+				+ "      Variable (name=n1)\r\n"
+				+ "      Var (name=p1_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
+				+ "      Variable (name=n1_1, value=http://default/BatteryLimit)\r\n"
 				+ "" ,element.pathPatternQuery(thing,null,null).toString());
 	}catch(Exception e){
 		fail();

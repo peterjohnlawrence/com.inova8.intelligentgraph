@@ -7,7 +7,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +22,7 @@ import com.seeq.model.FormulaRunOutputV1;
 import com.seeq.model.GetSampleOutputV1;
 
 import Exceptions.HandledException;
+import pathCalc.CustomQueryOptions;
 import pathQLModel.Resource;
 
 /**
@@ -98,7 +98,11 @@ public class SEEQSource {
 		AuthInputV1 input = new AuthInputV1();
 		input.setUsername("peter.lawrence@inova8.com");
 		input.setPassword("lusterthief");
-		authApi.login(input);
+		try {
+			authApi.login(input);
+		}catch(Exception e) {
+			throw e;
+		}
 		signalsApi = new SignalsApi(apiClient);
 		formulasApi = new FormulasApi(apiClient);
 		logger.debug("Connection created at: {}",basePath);
@@ -112,7 +116,7 @@ public class SEEQSource {
 	 * @return the signal
 	 * @throws HandledException the handled exception
 	 */
-	public Object getSignal(String signal, HashMap<String, pathQLModel.Resource> customQueryOptions) throws HandledException {
+	public Object getSignal(String signal, CustomQueryOptions customQueryOptions) throws HandledException {
 		String start = getStart(customQueryOptions);
 		String end = getEnd(customQueryOptions);
 		String aggregate = getAggregate(customQueryOptions);
@@ -166,7 +170,7 @@ public class SEEQSource {
 	 * @param customQueryOptions the custom query options
 	 * @return the start
 	 */
-	private String getStart(HashMap<String, pathQLModel.Resource> customQueryOptions) {
+	private String getStart(CustomQueryOptions customQueryOptions) {
 		if (customQueryOptions!=null && customQueryOptions.containsKey(START)) {
 			Resource startDateTime = customQueryOptions.get(START);
 			return startDateTime.getValue().stringValue();
@@ -181,7 +185,7 @@ public class SEEQSource {
 	 * @param customQueryOptions the custom query options
 	 * @return the end
 	 */
-	private String getEnd(HashMap<String, pathQLModel.Resource> customQueryOptions) {
+	private String getEnd(CustomQueryOptions customQueryOptions) {
 		if (customQueryOptions!=null && customQueryOptions.containsKey(END)) {
 			Resource endDateTime = customQueryOptions.get(END);
 			return endDateTime.getValue().stringValue();
@@ -202,7 +206,7 @@ public class SEEQSource {
 	 * @param customQueryOptions the custom query options
 	 * @return the aggregate
 	 */
-	private String getAggregate(HashMap<String, pathQLModel.Resource> customQueryOptions) {
+	private String getAggregate(CustomQueryOptions customQueryOptions) {
 		if (customQueryOptions!=null && customQueryOptions.containsKey(AGGREGATE)) {
 			return customQueryOptions.get(AGGREGATE).getValue().stringValue();
 		} else {

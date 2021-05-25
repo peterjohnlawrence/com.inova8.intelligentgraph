@@ -5,8 +5,12 @@ package pathPatternElement;
 
 import java.util.ArrayList;
 
+import org.eclipse.rdf4j.query.algebra.And;
+import org.eclipse.rdf4j.query.algebra.Filter;
 import org.eclipse.rdf4j.query.algebra.Join;
+import org.eclipse.rdf4j.query.algebra.QueryModelNode;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
+import org.eclipse.rdf4j.query.algebra.ValueExpr;
 
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
@@ -24,6 +28,8 @@ public class FactFilterElement extends ObjectElement{
 	
 	/**
 	 * Instantiates a new fact filter element.
+	 *
+	 * @param source the source
 	 */
 	public FactFilterElement(PathQLRepository source) {
 		super(source);
@@ -88,6 +94,34 @@ public class FactFilterElement extends ObjectElement{
 		}
 
 		return factFilterPattern;
+	}
+	public TupleExpr filterExpression(Thing thing, Variable sourceVariable, Variable targetVariable,TupleExpr filterExpression) {		
+		//QueryModelNode filterExpression = null;
+		if(propertyListNotEmpty!=null) {
+			for ( VerbObjectList verbObjectList: propertyListNotEmpty) {
+				QueryModelNode verbObjectListExpression = verbObjectList.filterExpression( thing,sourceVariable,targetVariable);		
+				if(filterExpression == null) 
+					filterExpression = (TupleExpr) verbObjectListExpression;
+				else if(verbObjectListExpression == null){
+					//Ignore it for some unknown reason
+				}else {
+					if(filterExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.Compare") )	
+						if(verbObjectListExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.Compare"))
+							filterExpression = (TupleExpr) new And((ValueExpr) filterExpression,(ValueExpr) verbObjectListExpression  );	
+						else
+							filterExpression = new Filter( (TupleExpr) verbObjectListExpression ,(ValueExpr) filterExpression );	
+					else
+						if(verbObjectListExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.StatementPattern"))
+							filterExpression = new Join(  (TupleExpr)filterExpression,(TupleExpr) verbObjectListExpression  );	
+						else if(verbObjectListExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.Join"))
+							filterExpression = new Join(  (TupleExpr)filterExpression,(TupleExpr) verbObjectListExpression  );	
+						else
+							filterExpression = new Filter(  (TupleExpr) filterExpression  ,(ValueExpr)  verbObjectListExpression );
+				}
+			}	
+		}
+
+		return filterExpression;
 	}
 	
 	/**

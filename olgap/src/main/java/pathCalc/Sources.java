@@ -3,8 +3,8 @@
  */
 package pathCalc;
 
-import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public class Sources {
 	private final Logger logger = LogManager.getLogger(Sources.class);
 	
 	/** The sources. */
-	static protected   HashMap<Integer, PathQLRepository > sources = new HashMap<Integer, PathQLRepository>();
+	static protected   ConcurrentHashMap<Integer, PathQLRepository > sources = new ConcurrentHashMap<Integer, PathQLRepository>();
 	
 	/**
 	 * Contains key.
@@ -75,7 +75,7 @@ public class Sources {
 		  }		
 			PathQLRepository source;
 			if(!sources.containsKey(cacheHash) ){
-				source = new PathQLRepository(tripleSource);
+				source = PathQLRepository.create(tripleSource);
 				sources.put(cacheHash,  source);
 				logger.error(new ParameterizedMessage("Failed to locate hash <{}>, new source created  <{}>",locateCachHashArgument( args),cacheHash));
 			}else {

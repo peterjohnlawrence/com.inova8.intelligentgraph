@@ -6,6 +6,7 @@ package pathPatternProcessor;
 import java.util.HashMap;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
 /**
  * The Class PathConstants.
@@ -127,7 +128,17 @@ VERBOBJECTLIST,
 		getFilterLookup().put(FilterOperator.QUERY, "query");
 		getFilterLookup().put(FilterOperator.PROPERTY, "property");
 	}
-	 
+	public static HashMap<FilterOperator, CompareOp> compareOperators;
+	static {
+		compareOperators = new HashMap<FilterOperator, CompareOp>();
+		compareOperators.put(FilterOperator.LT, CompareOp.LT);
+		compareOperators.put(FilterOperator.GT, CompareOp.GT);
+		compareOperators.put(FilterOperator.LE, CompareOp.LE);
+		compareOperators.put(FilterOperator.GE, CompareOp.GE);
+		compareOperators.put(FilterOperator.EQ, CompareOp.EQ);
+		compareOperators.put(FilterOperator.NE, CompareOp.NE);
+	}
+	  
  	/**
  	 * Gets the filter lookup.
  	 *

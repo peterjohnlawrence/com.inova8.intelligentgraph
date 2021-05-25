@@ -1,9 +1,10 @@
+/*
+ * inova8 2020
+ */
 package intelligentGraph;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Namespace;
@@ -21,15 +22,30 @@ import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.algebra.helpers.VarNameCollector;
 import org.eclipse.rdf4j.sail.NotifyingSailConnection;
 import org.eclipse.rdf4j.sail.SailException;
+import org.eclipse.rdf4j.sail.UpdateContext;
 import org.eclipse.rdf4j.sail.helpers.NotifyingSailConnectionWrapper;
 
-import pathCalc.Evaluator;
+import pathCalc.Prefixes;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
+
+/**
+ * The Class IntelligentGraphConnection.
+ */
 public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
+	/** The intelligent graph sail. */
 	private IntelligentGraphSail intelligentGraphSail;
-	private HashMap<String,IRI> prefixes = new HashMap<String,IRI>();
+	
+	/** The prefixes. */
+	private Prefixes prefixes = new Prefixes();
 
+	/**
+	 * Instantiates a new intelligent graph connection.
+	 *
+	 * @param wrappedCon the wrapped con
+	 * @param intelligentGraphSail the intelligent graph sail
+	 */
 	public IntelligentGraphConnection(NotifyingSailConnection wrappedCon, IntelligentGraphSail intelligentGraphSail) {
 		super(wrappedCon);
 		this.intelligentGraphSail= intelligentGraphSail;
@@ -39,16 +55,96 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
 		}
 	}
-	public HashMap<String, IRI> getPrefixes() {
+	
+	
+	public IntelligentGraphSail getIntelligentGraphSail() {
+		return intelligentGraphSail;
+	}
+
+	/**
+	 * Adds the statement.
+	 *
+	 * @param subject the subject
+	 * @param predicate the predicate
+	 * @param object the object
+	 * @param contexts the contexts
+	 * @throws SailException the sail exception
+	 */
+	@Override
+	public void addStatement(Resource subject, IRI predicate, Value object, Resource... contexts)
+			throws SailException {
+	//	Evaluator.clearCache();
+		super.addStatement(subject, predicate, object, contexts);
+	}
+
+
+	@Override
+	public void removeStatements(Resource subj, IRI pred, Value obj, Resource... contexts) throws SailException {
+	//	Evaluator.clearCache();
+		super.removeStatements(subj, pred, obj, contexts);
+	}
+	
+
+
+	@Override
+	public void addStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
+			throws SailException {
+	//	Evaluator.clearCache();
+		super.addStatement(modify, subj, pred, obj, contexts);
+	}
+
+
+	@Override
+	public void removeStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
+			throws SailException {
+	//	Evaluator.clearCache();
+		super.removeStatement(modify, subj, pred, obj, contexts);
+	}
+
+
+	@Override
+	public void removeNamespace(String prefix) throws SailException {
+	//	Evaluator.clearCache();
+		super.removeNamespace(prefix);
+	}
+
+
+	/**
+	 * Gets the prefixes.
+	 *
+	 * @return the prefixes
+	 */
+	public Prefixes getPrefixes() {
 		return prefixes;
 	}
 
+	/**
+	 * Gets the statements.
+	 *
+	 * @param subj the subj
+	 * @param pred the pred
+	 * @param obj the obj
+	 * @param includeInferred the include inferred
+	 * @param contexts the contexts
+	 * @return the statements
+	 * @throws SailException the sail exception
+	 */
 	@Override
 	public CloseableIteration<? extends Statement, SailException> getStatements(Resource subj, IRI pred, Value obj,
 			boolean includeInferred, Resource... contexts) throws SailException {
 		return new IntelligentGraphStatementsIterator( super.getStatements(subj, pred, obj, includeInferred, contexts),intelligentGraphSail,this,contexts); 
 	}
 
+	/**
+	 * Evaluate.
+	 *
+	 * @param tupleExpr the tuple expr
+	 * @param dataset the dataset
+	 * @param bindings the bindings
+	 * @param includeInferred the include inferred
+	 * @return the closeable iteration<? extends binding set, query evaluation exception>
+	 * @throws SailException the sail exception
+	 */
 	@Override
 	public CloseableIteration<? extends BindingSet, QueryEvaluationException> evaluate(TupleExpr tupleExpr,
 			Dataset dataset, BindingSet bindings, boolean includeInferred) throws SailException {
@@ -65,12 +161,15 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		queryContext.setAttribute("queryType", getQueryType() );
 		return new IntelligentGraphEvaluator(super.evaluate(tupleExpr, dataset, bindings, includeInferred) ,queryContext,originalProjectionElemList);
 	}
-	@Override
-	public void addStatement(Resource subject, IRI predicate, Value object, Resource... contexts)
-			throws SailException {
-		Evaluator.clearCache();
-		super.addStatement(subject, predicate, object, contexts);
-	}
+	
+
+	
+	/**
+	 * Gets the original projection elem list.
+	 *
+	 * @param tupleExpr the tuple expr
+	 * @return the original projection elem list
+	 */
 	private ProjectionElemList getOriginalProjectionElemList(TupleExpr tupleExpr){
 		Set<String> varnames = VarNameCollector.process(tupleExpr);
 		ProjectionElemList projElemList = new ProjectionElemList();
@@ -92,6 +191,12 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			return null;
 
 	}
+	
+	/**
+	 * Gets the query type.
+	 *
+	 * @return the query type
+	 */
 	QueryType getQueryType() {
 		@SuppressWarnings("rawtypes")
 		Class[] callingClasses = CallingClass.INSTANCE.getCallingClasses();	

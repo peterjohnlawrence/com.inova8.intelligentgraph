@@ -18,6 +18,8 @@ public class IriRefValueElement extends ObjectElement {
 	
 	/**
 	 * Instantiates a new iri ref value element.
+	 *
+	 * @param source the source
 	 */
 	public IriRefValueElement(PathQLRepository source) {
 		super(source);

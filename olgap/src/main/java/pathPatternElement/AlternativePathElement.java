@@ -21,6 +21,8 @@ public class AlternativePathElement extends PathElement{
 
 	/**
 	 * Instantiates a new alternative path element.
+	 *
+	 * @param source the source
 	 */
 	public AlternativePathElement(PathQLRepository source) {
 		super(source);

@@ -6,11 +6,12 @@ package pathPatternProcessor;
 import static org.eclipse.rdf4j.model.util.Values.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.IRI;
 
+import Exceptions.ScriptFailedException;
 import PathPattern.PathPatternBaseVisitor;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.BindingContext;
@@ -60,6 +61,8 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 	
 	/** The thing. */
 	Thing thing;
+	
+	/** The source. */
 	private PathQLRepository source;
 
 	/**
@@ -73,12 +76,19 @@ public PathPatternVisitor(Thing thing) {
 		this.source = thing.getSource();
 	}
 	
+	/**
+	 * Gets the source.
+	 *
+	 * @return the source
+	 */
 	public PathQLRepository getSource() {
 		return source;
 	}
 
 	/**
 	 * Instantiates a new path pattern visitor.
+	 *
+	 * @param source the source
 	 */
 	public PathPatternVisitor(PathQLRepository source) {
 		super();
@@ -90,7 +100,7 @@ public PathPatternVisitor(Thing thing) {
 	 *
 	 * @return the prefixes
 	 */
-	private HashMap<String, IRI> getPrefixes() {
+	private ConcurrentHashMap<String, IRI> getPrefixes() {
 		if (thing!=null) 
 			return thing.getPrefixes();
 		else
@@ -523,8 +533,9 @@ public PathPatternVisitor(Thing thing) {
 			qnameElement.setIri(qname);
 			return qnameElement;
 		}else {
-			thing.addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
-			return null;
+			if (thing!=null) thing.addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
+			throw new ScriptFailedException("QNAME",  new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
+			//return null;
 		}
 	}
 
@@ -538,13 +549,16 @@ public PathPatternVisitor(Thing thing) {
 	public IriRefValueElement visitPname_ns(Pname_nsContext ctx) {
 		// pname_ns : PNAME_NS ;   
 		IriRefValueElement pname_nsElement = new IriRefValueElement(getSource());
-		IRI qname = getSource().convertQName(ctx.getText(),thing.getPrefixes());
+		ConcurrentHashMap<String, IRI> prefixes=null;
+		if(thing!=null) prefixes=thing.getPrefixes();
+		IRI qname = getSource().convertQName(ctx.getText(),prefixes);
 		if (qname!=null) {
 			pname_nsElement.setIri(qname);
 			return pname_nsElement;
 		}else {
-			thing.addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
-			return null;
+			if (thing!=null) thing.addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
+			throw new ScriptFailedException("QNAME",  new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
+			//return null;
 		}
 	}
 

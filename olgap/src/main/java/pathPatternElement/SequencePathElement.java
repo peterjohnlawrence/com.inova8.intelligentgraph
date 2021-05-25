@@ -21,6 +21,8 @@ public class SequencePathElement extends PathElement {
 
 	/**
 	 * Instantiates a new sequence path element.
+	 *
+	 * @param source the source
 	 */
 	public SequencePathElement(PathQLRepository source) {
 		super(source);

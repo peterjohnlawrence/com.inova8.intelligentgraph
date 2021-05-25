@@ -122,7 +122,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/testProperty4"), 
+					iri("http://inova8.com/calc2graph/def/test2"), 
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":massFlow\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("24.779999", result.stringValue());
@@ -132,6 +132,10 @@ class Local_OlgapFunction_Tests {
 		}
 		
 	}
+	
+	/**
+	 * Test stack.
+	 */
 	@Test
 	@Order(3)
 	void test_stack() {
@@ -141,7 +145,9 @@ class Local_OlgapFunction_Tests {
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
 					iri("http://inova8.com/calc2graph/def/testProperty3"));
 			assertEquals("javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.CircularReferenceException: Circular reference encountered when evaluating <http://inova8.com/calc2graph/def/testProperty3> of <http://inova8.com/calc2graph/id/BatteryLimit1>.\r\n"
-					+ "[<http://inova8.com/calc2graph/def/testProperty3>, <http://inova8.com/calc2graph/def/testProperty2>]", result.stringValue());
+					+ "[<http://inova8.com/calc2graph/def/testProperty3> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions=\r\n"
+					+ ", <http://inova8.com/calc2graph/def/testProperty2> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions=\r\n"
+					+ "]", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -159,10 +165,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Unit1"),
-					iri("http://inova8.com/calc2graph/def/test"),
+					iri("http://inova8.com/calc2graph/def/test4"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":massThroughput\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("23.44", result.stringValue());
+			assertEquals("38.0", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -180,7 +186,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/density"),
+					iri("http://inova8.com/calc2graph/def/test4_3"),
 					literal("$this.prefix(\"def\",\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\"def:Attribute@def:density\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
 			if(result!=null) 
@@ -204,12 +210,16 @@ class Local_OlgapFunction_Tests {
 			org.eclipse.rdf4j.model.Value result = factValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit2"),
 					iri("http://inova8.com/calc2graph/def/massFlow"));
-			assertEquals("12.239999771118164", result.stringValue());
+			assertEquals("27.999999523162842", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		} 
 	}
+	
+	/**
+	 * Test 4 4.
+	 */
 	@Test
 	@Order(5)
 	void test_4_4() {
@@ -219,7 +229,7 @@ class Local_OlgapFunction_Tests {
 			org.eclipse.rdf4j.model.Value result = factValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit3"),
 					iri("http://inova8.com/calc2graph/def/massFlow"));
-			assertEquals("11.200000047683716", result.stringValue());
+			assertEquals("10.0", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -237,7 +247,7 @@ class Local_OlgapFunction_Tests {
 			org.eclipse.rdf4j.model.Value result = factValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Unit1"),
 					iri("http://inova8.com/calc2graph/def/massThroughput"));
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -256,10 +266,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit2"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test5"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\"^:hasProductBatteryLimit\").getFact(\":massThroughput\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("23.44", result.stringValue());
+			assertEquals("38.0", result.stringValue());
 			}catch(Exception e){
 				fail();
 				e.printStackTrace();
@@ -278,10 +288,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit2"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test6"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":massFlow\").floatValue()/ $this.getFact(\"^:hasProductBatteryLimit\").getFact(\":massThroughput\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("0.5221842786792522", result.stringValue());
+			assertEquals("0.7368421052631579", result.stringValue());
 			}catch(Exception e){
 				fail();
 				e.printStackTrace();
@@ -299,10 +309,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit2"),
-					iri("http://inova8.com/calc2graph/def/massThroughput"),
+					iri("http://inova8.com/calc2graph/def/test7"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result=  $this.getFact(\"^:hasProductBatteryLimit/:massThroughput\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
-			 assertEquals("23.44",result.stringValue());
+			 assertEquals("38.0",result.stringValue());
 			}catch(Exception e){
 				fail();
 				e.printStackTrace();
@@ -340,7 +350,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test9"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#/:lat\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("400", result.stringValue());
@@ -362,7 +372,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test10"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("400", result.stringValue());
@@ -384,7 +394,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test11"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph2]#\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			if(result!=null) 
@@ -427,7 +437,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Calc2Graph1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test15"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\"^:Location@:appearsOn[eq id:BatteryLimit2]#\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL2", result.stringValue());
@@ -449,7 +459,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Calc2Graph1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test16"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\"^:Location@:appearsOn[eq id:BatteryLimit2]\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("http://inova8.com/calc2graph/id/BatteryLimit2", result.stringValue());
@@ -471,7 +481,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Calc2Graph1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test17"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\"^:Location@:appearsOn[eq id:BatteryLimit1]#/:lat\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("400", result.stringValue());
@@ -492,10 +502,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test18"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#\"); result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
+			assertEquals("http://inova8.com/calc2graph/id/Location_BL1", result.stringValue());
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -513,7 +523,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test19"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#/:lat\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("400", result.stringValue());
@@ -534,7 +544,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test20"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn#[:location.Map  id:Calc2Graph1 ]/:long\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("501", result.stringValue());
@@ -555,7 +565,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test20_1"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("502", result.stringValue());
@@ -576,7 +586,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test21"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
@@ -597,10 +607,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Unit2"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test22"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":massThroughput\"); result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -618,10 +628,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Unit2"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test23"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":massThroughput\"); result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("23.43999981880188", result.stringValue());
+			assertEquals("37.99999952316284", result.stringValue());
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -639,7 +649,7 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Unit3"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test24"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":massThroughput\"); result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("24.77999922633171", result.stringValue());
@@ -660,10 +670,10 @@ class Local_OlgapFunction_Tests {
 			ObjectValue objectValue = new ObjectValue();
 			org.eclipse.rdf4j.model.Value result = objectValue.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/Unit3"),
-					iri("http://inova8.com/calc2graph/def/massYield"),
+					iri("http://inova8.com/calc2graph/def/test25"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"rdfs\",\"<http://www.w3.org/2000/01/rdf-schema#>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");var result= $this.getFact(\":massFlowBalance\"); result;",
 							iri("http://inova8.com/script/groovy")));
-			assertEquals("1.339999407529831", result.stringValue());
+			assertEquals("-13.220000296831131", result.stringValue());
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -680,7 +690,7 @@ class Local_OlgapFunction_Tests {
 			ClearCache clearCache = new ClearCache();
 			org.eclipse.rdf4j.model.Value result = clearCache.evaluate(repositoryTripleSource,
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/testProperty4"),
+					iri("http://inova8.com/calc2graph/def/test100"),
 					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
 							iri("http://inova8.com/script/groovy")));
 			assertEquals("true", result.stringValue());

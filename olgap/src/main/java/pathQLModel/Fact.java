@@ -19,7 +19,7 @@ import pathQLResults.ResourceResults;
 public class Fact extends Resource {
 	
 	/** The predicate. */
-	Resource predicate;
+	Resource predicate =null;
 	
 	/** The subject. */
 	Resource subject;
@@ -49,8 +49,10 @@ public class Fact extends Resource {
 	 */
 	public Fact(Value subject, Value predicate, Value value) {
 		super(value);
-		this.predicate =Thing.create(getSource(), predicate, getEvaluationContext() );
-		this.subject = Thing.create(getSource(), subject, getEvaluationContext());
+		if(predicate!=null)
+			this.predicate =Thing.create(getSource(), predicate, getEvaluationContext() );	
+		if(subject!=null)
+			this.subject = Thing.create(getSource(), subject, getEvaluationContext());
 	}
 	
 	/**

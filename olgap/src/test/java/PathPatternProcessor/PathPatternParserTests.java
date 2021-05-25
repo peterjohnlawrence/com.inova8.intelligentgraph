@@ -46,7 +46,7 @@ class PathPatternParserTests {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		source = new PathQLRepository();
-		thing = new Thing(source, null);
+		thing = source.getThing( "http://",null);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/");
 
 	}

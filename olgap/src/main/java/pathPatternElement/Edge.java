@@ -64,6 +64,7 @@ public class Edge {
 	 * @param predicateVariable the predicate variable
 	 * @param targetVariable the target variable
 	 * @param isInverseOf the is inverse of
+	 * @param isDereified the is dereified
 	 */
 	public Edge(Variable sourceVariable, IRI reification, Variable predicateVariable, Variable targetVariable, Boolean isInverseOf, Boolean isDereified) {
 		this.sourceVariable = sourceVariable;
@@ -77,31 +78,68 @@ public class Edge {
 		this.isDereified=isDereified;
 	}
 	
+	/**
+	 * Gets the source variable.
+	 *
+	 * @return the source variable
+	 */
 	public Variable getSourceVariable() {
 		return sourceVariable;
 	}
 
+	/**
+	 * Gets the predicate variable.
+	 *
+	 * @return the predicate variable
+	 */
 	public Variable getPredicateVariable() {
 		return predicateVariable;
 	}
 
+	/**
+	 * Gets the reification.
+	 *
+	 * @return the reification
+	 */
 	public IRI getReification() {
 		return reification;
 	}
 
+	/**
+	 * Gets the target variable.
+	 *
+	 * @return the target variable
+	 */
 	public Variable getTargetVariable() {
 		return targetVariable;
 	}
 
+	/**
+	 * Gets the direction.
+	 *
+	 * @return the direction
+	 */
 	public Direction getDirection() {
 		return direction;
 	}
+	
+	/**
+	 * Checks if is inverse.
+	 *
+	 * @return the boolean
+	 */
 	public Boolean isInverse() {
 		if (direction == Direction.INVERSE)
 			return true;
 		else
 			return false;
 	}
+	
+	/**
+	 * Gets the checks if is dereified.
+	 *
+	 * @return the checks if is dereified
+	 */
 	public Boolean getIsDereified() {
 		return isDereified;
 	}

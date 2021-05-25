@@ -5,8 +5,11 @@ package pathPatternElement;
 
 import java.util.ArrayList;
 
+import org.eclipse.rdf4j.query.algebra.Compare;
+import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
+import org.eclipse.rdf4j.query.algebra.QueryModelNode;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
-
+import org.eclipse.rdf4j.query.algebra.ValueConstant;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -20,6 +23,8 @@ public class VerbObjectList extends FactFilterElement {
 	
 	/**
 	 * Instantiates a new verb object list.
+	 *
+	 * @param source the source
 	 */
 	public VerbObjectList(PathQLRepository source) {
 		super(source);
@@ -300,13 +305,15 @@ public class VerbObjectList extends FactFilterElement {
 					//verbObjectList += ((FactFilterElement)objectList.get(0)).pathPatternQuery(thing);//( sourceValue);
 					break;
 				case IRIREF:
+					sourceVariable.setValue(objectList.get(0).getIri());
 					break;
 				case LITERAL:
+					sourceVariable.setValue(objectList.get(0).getLiteral());
 					break;
 				default:
 				}
 			} else {
-				//verbObjectList += "FILTER("+sourceVariable +  " " + PathConstants.getFilterLookup(filterOperator) + " " + objectList.get(0).toSPARQL()+")\n";		
+
 			}
 
 		} else if (predicate != null) {
@@ -338,7 +345,65 @@ public class VerbObjectList extends FactFilterElement {
 		return verbObjectListPattern;
 
 	};
+	public QueryModelNode filterExpression(Thing thing, Variable sourceVariable, Variable targetVariable) {
+		QueryModelNode verbObjectListExpression = null;
+		if (filterOperator != null) {
+			if (filterOperator.equals(FilterOperator.EQ)) {
+				switch (objectList.get(0).getOperator()) {
+				case PROPERTYLIST:
+					//verbObjectList += ((FactFilterElement)objectList.get(0)).pathPatternQuery(thing);//( sourceValue);
+					break;
+				case IRIREF:
+					sourceVariable.setValue(objectList.get(0).getIri());
+					break;
+				case LITERAL:
+					sourceVariable.setValue(objectList.get(0).getLiteral());
+					break;
+				default:
+				}
+			} else {
+			//	verbObjectListPattern;
+				CompareOp compareOperator = PathConstants.compareOperators.get(filterOperator);
+				if(compareOperator!=null){
+					Compare filterExpression = new Compare(sourceVariable, new ValueConstant(objectList.get(0).getLiteral()), compareOperator);
+					return filterExpression;
+				}
 
+			}
+
+		} else if (predicate != null) {
+			if (objectList != null) {
+
+				if (objectList.size() == 1) {
+					Variable boundTargetVariable;
+					switch (objectList.get(0).getOperator()) {
+					case PROPERTYLIST:
+						//objectList.get(0);
+						predicate.setObjectFilterElement((FactFilterElement) objectList.get(0));
+						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable.setValue(objectList.get(0).getIri());
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable);
+						break;
+					case IRIREF:
+						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable.setValue(objectList.get(0).getIri());
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable);
+						break;
+					case LITERAL:
+						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable.setValue(objectList.get(0).getLiteral());
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable);
+						break;
+					default:
+					}
+				} else {
+
+				}
+			}
+		}
+		return verbObjectListExpression;
+
+	};
 	/**
 	 * Bound pattern query.
 	 *

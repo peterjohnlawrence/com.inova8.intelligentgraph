@@ -3,10 +3,10 @@
  */
 package pathQLResults;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.lang.Iterable;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iterator.CloseableIterationIterator;
@@ -231,7 +231,7 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 *
 	 * @return the custom query options
 	 */
-	protected HashMap<String, Resource> getCustomQueryOptions() {
+	protected ConcurrentHashMap<String, Resource> getCustomQueryOptions() {
 		if(thing!=null)
 			return thing.getCustomQueryOptions();
 		else 
@@ -302,13 +302,25 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 */
 	public abstract Resource nextResource();
 	
+	/**
+	 * Count.
+	 *
+	 * @return the integer
+	 */
 	public Integer count() {
 		Integer count = 0;
 		while( hasNext()) {
+			next();
 			count++;
 		}
 		return count; 
 	}
+	
+	/**
+	 * Average.
+	 *
+	 * @return the double
+	 */
 	public Double average() {
 		Integer count = 0;
 		Double total = 0.0;
@@ -318,6 +330,12 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		}
 		return total/count; 
 	}
+	
+	/**
+	 * Total.
+	 *
+	 * @return the double
+	 */
 	public Double total() {
 		Double total = 0.0;
 		while( hasNext()) {

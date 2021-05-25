@@ -29,9 +29,7 @@ id:Attribute_2
   <http://inova8.com/calc2graph/def/attribute.Property> def:density ;
   <http://inova8.com/calc2graph/def/attribute.of.Item> id:BatteryLimit2 ;
   <http://inova8.com/calc2graph/def/attribute.producedBy.Signal> id:Signal_2 ;
-  <http://inova8.com/calc2graph/def/attribute.value> """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-var result= $this.getFact(\":density\").floatValue();  
-result;"""^^script:groovy ;
+  <http://inova8.com/calc2graph/def/attribute.value> ".7" ;
   rdfs:label "Attribute 2" ;
 .
 id:Attribute_3
@@ -39,7 +37,7 @@ id:Attribute_3
   <http://inova8.com/calc2graph/def/attribute.Property> def:density ;
   <http://inova8.com/calc2graph/def/attribute.of.Item> id:BatteryLimit3 ;
   <http://inova8.com/calc2graph/def/attribute.producedBy.Signal> id:Signal_3 ;
-  <http://inova8.com/calc2graph/def/attribute.value> "<http://inova8.com/calc2graph/id/deduceDensity>"^^script:groovy ;
+  <http://inova8.com/calc2graph/def/attribute.value> ".5" ;
   rdfs:label "Attribute 3" ;
 .
 id:BL1-feedTo-Unit3
@@ -543,10 +541,4 @@ id:deduceDensity
 var result= $this.getFact(\":density\").floatValue();  
 result;"""^^script:groovy ;
   rdfs:label "deduce density" ;
-.
-id:id_BatteryLimit1-massFlow-
-  a rdf:Statement ;
-  rdf:object "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
-  rdf:predicate def:massFlow ;
-  rdf:subject id:BatteryLimit1 ;
 .

@@ -102,7 +102,7 @@ class Local_Evaluate_Tests {
 			while (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
-						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.314387798309326]",
+						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.309943199157715]",
 						nextMatch.toString());
 				break;
 			}
@@ -208,7 +208,7 @@ class Local_Evaluate_Tests {
 		conn = workingRep.getConnection();
 		conn.add(modelModel.getStatements(null, null, null));
 		repositoryTripleSource = new RepositoryTripleSource(conn);
-		source = new PathQLRepository(workingRep);
+		source = PathQLRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 		evaluator = new Evaluator();

@@ -9,6 +9,8 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
@@ -37,11 +39,16 @@ import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.evaluation.SailTripleSource;
 
+import Exceptions.ServerException;
 import intelligentGraph.IntelligentGraphConnection;
+import intelligentGraph.IntelligentGraphSail;
 
 import org.eclipse.rdf4j.model.Resource;
 
+import pathCalc.CustomQueryOptions;
+import pathCalc.EvaluationContext;
 import pathCalc.Evaluator;
+import pathCalc.Prefixes;
 import pathCalc.Thing;
 import pathQL.PathParser;
 
@@ -51,102 +58,207 @@ import pathQL.PathParser;
 public class PathQLRepository {
 
 	/** The Constant logger. */
-	 private final Logger logger = LogManager.getLogger(PathQLRepository.class);
-	
+	private final Logger logger = LogManager.getLogger(PathQLRepository.class);
+	private static final String FAILEDTOADDGRAPH_EXCEPTION = "Failed To Add Graph";
+	private static final String FAILEDTOOPENGRAPH_EXCEPTION = "Failed To Open Graph";
+	private static final String FAILEDTOREMOVEGRAPH_EXCEPTION = "Failed To Remove Graph";
+	private static final String FAILEDTOCLOSEGRAPH_EXCEPTION = "Failed To Close Graph";
 	/** The cache rep. */
-	 private org.eclipse.rdf4j.repository.Repository cacheRep;
-	
+	private org.eclipse.rdf4j.repository.Repository cacheRep;
+
 	/** The cache service. */
-	 private String cacheService;
-	
+	private String cacheService;
+
 	/** The repository. */
-	private  org.eclipse.rdf4j.repository.Repository repository;
-	
+	private org.eclipse.rdf4j.repository.Repository repository;
+
 	/** The cache connection. */
-	 private RepositoryConnection cacheConnection;
-	
+	private RepositoryConnection cacheConnection;
+	private ContextAwareConnection contextAwareConnection ;
 	/** The triple source. */
-	 private TripleSource tripleSource; //Not unique per call using the same underlying triplestore
-	
+	private TripleSource tripleSource; //Not unique per call using the same underlying triplestore
+
 	/** The model builder. */
-	 private ModelBuilder modelBuilder;
-	
+	private ModelBuilder modelBuilder;
+
 	/** The things. */
-	 private HashMap<String, Thing> things = new HashMap<String, Thing>();
-	
+	private static  ConcurrentHashMap<String, Thing> things = new ConcurrentHashMap<String, Thing>();
+
 	/** The facts. */
-//	 private HashMap<String, HashMap<String, pathQLModel.Resource>> facts = new HashMap<String, HashMap<String, pathQLModel.Resource>>();
-	
+	//	 private HashMap<String, HashMap<String, pathQLModel.Resource>> facts = new HashMap<String, HashMap<String, pathQLModel.Resource>>();
+
 	/** The compiled scripts. */
-	 private HashMap<String, CompiledScript> compiledScripts = new HashMap<String, CompiledScript>();
-	
+	private static ConcurrentHashMap<String, CompiledScript> compiledScripts = new ConcurrentHashMap<String, CompiledScript>();
+
 	/** The seeq sources. */
-	 private HashMap<String, SEEQSource> seeqSources = new HashMap<String, SEEQSource>();
-	
+	private static ConcurrentHashMap<String, SEEQSource> seeqSources = new ConcurrentHashMap<String, SEEQSource>();
+
 	/** The is lazy loaded. */
-	 private Boolean isLazyLoaded = false;
-	
+	private Boolean isLazyLoaded = false;
+
+	/**
+	 * Sets the checks if is lazy loaded.
+	 *
+	 * @param isLazyLoaded
+	 *            the new checks if is lazy loaded
+	 */
 	public void setIsLazyLoaded(Boolean isLazyLoaded) {
 		this.isLazyLoaded = isLazyLoaded;
 	}
+
 	/** The reification types. */
-	 private HashMap<String, ReificationType> reificationTypes = new HashMap<String, ReificationType>();
-	
+	private ConcurrentHashMap<String, ReificationType> reificationTypes = new ConcurrentHashMap<String, ReificationType>();
+
 	/** The predicate reification types. */
-	 private HashMap<String, ReificationType> predicateReificationTypes = new HashMap<String, ReificationType>();
-	
+	private ConcurrentHashMap<String, ReificationType> predicateReificationTypes = new ConcurrentHashMap<String, ReificationType>();
+
 	/** The prefixes. */
-	private HashMap<String, IRI> prefixes = new HashMap<String, IRI>();
+	private Prefixes prefixes = new Prefixes();
 
-	private  HashSet<IRI>  publicContexts= new HashSet<IRI>();
+	private HashSet<IRI> publicContexts = new HashSet<IRI>();
+	private HashSet<IRI> privateContexts = new HashSet<IRI>();
+	
+	private ConcurrentHashMap<IRI, Graph> graphs = new ConcurrentHashMap<IRI,Graph>();
 
-	private  HashSet<IRI>  privateContexts= new HashSet<IRI>();
+	
+	 IntelligentGraphSail sail ;
+	private IntelligentGraphConnection intelligentGraphConnection;
+	private static HashMap<Integer, PathQLRepository> pathQLRepositories  = new HashMap<Integer, PathQLRepository>();
+	
+//	public static PathQLRepository create(Repository workingRep) {
+//		return create( (IntelligentGraphConnection)workingRep.getConnection());
+//	}
+	public static PathQLRepository create(org.eclipse.rdf4j.repository.Repository repository, Resource... contexts) {
+		Integer key = repository.hashCode();
+		if(pathQLRepositories.containsKey(key)) {
+			return pathQLRepositories.get(key);
+		}else {
+			PathQLRepository pathQLRepository = new PathQLRepository( repository, contexts);
+			pathQLRepositories.put(key , pathQLRepository);
+			return pathQLRepository;
+		}	
+	}
+	public static PathQLRepository create(String serverURL, String repositoryId, Resource... contexts) {
+		Integer key = (serverURL + repositoryId).hashCode();
+		if(pathQLRepositories.containsKey(key)) {
+			return pathQLRepositories.get(key);
+		}else {
+			PathQLRepository pathQLRepository = new PathQLRepository( serverURL,  repositoryId, contexts);
+			pathQLRepositories.put(key , pathQLRepository);
+			return pathQLRepository;
+		}	
+	}
+
+	public static PathQLRepository create(IntelligentGraphConnection intelligentGraphConnection) {
+		IntelligentGraphSail sail = intelligentGraphConnection.getIntelligentGraphSail();
+		Integer key =sail.hashCode();
+		if(pathQLRepositories.containsKey(key)) {
+			return pathQLRepositories.get(key);
+		}else {
+			PathQLRepository pathQLRepository = new PathQLRepository( intelligentGraphConnection);
+			pathQLRepositories.put(key , pathQLRepository);
+			return pathQLRepository;
+		}
+	}
+	public static PathQLRepository create(TripleSource tripleSource) {
+		Integer key =tripleSource.hashCode();
+		if(pathQLRepositories.containsKey(key)) {
+			return pathQLRepositories.get(key);
+		}else {
+			PathQLRepository pathQLRepository = new PathQLRepository( tripleSource);
+			pathQLRepositories.put(key , pathQLRepository);
+			return pathQLRepository;
+		}
+	}
+	/**
+	 * Instantiates a new path QL repository.
+	 */
 	public PathQLRepository() {
 		this.modelBuilder = new ModelBuilder();
 	}
-	/**
-	 * Instantiates a new path QL repository.
-	 *
-	 * @param tripleSource the triple source
-	 */
-	public PathQLRepository(TripleSource tripleSource) {
+
+//Used via SPARQL Functions
+	private PathQLRepository(TripleSource tripleSource) {
 		this.tripleSource = tripleSource;
 		this.modelBuilder = new ModelBuilder();
 	}
-	public PathQLRepository(IntelligentGraphConnection intelligentGraphConnection) {
-		this.tripleSource = new SailTripleSource(intelligentGraphConnection,true,null);
+
+	/**
+	 * Instantiates a new path QL repository.
+	 *
+	 * @param intelligentGraphConnection
+	 *            the intelligent graph connection
+	 */
+	private PathQLRepository(IntelligentGraphConnection intelligentGraphConnection) {
+		this.intelligentGraphConnection=intelligentGraphConnection;
+		this.tripleSource = new SailTripleSource(intelligentGraphConnection, true, null);
 		this.modelBuilder = new ModelBuilder();
 		initializePrefixes(intelligentGraphConnection);
 	}
-	
 
-	/**
-	 * Instantiates a new path QL repository.
-	 *
-	 * @param repository the repository
-	 */
-	public PathQLRepository(org.eclipse.rdf4j.repository.Repository repository,  Resource... contexts) {
-		this.repository = repository;
-		ContextAwareConnection contextAwareConnection = publicContextAwareConnection();
-		this.tripleSource = new RepositoryTripleSource(contextAwareConnection);
+	private PathQLRepository(org.eclipse.rdf4j.repository.Repository repository, Resource... contexts) {
+		this.repository = repository; 
+		//((IntelligentGraphSail)repository).getConnection().getIntelligentGraphSail();
+		this.contextAwareConnection = publicContextAwareConnection();
+		this.tripleSource = new RepositoryTripleSource(this.contextAwareConnection);
 		this.modelBuilder = new ModelBuilder();
 		initializePrefixes(contextAwareConnection);
 	}
 
-	/**
-	 * Instantiates a new path QL repository.
-	 *
-	 * @param repository the repository
-	 */
-	public PathQLRepository(String serverURL, String repositoryId ,  Resource... contexts) {
-		this.repository =  new HTTPRepository(serverURL, repositoryId);
-		ContextAwareConnection contextAwareConnection = publicContextAwareConnection();
-		this.tripleSource = new RepositoryTripleSource(contextAwareConnection);
+	private PathQLRepository(String serverURL, String repositoryId, Resource... contexts) {
+		this.repository = new HTTPRepository(serverURL, repositoryId);
+		this.contextAwareConnection = publicContextAwareConnection();
+		this.tripleSource = new RepositoryTripleSource(this.contextAwareConnection);
 		this.modelBuilder = new ModelBuilder();
 		initializePrefixes(contextAwareConnection);
 
 	}
-	public HashMap<String, Thing> getThings() {
+
+	/**
+	 * Gets the triple source.
+	 *
+	 * @return the triple source
+	 */
+	public TripleSource getTripleSource() {
+		//PathQLRepository runs in two modes: when a triplesource is explicitly provided (as when invoked from SPARQL function) or when a repository is provided
+		if (repository != null) {
+			return new RepositoryTripleSource(getContextAwareConnection());
+		} else if (sail != null) {
+			return new SailTripleSource(sail.getConnection(), true, null);
+		} else if (tripleSource != null) {
+			if(this.intelligentGraphConnection!=null ) {
+				if(this.intelligentGraphConnection.isOpen()) {
+					return tripleSource;
+				}else {
+					tripleSource = new SailTripleSource(this.intelligentGraphConnection.getIntelligentGraphSail().getConnection(), true, null);
+					return tripleSource;
+				}
+			}else if(this.contextAwareConnection!=null) {
+				if(this.contextAwareConnection.isOpen()) {
+					return tripleSource;
+				}else {
+					tripleSource = new RepositoryTripleSource(this.contextAwareConnection.getRepository().getConnection());
+					return tripleSource;
+				}
+			}
+			else {
+				return tripleSource;
+			}
+		} else {
+			return null;
+		}
+	}
+	static void clearCaches() {
+		for( PathQLRepository pathRepository:pathQLRepositories.values()) {
+			pathRepository.clearCache(null);
+		}
+	}
+	/**
+	 * Gets the things.
+	 *
+	 * @return the things
+	 */
+	public ConcurrentHashMap<String, Thing> getThings() {
 		return things;
 	}
 
@@ -155,7 +267,7 @@ public class PathQLRepository {
 	 *
 	 * @return the reification types
 	 */
-	 HashMap<String, ReificationType> getReificationTypes() {
+	public ConcurrentHashMap<String, ReificationType> getReificationTypes() {
 		if (!isLazyLoaded && this.getTripleSource() != null)
 			initializeReificationTypes();
 		return reificationTypes;
@@ -166,7 +278,7 @@ public class PathQLRepository {
 	 *
 	 * @return the predicate reification types
 	 */
-	 HashMap<String, ReificationType> getPredicateReificationTypes() {
+	ConcurrentHashMap<String, ReificationType> getPredicateReificationTypes() {
 		if (!isLazyLoaded && this.getTripleSource() != null)
 			initializeReificationTypes();
 		return predicateReificationTypes;
@@ -175,17 +287,24 @@ public class PathQLRepository {
 	/**
 	 * Adds the reification type.
 	 *
-	 * @param reificationType the reification type
-	 * @param reificationSubject the reification subject
-	 * @param reificationPredicate the reification predicate
-	 * @param reificationObject the reification object
-	 * @param reificationIsSubjectOf the reification is subject of
-	 * @param reificationIsPredicateOf the reification is predicate of
-	 * @param reificationIsObjectOf the reification is object of
+	 * @param reificationType
+	 *            the reification type
+	 * @param reificationSubject
+	 *            the reification subject
+	 * @param reificationPredicate
+	 *            the reification predicate
+	 * @param reificationObject
+	 *            the reification object
+	 * @param reificationIsSubjectOf
+	 *            the reification is subject of
+	 * @param reificationIsPredicateOf
+	 *            the reification is predicate of
+	 * @param reificationIsObjectOf
+	 *            the reification is object of
 	 */
-	public  void addReificationType(Resource reificationType, Resource reificationSubject,
-			Resource reificationPredicate, Resource reificationObject, Resource reificationIsSubjectOf,
-			Resource reificationIsPredicateOf, Resource reificationIsObjectOf) {
+	public void addReificationType(Resource reificationType, Resource reificationSubject, Resource reificationPredicate,
+			Resource reificationObject, Resource reificationIsSubjectOf, Resource reificationIsPredicateOf,
+			Resource reificationIsObjectOf) {
 		ReificationType newReificationType = new ReificationType(reificationType, reificationSubject,
 				reificationPredicate, reificationObject, reificationIsSubjectOf, reificationIsPredicateOf,
 				reificationIsObjectOf);
@@ -197,18 +316,18 @@ public class PathQLRepository {
 	/**
 	 * Initialize reification types.
 	 */
-	private  void initializeReificationTypes() {
+	private void initializeReificationTypes() {
 		StringBuilder initializedReifications = new StringBuilder(
 				" reifications initialized: <" + Evaluator.RDF_STATEMENT + "> ");
 		int initializedReification = 1;
-		IRI RDFStatement = iri(Evaluator.RDF_STATEMENT);
+		IRI RDFStatement = Evaluator.RDF_STATEMENT_IRI;
 
-		IRI RDFSsubPropertyOf = iri(Evaluator.RDFS_SUB_PROPERTY_OF);
-		IRI RDFsubject = iri(Evaluator.RDF_SUBJECT);
-		IRI RDFpredicate = iri(Evaluator.RDF_PREDICATE);
-		IRI RDFobject = iri(Evaluator.RDF_OBJECT);
-		IRI RDFSdomain = iri(Evaluator.RDFS_DOMAIN);
-		IRI OWLinverseOf = iri(Evaluator.OWL_INVERSE_OF);
+		IRI RDFSsubPropertyOf = Evaluator.RDFS_SUB_PROPERTY_OF_IRI;
+		IRI RDFsubject = Evaluator.RDF_SUBJECT_IRI;
+		IRI RDFpredicate = Evaluator.RDF_PREDICATE_IRI;
+		IRI RDFobject = Evaluator.RDF_OBJECT_IRI;
+		IRI RDFSdomain = Evaluator.RDFS_DOMAIN_IRI;
+		IRI OWLinverseOf = Evaluator.OWL_INVERSE_OF_IRI;
 
 		reificationTypes.put(Evaluator.RDF_STATEMENT,
 				new ReificationType(RDFStatement, RDFsubject, RDFpredicate, RDFobject));
@@ -287,16 +406,17 @@ public class PathQLRepository {
 	 *
 	 * @return the cache rep
 	 */
-	public  org.eclipse.rdf4j.repository.Repository getCacheRep() {
+	public org.eclipse.rdf4j.repository.Repository getCacheRep() {
 		return this.cacheRep;
 	}
 
 	/**
 	 * Sets the cache rep.
 	 *
-	 * @param cacheRep the new cache rep
+	 * @param cacheRep
+	 *            the new cache rep
 	 */
-	public  void setCacheRep(org.eclipse.rdf4j.repository.Repository cacheRep) {
+	public void setCacheRep(org.eclipse.rdf4j.repository.Repository cacheRep) {
 		this.cacheRep = cacheRep;
 	}
 
@@ -305,56 +425,48 @@ public class PathQLRepository {
 	 *
 	 * @return the cache service
 	 */
-	public  String getCacheService() {
+	public String getCacheService() {
 		return this.cacheService;
 	}
 
 	/**
 	 * Sets the cache service.
 	 *
-	 * @param cacheService the new cache service
+	 * @param cacheService
+	 *            the new cache service
 	 */
-	public  void setCacheService(String cacheService) {
+	public void setCacheService(String cacheService) {
 		this.cacheService = cacheService;
 	}
 
+
 	/**
-	 * Gets the triple source.
+	 * Sets the triple source.
 	 *
-	 * @return the triple source
+	 * @param tripleSource
+	 *            the new triple source
 	 */
-	public  TripleSource getTripleSource() {
-		//PathQLRepository runs in two modes: when a triplesource is explicitly provided (as when invoked from SPARQL function) or when a repository is provided
-		if(repository!=null) {
-			return	new RepositoryTripleSource(getContextAwareConnection());
-		}else if(tripleSource!=null) {
-			return tripleSource;
-		}else {
-			return null;
-		}
-	}
-	public   void setTripleSource(TripleSource tripleSource) {
+	public void setTripleSource(TripleSource tripleSource) {
 		this.tripleSource = tripleSource;
 	}
-
 
 	/**
 	 * Gets the model builder.
 	 *
 	 * @return the model builder
 	 */
-	public  ModelBuilder getModelBuilder() {
+	public ModelBuilder getModelBuilder() {
 		return this.modelBuilder;
 	}
-
 
 	/**
 	 * Gets the custom query options.
 	 *
-	 * @param customQueryOptionsArray the custom query options array
+	 * @param customQueryOptionsArray
+	 *            the custom query options array
 	 * @return the custom query options
 	 */
-	public HashMap<String, pathQLModel.Resource> getCustomQueryOptions(Value[] customQueryOptionsArray) {
+	public CustomQueryOptions getCustomQueryOptions(Value[] customQueryOptionsArray) {
 		if (customQueryOptionsArray.length == 0) {
 			return null;
 		} else if (customQueryOptionsArray.length % 2 != 0) {
@@ -362,13 +474,13 @@ public class PathQLRepository {
 					customQueryOptionsArray.length));
 			return null;
 		} else {
-			HashMap<String, pathQLModel.Resource> customQueryOptions = new HashMap<String, pathQLModel.Resource>();
+			CustomQueryOptions customQueryOptions = new CustomQueryOptions();
 			for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2) {
 				String customQueryOptionParameter = customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue();
 				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
 				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
 					customQueryOptions.put(customQueryOptionParameter,
-							pathQLModel.Resource.create (this,literal( customQueryOptionValue), null));//TODO
+							pathQLModel.Resource.create(this, literal(customQueryOptionValue), null));//TODO
 				if (customQueryOptionParameter.equals("service")) {
 					String service = customQueryOptionValue;
 					if (customQueryOptionValue.indexOf('?') > 0) {
@@ -384,9 +496,11 @@ public class PathQLRepository {
 	/**
 	 * Compiled script factory.
 	 *
-	 * @param scriptString the script string
+	 * @param scriptString
+	 *            the script string
 	 * @return the compiled script
-	 * @throws ScriptException the script exception
+	 * @throws ScriptException
+	 *             the script exception
 	 */
 	public CompiledScript compiledScriptFactory(SimpleLiteral scriptString) throws ScriptException {
 		String scriptCode = scriptString.getLabel();
@@ -398,7 +512,7 @@ public class PathQLRepository {
 				if (scriptEngine != null) {
 					CompiledScript compiledScriptCode;
 					compiledScriptCode = ((Compilable) scriptEngine).compile(scriptCode);
-					compiledScripts.put(scriptCode.toString(), compiledScriptCode);
+					compiledScripts.put(scriptCode, compiledScriptCode);
 					return compiledScriptCode;
 				} else {
 					throw new ScriptException(
@@ -415,9 +529,11 @@ public class PathQLRepository {
 	/**
 	 * Seeq source factory.
 	 *
-	 * @param seeqServer the seeq server
+	 * @param seeqServer
+	 *            the seeq server
 	 * @return the SEEQ source
-	 * @throws ScriptException the script exception
+	 * @throws ScriptException
+	 *             the script exception
 	 */
 	public SEEQSource seeqSourceFactory(String seeqServer) throws ScriptException {
 		if (seeqSources.containsKey(seeqServer)) {
@@ -439,27 +555,33 @@ public class PathQLRepository {
 	/**
 	 * Clear cache.
 	 *
-	 * @param args the args
+	 * @param args
+	 *            the args
 	 */
-	public void clearCache(Value... args) {
-		things.clear();
+	public static void clearCache(Value... args) {
+		for( Thing thing:things.values()) {
+			thing.getCachedResources().clear();
+		}
+//		things.clear();
 		compiledScripts.clear();
 		seeqSources.clear();
-		if (args.length > 0) {
-			//clear the service if provided
-			HashMap<String, pathQLModel.Resource> customQueryOptions = getCustomQueryOptions(args);
-			if (customQueryOptions.containsKey("service"))
-				clearServiceCache(customQueryOptions);
-		}
-		logger.debug(new ParameterizedMessage("Caches cleared {}"));
+//		if (args.length > 0) {
+//			//clear the service if provided
+//			ConcurrentHashMap<String, pathQLModel.Resource> customQueryOptions = getCustomQueryOptions(args);
+//			if (customQueryOptions.containsKey("service"))
+//				clearServiceCache(customQueryOptions);
+//		}
+		//logger.debug(new ParameterizedMessage("Caches cleared {}"));
 	}
 
 	/**
 	 * Clear service cache.
 	 *
-	 * @param customQueryOptions the custom query options
+	 * @param customQueryOptions
+	 *            the custom query options
 	 */
-	private void clearServiceCache(HashMap<String, pathQLModel.Resource> customQueryOptions) {
+
+	private void clearServiceCache(ConcurrentHashMap<String, pathQLModel.Resource> customQueryOptions) {
 		if (connected()) {
 			IRI cacheDateTimePredicate = iri(Evaluator.SCRIPTNAMESPACE, Evaluator.CACHE_DATE_TIME);
 			RepositoryResult<Statement> cacheStatements = cacheConnection.getStatements(null, cacheDateTimePredicate,
@@ -486,10 +608,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the before.
 	 *
-	 * @param customQueryOptions the custom query options
+	 * @param customQueryOptions
+	 *            the custom query options
 	 * @return the before
 	 */
-	private String getBefore(HashMap<String, pathQLModel.Resource> customQueryOptions) {
+	private String getBefore(ConcurrentHashMap<String, pathQLModel.Resource> customQueryOptions) {
 		if (customQueryOptions != null && customQueryOptions.containsKey("before")) {
 			pathQLModel.Resource beforeDateTime = customQueryOptions.get("before");
 			return beforeDateTime.getValue().toString().substring(1, 20);
@@ -497,12 +620,11 @@ public class PathQLRepository {
 		return null;
 	}
 
-
-
 	/**
 	 * Adds the service.
 	 *
-	 * @param service the service
+	 * @param service
+	 *            the service
 	 * @return the string
 	 */
 	private String addService(String service) {
@@ -533,8 +655,10 @@ public class PathQLRepository {
 	/**
 	 * Creates the IRI.
 	 *
-	 * @param namespace the namespace
-	 * @param localName the local name
+	 * @param namespace
+	 *            the namespace
+	 * @param localName
+	 *            the local name
 	 * @return the iri
 	 */
 	public static IRI createIRI(String namespace, String localName) {
@@ -544,10 +668,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the predicate reification type.
 	 *
-	 * @param predicate the predicate
+	 * @param predicate
+	 *            the predicate
 	 * @return the predicate reification type
 	 */
-	public  ReificationType getPredicateReificationType(String predicate) {
+	public ReificationType getPredicateReificationType(String predicate) {
 		if (getPredicateReificationTypes().containsKey(predicate)) {
 			return getPredicateReificationTypes().get(predicate);
 		} else {
@@ -558,10 +683,11 @@ public class PathQLRepository {
 	/**
 	 * Creates the IRI.
 	 *
-	 * @param iri the iri
+	 * @param iri
+	 *            the iri
 	 * @return the iri
 	 */
-	public  IRI createIRI(String iri) {
+	public IRI createIRI(String iri) {
 		//	return getTripleSource().getValueFactory().createIRI( iri);
 		return iri(iri);
 	}
@@ -569,7 +695,8 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification type.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification type
 	 */
 	private ReificationType getReificationType(String reificationType) {
@@ -579,10 +706,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification subject.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification subject
 	 */
-	public  IRI getReificationSubject(String reificationType) {
+	public IRI getReificationSubject(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationSubject();
 		else
@@ -592,10 +720,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification is subject of.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification is subject of
 	 */
-	public  IRI getReificationIsSubjectOf(String reificationType) {
+	public IRI getReificationIsSubjectOf(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationIsSubjectOf();
 		else
@@ -605,10 +734,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification predicate.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification predicate
 	 */
-	public  IRI getReificationPredicate(String reificationType) {
+	public IRI getReificationPredicate(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationPredicate();
 		else
@@ -618,10 +748,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification is predicate of.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification is predicate of
 	 */
-	public  IRI getReificationIsPredicateOf(String reificationType) {
+	public IRI getReificationIsPredicateOf(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationIsPredicateOf();
 		else
@@ -631,10 +762,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification object.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification object
 	 */
-	public  IRI getReificationObject(String reificationType) {
+	public IRI getReificationObject(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationObject();
 		else
@@ -644,10 +776,11 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification is object of.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification is object of
 	 */
-	public  IRI getReificationIsObjectOf(String reificationType) {
+	public IRI getReificationIsObjectOf(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationIsObjectOf();
 		else
@@ -657,60 +790,66 @@ public class PathQLRepository {
 	/**
 	 * Gets the reification object.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification object
 	 */
-	public  IRI getReificationObject(IRI reificationType) {
+	public IRI getReificationObject(IRI reificationType) {
 		return getReificationObject(reificationType.stringValue());
 	}
 
 	/**
 	 * Gets the reification is object of.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification is object of
 	 */
-	public  IRI getReificationIsObjectOf(IRI reificationType) {
+	public IRI getReificationIsObjectOf(IRI reificationType) {
 		return getReificationIsObjectOf(reificationType.stringValue());
 	}
 
 	/**
 	 * Gets the reification subject.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification subject
 	 */
-	public  IRI getReificationSubject(IRI reificationType) {
+	public IRI getReificationSubject(IRI reificationType) {
 		return getReificationSubject(reificationType.stringValue());
 	}
 
 	/**
 	 * Gets the reification is subject of.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification is subject of
 	 */
-	public  IRI getReificationIsSubjectOf(IRI reificationType) {
+	public IRI getReificationIsSubjectOf(IRI reificationType) {
 		return getReificationIsSubjectOf(reificationType.stringValue());
 	}
 
 	/**
 	 * Gets the reification predicate.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification predicate
 	 */
-	public  IRI getReificationPredicate(IRI reificationType) {
+	public IRI getReificationPredicate(IRI reificationType) {
 		return getReificationPredicate(reificationType.stringValue());
 	}
 
 	/**
 	 * Gets the reification is predicate of.
 	 *
-	 * @param reificationType the reification type
+	 * @param reificationType
+	 *            the reification type
 	 * @return the reification is predicate of
 	 */
-	public  IRI getReificationIsPredicateOf(IRI reificationType) {
+	public IRI getReificationIsPredicateOf(IRI reificationType) {
 		return getReificationIsPredicateOf(reificationType.stringValue());
 	}
 
@@ -719,21 +858,39 @@ public class PathQLRepository {
 	 *
 	 * @return the prefixes
 	 */
-	public  HashMap<String, IRI> getPrefixes() {
+	public Prefixes getPrefixes() {
 
 		return prefixes;
 	}
+
+	/**
+	 * Initialize prefixes.
+	 *
+	 * @param connection
+	 *            the connection
+	 */
 	private void initializePrefixes(IntelligentGraphConnection connection) {
 		CloseableIteration<? extends Namespace, SailException> namespaces = connection.getNamespaces();
 		while (namespaces.hasNext()) {
 			Namespace namespace = namespaces.next();
 			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
 		}
-		
+
 	}
-	private void initializePrefixes(ContextAwareConnection connection) throws RepositoryException, IllegalArgumentException {
-		
-			//ContextAwareConnection connection = this.getContextAwareConnection();
+	/**
+	 * Initialize prefixes.
+	 *
+	 * @param connection
+	 *            the connection
+	 * @throws RepositoryException
+	 *             the repository exception
+	 * @throws IllegalArgumentException
+	 *             the illegal argument exception
+	 */
+	private void initializePrefixes(ContextAwareConnection connection)
+			throws RepositoryException, IllegalArgumentException {
+
+		//ContextAwareConnection connection = this.getContextAwareConnection();
 		RepositoryResult<Namespace> namespaces = connection.getNamespaces();
 		while (namespaces.hasNext()) {
 			Namespace namespace = namespaces.next();
@@ -742,12 +899,13 @@ public class PathQLRepository {
 
 	}
 
-
 	/**
 	 * Prefix.
 	 *
-	 * @param prefix the prefix
-	 * @param IRI the iri
+	 * @param prefix
+	 *            the prefix
+	 * @param IRI
+	 *            the iri
 	 * @return the path QL repository
 	 */
 	public PathQLRepository prefix(String prefix, String IRI) {
@@ -764,7 +922,8 @@ public class PathQLRepository {
 	/**
 	 * Prefix.
 	 *
-	 * @param IRI the iri
+	 * @param IRI
+	 *            the iri
 	 * @return the path QL repository
 	 */
 	public PathQLRepository prefix(String IRI) {
@@ -774,7 +933,8 @@ public class PathQLRepository {
 	/**
 	 * Trim and check IRI string.
 	 *
-	 * @param IRI the iri
+	 * @param IRI
+	 *            the iri
 	 * @return the iri
 	 */
 	public static IRI trimAndCheckIRIString(String IRI) {
@@ -784,7 +944,8 @@ public class PathQLRepository {
 	/**
 	 * Trim IRI string.
 	 *
-	 * @param IRI the iri
+	 * @param IRI
+	 *            the iri
 	 * @return the string
 	 */
 	public static String trimIRIString(String IRI) {
@@ -799,11 +960,13 @@ public class PathQLRepository {
 	/**
 	 * Convert Q name.
 	 *
-	 * @param predicateIRI the predicate IRI
-	 * @param localPrefixes the local prefixes
+	 * @param predicateIRI
+	 *            the predicate IRI
+	 * @param localPrefixes
+	 *            the local prefixes
 	 * @return the iri
 	 */
-	public  IRI convertQName(String predicateIRI, HashMap<String, IRI> localPrefixes) {
+	public IRI convertQName(String predicateIRI, ConcurrentHashMap<String, IRI> localPrefixes) {
 		predicateIRI = PathQLRepository.trimIRIString(predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":|~");
 		IRI predicate = null;
@@ -825,11 +988,13 @@ public class PathQLRepository {
 	/**
 	 * Gets the namespace.
 	 *
-	 * @param namespaceString the namespace string
-	 * @param localPrefixes the local prefixes
+	 * @param namespaceString
+	 *            the namespace string
+	 * @param localPrefixes
+	 *            the local prefixes
 	 * @return the namespace
 	 */
-	private  IRI getNamespace(String namespaceString, HashMap<String, IRI> localPrefixes) {
+	private IRI getNamespace(String namespaceString, ConcurrentHashMap<String, IRI> localPrefixes) {
 		IRI namespace;
 		if (localPrefixes != null) {
 			namespace = localPrefixes.get(namespaceString);
@@ -845,46 +1010,68 @@ public class PathQLRepository {
 	 *
 	 * @return the repository
 	 */
-	public  org.eclipse.rdf4j.repository.Repository getRepository() {
+	public org.eclipse.rdf4j.repository.Repository getRepository() {
 		return repository;
 	}
-	public  ContextAwareConnection getContextAwareConnection() {
-		if(repository!=null) {
-			ContextAwareConnection contextAwareConnection =  new ContextAwareConnection(repository);
-			if(getPublicContexts().size() >0) {
-				IRI[] publicContextsArray = {} ;
-				contextAwareConnection.setReadContexts( getPublicContexts().toArray(publicContextsArray));
+
+	/**
+	 * Gets the context aware connection.
+	 *
+	 * @return the context aware connection
+	 */
+	public ContextAwareConnection getContextAwareConnection() {
+		if (repository != null) {
+			ContextAwareConnection contextAwareConnection = new ContextAwareConnection(repository);
+			if (getPublicContexts().size() > 0) {
+				IRI[] publicContextsArray = {};
+				contextAwareConnection.setReadContexts(getPublicContexts().toArray(publicContextsArray));
 			}
 			return contextAwareConnection;
-		}	else {
+		} else {
 			return null;
 		}
 	}
 
-	private  ContextAwareConnection publicContextAwareConnection()
-			throws RepositoryException, IllegalArgumentException {
+	/**
+	 * Public context aware connection.
+	 *
+	 * @return the context aware connection
+	 * @throws RepositoryException
+	 *             the repository exception
+	 * @throws IllegalArgumentException
+	 *             the illegal argument exception
+	 */
+	private ContextAwareConnection publicContextAwareConnection() throws RepositoryException, IllegalArgumentException {
 		ContextAwareConnection contextAwareConnection = new ContextAwareConnection(repository);
-		 RepositoryResult<Resource> contextIDs = contextAwareConnection.getContextIDs();
-		 for(Resource contextID: contextIDs ) {
-			if(contextAwareConnection.hasStatement(contextID , iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE), literal(true ),  contextID)) {
-				privateContexts.add((IRI)contextID);
-			}else {
-				getPublicContexts().add((IRI)contextID);
+		RepositoryResult<Resource> contextIDs = contextAwareConnection.getContextIDs();
+		for (Resource contextID : contextIDs) {
+			if (contextAwareConnection.hasStatement(contextID, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE),
+					literal(true), contextID)) {
+				privateContexts.add((IRI) contextID);
+			} else {
+				getPublicContexts().add((IRI) contextID);
 			}
 
-		 }
+		}
 		return contextAwareConnection;
 	}
-	public Thing getThing(IRI iri,HashMap<String, pathQLModel.Resource> customQueryOptions) {
-		return Thing.create(this, iri,null );
-	}
+
 	/**
-	 * Write model to cache.
+	 * Gets the thing.
 	 *
-	 * @param thing the thing
-	 * @param result the result
-	 * @param cacheContext the cache context
+	 * @param iri
+	 *            the iri
+	 * @param customQueryOptions
+	 *            the custom query options
+	 * @return the thing
 	 */
+	public Thing getThing(IRI iri, CustomQueryOptions customQueryOptions) {
+		return Thing.create(this, iri, new EvaluationContext(customQueryOptions));
+	}
+	public Thing getThing(String iri, CustomQueryOptions customQueryOptions) {
+		return getThing( iri(iri), customQueryOptions);
+	}
+
 	public void writeModelToCache(Thing thing, Object result, IRI cacheContext) {
 		if (connected()) {
 			try {
@@ -905,70 +1092,110 @@ public class PathQLRepository {
 			thing.addTrace(new ParameterizedMessage("No service to cached results"));
 		}
 	}
-	public Graph addGraph(String graphName ) {
+
+	public Graph addGraph(String graphName) {
 		ContextAwareConnection connection = this.getContextAwareConnection();
 		Model result;
 		IRI graphNameIri = null;
 		try {
-			graphNameIri = 	PathParser.parseIriRef(this, graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
 			result = new LinkedHashModel();
-			((Model) result).add(graphNameIri, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.CACHE_DATE_TIME),	literal(new Date()), graphNameIri);
-			((Model) result).add(graphNameIri, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE),	literal(true), graphNameIri);
+			((Model) result).add(graphNameIri, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.CACHE_DATE_TIME),
+					literal(new Date()), graphNameIri);
+			((Model) result).add(graphNameIri, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE), literal(true),
+					graphNameIri);
 			connection.add((Model) result, graphNameIri);
+			Graph addedGraph = new Graph(this,graphNameIri);
+			graphs.put(graphNameIri, addedGraph);
 			getPublicContexts().add(graphNameIri);
-			 
 			logger.debug(new ParameterizedMessage("Added new graph {} ", graphNameIri.stringValue()));
-		} catch (Exception e) {
-			logger.error(new ParameterizedMessage("Failed to add graph {} with exception {}", graphNameIri.stringValue(),e.getMessage()));
+		} catch (Exception qe) {
+			throw new ServerException(FAILEDTOADDGRAPH_EXCEPTION, new ParameterizedMessage(
+					"Failed to add graph {} with exception {}", graphName, qe.getMessage()), qe);
 		}
 		return new Graph(this, graphNameIri);
 	}
-	public Graph openGraph(String graphName ) {
+
+	public Graph openGraph(String graphName) {
 		RepositoryConnection connection = this.getContextAwareConnection();
 
 		IRI graphNameIri = null;
 		try {
-			graphNameIri = PathParser.parseIriRef(this,graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
-			if(!contextExists) {
-				addGraph( graphName );
+			if (!contextExists) {
+				addGraph(graphName);
+			} else {
+				getPublicContexts().add(graphNameIri);
 			}
 			logger.debug(new ParameterizedMessage("Got graph {} ", graphNameIri.stringValue()));
-		} catch (Exception e) {
-			logger.error(new ParameterizedMessage("Failed to get graph {} with exception {}", graphNameIri.stringValue(),e.getMessage()));
+		} catch (Exception qe) {
+			throw new ServerException(FAILEDTOOPENGRAPH_EXCEPTION, new ParameterizedMessage(
+					"Failed to get graph {} with exception {}", graphName, qe.getMessage()), qe);
 		}
 		return new Graph(this, graphNameIri);
 	}
-	public IRI removeGraph(String graphName ) {
+
+	public IRI removeGraph(String graphName){
 		RepositoryConnection connection = this.getContextAwareConnection();
 		IRI graphNameIri = null;
 		try {
-			graphNameIri = PathParser.parseIriRef(this,graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
-			if(contextExists) {
+			if (contextExists) {
 				connection.clear(graphNameIri);
 				logger.debug(new ParameterizedMessage("Removed graph {} ", graphNameIri.stringValue()));
+			}else {
+				return null;
+			//	throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  new ParameterizedMessage("Failed to remove graph {}. Does not exist", graphName)); 
 			}
 
-		} catch (Exception e) {
-			logger.error(new ParameterizedMessage("Failed to remove graph {} with exception {}", graphNameIri.stringValue(),e.getMessage()));
+		} catch (Exception qe) {
+			throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  new ParameterizedMessage("Failed to remove graph {}", graphName, qe.getMessage()), qe); 
 		}
 		return graphNameIri;
 	}
-	public Boolean closeGraph(String graphName ) {
+
+	public Boolean closeGraph(String graphName) {
+		RepositoryConnection connection = this.getContextAwareConnection();
 		IRI graphNameIri = null;
 		try {
-
-			graphNameIri = PathParser.parseIriRef(this,graphName).getIri();
-			getPublicContexts().remove(graphNameIri);
-			return true;
-		} catch (Exception e) {
-			logger.error(new ParameterizedMessage("Failed to close graph {} with exception {}", graphNameIri.stringValue(),e.getMessage()));
+			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
+			if (contextExists) {
+				getPublicContexts().remove(graphNameIri);
+				return true;
+			}else {
+				return false;
+			}
+			
+		} catch (Exception qe) {
+			throw new ServerException(FAILEDTOCLOSEGRAPH_EXCEPTION, new ParameterizedMessage(
+					"Failed to close graph {} with exception {}", graphName, qe.getMessage()), qe);
 		}
-		return false;
 	}
+	public void initializeContexts() {
+		publicContexts.clear();
+		privateContexts.clear();
+		RepositoryConnection connection = this.repository.getConnection();
+		CloseableIteration<Resource, RepositoryException> connectionIDs = connection.getContextIDs();
+		while(connectionIDs.hasNext()) {
+			Resource connectionID = connectionIDs.next();
+			CloseableIteration<Statement, RepositoryException> contextPrivacies = connection.getStatements(connectionID, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE), null, false);
+			publicContexts.add((IRI) connectionID);
+			while(contextPrivacies.hasNext()) {
+				Statement contextPrivacy = contextPrivacies.next();
+				Value privacy = contextPrivacy.getObject();
+				if(privacy.stringValue()=="true") {
+					privateContexts.add((IRI) connectionID);
+					publicContexts.remove((IRI) connectionID);
+				}
+			}
+		}
 
+	}
 	public HashSet<IRI> getPublicContexts() {
 		return publicContexts;
 	}
+
 }

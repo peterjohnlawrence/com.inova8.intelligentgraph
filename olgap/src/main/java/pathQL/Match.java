@@ -20,11 +20,18 @@ public class Match {
 	
 	/** The Constant logger. */
 	private final static Logger logger = LogManager.getLogger(Match.class);
+	
+	/**
+	 * Instantiates a new match.
+	 *
+	 * @param source the source
+	 */
 	public Match(PathQLRepository source) {
 		super();
 		this.source = source;
 	}
 
+	/** The source. */
 	PathQLRepository source;
 	
 	/** The match query. */

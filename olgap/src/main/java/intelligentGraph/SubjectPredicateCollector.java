@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package intelligentGraph;
 
 import java.util.ArrayList;
@@ -9,8 +12,18 @@ import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.Var;
 import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
 
+/**
+ * The Class SubjectPredicateCollector.
+ */
 public class SubjectPredicateCollector extends AbstractQueryModelVisitor<RuntimeException> {
 
+	/**
+	 * Process.
+	 *
+	 * @param node the node
+	 * @param name the name
+	 * @return the list
+	 */
 	public static List<StatementPattern> process(QueryModelNode node, String name) {
 		SubjectPredicateCollector collector = new SubjectPredicateCollector();
 		bindingValueName=name;
@@ -18,19 +31,37 @@ public class SubjectPredicateCollector extends AbstractQueryModelVisitor<Runtime
 		return collector.getStatementPatterns();
 	}
 
+	/** The st patterns. */
 	private List<StatementPattern> stPatterns = new ArrayList<>();
+	
+	/** The binding value name. */
 	private static String bindingValueName;
 
+	/**
+	 * Gets the statement patterns.
+	 *
+	 * @return the statement patterns
+	 */
 	public List<StatementPattern> getStatementPatterns() {
 		return stPatterns;
 	}
 
+	/**
+	 * Meet.
+	 *
+	 * @param node the node
+	 */
 	@Override
 	public void meet(Filter node) {
 		// Skip boolean constraints
 		node.getArg().visit(this);
 	}
 
+	/**
+	 * Meet.
+	 *
+	 * @param node the node
+	 */
 	@Override
 	public void meet(StatementPattern node) {
 		 Var objectVar = node.getObjectVar();

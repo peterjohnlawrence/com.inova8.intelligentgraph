@@ -31,7 +31,11 @@ class Remote_PathQL_MultiGraphTests {
 	/** The source. */
 	private static PathQLRepository source;
 	
-	/** The evaluator. */
+	/**
+	 *  The evaluator.
+	 *
+	 * @throws Exception the exception
+	 */
 //	private static Evaluator evaluator;
 	
 	/**
@@ -42,7 +46,7 @@ class Remote_PathQL_MultiGraphTests {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
-		source = new PathQLRepository("http://localhost:8080/rdf4j-server","calc2graph");
+		source =PathQLRepository.create("http://localhost:8080/rdf4j-server","calc2graph");
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 	}
@@ -174,11 +178,16 @@ class Remote_PathQL_MultiGraphTests {
 			myCountry.addFact(":Attribute@:salesPerformance", performanceCalculation, Evaluator.GROOVY) ;
 			
 			ResourceResults results = myCountry.getFacts(":Attribute@:salesPerformance") ;
-			for(Resource result:results) {
-				assertEquals("6", result.getValue().stringValue());
-			}
-	//		source.removeGraph("<http://inova8.com/calc2graph/testGraph>");
-			source.closeGraph("<http://inova8.com/calc2graph/testGraph5>");
+			//if(results.hasNext()) {
+				for(Resource result:results) {
+					assertEquals("6", result.getValue().stringValue());
+					break;
+				}
+		//		source.removeGraph("<http://inova8.com/calc2graph/testGraph>");
+				source.closeGraph("<http://inova8.com/calc2graph/testGraph5>");
+			//}else {
+			//	fail();
+			//}
 		} catch (Exception e) {
 			fail();
 		}

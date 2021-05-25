@@ -10,12 +10,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import javax.script.CompiledScript;
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
-import javax.script.SimpleScriptContext;
+import javax.script.SimpleBindings;
 
+import org.antlr.v4.runtime.RecognitionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +27,7 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
+import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
@@ -36,9 +36,11 @@ import org.eclipse.rdf4j.repository.RepositoryException;
 
 import Exceptions.CircularReferenceException;
 import Exceptions.HandledException;
+import Exceptions.NotSupportedException;
 import Exceptions.NullValueReturnedException;
 import Exceptions.ScriptFailedException;
 import pathPatternElement.PredicateElement;
+import pathPatternElement.Variable;
 import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
 import pathQL.PathQL;
@@ -46,6 +48,7 @@ import pathQLModel.NullValue;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
+import pathQLRepository.ReificationType;
 import pathQLRepository.SEEQSource;
 import pathQLResults.ResourceResults;
 
@@ -54,154 +57,206 @@ import pathQLResults.ResourceResults;
  */
 public class Thing extends Resource {
 
+	/** The Constant NULLVALUERETURNED_EXCEPTION. */
 	private static final String NULLVALUERETURNED_EXCEPTION = "NullValueReturned";
+
+	/** The Constant SCRIPTFAILED_EXCEPTION. */
 	private static final String SCRIPTFAILED_EXCEPTION = "ScriptFailed";
+
+	/** The Constant CIRCULARREFERENCE_EXCEPTION. */
 	private static final String CIRCULARREFERENCE_EXCEPTION = "CircularReference";
+
+	/** The Constant SCRIPTNOTFOUND_EXCEPTION. */
 	private static final String SCRIPTNOTFOUND_EXCEPTION = null;
+
+	/** The Constant NULLVALUESCRIPT_EXCEPTION. */
 	private static final String NULLVALUESCRIPT_EXCEPTION = null;
 	/** The logger. */
 	protected final Logger logger = LogManager.getLogger(Thing.class);
-	private Graph graph;
-	public static Thing create(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue, EvaluationContext evaluationContext) {
-		Thing thing ;
-		if(superValue!=null && source!=null &&  source.getThings().containsKey(superValue.stringValue()) ) {
-			thing = source.getThings().get(superValue.stringValue());				
-		}else {
+	/** The cached resources. */
+	private HashMap<String, Resource> cachedResources;
+	/** The graph. */
+	private static Graph graph;
+	private  IRI graphName;
+
+	/**
+	 * Creates the.
+	 *
+	 * @param source
+	 *            the source
+	 * @param superValue
+	 *            the super value
+	 * @param evaluationContext
+	 *            the evaluation context
+	 * @return the thing
+	 */
+	public static Thing create(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue,
+			EvaluationContext evaluationContext) {
+		return Thing.create( source,  Graph.DEFAULTGRAPH, superValue,	 evaluationContext);
+	}
+	public static Thing create(PathQLRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
+			EvaluationContext evaluationContext) {
+		Thing thing;
+		String graphThingKey = graphIri.stringValue()+"~"+ superValue.stringValue();
+		if (superValue != null && source != null && source.getThings().containsKey(graphThingKey)) {
+			thing = source.getThings().get(graphThingKey);
+			if(evaluationContext!=null) {
+				if(thing.evaluationContext.getPrefixes()==null || thing.evaluationContext.getPrefixes().isEmpty())thing.evaluationContext.setPrefixes(evaluationContext.getPrefixes());
+				if(evaluationContext.getCustomQueryOptions()!=null && !evaluationContext.getCustomQueryOptions().isEmpty())thing.evaluationContext.setCustomQueryOptions(evaluationContext.getCustomQueryOptions());
+			}
+			return thing;
+		} else {
 			thing = new Thing(source, superValue, evaluationContext);
-			if(source!=null)source.getThings().put(superValue.stringValue(), thing);	
+			if (source != null)
+				source.getThings().put(graphThingKey, thing);
+			thing.graphName = graphIri;
 		}
-		if(evaluationContext!=null)
-			thing.evaluationContext=evaluationContext;
-		else if(thing.evaluationContext==null) 
-			thing.evaluationContext=new EvaluationContext();	
+		if (evaluationContext != null)
+			thing.evaluationContext = evaluationContext;
+		else if (thing.evaluationContext == null)
+			thing.evaluationContext = new EvaluationContext();
 		return thing;
 	}
-	private Thing(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue, EvaluationContext evaluationContext ) {
-		super(superValue,evaluationContext);
+	/**
+	 * Instantiates a new thing.
+	 *
+	 * @param source
+	 *            the source
+	 * @param superValue
+	 *            the super value
+	 * @param evaluationContext
+	 *            the evaluation context
+	 */
+	private Thing(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue,
+			EvaluationContext evaluationContext) {
+		super(superValue, evaluationContext);
 		this.setSource(source);
-	}	
-	public Thing(PathQLRepository source, Value superValue ) {
-		super(superValue);
-		this.setSource(source);
-	}
-	public Thing(Graph graph, String iri) {
-		super(iri(iri));
-		this.setGraph(graph);
-	}
-	public Thing(Graph graph, IRI iri) {
-		super(iri);
-		
-		this.setGraph(graph);
-	}	
-
-
-	public Graph getGraph() {
-		return graph;
 	}
 
-	private void setGraph(Graph graph) {
-		this.graph=graph;
-		this.setSource(graph.getSource());
+	/**
+	 * Gets the graph.
+	 *
+	 * @return the graph
+	 */
+	public IRI getGraphName() {
+		return graphName;
 	}
-	
+
+
 	/**
 	 * Generate cache context.
 	 *
-	 * @param predicate the predicate
+	 * @param predicate
+	 *            the predicate
 	 * @return the iri
 	 */
 	private final IRI generateCacheContext(IRI predicate) {
 		String key;
-		if(predicate!=null) {
-			 key = getSuperValue().toString() + predicate.stringValue() + StringUtils.join(getCustomQueryOptions());
-		}else {
-			 key = getSuperValue().toString() + StringUtils.join(getCustomQueryOptions());
+		if (predicate != null) {
+			key = getSuperValue().toString() + predicate.stringValue() + StringUtils.join(getCustomQueryOptions());
+		} else {
+			key = getSuperValue().toString() + StringUtils.join(getCustomQueryOptions());
 		}
 		String cacheContext = Evaluator.getHexKey(key);
-		IRI cacheContextIRI =	iri(Evaluator.SCRIPT_DATA_GRAPH,cacheContext);
+		IRI cacheContextIRI = iri(Evaluator.SCRIPT_DATA_GRAPH, cacheContext);
 		return cacheContextIRI;
 	}
 
 	/**
-	 * Gets the fact.
+	 * Gets the cached resources.
 	 *
-	 * @param predicateElement the predicate element
-	 * @return Finds factvalue in the pattern { :thing :predicate ?factValue }
+	 * @return the cached resources
 	 */
-	public final Resource getFact(PredicateElement predicateElement) { 
-		String key = getFactKey(predicateElement);
-		addTrace(new ParameterizedMessage("Seeking value {} of {} using customQueryOptions {}", addIRI(predicateElement.getPredicate()),
-				addIRI(getSuperValue()), getCustomQueryOptions()));
-		if (notTracing() && getCachedResources().containsKey(key)) {
-			Resource result = getCachedResources().get(key);
-			addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicateElement.toString(), addIRI(getSuperValue()),
-					getHTMLValue(result.getValue())));
-			return result;
-		} else {
-			return retrieveFact(predicateElement.getPredicate(), key);
+	public HashMap<String, Resource> getCachedResources() {
+		if( cachedResources==null) {
+			cachedResources= new HashMap<String, Resource> ();
 		}
-	}
-	private String getFactKey(PredicateElement predicateElement) {
-		return  getFactKey(predicateElement.getPredicate()) ;
+		return cachedResources;
 	}
 
+	/**
+	 * Gets the fact key.
+	 *
+	 * @param predicateElement
+	 *            the predicate element
+	 * @return the fact key
+	 */
+	private String getFactKey(PredicateElement predicateElement) {
+		return getFactKey(predicateElement.getPredicate());
+	}
+
+	/**
+	 * Gets the fact key.
+	 *
+	 * @param predicate
+	 *            the predicate
+	 * @return the fact key
+	 */
 	private String getFactKey(IRI predicate) {
-		String key = predicate.stringValue() + "."+ StringUtils.join(this.getCustomQueryOptions()).hashCode() + "."+StringUtils.join(getSource().getPublicContexts()).hashCode();
+		String key = predicate.stringValue() + "." + StringUtils.join(this.getCustomQueryOptions()).hashCode() + "."
+				+ StringUtils.join(getSource().getPublicContexts()).hashCode();
 		return key;
 	}
+
 	/**
 	 * Gets the fact.
 	 *
-	 * @param predicateElement the predicate element
-	 * @param scriptString the script string
+	 * @param predicateElement
+	 *            the predicate element
+	 * @param scriptString
+	 *            the script string
 	 * @return the fact
 	 */
-	public final Resource getFact(PredicateElement predicateElement, SimpleLiteral scriptString) {
-		Resource fact = this.handleScript(scriptString, predicateElement.getPredicate());
-		return fact;
-	}
-	
+//	@Deprecated
+//	public final Resource getFact(PredicateElement predicateElement, SimpleLiteral scriptString) {
+//		Resource fact = this.handleScript(scriptString, predicateElement.getPredicate());
+//		return fact;
+//	}
+
 	/**
 	 * Gets the fact.
 	 *
-	 * @param predicate the predicate
-	 * @param scriptString the script string
+	 * @param predicate
+	 *            the predicate
+	 * @param scriptString
+	 *            the script string
 	 * @return the fact
 	 */
-	private final Resource getFact(IRI predicate, SimpleLiteral scriptString) {
-		Resource fact = this.handleScript(scriptString, predicate);
+	public final Resource getFact(IRI predicate, SimpleLiteral scriptString) {
+		Resource fact = processFactObjectValue(predicate,scriptString );//this.handleScript(scriptString, predicate);
 		return fact;
 	}
 
 	/**
 	 * Gets the fact.
 	 *
-	 * @param predicatePattern the predicate pattern
+	 * @param predicatePattern
+	 *            the predicate pattern
 	 * @return the fact
-	 * @throws PathPatternException the path pattern exception
+	 * @throws PathPatternException
+	 *             the path pattern exception
 	 */
 	public final Resource getFact(String predicatePattern) throws PathPatternException {
-		logger.debug(new ParameterizedMessage("getFact{}\n",predicatePattern));
-		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);
-		if(factValues==null) {
-			//throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION, new ParameterizedMessage("getFact evaluated to null for {} of {}", predicatePattern, getSuperValue()));
+		logger.debug(new ParameterizedMessage("getFact{}\n", predicatePattern));
+		ResourceResults factValues =  getFacts( predicatePattern);
+		if (factValues == null) {
 			return new NullValue();
-		}else if(factValues.hasNext()) {
+		} else if (factValues.hasNext()) {
 			return factValues.next();
-		}else {
+		} else {
 			factValues.close();
-			//TODO Is this the best way of handling errors
-			//throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION, new ParameterizedMessage("getFact evaluated to empty for {} of {}", predicatePattern, getSuperValue()));
 			return new NullValue();
 		}
 	}
-	
+
 	/**
 	 * Gets the facts.
 	 *
-	 * @param predicatePattern the predicate pattern
+	 * @param predicatePattern
+	 *            the predicate pattern
 	 * @return the facts
-	 * @throws PathPatternException the path pattern exception
+	 * @throws PathPatternException
+	 *             the path pattern exception
 	 */
 	public final ResourceResults getFacts(String predicatePattern) throws PathPatternException {
 
@@ -211,12 +266,13 @@ public class Thing extends Resource {
 	/**
 	 * Gets the signal.
 	 *
-	 * @param signal the signal
+	 * @param signal
+	 *            the signal
 	 * @return the signal
 	 */
 	public Resource getSignal(String signal) {
 		incrementTraceLevel();
-		signal=PathQLRepository.trimIRIString(signal); 
+		signal = PathQLRepository.trimIRIString(signal);
 		String[] elements = signal.split("/");
 		Object result;
 		switch (elements[0].toUpperCase()) {
@@ -229,63 +285,65 @@ public class Thing extends Resource {
 				result = seeqSource.getSignal(elements[5], getCustomQueryOptions());
 				decrementTraceLevel();
 				//return getSource().resourceFactory(getTracer(),PathQLRepository.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),customQueryOptions,this.prefixes);
-				return Resource.create (getSource(),literal((Double) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((Double) result), this.getEvaluationContext());
 			} catch (ScriptException e) {
-				return Resource.create (getSource(), literal("**SEEQ Source Error**"), this.getEvaluationContext());
+				return Resource.create(getSource(), literal("**SEEQ Source Error**"), this.getEvaluationContext());
 			} catch (HandledException e) {
-				return Resource.create (getSource(),literal( e.getCode()), this.getEvaluationContext());
+				return Resource.create(getSource(), literal(e.getCode()), this.getEvaluationContext());
 			}
 		case "HTTP:":
 			ParameterizedMessage httpMessage = new ParameterizedMessage("HTTP not supported signal source: {}", signal);
 			logger.error(httpMessage.getFormattedMessage());
 			addTrace(httpMessage);
-			return Resource.create (getSource(),literal("**HTTP Source Error**"), this.getEvaluationContext());
+			return Resource.create(getSource(), literal("**HTTP Source Error**"), this.getEvaluationContext());
 		default:
 			ParameterizedMessage defaultMessage = new ParameterizedMessage("Unsupported signal source: {}", signal);
 			logger.error(defaultMessage.getFormattedMessage());
 			addTrace(defaultMessage);
-			return Resource.create (getSource(), literal("**Unsupported Source Error**"), this.getEvaluationContext());
+			return Resource.create(getSource(), literal("**Unsupported Source Error**"), this.getEvaluationContext());
 
 		}
 	}
-	
-//	/**
-//	 * Gets the thing.
-//	 *
-//	 * @param subjectIRI the subject IRI
-//	 * @return the thing
-//	 */
-//	public final pathCalc.Thing getThing(String subjectIRI) {
-//		return getSource().thingFactory(getTracer(),convertQName( subjectIRI), this.getStack(),this.getCustomQueryOptions(),this.prefixes);
-//	}
 
+
+	/**
+	 * Handle script.
+	 *
+	 * @param scriptString
+	 *            the script string
+	 * @param predicate
+	 *            the predicate
+	 * @return the resource
+	 */
 	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate) {
 		if (predicate.equals(iri(Evaluator.SCRIPTPROPERTY))) {
-			return  Resource.create(getSource(),scriptString, this.getEvaluationContext());
-		}else {
+			return Resource.create(getSource(), scriptString, this.getEvaluationContext());
+		} else {
 			String scriptCode = scriptString.getLabel();
 			scriptCode = scriptCode.trim();
 			if (scriptCode.startsWith("<")) {
 				String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
-				org.eclipse.rdf4j.model.Resource scriptResource =convertQName( scriptIRI);
+				org.eclipse.rdf4j.model.Resource scriptResource = convertQName(scriptIRI);
 				IRI scriptPropertyIRI = iri(Evaluator.SCRIPTPROPERTY);
 				Statement scriptStatement;
 				SimpleLiteral scriptCodeliteral = null;
 				try {
 					CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = getSource()
 							.getTripleSource().getStatements(scriptResource, scriptPropertyIRI, null);
-	
+
 					while (scriptStatements.hasNext()) {
 						scriptStatement = scriptStatements.next();
 						scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
 					}
 				} catch (QueryEvaluationException qe) {
-					throw new ScriptFailedException(SCRIPTNOTFOUND_EXCEPTION,new ParameterizedMessage("Reference script <{}> not found for  {} of  subject {}", scriptIRI, predicate,  this),qe);
+					throw new ScriptFailedException(SCRIPTNOTFOUND_EXCEPTION, new ParameterizedMessage(
+							"Reference script <{}> not found for  {} of  subject {}", scriptIRI, predicate, this), qe);
 				}
 				if (scriptCodeliteral != null) {
 					return handleScript(scriptCodeliteral, predicate);
 				} else {
-					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION,new ParameterizedMessage("Reference script null <{}> for {} of subject {}", scriptIRI, predicate, this ));
+					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION, new ParameterizedMessage(
+							"Reference script null <{}> for {} of subject {}", scriptIRI, predicate, this));
 				}
 			} else {
 				incrementTraceLevel();
@@ -293,7 +351,7 @@ public class Thing extends Resource {
 				String scripttype = scriptString.getDatatype().getLocalName();
 				addTrace(new ParameterizedMessage("Evaluating predicate {} of {}, by invoking <b>{}</b> script\n",
 						addIRI(predicate), addIRI(getSuperValue()), scripttype));
-	
+
 				addScript(scriptString.getLabel());
 				incrementTraceLevel();
 				Object scriptResult = null;
@@ -303,27 +361,32 @@ public class Thing extends Resource {
 					//If not push on stack
 					String stackKey = generateStackKey(predicate);
 					if (!searchStack(stackKey)) {
-						pushStack(stackKey);
+						
 						CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
-						ScriptContext scriptContext = new SimpleScriptContext();
-						scriptContext.setAttribute("$tripleSource", getSource().getTripleSource(), ScriptContext.ENGINE_SCOPE);
-						scriptContext.setAttribute("$this", this, ScriptContext.ENGINE_SCOPE);
-						scriptContext.setAttribute("$property",
-								Thing.create(getSource(), predicate, this.getEvaluationContext()), ScriptContext.ENGINE_SCOPE);
-						scriptContext.setAttribute("$customQueryOptions", getCustomQueryOptions(), ScriptContext.ENGINE_SCOPE);
-						scriptContext.setAttribute("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI),
-								ScriptContext.ENGINE_SCOPE);
-						scriptResult = compiledScriptCode.eval(scriptContext);
-						Resource result = returnResult(scriptResult, cacheContextIRI);
-						//Since script complete, pop from stack
-						popStack();
+						SimpleBindings scriptBindings = new SimpleBindings();
+					//	scriptBindings.put("$tripleSource", getSource().getTripleSource());
+						scriptBindings.put("$this", this);
+					//	scriptBindings.put("$property",		Thing.create(getSource(), predicate, this.getEvaluationContext()));
+						scriptBindings.put("$customQueryOptions", getCustomQueryOptions());
+						scriptBindings.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
+						Resource result;
+						try {
+							pushStack(stackKey);
+							scriptResult = compiledScriptCode.eval(scriptBindings);
+							result = returnResult(scriptResult, cacheContextIRI);
+						}
+						finally {
+							//Since script complete, pop from stack
+							popStack();
+						}
 						decrementTraceLevel();
-						if(result!=null )
-							addTrace(new ParameterizedMessage("Evaluated {} of {} =  {}", addIRI(predicate), addIRI(getSuperValue()),
-								result.getHTMLValue()));
+						if (result != null)
+							addTrace(new ParameterizedMessage("Evaluated {} of {} =  {}", addIRI(predicate),
+									addIRI(getSuperValue()), result.getHTMLValue()));
 						else {
-							throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION, new ParameterizedMessage("Evaluated null for {} of {}, using script {}", predicate, getSuperValue(),scriptString));
-     					//		addTrace(new ParameterizedMessage("Evaluated null {} of {}", addIRI(predicate), addIRI(getSuperValue())));
+							throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION,
+									new ParameterizedMessage("Evaluated null for {} of {}, using script {}", predicate,
+											getSuperValue(), scriptString));
 						}
 						decrementTraceLevel();
 						return result;
@@ -341,13 +404,10 @@ public class Thing extends Resource {
 										.toString()));
 						throw new CircularReferenceException(CIRCULARREFERENCE_EXCEPTION, new ParameterizedMessage(
 								"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
-								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
-								getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())));
-
-					//	return Resource.create(getSource(), literal("**Circular Reference**"), this.getEvaluationContext());
+								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(), getStack()
+										.subList(getStack().size() - getStack().search(stackKey), getStack().size())));
 					}
-				} 
-				catch (ScriptException e) {
+				} catch (ScriptException e) {
 					decrementTraceLevel();
 					ParameterizedMessage scriptFailedMesssage = new ParameterizedMessage(
 							"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">{}</span></code >",
@@ -355,64 +415,60 @@ public class Thing extends Resource {
 					logger.error(scriptFailedMesssage.getFormattedMessage());
 					addTrace(scriptFailedMesssage);
 					//throw e;
-					throw new ScriptFailedException(SCRIPTFAILED_EXCEPTION,e);
+					throw new ScriptFailedException(SCRIPTFAILED_EXCEPTION, e);
 					//return Resource.create(getSource(),literal(scriptFailedMesssage.getFormattedMessage()), this.getEvaluationContext());
 				}
 			}
 		}
 
 	}
-	
+
 	/**
 	 * Generate stack key.
 	 *
-	 * @param predicate the predicate
+	 * @param predicate
+	 *            the predicate
 	 * @return the string
 	 */
 	private String generateStackKey(IRI predicate) {
-		String stackKey ;
-//		if(predicate!=null) {
-//			 stackKey = "<" + predicate.stringValue() + "> <" + this.toString() + ">; queryOptions="
-//					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
-//		}else {
-//			 stackKey = "<NULL> <" + this.toString() + ">; queryOptions="
-//					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
-//		}
-		//TODO Debug only
-		if(predicate!=null) {
-		 stackKey = "<" + predicate.stringValue() + ">";
-	}else {
-		 stackKey = "<NULL>" ;
-	}
+		String stackKey;
+		if (predicate != null) {
+			stackKey = "<" + predicate.stringValue() + "> <" + this.toString() + ">; queryOptions="
+					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
+		} else {
+			stackKey = "<NULL> <" + this.toString() + ">; queryOptions="
+					+ (this.getCustomQueryOptions() == null ? "" : this.getCustomQueryOptions().toString()) + "\r\n";
+		}
 		return stackKey;
 	}
 
 	/**
 	 * Process fact object value.
 	 *
-	 * @param predicate the predicate
-	 * @param key the key
-	 * @param objectValue the object value
+	 * @param predicate
+	 *            the predicate
+	 * @param objectValue
+	 *            the object value
 	 * @return Processes the objectValue
 	 */
-	public Resource processFactObjectValue(IRI predicate,  Value objectValue) {
+	public Resource processFactObjectValue(IRI predicate, Value objectValue) {
 		Resource returnResult = null;
 		SimpleLiteral literalValue;
-		try {
+		{
 			literalValue = (SimpleLiteral) objectValue;
 			if (Evaluator.isScriptEngine(literalValue.getDatatype())) {
-				String key= getFactKey(predicate );
+				String key = getFactKey(predicate);
 				if (notTracing() && getCachedResources().containsKey(key)) {
 					Resource result = getCachedResources().get(key);
-					logger.debug(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicate.stringValue(), addIRI(getSuperValue()),
-							getHTMLValue(result.getValue())));
-					addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicate.stringValue(), addIRI(getSuperValue()),
-							getHTMLValue(result.getValue())));
+					logger.debug(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicate.stringValue(),
+							addIRI(getSuperValue()), getHTMLValue(result.getValue())));
+					addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicate.stringValue(),
+							addIRI(getSuperValue()), getHTMLValue(result.getValue())));
 					returnResult = result;
-				}else {
-					Resource result = getFact(predicate, literalValue);
+				} else {
+					Resource result = this.handleScript(literalValue, predicate);//getFact(predicate, literalValue);
 					if (result != null) {
-						
+
 						getCachedResources().put(key, result);
 						addTrace(new ParameterizedMessage("Calculated {} of {} = {}", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
@@ -422,108 +478,64 @@ public class Thing extends Resource {
 			} else {
 				addTrace(new ParameterizedMessage("Retrieved literal {} of {} = {}", addIRI(predicate),
 						addIRI(getSuperValue()), getHTMLValue(objectValue)));
-				returnResult = Resource.create(getSource(), objectValue,  this.getEvaluationContext());
+				returnResult = Resource.create(getSource(), objectValue, this.getEvaluationContext());
 			}
-		} catch (Exception e) {
-			throw e;
-		//	addTrace(new ParameterizedMessage("Retrieved resource {} of {} = {}", addIRI(predicate),
-		//			addIRI(getSuperValue()), getHTMLValue(objectValue)));
-		//	returnResult = Resource.create(getSource(), objectValue,  this.getEvaluationContext());
 		}
-		finally {
-			
-		}
-		//return returnResult;
 		return returnResult;
 	}
 
-	/**
-	 * Retrieve fact.
-	 *
-	 * @param predicate the predicate
-	 * @param key the key
-	 * @return Finds factvalue in the pattern { :thing :predicate ?factValue } unless key can be found in cache
-	 * @throws QueryEvaluationException the query evaluation exception
-	 */
-	@Deprecated
-	private Resource retrieveFact(IRI predicate,  String key)
-			throws QueryEvaluationException {
-		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = getSource()
-				.getTripleSource().getStatements((IRI) getSuperValue(), predicate, null);
-		Resource returnResult = null;
-		while (objectStatements.hasNext()) {
-			Statement objectStatement = objectStatements.next();
-			Value objectValue = objectStatement.getObject();		
-			returnResult = processFactObjectValue(predicate, objectValue);
-		}
-		if (returnResult != null)
-			return returnResult;
-		addTrace(new ParameterizedMessage("Error: No predicate {} found for subject {}", addIRI(predicate),
-				addThisIRI()));
-		// It could be there are reified attributes associated with scripts or signals
-		Resource reifiedValue = getReifiedValue(getSource().createIRI(Evaluator.RDF_STATEMENT),predicate);
-		if (reifiedValue != null) {
-			return reifiedValue;//source.valueFactory(getTracer(), reifiedValue, getStack(),this.customQueryOptions,this.prefixes);
-		}
-		decrementTraceLevel();
-		return new pathQLModel.Literal(null);
-	}
-	
-	/**
-	 * Gets the reified value.
-	 *
-	 * @param createIRI the create IRI
-	 * @param predicate the predicate
-	 * @return the reified value
-	 */
-	@Deprecated
-	private Resource getReifiedValue(IRI createIRI, IRI predicate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+
 	/**
 	 * Return result.
 	 *
-	 * @param result the result
-	 * @param cacheContextIRI the cache context IRI
+	 * @param result
+	 *            the result
+	 * @param cacheContextIRI
+	 *            the cache context IRI
 	 * @return the olgap. value
 	 */
 	public Resource returnResult(Object result, IRI cacheContextIRI) {
 		if (result != null) {
 			switch (result.getClass().getSimpleName()) {
 			case "NullValue":
-				return Resource.create(getSource(),	literal((String) "null"), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((String) "null"), this.getEvaluationContext());
 			case "Integer":
-				return Resource.create(getSource(),	literal((Integer) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((Integer) result), this.getEvaluationContext());
 			case "Double":
-				return Resource.create(getSource(),literal((Double) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((Double) result), this.getEvaluationContext());
 			case "Float":
-				return Resource.create(getSource(),literal((Float) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((Float) result), this.getEvaluationContext());
 			case "decimal":
-				return Resource.create(getSource(),literal((BigDecimal) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((BigDecimal) result), this.getEvaluationContext());
 			case "BigDecimal":
-				return Resource.create(getSource(),literal((BigDecimal) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((BigDecimal) result), this.getEvaluationContext());
 			case "BigInteger":
-				return Resource.create(getSource(),literal((BigInteger) result), this.getEvaluationContext());
+				return Resource.create(getSource(), literal((BigInteger) result), this.getEvaluationContext());
 			case "Thing":
 				return (Thing) result;
 			case "LinkedHashModel":
 				getSource().writeModelToCache(this, result, cacheContextIRI);
-				return Thing.create(getSource(),cacheContextIRI,  this.getEvaluationContext());
+				return Thing.create(getSource(), cacheContextIRI, this.getEvaluationContext());
 			case "Literal":
-				Value content = ((pathQLModel.Literal)result).getValue();
-				switch (((org.eclipse.rdf4j.model.Literal)content).getDatatype().getLocalName()) {			
+				Value content = ((pathQLModel.Literal) result).getValue();
+				switch (((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName()) {
+				case "int":
 				case "integer":
 					return Resource.create(getSource(),
-							literal((BigInteger)((pathQLModel.Literal)result).bigIntegerValue() ), this.getEvaluationContext());
+							literal((BigInteger) ((pathQLModel.Literal) result).bigIntegerValue()),
+							this.getEvaluationContext());
 				case "decimal":
-					return Resource.create(getSource(),
-							literal(((pathQLModel.Literal)result).decimalValue() ), this.getEvaluationContext());
+					return Resource.create(getSource(), literal(((pathQLModel.Literal) result).decimalValue()),
+							this.getEvaluationContext());
 				case "double":
-					return Resource.create(getSource(),
-							literal(((pathQLModel.Literal)result).doubleValue() ), this.getEvaluationContext());
+					return Resource.create(getSource(), literal(((pathQLModel.Literal) result).doubleValue()),
+							this.getEvaluationContext());
+				case "string":
+					return Resource.create(getSource(), literal(result), this.getEvaluationContext());
 				default:
-					logger.error("No literal handler found for result {} of class {}", result.toString(),((org.eclipse.rdf4j.model.Literal)content).getDatatype().getLocalName());
+					logger.error("No literal handler found for result {} of class {}", result.toString(),
+							((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName());
 					return Resource.create(getSource(), literal("**Handler Error**"), this.getEvaluationContext());
 				}
 			default:
@@ -536,30 +548,32 @@ public class Thing extends Resource {
 		}
 	}
 
-	/**
-	 * Sets the cached values.
-	 *
-	 * @param cachedValues the cached values
-	 */
-	public void setCachedValues(HashMap<String, Resource> cachedValues) {
-		this.setCachedResources(cachedValues);
-	}
-
+//	/**
+//	 * Sets the cached values.
+//	 *
+//	 * @param cachedValues
+//	 *            the cached values
+//	 */
+//	public void setCachedValues(ConcurrentHashMap<String, Resource> cachedValues) {
+//		this.setCachedResources(cachedValues);
+//	}
 
 	/**
 	 * Prefix.
 	 *
-	 * @param prefix the prefix
-	 * @param IRI the iri
+	 * @param prefix
+	 *            the prefix
+	 * @param IRI
+	 *            the iri
 	 * @return the thing
 	 */
 	public Thing prefix(String prefix, String IRI) {
 		org.eclipse.rdf4j.model.IRI iri = PathQLRepository.trimAndCheckIRIString(IRI);
-		if(iri!=null )	{	
-			this.getEvaluationContext().getPrefixes().put(prefix,iri);
+		if (iri != null) {
+			this.getEvaluationContext().getPrefixes().put(prefix, iri);
 			return this;
-		}else {
-			logger.error("Invalid IRI specified. Ensure enclosed in <...> ", IRI);	
+		} else {
+			logger.error("Invalid IRI specified. Ensure enclosed in <...> ", IRI);
 			return null;
 		}
 	}
@@ -567,17 +581,19 @@ public class Thing extends Resource {
 	/**
 	 * Prefix.
 	 *
-	 * @param IRI the iri
+	 * @param IRI
+	 *            the iri
 	 * @return the thing
 	 */
 	public Thing prefix(String IRI) {
-		return this.prefix("",IRI);
+		return this.prefix("", IRI);
 	}
-	
+
 	/**
 	 * Gets the facts.
 	 *
-	 * @param path the path
+	 * @param path
+	 *            the path
 	 * @return the facts
 	 */
 	@Override
@@ -585,7 +601,7 @@ public class Thing extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * Gets the subject.
 	 *
@@ -596,7 +612,7 @@ public class Thing extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * Gets the predicate.
 	 *
@@ -607,7 +623,7 @@ public class Thing extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * Gets the snippet.
 	 *
@@ -618,7 +634,7 @@ public class Thing extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * Gets the score.
 	 *
@@ -629,91 +645,310 @@ public class Thing extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public String traceFact(String predicatePattern) throws PathPatternException{
-		if(this.getEvaluationContext()==null) {
-			this.evaluationContext=new EvaluationContext();
+
+	/**
+	 * Trace fact.
+	 *
+	 * @param predicatePattern
+	 *            the predicate pattern
+	 * @return the string
+	 * @throws PathPatternException
+	 *             the path pattern exception
+	 */
+	public String traceFact(String predicatePattern) throws PathPatternException {
+		if (this.getEvaluationContext() == null) {
+			this.evaluationContext = new EvaluationContext();
 		}
 		this.getEvaluationContext().setTracing(true);
-		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);	
-		if(factValues.hasNext()) {
+		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);
+		if (factValues.hasNext()) {
 			factValues.next();
 		}
 		return this.getEvaluationContext().getTrace();
 	}
+
+	public void deleteFacts(String pathQL) throws Exception {
+		try {
+			PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(this, pathQL);
+			pathQLResults.ResourceResults facts;
+			if (predicateElement != null) {
+				facts = PathQL.evaluate(this, predicateElement);
+			} else {
+				throw new PathPatternException();
+			}
+			if (predicateElement.getIsReified()) {
+				deleteReifiedFacts(facts);
+			} else if (predicateElement.getIsDereified()) {
+				throw new NotSupportedException("derifiedFact deletion");
+			} else {
+				deleteFacts(facts);
+			}
+			//getSource();
+			//Since changed the database, we need to xclear any cache values.
+			PathQLRepository.clearCache();
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	private void deleteFacts(pathQLResults.ResourceResults facts) throws QueryEvaluationException, RepositoryException {
+		RepositoryConnection connection = this.getSource().getContextAwareConnection();
+		PredicateElement predicateElement = (PredicateElement) facts.getPathElement();
+		while (facts.hasNext()) {
+			BindingSet bindingSet = facts.nextBindingSet();
+			Variable subject = predicateElement.getTargetSubject();
+			Variable predicate = predicateElement.getTargetPredicate();
+			Variable target = predicateElement.getTargetVariable();
+			Value subjectValue = bindingSet.getValue(subject.getName());
+			Value predicateValue = bindingSet.getValue(predicate.getName());
+			Value targetValue = bindingSet.getValue(target.getName());
+			connection.remove((IRI) subjectValue, (IRI) predicateValue, targetValue, this.getGraphName());
+		}
+	}
+
+	private void deleteReifiedFacts(pathQLResults.ResourceResults facts)
+			throws QueryEvaluationException, RepositoryException {
+		RepositoryConnection connection = this.getSource().getContextAwareConnection();
+		PredicateElement predicateElement = (PredicateElement) facts.getPathElement();
+
+		ReificationType reificationType = this.getSource().getReificationTypes()
+				.get(predicateElement.getReification().stringValue());
+		if (reificationType != null) {
+			Variable reification = predicateElement.getReifiedVariable();
+			//			Variable subject = predicateElement.getTargetSubject();
+			//			Variable predicate = predicateElement.getTargetPredicate();
+			//			Variable target = predicateElement.getTargetVariable();
+			while (facts.hasNext()) {
+				BindingSet bindingSet = facts.nextBindingSet();
+				IRI reificationValue = (IRI) bindingSet.getValue(reification.getName());
+
+				//This will clean out any reference to the reification, including metadata
+				connection.remove(reificationValue, null, null, this.getGraphName());
+				//				Value subjectValue = bindingSet.getValue(subject.getName());
+				//				Value predicateValue = bindingSet.getValue(predicate.getName());
+				//				Value targetValue = bindingSet.getValue(target.getName());	
+				//				connection.remove(reificationValue, Evaluator.RDF_TYPE_IRI, predicateElement.getReification() , this.getGraph().getGraphName());
+				//				connection.remove(reificationValue, reificationType.getReificationSubject(), subjectValue, this.getGraph().getGraphName());
+				//				connection.remove(reificationValue, reificationType.getReificationPredicate() ,predicateValue, this.getGraph().getGraphName());
+				//				connection.remove(reificationValue, reificationType.getReificationObject() ,targetValue, this.getGraph().getGraphName());
+			}
+		} else {
+			logger.error("Reified type not supported:" + predicateElement.toString());
+		}
+	}
+
+	/**
+	 * Adds the fact.
+	 *
+	 * @param property
+	 *            the property
+	 * @param value
+	 *            the value
+	 * @param dataType
+	 *            the data type
+	 * @return the thing
+	 */
 	public Thing addFact(String property, String value, IRI dataType) {
 
 		try {
-			Literal literal = literal(value,dataType);
+			Literal literal = literal(value, dataType);
 			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
-			
+
 			addFact(literal, predicateElement);
 
 		} catch (Exception e) {
 
 		}
 		return this;
-		
+
 	}
 
+	/**
+	 * Adds the fact.
+	 *
+	 * @param property
+	 *            the property
+	 * @param value
+	 *            the value
+	 * @return the thing
+	 */
 	public Thing addFact(String property, String value) {
 
 		try {
 			Literal literal = literal(value);
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource(),property);		
+			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
 			addFact(literal, predicateElement);
 		} catch (Exception e) {
 
 		}
 		return this;
-		
+
 	}
+
+	/**
+	 * Adds the fact.
+	 *
+	 * @param literal
+	 *            the literal
+	 * @param predicateElement
+	 *            the predicate element
+	 * @throws RepositoryException
+	 *             the repository exception
+	 */
 	private void addFact(Literal literal, PredicateElement predicateElement) throws RepositoryException {
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
-		if(predicateElement.getIsReified()) {
-			//TODO
-			logger.error("Reified statement insert not yet supported:" + predicateElement.toString());
-			//IRI propertyIri = PathParser.parsePredicate(property).getIri();
-			//connection.add(this.getIRI(), propertyIri,literal, this.getGraph().getGraphName());
-		}else {
+		if (predicateElement.getIsReified()) {
+			ReificationType reificationType = this.getSource().getReificationTypes()
+					.get(predicateElement.getReification().stringValue());
+			if (reificationType != null) {
+				IRI reification = iri(
+						reificationType.getReificationType().stringValue() + "/" + this.getIRI().hashCode() + "."
+								+ predicateElement.getPredicate().hashCode() + "." + literal.hashCode());
+				connection.add(reification, Evaluator.RDF_TYPE_IRI, predicateElement.getReification(),
+						this.getGraphName());
+				connection.add(reification, reificationType.getReificationSubject(), this.getIRI(),
+						this.getGraphName());
+				connection.add(reification, reificationType.getReificationPredicate(), predicateElement.getPredicate(),
+						this.getGraphName());
+				connection.add(reification, reificationType.getReificationObject(), literal,
+						this.getGraphName());
+			} else {
+				logger.error("Reified type not supported:" + predicateElement.toString());
+			}
+
+		} else {
 			IRI propertyIri = predicateElement.getPredicate();
-			connection.add(this.getIRI(), propertyIri,literal, this.getGraph().getGraphName());
+			connection.add(this.getIRI(), propertyIri, literal, this.getGraphName());
 		}
 		//Since changed the database, we need to xclear any cache values.
-		getSource().clearCache();
+		PathQLRepository.clearCache();
 	}
 
+	/**
+	 * Gets the iri.
+	 *
+	 * @return the iri
+	 */
 	public IRI getIRI() {
-		return (IRI)getSuperValue();
+		return (IRI) getSuperValue();
 	}
 
+	/**
+	 * Gets the dataset.
+	 *
+	 * @return the dataset
+	 */
 	public Dataset getDataset() {
 		//The graphs can be defined in three ways: as the dataset of a tuplequery, as contexts in getStatements query, or as explicitly defined graphs in a PathCalc query
 		SimpleDataset dataset = (SimpleDataset) getEvaluationContext().getDataset();
-		if(dataset!=null)
-				return dataset;
+		if (dataset != null)
+			return dataset;
 		else {
 			HashSet<IRI> publicContexts = getSource().getPublicContexts();
-			if (publicContexts==null || publicContexts.isEmpty()) {
+			if (publicContexts == null || publicContexts.isEmpty()) {
 				org.eclipse.rdf4j.model.Resource[] contexts = getEvaluationContext().getContexts();
-				if(contexts==null ||contexts.length==0 ) {
+				if (contexts == null || contexts.length == 0) {
 					return null;
-				}else {
+				} else {
 					dataset = new SimpleDataset();
-					for( org.eclipse.rdf4j.model.Resource resource: contexts) {
-						dataset.addDefaultGraph((IRI)resource);
+					for (org.eclipse.rdf4j.model.Resource resource : contexts) {
+						dataset.addDefaultGraph((IRI) resource);
 					}
 					getEvaluationContext().setDataset(dataset);
-					return dataset;	
+					return dataset;
 				}
-			}else {
+			} else {
 				dataset = new SimpleDataset();
-				for( IRI graph: publicContexts) {
+				for (IRI graph : publicContexts) {
 					dataset.addDefaultGraph(graph);
 				}
 				getEvaluationContext().setDataset(dataset);
 				return dataset;
-			}		
+			}
 		}
 	}
+	/**
+	 * Gets the thing.
+	 *
+	 * @param thing the thing
+	 * @return the thing
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
+	public Thing getThing(String thing) throws RecognitionException, PathPatternException {
+		IRI thingIri = PathParser.parseIriRef(this.getSource(),thing).getIri();
+		return create(this.getSource(), thingIri,this.getEvaluationContext());
+	}
+	/**
+	 * Gets the fact.
+	 *
+	 * @param predicateElement
+	 *            the predicate element
+	 * @return Finds factvalue in the pattern { :thing :predicate ?factValue }
+	 */
+	@Deprecated
+	public final Resource getFact(PredicateElement predicateElement) {
+		String key = getFactKey(predicateElement);
+		addTrace(new ParameterizedMessage("Seeking value {} of {} using customQueryOptions {}",
+				addIRI(predicateElement.getPredicate()), addIRI(getSuperValue()), getCustomQueryOptions()));
+		if (notTracing() && getCachedResources().containsKey(key)) {
+			Resource result = getCachedResources().get(key);
+			addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicateElement.toString(),
+					addIRI(getSuperValue()), getHTMLValue(result.getValue())));
+			return result;
+		} else {
+			return retrieveFact(predicateElement.getPredicate(), key);
+		}
+	}
+	/**
+	 * Retrieve fact.
+	 *
+	 * @param predicate
+	 *            the predicate
+	 * @param key
+	 *            the key
+	 * @return Finds factvalue in the pattern { :thing :predicate ?factValue }
+	 *         unless key can be found in cache
+	 * @throws QueryEvaluationException
+	 *             the query evaluation exception
+	 */
+	@Deprecated
+	private Resource retrieveFact(IRI predicate, String key) throws QueryEvaluationException {
+		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = getSource()
+				.getTripleSource().getStatements((IRI) getSuperValue(), predicate, null);
+		Resource returnResult = null;
+		while (objectStatements.hasNext()) {
+			Statement objectStatement = objectStatements.next();
+			Value objectValue = objectStatement.getObject();
+			returnResult = processFactObjectValue(predicate, objectValue);
+		}
+		if (returnResult != null)
+			return returnResult;
+		addTrace(new ParameterizedMessage("Error: No predicate {} found for subject {}", addIRI(predicate),
+				addThisIRI()));
+		// It could be there are reified attributes associated with scripts or signals
+		Resource reifiedValue = getReifiedValue(getSource().createIRI(Evaluator.RDF_STATEMENT), predicate);
+		if (reifiedValue != null) {
+			return reifiedValue;//source.valueFactory(getTracer(), reifiedValue, getStack(),this.customQueryOptions,this.prefixes);
+		}
+		decrementTraceLevel();
+		return new pathQLModel.Literal(null);
+	}
+
+	/**
+	 * Gets the reified value.
+	 *
+	 * @param createIRI
+	 *            the create IRI
+	 * @param predicate
+	 *            the predicate
+	 * @return the reified value
+	 */
+	@Deprecated
+	private Resource getReifiedValue(IRI createIRI, IRI predicate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

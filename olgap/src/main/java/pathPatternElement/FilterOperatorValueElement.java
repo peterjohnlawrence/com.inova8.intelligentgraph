@@ -18,6 +18,8 @@ public class FilterOperatorValueElement extends ValueElement {
 	
 	/**
 	 * Instantiates a new filter operator value element.
+	 *
+	 * @param source the source
 	 */
 	public FilterOperatorValueElement(PathQLRepository source) {
 		super(source);

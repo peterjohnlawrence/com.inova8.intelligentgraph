@@ -67,6 +67,7 @@ class Local_PathQL_CacheTests {
 	/** The evaluator. */
 	private static Evaluator evaluator;
 
+	/** The match. */
 	private static Match match;
 
 	/**
@@ -99,19 +100,16 @@ class Local_PathQL_CacheTests {
 		conn = workingRep.getConnection();
 		conn.add(modelModel.getStatements(null, null, null));
 		repositoryTripleSource = new RepositoryTripleSource(conn);
-		source = new PathQLRepository(workingRep);
+		source = PathQLRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 		evaluator = new Evaluator();
 		match = new Match(source);
 	}
-	String removeWhiteSpaces(String input) {
-	    return input.replaceAll("\\s+", "");
-	    //return input;
-	}
-	void assertEqualsWOSpaces(String actual, String expected){
-		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
-}	
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -124,7 +122,7 @@ class Local_PathQL_CacheTests {
 			
 			
 			assertEquals("40", result1.stringValue());
-			assertEquals("23.43999981880188", result2.stringValue());
+			assertEquals("37.99999952316284", result2.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

@@ -4,7 +4,6 @@
 package olgap;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
@@ -12,11 +11,10 @@ import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.EvaluationContext;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
-import pathPatternElement.PredicateElement;
-import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
@@ -82,11 +80,12 @@ public class FactDebug extends Evaluator implements Function {
 			try{
 				Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
 				PathQLRepository source = sources.getSource(tripleSource,argumentArray );
-				HashMap<String, Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
+				CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 				evaluationContext.setTracing(true);
 				Thing subjectThing = Thing.create(source, subject, evaluationContext);
-				subjectThing.getFact(new PredicateElement(source, predicate), scriptLiteral);
+				subjectThing.getFact(predicate,//new PredicateElement(source, predicate),
+						scriptLiteral);
 				logger.debug("Trace\r\n"+evaluationContext.getTrace());
 				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());
 			}catch(Exception e) {

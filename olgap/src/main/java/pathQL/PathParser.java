@@ -27,6 +27,7 @@ import pathPatternProcessor.PathConstants.ErrorCode;
  */
 public class PathParser {
 	
+	/** The path pattern visitor. */
 	//private final static Logger logger = LogManager.getLogger(PathParser.class);
 	static PathPatternVisitor pathPatternVisitor ;//= new PathPatternVisitor();
 	
@@ -99,17 +100,41 @@ public class PathParser {
 		return pathElement;
 
 	}
+	
+	/**
+	 * Parses the iri ref.
+	 *
+	 * @param source the source
+	 * @param uriPattern the uri pattern
+	 * @return the iri ref value element
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	public static IriRefValueElement parseIriRef(PathQLRepository source,String uriPattern)
 			throws RecognitionException, PathPatternException {
-		pathPatternVisitor = new PathPatternVisitor(source);
-		CharStream input = CharStreams.fromString( uriPattern);
-		PathPatternLexer lexer = new PathPatternLexer(input);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		PathPatternParser parser = new PathPatternParser(tokens);
-		IriRefContext pathPatternTree = parser.iriRef();
-		PathElement iriRefValueElement = pathPatternVisitor.visit(pathPatternTree);
-		return (IriRefValueElement) iriRefValueElement;
+		try {
+			pathPatternVisitor = new PathPatternVisitor(source);
+			CharStream input = CharStreams.fromString( uriPattern);
+			PathPatternLexer lexer = new PathPatternLexer(input);
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			PathPatternParser parser = new PathPatternParser(tokens);
+			IriRefContext pathPatternTree = parser.iriRef();
+			PathElement iriRefValueElement = pathPatternVisitor.visit(pathPatternTree);
+			return (IriRefValueElement) iriRefValueElement;
+		}catch (Exception qe) {
+			throw new PathPatternException();
+		}
 	}
+	
+	/**
+	 * Parses the predicate.
+	 *
+	 * @param source the source
+	 * @param uriPattern the uri pattern
+	 * @return the predicate element
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	public static PredicateElement parsePredicate(PathQLRepository source,String uriPattern)
 			throws RecognitionException, PathPatternException {
 		pathPatternVisitor = new PathPatternVisitor(source);

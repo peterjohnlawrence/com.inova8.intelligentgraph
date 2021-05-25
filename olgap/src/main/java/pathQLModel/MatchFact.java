@@ -36,8 +36,8 @@ public class MatchFact extends Fact {
 	
 	/**
 	 * Instantiates a new match fact.
-	 * @param source 
 	 *
+	 * @param source the source
 	 * @param subject the subject
 	 * @param predicate the predicate
 	 * @param value the value

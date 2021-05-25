@@ -17,6 +17,8 @@ public class NegationPathElement extends PathElement{
 
 	/**
 	 * Instantiates a new negation path element.
+	 *
+	 * @param source the source
 	 */
 	public NegationPathElement(PathQLRepository source) {
 		super(source);

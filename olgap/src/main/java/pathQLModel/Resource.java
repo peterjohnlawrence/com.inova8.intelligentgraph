@@ -9,7 +9,9 @@ import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.EvaluationContext;
+import pathCalc.EvaluationStack;
 import pathCalc.Thing;
 import pathCalc.Tracer;
 import pathPatternElement.PredicateElement;
@@ -23,8 +25,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -40,17 +41,26 @@ import org.apache.logging.log4j.LogManager;
 	
 	/** The logger. */
 	protected final Logger logger = LogManager.getLogger(Resource.class);
-	protected EvaluationContext evaluationContext  = new EvaluationContext();	
+	
+	/** The evaluation context. */
+	protected EvaluationContext evaluationContext;	
 	
 	/** The prefixes. */
-	protected HashMap<String,IRI> prefixes = new HashMap<String,IRI>();
+	protected ConcurrentHashMap<String,IRI> prefixes = new ConcurrentHashMap<String,IRI>();
 	
 	/** The source. */
 	private  PathQLRepository source;
 	
-	/** The cached resources. */
-	private HashMap<String, Resource> cachedResources;
+
 	
+	/**
+	 * Creates the.
+	 *
+	 * @param source the source
+	 * @param value the value
+	 * @param evaluationContext the evaluation context
+	 * @return the resource
+	 */
 	public static Resource create(PathQLRepository source, Value value,EvaluationContext evaluationContext) {
 		switch (value.getClass().getSimpleName()) {
 		case "SimpleLiteral":
@@ -82,12 +92,24 @@ import org.apache.logging.log4j.LogManager;
 		super();
 		this.superValue = value;
 	}
+	
+	/**
+	 * Instantiates a new resource.
+	 *
+	 * @param value the value
+	 * @param evaluationContext the evaluation context
+	 */
 	protected Resource(Value value,EvaluationContext evaluationContext) {
 		super();
 		this.superValue = value;
 		if (evaluationContext!=null)
 			this.evaluationContext = evaluationContext;
 	}	
+	public Resource(Value value, CustomQueryOptions customQueryOptions) {
+		super();
+		this.superValue = value;
+		evaluationContext=new EvaluationContext(customQueryOptions);
+	}
 	/**
 	 * To string.
 	 *
@@ -101,6 +123,11 @@ import org.apache.logging.log4j.LogManager;
 			return null;
 	}
 	
+	/**
+	 * Gets the evaluation context.
+	 *
+	 * @return the evaluation context
+	 */
 	public EvaluationContext getEvaluationContext() {
 		return evaluationContext;
 	}
@@ -127,7 +154,7 @@ import org.apache.logging.log4j.LogManager;
 	 *
 	 * @return the custom query options
 	 */
-	public  HashMap<String, Resource> getCustomQueryOptions() {
+	public  CustomQueryOptions getCustomQueryOptions() {
 		if (evaluationContext!=null)
 			return evaluationContext.getCustomQueryOptions();
 		else
@@ -350,29 +377,47 @@ import org.apache.logging.log4j.LogManager;
 	 *
 	 * @return the stack
 	 */
-	public Stack<String> getStack() {
+	public EvaluationStack getStack() {
 		if (evaluationContext!=null && evaluationContext.getStack() != null) {
 			return evaluationContext.getStack();
 		}else {
 			return null;
 		}
 	}
+	
+	/**
+	 * Search stack.
+	 *
+	 * @param stackKey the stack key
+	 * @return true, if successful
+	 */
 	public boolean searchStack(String stackKey) {
-		if (evaluationContext!=null && evaluationContext.getStack() != null) {
-			return evaluationContext.getStack().contains(stackKey);
-		}else {
-			return true;
-		}
+//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+//		if(evaluationContext.getStack().size()>10 ) return true;
+		return evaluationContext.getStack().contains(stackKey);
+//		}else {
+//			return true;
+//		}
 	}
+	
+	/**
+	 * Push stack.
+	 *
+	 * @param stackKey the stack key
+	 */
 	public void pushStack(String stackKey) {
-		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
 			evaluationContext.getStack().push(stackKey);
-		}
+//		}
 	}
+	
+	/**
+	 * Pop stack.
+	 */
 	public void popStack() {
-		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
 			evaluationContext.getStack().pop();
-		}
+//		}
 	}
 	/**
 	 * Gets the fact.
@@ -596,33 +641,14 @@ import org.apache.logging.log4j.LogManager;
 	 *
 	 * @return the prefixes
 	 */
-	public HashMap<String, IRI> getPrefixes() {
+	public ConcurrentHashMap<String, IRI> getPrefixes() {
 		if(this.getEvaluationContext()!=null )
 			return this.getEvaluationContext().getPrefixes();
 		else
 			return null;
 	}
 	
-	/**
-	 * Gets the cached resources.
-	 *
-	 * @return the cached resources
-	 */
-	public HashMap<String, Resource> getCachedResources() {
-		if( cachedResources==null) {
-			cachedResources= new HashMap<String, Resource> ();
-		}
-		return cachedResources;
-	}
-	
-	/**
-	 * Sets the cached resources.
-	 *
-	 * @param cachedResources the cached resources
-	 */
-	public void setCachedResources(HashMap<String, Resource> cachedResources) {
-		this.cachedResources = cachedResources;
-	}
+
 	
 	/**
 	 * Gets the super value.

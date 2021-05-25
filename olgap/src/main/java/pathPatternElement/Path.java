@@ -10,9 +10,7 @@ import java.util.ArrayList;
  */
 public class Path extends ArrayList<Edge>  {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
 	/**

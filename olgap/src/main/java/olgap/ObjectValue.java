@@ -4,7 +4,6 @@
 package olgap;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
@@ -12,10 +11,10 @@ import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.EvaluationContext;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
-import pathPatternElement.PredicateElement;
 import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
@@ -83,13 +82,14 @@ public class ObjectValue extends Evaluator implements Function {
 				literalValue = (SimpleLiteral)args[2];
 				if( isScriptEngine(literalValue.getDatatype()) ) {		
 					Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
-					PathQLRepository source = sources.getSource(tripleSource, argumentArray );
-					HashMap<String, pathQLModel.Resource> customQueryOptions = source.getCustomQueryOptions(argumentArray);
+					PathQLRepository source = PathQLRepository.create(tripleSource);//sources.getSource(tripleSource, argumentArray );
+					CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				
 					EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 					//Thing subjectThing = source.thingFactory( null, subject, new Stack<String>(),customQueryOptions);	
 					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
-					pathQLModel.Resource fact = subjectThing.getFact(new PredicateElement(source,predicate),literalValue); 
+					pathQLModel.Resource fact = subjectThing.getFact(predicate,//new PredicateElement(source,predicate),
+							literalValue); 
 					if( fact != null) {
 						Value result = fact.getValue();
 						//source.writeModelToCache(result, cacheContext);

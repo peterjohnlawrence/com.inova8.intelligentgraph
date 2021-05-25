@@ -17,6 +17,8 @@ public class BoundPathElement extends PathElement{
 
 	/**
 	 * Instantiates a new bound path element.
+	 *
+	 * @param source the source
 	 */
 	public BoundPathElement(PathQLRepository source) {
 		super(source);

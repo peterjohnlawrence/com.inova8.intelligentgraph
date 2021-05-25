@@ -50,7 +50,7 @@ class PathPatternSPARQLTests {
 		source.addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
 		source.setIsLazyLoaded(true);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/");
-		thing = new Thing(source, null);
+		thing = source.getThing( "http://",null);
 	}
 
 	/**

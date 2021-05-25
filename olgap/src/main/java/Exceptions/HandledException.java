@@ -16,7 +16,9 @@ public class HandledException extends RDF4JException {
 	
 	/** The code. */
 	private String code;
-
+	public HandledException(String code) {
+        this.setCode(code);
+    }
 	    /**
     	 * Instantiates a new handled exception.
     	 *
@@ -39,15 +41,37 @@ public class HandledException extends RDF4JException {
 	        super(message, cause);
 	        this.setCode(code);
 	    }
-    	public HandledException(String code, ParameterizedMessage parameterizedMessage) {
+    	
+	    /**
+	     * Instantiates a new handled exception.
+	     *
+	     * @param code the code
+	     * @param parameterizedMessage the parameterized message
+	     */
+	    public HandledException(String code, ParameterizedMessage parameterizedMessage) {
 	        super(parameterizedMessage.getFormattedMessage());
 	        this.setCode(code);
     	}
-    	public HandledException(String code, ParameterizedMessage parameterizedMessage, Throwable cause) {
+    	
+	    /**
+	     * Instantiates a new handled exception.
+	     *
+	     * @param code the code
+	     * @param parameterizedMessage the parameterized message
+	     * @param cause the cause
+	     */
+	    public HandledException(String code, ParameterizedMessage parameterizedMessage, Throwable cause) {
 	        super(parameterizedMessage.getFormattedMessage(),cause);
 	        this.setCode(code);
     	}
-	    public HandledException(String code, String message) {
+	    
+    	/**
+    	 * Instantiates a new handled exception.
+    	 *
+    	 * @param code the code
+    	 * @param message the message
+    	 */
+    	public HandledException(String code, String message) {
 	        super(message);
 	        this.setCode(code);
 		}

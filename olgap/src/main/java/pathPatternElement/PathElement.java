@@ -67,10 +67,13 @@ public abstract class PathElement {
 	/** The base index. */
 	private Integer baseIndex;
 
+	/** The source. */
 	private PathQLRepository source;
 	
 	/**
 	 * Instantiates a new path element.
+	 *
+	 * @param source the source
 	 */
 	public PathElement(PathQLRepository source) {
 		this.source= source;
@@ -606,7 +609,12 @@ public abstract class PathElement {
 //	};
 	
 
-	protected PathQLRepository getSource() {
+	/**
+ * Gets the source.
+ *
+ * @return the source
+ */
+protected PathQLRepository getSource() {
 		return this.source ;
 	}
 

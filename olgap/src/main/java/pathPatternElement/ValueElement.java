@@ -16,6 +16,8 @@ public class ValueElement extends PathElement {
 	
 	/**
 	 * Instantiates a new value element.
+	 *
+	 * @param source the source
 	 */
 	public ValueElement(PathQLRepository source) {
 		super(source);

@@ -56,9 +56,16 @@ public class Evaluator {
 	/** The Constant SCRIPTNAMESPACE. */
 	public static final String SCRIPTNAMESPACE = "http://inova8.com/script/";
 
+	/** The Constant GROOVY. */
 	public static final IRI GROOVY = iri(SCRIPTNAMESPACE + "groovy");
+	
+	/** The Constant JS. */
 	public static final IRI JS = iri(SCRIPTNAMESPACE + "javascript");
+	
+	/** The Constant ANONTHING. */
 	public static final IRI ANONTHING = iri(SCRIPTNAMESPACE + "anonThing");
+	
+	/** The Constant ANONPREDICATE. */
 	public static final IRI ANONPREDICATE = iri(SCRIPTNAMESPACE + "anonPredicate");
 	/** The Constant SCRIPTPROPERTY. */
 	public static final String SCRIPTPROPERTY = "http://inova8.com/script/scriptCode";
@@ -68,27 +75,33 @@ public class Evaluator {
 
 	/** The Constant OWL_INVERSE_OF. */
 	public static final String OWL_INVERSE_OF = "http://www.w3.org/2002/07/owl#inverseOf";
-
+	public static final IRI OWL_INVERSE_OF_IRI = iri(OWL_INVERSE_OF);
 	/** The Constant RDFS_DOMAIN. */
 	public static final String RDFS_DOMAIN = "http://www.w3.org/2000/01/rdf-schema#domain";
-
+	public static final IRI RDFS_DOMAIN_IRI = iri(RDFS_DOMAIN);
 	/** The Constant RDFS_SUB_PROPERTY_OF. */
 	public static final String RDFS_SUB_PROPERTY_OF = "http://www.w3.org/2000/01/rdf-schema#subPropertyOf";
-
+	public static final IRI RDFS_SUB_PROPERTY_OF_IRI = iri(RDFS_SUB_PROPERTY_OF);
 	/** The Constant RDF_OBJECT. */
 	public static final String RDF_OBJECT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#object";
-
+	public static final IRI RDF_OBJECT_IRI = iri(RDF_OBJECT);
 	/** The Constant RDF_PREDICATE. */
 	public static final String RDF_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate";
-
+	public static final IRI RDF_PREDICATE_IRI = iri(RDF_PREDICATE);
 	/** The Constant RDF_SUBJECT. */
 	public static final String RDF_SUBJECT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject";
-
+	public static final IRI RDF_SUBJECT_IRI = iri(RDF_SUBJECT);
 	/** The Constant RDF_STATEMENT. */
 	public static final String RDF_STATEMENT = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement";
-
+	public static final IRI RDF_STATEMENT_IRI = iri(RDF_STATEMENT);
+	/** The Constant RDF_TYPE. */
+	public static final String RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+	public static final IRI RDF_TYPE_IRI = iri(RDF_TYPE);
+	
 	/** The Constant CACHE_DATE_TIME. */
 	public static final String CACHE_DATE_TIME = "cacheDateTime";
+	
+	/** The Constant ISPRIVATE. */
 	public static final String ISPRIVATE = "isPrivate";
 	static {
 		try {
@@ -226,6 +239,11 @@ public class Evaluator {
 		sources.clear();
 	}
 
+	/**
+	 * Gets the engine names.
+	 *
+	 * @return the engine names
+	 */
 	public static Properties getEngineNames() {
 		return scriptEngines;
 	}

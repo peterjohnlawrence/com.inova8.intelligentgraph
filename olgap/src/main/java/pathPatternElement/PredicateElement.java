@@ -60,6 +60,7 @@ public class PredicateElement extends PathElement {
 	/**
 	 * Instantiates a new predicate element.
 	 *
+	 * @param source the source
 	 * @param isInverseOf the is inverse of
 	 * @param isReified the is reified
 	 * @param predicate the predicate
@@ -77,6 +78,8 @@ public class PredicateElement extends PathElement {
 
 	/**
 	 * Instantiates a new predicate element.
+	 *
+	 * @param source the source
 	 */
 	public PredicateElement(PathQLRepository source) {
 		super(source);
@@ -86,6 +89,7 @@ public class PredicateElement extends PathElement {
 	/**
 	 * Instantiates a new predicate element.
 	 *
+	 * @param source the source
 	 * @param predicate the predicate
 	 */
 	public PredicateElement(PathQLRepository source,IRI predicate) {
@@ -200,7 +204,7 @@ public class PredicateElement extends PathElement {
 	 *
 	 * @return the reified variable
 	 */
-	private Variable getReifiedVariable() {
+	public Variable getReifiedVariable() {
 		String reificationValue = "r" + getExitIndex();//(getIndex() + 1);
 		Variable reificationVariable = new Variable(reificationValue);
 		return reificationVariable;
@@ -591,21 +595,16 @@ public class PredicateElement extends PathElement {
 			TupleExpr part1Pattern = null;
 			if (isInverseOf) {
 				if (object != null && isObjectOf != null) {
-					//					predicateString += "{{"+reificationValue  + " <" + object.stringValue() + "> "  + sourceValue;
-					//					predicateString += " }UNION{ ";
-					//					predicateString += sourceValue + " <" + isObjectOf.stringValue() + "> " + reificationValue + " }}\n";
 					StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
 							sourceVariable);
 					StatementPattern isObjectOfPattern = new StatementPattern(sourceVariable, isObjectOfVariable,
 							reificationVariable);
 					part1Pattern = new Union(objectPattern, isObjectOfPattern);
 				} else if (object != null) {
-					//					predicateString += reificationValue  + " <" + object.stringValue() + "> "  + sourceValue+ "\n";
 					StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
 							sourceVariable);
 					part1Pattern = objectPattern;
 				} else if (isObjectOf != null) {
-					//					predicateString += sourceValue + " <" + isObjectOf.stringValue() + "> " + reificationValue + "\n";
 					StatementPattern isObjectOfPattern = new StatementPattern(targetVariable, isObjectOfVariable,
 							sourceVariable);
 					part1Pattern = isObjectOfPattern;
@@ -613,21 +612,16 @@ public class PredicateElement extends PathElement {
 				}
 			} else {
 				if (subject != null && isSubjectOf != null) {
-					//					predicateString += "{{"+reificationValue + " <" + subject.stringValue() + "> "  + sourceValue;
-					//					predicateString += " }UNION{ ";
-					//					predicateString += sourceValue + " <" + isSubjectOf.stringValue()+ "> " + reificationValue + " }}\n";
 					StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
 							sourceVariable);
 					StatementPattern isSubjectOfPattern = new StatementPattern(sourceVariable, isSubjectOfVariable,
 							reificationVariable);
 					part1Pattern = new Union(subjectPattern, isSubjectOfPattern);
 				} else if (subject != null) {
-					//					predicateString += reificationValue  + " <" + subject.stringValue() + "> "  + sourceValue+ "\n";
 					StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
 							sourceVariable);
 					part1Pattern = subjectPattern;
 				} else if (isSubjectOf != null) {
-					//					predicateString += sourceValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue + "\n";
 					StatementPattern isSubjectOfPattern = new StatementPattern(sourceVariable, isSubjectOfVariable,
 							reificationVariable);
 					part1Pattern = isSubjectOfPattern;
@@ -637,21 +631,16 @@ public class PredicateElement extends PathElement {
 			//Part2
 			TupleExpr part2Pattern = null;
 			if (property != null && isPropertyOf != null) {
-				//				predicateString += "{{"+ reificationValue + " <" + property.stringValue()+ "> "  + getPredicateSPARQL();
-				//				predicateString += " }UNION{ ";
-				//				predicateString += getPredicateSPARQL() + " <" + isPropertyOf.stringValue() + "> " + reificationValue	+ " }}\n";
 				StatementPattern propertyPattern = new StatementPattern(reificationVariable, propertyVariable,
 						predicateVariable);
 				StatementPattern isPropertyOfPattern = new StatementPattern(predicateVariable, isPropertyOfVariable,
 						reificationVariable);
 				part2Pattern = new Union(propertyPattern, isPropertyOfPattern);
 			} else if (property != null) {
-				//				predicateString += reificationValue + " <" + property.stringValue()+ "> "  + getPredicateSPARQL()+ "\n";
 				StatementPattern propertyPattern = new StatementPattern(reificationVariable, propertyVariable,
 						predicateVariable);
 				part2Pattern = propertyPattern;
 			} else if (isPropertyOf != null) {
-				//				predicateString +=  getPredicateSPARQL() + " <" + isPropertyOf.stringValue() + "> " + reificationValue	+ "\n";
 				StatementPattern isPropertyOfPattern = new StatementPattern(predicateVariable, isPropertyOfVariable,
 						reificationVariable);
 				part2Pattern = isPropertyOfPattern;
@@ -671,21 +660,16 @@ public class PredicateElement extends PathElement {
 				TupleExpr aTargetPattern = null;
 				if (isInverseOf) {
 					if (subject != null && isSubjectOf != null) {
-						//						predicateString += "{{"+reificationValue + " <" + subject.stringValue() + "> " + aTargetValue ;
-						//						predicateString += " }UNION{ ";
-						//						predicateString += aTargetValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue+ " }}\n";
 						StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
 								aTargetVariable);
 						StatementPattern isSubjectOfPattern = new StatementPattern(aTargetVariable, isSubjectOfVariable,
 								reificationVariable);
 						aTargetPattern = new Union(subjectPattern, isSubjectOfPattern);
 					} else if (subject != null) {
-						//						predicateString +=  reificationValue + " <" +subject.stringValue()+ "> " + aTargetValue + "\n";
 						StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
 								aTargetVariable);
 						aTargetPattern = subjectPattern;
 					} else if (isSubjectOf != null) {
-						//						predicateString += aTargetValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue+ "\n";
 						StatementPattern isSubjectOfPattern = new StatementPattern(aTargetVariable, isSubjectOfVariable,
 								reificationVariable);
 						aTargetPattern = isSubjectOfPattern;
@@ -693,21 +677,16 @@ public class PredicateElement extends PathElement {
 					}
 				} else {
 					if (object != null && isObjectOf != null) {
-						//						predicateString += "{{"+reificationValue + " <" + object.stringValue() + "> " + aTargetValue ;
-						//						predicateString += " }UNION{ ";
-						//						predicateString += aTargetValue + " <" + isObjectOf.stringValue() + "> " + reificationValue+ " }}\n";
 						StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
 								aTargetVariable);
 						StatementPattern isObjectOfPattern = new StatementPattern(aTargetVariable, isObjectOfVariable,
 								reificationVariable);
 						aTargetPattern = new Union(objectPattern, isObjectOfPattern);
 					} else if (object != null) {
-						//						predicateString += reificationValue + " <" +object.stringValue()+ "> " + aTargetValue + "\n";
 						StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
 								aTargetVariable);
 						aTargetPattern = objectPattern;
 					} else if (isObjectOf != null) {
-						//						predicateString += aTargetValue + " <" + isObjectOf.stringValue() + "> " + reificationValue+ "\n";
 						StatementPattern isObjectOfPattern = new StatementPattern(aTargetVariable, isObjectOfVariable,
 								reificationVariable);
 						aTargetPattern = isObjectOfPattern;
@@ -734,18 +713,22 @@ public class PredicateElement extends PathElement {
 				reifiedPredicatePattern = part3Pattern;
 			
 			if (objectFilterElement != null) {
-				TupleExpr objectFilterPattern = objectFilterElement.pathPatternQuery( thing,getTargetObject(),null); 
-				if(objectFilterPattern!=null) {
-					Join newObjectFilterPattern = new Join(objectFilterPattern, reifiedPredicatePattern);
-					reifiedPredicatePattern = newObjectFilterPattern;
-				}
+				reifiedPredicatePattern =  objectFilterElement.filterExpression( thing,getTargetObject(),null, reifiedPredicatePattern);
+//				ValueExpr objectFilterExpression = (ValueExpr) objectFilterElement.filterExpression( thing,getTargetObject(),null,null); 
+//				if(objectFilterExpression!=null) {
+//					//Join newObjectFilterPattern = new Join(objectFilterPattern, reifiedPredicatePattern);
+//					Filter newObjectFilterPattern = new Filter(reifiedPredicatePattern,objectFilterExpression);
+//					reifiedPredicatePattern = newObjectFilterPattern;
+//				}
 			}			
 			if (statementFilterElement != null) {
-				TupleExpr statementFilterPattern =  statementFilterElement.pathPatternQuery(  thing,reificationVariable,null); 
-				if(statementFilterPattern!=null) {
-					Join newStatementFilterPattern = new Join(statementFilterPattern, reifiedPredicatePattern);
-					reifiedPredicatePattern = newStatementFilterPattern;
-				}
+				reifiedPredicatePattern =   statementFilterElement.filterExpression(  thing,reificationVariable,null,reifiedPredicatePattern); 
+//				ValueExpr statementFilterExpression =  (ValueExpr) statementFilterElement.filterExpression(  thing,reificationVariable,null,null); 
+//				if(statementFilterExpression!=null) {
+//					//Join newStatementFilterPattern = new Join(statementFilterPattern, reifiedPredicatePattern);
+//					Filter newStatementFilterPattern = new Filter( reifiedPredicatePattern,statementFilterExpression);
+//					reifiedPredicatePattern = newStatementFilterPattern;
+//				}
 			}			
 			return reifiedPredicatePattern;
 		} else {
@@ -776,13 +759,13 @@ public class PredicateElement extends PathElement {
 			}
 			
 			if (objectFilterElement != null) {
-				TupleExpr objectFilterPattern = objectFilterElement.pathPatternQuery( thing,getTargetObject(),null); //, aTargetValue
-				if(objectFilterPattern!=null) {
-					Join newObjectFilterPattern = new Join(objectFilterPattern, predicatePattern);
-					predicatePattern = newObjectFilterPattern;
-				}
+				 predicatePattern = (TupleExpr) objectFilterElement.filterExpression( thing,targetVariable,null,predicatePattern);
+//				if(objectFilterExpression!=null) {
+//					Join newObjectFilterPattern = new Join((TupleExpr) objectFilterExpression, predicatePattern);
+//					//Filter newObjectFilterPattern = new Filter( predicatePattern,objectFilterExpression);
+//					predicatePattern = newObjectFilterPattern;
+//				}
 			}	
-
 			return predicatePattern;
 		}
 	}

@@ -47,7 +47,7 @@ public class FactResults extends ResourceResults {
 	}
 	
 	/**
-	 * Next.
+	 * Next.  
 	 *
 	 * @return the resource
 	 * @throws QueryEvaluationException the query evaluation exception
@@ -75,7 +75,7 @@ public class FactResults extends ResourceResults {
 		else {
 			Value factPredicate = next.getValue(getPathElement().getTargetPredicate().getName());
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
-			Thing thing = Thing.create(getSource(), factThing, this.getEvaluationContext());
+			Thing thing = Thing.create(getSource(),this.getThing().getGraphName(), factThing ,this.getEvaluationContext());
 			return thing.processFactObjectValue((IRI) factPredicate,factValue);
 		}
 	}

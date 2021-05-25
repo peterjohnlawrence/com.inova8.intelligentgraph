@@ -117,9 +117,16 @@ class Local_Sparql_IntelligentGraphTests {
 //		int i=1;
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
-		source = new PathQLRepository(workingRep);
+		source = PathQLRepository.create(workingRep);
 	}
 
+	/**
+	 * Adds the graph 2.
+	 *
+	 * @return the thing
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	private Thing addGraph2() throws RecognitionException, PathPatternException {
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
@@ -134,6 +141,14 @@ class Local_Sparql_IntelligentGraphTests {
 		myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 		return myCountry;
 	}
+	
+	/**
+	 * Adds the graph 3.
+	 *
+	 * @return the thing
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	private Thing addGraph3() throws RecognitionException, PathPatternException {
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
@@ -147,6 +162,14 @@ class Local_Sparql_IntelligentGraphTests {
 		myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 		return myCountry;
 	}
+	
+	/**
+	 * Adds the graph 4.
+	 *
+	 * @return the thing
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	private Thing addGraph4() throws RecognitionException, PathPatternException {
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph4>");
@@ -160,6 +183,10 @@ class Local_Sparql_IntelligentGraphTests {
 		myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 		return myCountry;
 	}
+	
+	/**
+	 * Ig 0.
+	 */
 	@Test
 	@Order(0)
 	void ig_0() {
@@ -176,15 +203,19 @@ class Local_Sparql_IntelligentGraphTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 1.
+	 */
 	@Test
 	@Order(1)
 	void ig_1() {
 
 		try {
-			String queryString1 = "select * FROM <http://default> WHERE {VALUES(?time){(41)} ?s <http://inova8.com/calc2graph/def/testProperty6> $o } limit 1";
+			String queryString1 = "select $o  ?time FROM <http://default> WHERE {VALUES(?time){(41)(42)} <http://inova8.com/calc2graph/id/BatteryLimit1> <http://inova8.com/calc2graph/def/testProperty6> $o } ";
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/id/BatteryLimit1;time=41;o=41;"
+			assertEquals("time=41;o=41;time=42;o=42;"
 					,result); 
 		} catch (Exception e) {
 
@@ -193,6 +224,9 @@ class Local_Sparql_IntelligentGraphTests {
 		}
 	}
 
+	/**
+	 * Ig 2.
+	 */
 	@Test
 	@Order(2)
 	void ig_2() {
@@ -217,6 +251,9 @@ class Local_Sparql_IntelligentGraphTests {
 		}
 	}
 
+	/**
+	 * Ig 3.
+	 */
 	@Test
 	@Order(3)
 	void ig_3() {
@@ -225,17 +262,21 @@ class Local_Sparql_IntelligentGraphTests {
 			String queryString1 = "select ?time $o $o_SCRIPT $o_TRACE  WHERE {VALUES(?time){(41)} <http://inova8.com/calc2graph/id/BatteryLimit1> <http://inova8.com/calc2graph/def/volumeFlow> $o,$o_SCRIPT, $o_TRACE } limit 1";
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o_SCRIPT=59;;o_TRACE=<ol style='list-style-type:none;'><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/volumeFlow' target='_blank'>volumeFlow</a> of <a href='http://inova8.com/calc2graph/id/BatteryLimit1' target='_blank'>BatteryLimit1</a>, by invoking <b>javascript</b> script\n"
+			Query.assertEqualsWOSpaces("o_SCRIPT=59;;o_TRACE=<ol style='list-style-type:none;'><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/volumeFlow' target='_blank'>volumeFlow</a> of <a href='http://inova8.com/calc2graph/id/BatteryLimit1' target='_blank'>BatteryLimit1</a>, by invoking <b>javascript</b> script\r\n"
 					+ "</li>\r\n"
 					+ "<li><div  style='border: 1px solid black;'> <pre><code >59;</code></pre></div></li>\r\n"
 					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/volumeFlow' target='_blank'>volumeFlow</a> of <a href='http://inova8.com/calc2graph/id/BatteryLimit1' target='_blank'>BatteryLimit1</a> =  59^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol></ol>;time=41;o=59;"
-					+ "",result);
+					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/volumeFlow' target='_blank'>volumeFlow</a> of <a href='http://inova8.com/calc2graph/id/BatteryLimit1' target='_blank'>BatteryLimit1</a> = 59^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
+					+ "</ol>;time=41;o=59;",result);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 4.
+	 */
 	@Test
 	@Order(4)
 	void ig_4() {
@@ -251,6 +292,10 @@ class Local_Sparql_IntelligentGraphTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 5.
+	 */
 	@Test
 	@Order(5)
 	void ig_5() {
@@ -265,6 +310,10 @@ class Local_Sparql_IntelligentGraphTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 6.
+	 */
 	@Test
 	@Order(6)
 	void ig_6() {
@@ -286,6 +335,10 @@ class Local_Sparql_IntelligentGraphTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 7.
+	 */
 	@Test
 	@Order(7)
 	void ig_7() {
@@ -293,10 +346,10 @@ class Local_Sparql_IntelligentGraphTests {
 		try {
 			addGraph3();
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?o "
-					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
-					+ "FROM <file://calc2graph.data.ttl>\r\n"
-					+ "FROM <file://calc2graph.def.ttl>\r\n"
-					+ "{\r\n"
+					+ "FROM <http://inova8.com/calc2graph/testGraph3>\n"
+					+ "FROM <file://calc2graph.data.ttl>\n"
+					+ "FROM <file://calc2graph.def.ttl>\n"
+					+ "{\n"
 					+ "  ?s  :totalSales  ?o ,?o_SCRIPT,?o_TRACE} limit 10";
 
 
@@ -307,6 +360,10 @@ class Local_Sparql_IntelligentGraphTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 8.
+	 */
 	@Test
 	@Order(8)
 	void ig_8() {
@@ -328,6 +385,10 @@ class Local_Sparql_IntelligentGraphTests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 9.
+	 */
 	@Test
 	@Order(9)
 	void ig_9() {
@@ -339,14 +400,17 @@ class Local_Sparql_IntelligentGraphTests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/id/deduceDensity;o=$this.prefix(\"<http://inova8.com/calc2graph/def/>\");\r\n"
-					+ "var result= $this.getFact(\":density\").floatValue();  \r\n"
-					+ "result;;",result);
+			assertEquals("s=http://inova8.com/calc2graph/id/calculateLatitude;o=$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");\n"
+					+ "return $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();;",result);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 10.
+	 */
 	@Test
 	@Order(10)
 	void ig_10() {
@@ -355,12 +419,16 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "{\r\n"
 					+ "  <http://inova8.com/calc2graph/id/Attribute_3>  <http://inova8.com/calc2graph/def/attribute.value> ?o }";
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=Evaluated null for http:\\/\\/inova8.com\\/calc2graph\\/def\\/attribute.value of http:\\/\\/inova8.com\\/calc2graph\\/id\\/Attribute_3, using script \\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\");\\r\\nvar result= $this.getFact(\\\":density\\\").floatValue();  \\r\\nresult;\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>;",result);
+			assertEquals("o=.5;",result);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 11.
+	 */
 	@Test
 	@Order(11)
 	void ig_11() {
@@ -369,12 +437,16 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "{\r\n"
 					+ "  <http://inova8.com/calc2graph/id/BatteryLimit1>  <http://inova8.com/calc2graph/def/testProperty2> ?o }";
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.CircularReferenceException: Circular reference encountered when evaluating <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> of <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>.\\r\\n[<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2>, <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty3>];",result);
+			assertEquals("o=javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.CircularReferenceException: Circular reference encountered when evaluating <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> of <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>.\\r\\n[<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>; queryOptions={o=\\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\"); $this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>}\\r\\n, <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty3> <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>; queryOptions={o=\\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\"); $this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>}\\r\\n];",result);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 12.
+	 */
 	@Test
 	@Order(12)
 	void ig_12() {
@@ -386,6 +458,7 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "	#constructPath\r\n"
 					+ "	?BatteryLimit_s ?BatteryLimit_p ?BatteryLimit_o .\r\n"
 					+ "	#constructComplex\r\n"
+					+ "	?BatteryLimit_s <http://inova8.com/calc2graph/def/item.attribute> ?BatteryLimititem_attribute_s .\r\n"
 					+ "	#constructExpandSelect\r\n"
 					+ "}\r\n"
 					+ "WHERE {\r\n"
@@ -436,26 +509,44 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/1999/02/22-rdf-syntax-ns#subjectId, http://inova8.com/calc2graph/id/BatteryLimit1)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/long, \"501\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/massFlow, \"24.77999922633171\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
-					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty4, \"0.27430666666666664\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty4, \"0.24276\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/volumeFlow, \"59\"^^<http://www.w3.org/2001/XMLSchema#int>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://inova8.com/calc2graph/def/BatteryLimit)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit1\")\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://targetEntity, http://inova8.com/calc2graph/def/BatteryLimit)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://www.w3.org/1999/02/22-rdf-syntax-ns#subjectId, http://inova8.com/calc2graph/id/BatteryLimit2)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://inova8.com/calc2graph/def/long, \"600\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
-					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://inova8.com/calc2graph/def/massFlow, \"12.239999771118164\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://inova8.com/calc2graph/def/massFlow, \"27.999999523162842\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://inova8.com/calc2graph/def/volumeFlow, \"40\"^^<http://www.w3.org/2001/XMLSchema#int>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://inova8.com/calc2graph/def/BatteryLimit)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit2, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit2\")\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://targetEntity, http://inova8.com/calc2graph/def/BatteryLimit)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://www.w3.org/1999/02/22-rdf-syntax-ns#subjectId, http://inova8.com/calc2graph/id/BatteryLimit3)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://inova8.com/calc2graph/def/long, \"0\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
-					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://inova8.com/calc2graph/def/massFlow, \"11.200000047683716\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://inova8.com/calc2graph/def/massFlow, \"10.0\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://inova8.com/calc2graph/def/volumeFlow, \"20\"^^<http://www.w3.org/2001/XMLSchema#int>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://inova8.com/calc2graph/def/BatteryLimit)\n"
-					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit3\")\n"
-					+ "",result);
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit3\")\n",result);
 		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+
+	}		
+	@Test
+	@Order(13)
+	void ig_13() {
+
+		try {
+			String queryString1 = "CONSTRUCT{<http://inova8.com/context>  <http://inova8.com/context/time>   42. ?s <http://inova8.com/calc2graph/def/testProperty6> $o   }FROM <http://default> WHERE {select ?time ?s $o {VALUES(?time){(41)} ?s <http://inova8.com/calc2graph/def/testProperty6> $o }} ";
+
+			String result = Query.runCONSTRUCT(conn, queryString1);
+			assertEquals("(http://inova8.com/context, http://inova8.com/context/time, \"42\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty6, \"42\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
+					+ ""
+					,result); 
+		} catch (Exception e) {
+
 			fail();
 			e.printStackTrace();
 		}

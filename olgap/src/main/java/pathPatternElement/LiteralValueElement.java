@@ -18,6 +18,8 @@ public class LiteralValueElement extends ObjectElement {
 	
 	/**
 	 * Instantiates a new literal value element.
+	 *
+	 * @param source the source
 	 */
 	public LiteralValueElement(PathQLRepository source) {
 		super(source);
