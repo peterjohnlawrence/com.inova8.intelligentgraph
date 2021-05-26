@@ -3,7 +3,6 @@
  */
 package Exceptions;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.RDF4JException;
 
 /**
@@ -30,17 +29,6 @@ public class HandledException extends RDF4JException {
 	        this.setCode(code);
 	    }
 
-	    /**
-    	 * Instantiates a new handled exception.
-    	 *
-    	 * @param code the code
-    	 * @param message the message
-    	 * @param cause the cause
-    	 */
-    	public HandledException(String code, String message, Throwable cause) {
-	        super(message, cause);
-	        this.setCode(code);
-	    }
     	
 	    /**
 	     * Instantiates a new handled exception.
@@ -48,8 +36,8 @@ public class HandledException extends RDF4JException {
 	     * @param code the code
 	     * @param parameterizedMessage the parameterized message
 	     */
-	    public HandledException(String code, ParameterizedMessage parameterizedMessage) {
-	        super(parameterizedMessage.getFormattedMessage());
+	    public HandledException(String code, String message) {
+	        super(message);
 	        this.setCode(code);
     	}
     	
@@ -60,21 +48,11 @@ public class HandledException extends RDF4JException {
 	     * @param parameterizedMessage the parameterized message
 	     * @param cause the cause
 	     */
-	    public HandledException(String code, ParameterizedMessage parameterizedMessage, Throwable cause) {
-	        super(parameterizedMessage.getFormattedMessage(),cause);
+	    public HandledException(String code, String message, Throwable cause) {
+	        super(message,cause);
 	        this.setCode(code);
     	}
 	    
-    	/**
-    	 * Instantiates a new handled exception.
-    	 *
-    	 * @param code the code
-    	 * @param message the message
-    	 */
-    	public HandledException(String code, String message) {
-	        super(message);
-	        this.setCode(code);
-		}
 
 		/**
     	 * Gets the code.

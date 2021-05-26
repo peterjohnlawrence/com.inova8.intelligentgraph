@@ -9,8 +9,8 @@ import pathQLResults.MatchResults;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class Match.
@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 public class Match {
 	
 	/** The Constant logger. */
-	private final static Logger logger = LogManager.getLogger(Match.class);
+	private final static Logger logger = LoggerFactory.getLogger(Match.class);
 	
 	/**
 	 * Instantiates a new match.

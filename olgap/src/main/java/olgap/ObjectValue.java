@@ -18,9 +18,8 @@ import pathCalc.Thing;
 import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,14 +28,14 @@ import org.apache.logging.log4j.LogManager;
 public class ObjectValue extends Evaluator implements Function {
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(ObjectValue.class);
+	private static final Logger logger   = LoggerFactory.getLogger(ObjectValue.class);
 
 	/**
 	 * Instantiates a new object value.
 	 */
 	public ObjectValue()  {
 		super();
-		logger.info(new ParameterizedMessage("Initiating ObjectValue"));
+		logger.info("Initiating ObjectValue");
 	}
 
 	/**
@@ -60,11 +59,11 @@ public class ObjectValue extends Evaluator implements Function {
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
 	
-		logger.debug(new ParameterizedMessage("Evaluate for <{}> ,{}> with args <{}>",tripleSource, tripleSource.getValueFactory(), args));
+		logger.debug("Evaluate for <{}> ,{}> with args <{}>",tripleSource, tripleSource.getValueFactory(), args);
 		if(args.length <3) {
-			ParameterizedMessage message = new ParameterizedMessage("At least subject,predicate, and objectscript arguments required");
+			String message = "At least subject,predicate, and objectscript arguments required";
 			logger.error(message);
-			return tripleSource.getValueFactory().createLiteral(message.toString());
+			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
 
 			IRI subject ;
@@ -73,9 +72,9 @@ public class ObjectValue extends Evaluator implements Function {
 				subject = (IRI) args[0];
 				predicate = (IRI) args[1];
 			} catch(Exception e) {
-				ParameterizedMessage message = new ParameterizedMessage("Subject and predicate must be valid IRI. Subject {}, Object {}",args[0],args[1]);
+				String message = String.format("Subject and predicate must be valid IRI. Subject %s, Object %s",args[0],args[1]);
 				logger.error(message);
-				return tripleSource.getValueFactory().createLiteral(message.toString());
+				return tripleSource.getValueFactory().createLiteral(message);
 			}
 			SimpleLiteral literalValue;
 			try{
@@ -93,7 +92,7 @@ public class ObjectValue extends Evaluator implements Function {
 					if( fact != null) {
 						Value result = fact.getValue();
 						//source.writeModelToCache(result, cacheContext);
-						logger.debug(new ParameterizedMessage("ObjectValue = {}",result));
+						logger.debug("ObjectValue = {}",result);
 						return  result;
 					}else {
 						return null;

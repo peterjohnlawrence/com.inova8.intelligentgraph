@@ -17,10 +17,8 @@ import pathCalc.Thing;
 import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
-import org.apache.logging.log4j.LogManager;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class FactValue.
@@ -28,14 +26,14 @@ import org.apache.logging.log4j.LogManager;
 public class FactValue extends Evaluator implements Function {
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(FactValue.class);
+	private static final Logger logger   = LoggerFactory.getLogger(FactValue.class);
 	
 	/**
 	 * Instantiates a new fact value.
 	 */
 	public FactValue()  {
 		super();
-		logger.info(new ParameterizedMessage("Initiating FactValue"));
+		logger.info("Initiating FactValue");
 	}
 
 	/**
@@ -59,11 +57,11 @@ public class FactValue extends Evaluator implements Function {
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
 	
-		logger.debug(new ParameterizedMessage("Evaluate for {} with args <{}>", tripleSource.getValueFactory(),args));
+		logger.debug("Evaluate for {} with args <{}>", tripleSource.getValueFactory(),args);
 		if(args.length <2) {
-			ParameterizedMessage message = new ParameterizedMessage("At least subject, and predicate arguments required");
+			String message = "At least subject, and predicate arguments required";
 			logger.error(message);
-			return tripleSource.getValueFactory().createLiteral(message.toString());
+			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
 
 			IRI subject ;
@@ -72,7 +70,7 @@ public class FactValue extends Evaluator implements Function {
 				subject = (IRI) args[0];
 				predicate = (IRI) args[1];
 			} catch(Exception e) {
-				ParameterizedMessage message = new ParameterizedMessage("Subject and predicate must be valid IRI");
+				String message ="Subject and predicate must be valid IRI";
 				logger.error(message);
 				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}
@@ -85,7 +83,7 @@ public class FactValue extends Evaluator implements Function {
 				pathQLModel.Resource fact = subjectThing.getFact("<"+predicate.stringValue()+">");// new PredicateElement(source,predicate));
 				if( fact != null && fact.getValue()!=null) {
 					Value result = fact.getValue();
-					logger.debug(new ParameterizedMessage("FactValue = {}",result));
+					logger.debug("FactValue = {}",result);
 					return  result;
 				}else {
 					return tripleSource.getValueFactory().createLiteral("");

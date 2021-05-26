@@ -5,15 +5,18 @@ package olgap;
 
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pathCalc.Evaluator;
 
 /**
@@ -22,7 +25,8 @@ import pathCalc.Evaluator;
 public class ClearCache extends Evaluator implements Function{
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(ClearCache.class);
+	private static final Logger logger   = LoggerFactory.getLogger(ClearCache.class);
+//	private final Logger logger = LogManager.getLogger(ClearCache.class);
 	
 	/**
 	 * Instantiates a new clear cache.
@@ -31,7 +35,7 @@ public class ClearCache extends Evaluator implements Function{
 	 */
 	public ClearCache() throws NoSuchAlgorithmException {
 		super();
-		logger.info(new ParameterizedMessage("Initiating ClearCache"));
+		logger.info("Initiating ClearCache");
 	}
 	
 	/**
@@ -64,7 +68,7 @@ public class ClearCache extends Evaluator implements Function{
 		//Workaround for now
 		String keys = sources.getKeys().toString();
 		clearCache();
-		logger.error(new ParameterizedMessage("Caches cleared {}",keys));
+		logger.error("Caches cleared {}",keys);
 		return tripleSource.getValueFactory().createLiteral(true);
 	}
 	

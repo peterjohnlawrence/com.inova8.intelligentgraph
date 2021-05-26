@@ -3,8 +3,6 @@
  */
 package Exceptions;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
-
 /**
  * The Class RepositoryException.
  */
@@ -19,12 +17,12 @@ public class ServerException extends HandledException{
 	}
 
 
-	public ServerException(String code, ParameterizedMessage parameterizedMessage, Exception e) {
-		super(code, parameterizedMessage,e);
+	public ServerException(String code, String message, Exception e) {
+		super(code, message,e);
 	}
 
-	public ServerException(String code, ParameterizedMessage parameterizedMessage) {
-		super(code, parameterizedMessage);
+	public ServerException(String code, String message) {
+		super(code, message);
 	}
 
 }

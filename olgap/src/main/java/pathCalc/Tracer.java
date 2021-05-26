@@ -4,7 +4,6 @@
 package pathCalc;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.message.Message;
 
 /**
  * The Class Tracer.
@@ -20,20 +19,6 @@ public class Tracer {
 	/** The tracing. */
 	private boolean tracing =false;
 	
-	/**
-	 * Adds the trace.
-	 *
-	 * @param message the message
-	 * @return the tracer
-	 */
-	public Tracer addTrace(Message message) {
-		if(tracing) {
-			String messageString = message.getFormattedMessage();
-			this.trace.append("<li>").append(messageString).append("</li>").append("\r\n");
-			//this.trace.append("<li>").append(message.getFormattedMessage()).append("</li>").append("\r\n");
-		}
-		return this;
-	}
 	
 	/**
 	 * Adds the trace.

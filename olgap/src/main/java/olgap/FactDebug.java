@@ -10,6 +10,7 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
+import org.slf4j.LoggerFactory;
 
 import pathCalc.CustomQueryOptions;
 import pathCalc.EvaluationContext;
@@ -18,9 +19,7 @@ import pathCalc.Thing;
 import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
 
 /**
  * The Class FactDebug.
@@ -28,14 +27,14 @@ import org.apache.logging.log4j.LogManager;
 public class FactDebug extends Evaluator implements Function {
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(FactDebug.class);
+	private static final Logger logger   = LoggerFactory.getLogger(FactDebug.class);
 
 	/**
 	 * Instantiates a new fact debug.
 	 */
 	public FactDebug() {
 		super();
-		logger.info(new ParameterizedMessage("Initiating FactDebug"));
+		logger.info("Initiating FactDebug");
 	}
 
 	/**
@@ -58,11 +57,11 @@ public class FactDebug extends Evaluator implements Function {
 	 */
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
-		//logger.debug(new ParameterizedMessage("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),Arrays.toString(args)));
+		//logger.debug("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),Arrays.toString(args));
 		if(args.length <3) {
-			ParameterizedMessage message = new ParameterizedMessage("At least subject, predicate, and script arguments required");
+			String message = "At least subject, predicate, and script arguments required";
 			logger.error(message);
-			return tripleSource.getValueFactory().createLiteral(message.toString());
+			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
 
 			IRI subject ;
@@ -73,7 +72,7 @@ public class FactDebug extends Evaluator implements Function {
 				predicate = (IRI) args[1];
 				scriptLiteral = (SimpleLiteral) args[2];
 			} catch(Exception e) {
-				ParameterizedMessage message = new ParameterizedMessage("Subject and predicate must be valid IRI, and script must be a literal");
+				String message ="Subject and predicate must be valid IRI, and script must be a literal";
 				logger.error(message);
 				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}

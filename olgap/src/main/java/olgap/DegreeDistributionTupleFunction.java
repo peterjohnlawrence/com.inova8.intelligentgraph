@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
@@ -29,14 +28,14 @@ import org.eclipse.rdf4j.spin.function.InverseMagicProperty;
 public class DegreeDistributionTupleFunction implements InverseMagicProperty{
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(DegreeDistributionTupleFunction.class);
+	private static final Logger logger   = LoggerFactory.getLogger(DegreeDistributionTupleFunction.class);
 	
 	/**
 	 * Instantiates a new degree distribution tuple function.
 	 */
 	public DegreeDistributionTupleFunction()  {
 		super();
-		logger.info(new ParameterizedMessage("Initiating DegreeDistributionTupleFunction"));
+		logger.info("Initiating DegreeDistributionTupleFunction");
 	}	
 	
 	/** The conn. */

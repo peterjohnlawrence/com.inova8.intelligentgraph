@@ -3,8 +3,6 @@
  */
 package Exceptions;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
-
 /**
  * The Class CircularReferenceException.
  */
@@ -19,8 +17,8 @@ public class CircularReferenceException extends HandledException{
 	 * @param code the code
 	 * @param parameterizedMessage the parameterized message
 	 */
-	public CircularReferenceException(String code, ParameterizedMessage parameterizedMessage) {
-		super(code, parameterizedMessage);
+	public CircularReferenceException(String code, String message) {
+		super(code, message);
 	}
 
 

@@ -6,9 +6,8 @@ package pathCalc;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
@@ -21,7 +20,7 @@ import pathQLRepository.PathQLRepository;
 public class Sources {
 
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(Sources.class);
+	private final Logger logger = LoggerFactory.getLogger(Sources.class);
 	
 	/** The sources. */
 	static protected   ConcurrentHashMap<Integer, PathQLRepository > sources = new ConcurrentHashMap<Integer, PathQLRepository>();
@@ -77,7 +76,7 @@ public class Sources {
 			if(!sources.containsKey(cacheHash) ){
 				source = PathQLRepository.create(tripleSource);
 				sources.put(cacheHash,  source);
-				logger.error(new ParameterizedMessage("Failed to locate hash <{}>, new source created  <{}>",locateCachHashArgument( args),cacheHash));
+				logger.error("Failed to locate hash <{}>, new source created  <{}>",locateCachHashArgument( args),cacheHash);
 			}else {
 				source = sources.get(cacheHash);
 				//Need to ensure we are using the latest triplesource, which changes even though from same triplestore

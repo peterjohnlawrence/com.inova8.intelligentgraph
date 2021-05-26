@@ -4,8 +4,8 @@
 package pathQL;
 
 import org.antlr.v4.runtime.RecognitionException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.MalformedQueryException;
@@ -32,7 +32,7 @@ import pathQLResults.ResourceResults;
 public class PathQL {
 	
 	/** The Constant logger. */
-	private final static Logger logger = LogManager.getLogger(PathQL.class);
+	private final static Logger logger = LoggerFactory.getLogger(PathQL.class);
 
 	/**
 	 * Evaluate.

@@ -9,8 +9,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.seeq.ApiClient;
 import com.seeq.ApiException;
@@ -55,7 +55,7 @@ public class SEEQSource {
 	private static final String INSTANT = "Instant";
 	
 	/** The Constant logger. */
-	static private final Logger logger = LogManager.getLogger(SEEQSource.class);
+	private static final Logger logger   = LoggerFactory.getLogger(SEEQSource.class);
 	
 	/** The Constant INVALIDAGGREGATE_EXCEPTION. */
 	private static final String INVALIDAGGREGATE_EXCEPTION = "**Invalid Aggregate**";

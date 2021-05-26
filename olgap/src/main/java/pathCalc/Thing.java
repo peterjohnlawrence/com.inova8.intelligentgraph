@@ -17,9 +17,8 @@ import javax.script.SimpleBindings;
 import org.antlr.v4.runtime.RecognitionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -72,11 +71,9 @@ public class Thing extends Resource {
 	/** The Constant NULLVALUESCRIPT_EXCEPTION. */
 	private static final String NULLVALUESCRIPT_EXCEPTION = null;
 	/** The logger. */
-	protected final Logger logger = LogManager.getLogger(Thing.class);
+	protected final Logger logger = LoggerFactory.getLogger(Thing.class);
 	/** The cached resources. */
 	private HashMap<String, Resource> cachedResources;
-	/** The graph. */
-	private static Graph graph;
 	private  IRI graphName;
 
 	/**
@@ -237,7 +234,7 @@ public class Thing extends Resource {
 	 *             the path pattern exception
 	 */
 	public final Resource getFact(String predicatePattern) throws PathPatternException {
-		logger.debug(new ParameterizedMessage("getFact{}\n", predicatePattern));
+		logger.debug("getFact{}\n", predicatePattern);
 		ResourceResults factValues =  getFacts( predicatePattern);
 		if (factValues == null) {
 			return new NullValue();
@@ -279,7 +276,7 @@ public class Thing extends Resource {
 		case "SEEQ:":
 			SEEQSource seeqSource = null;
 			try {
-				addTrace(new ParameterizedMessage("Fetching SEEQ signal {} with customQueryOptions {}", elements[5],
+				addTrace(String.format("Fetching SEEQ signal %s with customQueryOptions %s", elements[5],
 						getCustomQueryOptions()));
 				seeqSource = getSource().seeqSourceFactory(elements[2]);
 				result = seeqSource.getSignal(elements[5], getCustomQueryOptions());
@@ -292,13 +289,13 @@ public class Thing extends Resource {
 				return Resource.create(getSource(), literal(e.getCode()), this.getEvaluationContext());
 			}
 		case "HTTP:":
-			ParameterizedMessage httpMessage = new ParameterizedMessage("HTTP not supported signal source: {}", signal);
-			logger.error(httpMessage.getFormattedMessage());
+			String httpMessage = String.format("HTTP not supported signal source: %s", signal);
+			logger.error(httpMessage);
 			addTrace(httpMessage);
 			return Resource.create(getSource(), literal("**HTTP Source Error**"), this.getEvaluationContext());
 		default:
-			ParameterizedMessage defaultMessage = new ParameterizedMessage("Unsupported signal source: {}", signal);
-			logger.error(defaultMessage.getFormattedMessage());
+			String defaultMessage = String.format("Unsupported signal source: %s", signal);
+			logger.error(defaultMessage);
 			addTrace(defaultMessage);
 			return Resource.create(getSource(), literal("**Unsupported Source Error**"), this.getEvaluationContext());
 
@@ -336,20 +333,20 @@ public class Thing extends Resource {
 						scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
 					}
 				} catch (QueryEvaluationException qe) {
-					throw new ScriptFailedException(SCRIPTNOTFOUND_EXCEPTION, new ParameterizedMessage(
-							"Reference script <{}> not found for  {} of  subject {}", scriptIRI, predicate, this), qe);
+					throw new ScriptFailedException(SCRIPTNOTFOUND_EXCEPTION, String.format(
+							"Reference script <%s> not found for  %s of  subject %s", scriptIRI, predicate, this), qe);
 				}
 				if (scriptCodeliteral != null) {
 					return handleScript(scriptCodeliteral, predicate);
 				} else {
-					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION, new ParameterizedMessage(
-							"Reference script null <{}> for {} of subject {}", scriptIRI, predicate, this));
+					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION, String.format(
+							"Reference script null <%s> for %s of subject %s", scriptIRI, predicate, this));
 				}
 			} else {
 				incrementTraceLevel();
 				IRI cacheContextIRI = generateCacheContext(predicate);
 				String scripttype = scriptString.getDatatype().getLocalName();
-				addTrace(new ParameterizedMessage("Evaluating predicate {} of {}, by invoking <b>{}</b> script\n",
+				addTrace(String.format("Evaluating predicate %s of %s, by invoking <b>%s</b> script\n",
 						addIRI(predicate), addIRI(getSuperValue()), scripttype));
 
 				addScript(scriptString.getLabel());
@@ -381,42 +378,41 @@ public class Thing extends Resource {
 						}
 						decrementTraceLevel();
 						if (result != null)
-							addTrace(new ParameterizedMessage("Evaluated {} of {} =  {}", addIRI(predicate),
+							addTrace(String.format("Evaluated %s of %s =  %s", addIRI(predicate),
 									addIRI(getSuperValue()), result.getHTMLValue()));
 						else {
 							throw new NullValueReturnedException(NULLVALUERETURNED_EXCEPTION,
-									new ParameterizedMessage("Evaluated null for {} of {}, using script {}", predicate,
+									String.format("Evaluated null for %s of %s, using script %s", predicate,
 											getSuperValue(), scriptString));
 						}
 						decrementTraceLevel();
 						return result;
 					} else {
-						ParameterizedMessage circularReferenceMessage = new ParameterizedMessage(
-								"Circular reference encountered when evaluating {} of {}:", addIRI(predicate),
+						String circularReferenceMessage = String.format(
+								"Circular reference encountered when evaluating %s of %s:", addIRI(predicate),
 								addIRI(getSuperValue()));
 						addTrace(circularReferenceMessage);
 						addScript(getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
 								.toString());
-						logger.error(new ParameterizedMessage(
+						logger.error(
 								"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
 								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
 								getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
-										.toString()));
-						throw new CircularReferenceException(CIRCULARREFERENCE_EXCEPTION, new ParameterizedMessage(
-								"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
+										.toString());
+						throw new CircularReferenceException(CIRCULARREFERENCE_EXCEPTION, String.format(
+								"Circular reference encountered when evaluating <%s> of <%s>.\r\n%s",
 								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(), getStack()
 										.subList(getStack().size() - getStack().search(stackKey), getStack().size())));
 					}
 				} catch (ScriptException e) {
 					decrementTraceLevel();
-					ParameterizedMessage scriptFailedMesssage = new ParameterizedMessage(
-							"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">{}</span></code >",
+					String scriptFailedMesssage = String.format(
+							"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">%s</span></code >",
 							StringEscapeUtils.escapeHtml4(e.getMessage()));
-					logger.error(scriptFailedMesssage.getFormattedMessage());
+					logger.error(scriptFailedMesssage);
 					addTrace(scriptFailedMesssage);
-					//throw e;
 					throw new ScriptFailedException(SCRIPTFAILED_EXCEPTION, e);
-					//return Resource.create(getSource(),literal(scriptFailedMesssage.getFormattedMessage()), this.getEvaluationContext());
+
 				}
 			}
 		}
@@ -460,9 +456,9 @@ public class Thing extends Resource {
 				String key = getFactKey(predicate);
 				if (notTracing() && getCachedResources().containsKey(key)) {
 					Resource result = getCachedResources().get(key);
-					logger.debug(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicate.stringValue(),
-							addIRI(getSuperValue()), getHTMLValue(result.getValue())));
-					addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicate.stringValue(),
+					logger.debug("Retrieved cache {} of {} = {}", predicate.stringValue(),
+							addIRI(getSuperValue()), getHTMLValue(result.getValue()));
+					addTrace(String.format("Retrieved cache %s of %s = %s", predicate.stringValue(),
 							addIRI(getSuperValue()), getHTMLValue(result.getValue())));
 					returnResult = result;
 				} else {
@@ -470,13 +466,13 @@ public class Thing extends Resource {
 					if (result != null) {
 
 						getCachedResources().put(key, result);
-						addTrace(new ParameterizedMessage("Calculated {} of {} = {}", addIRI(predicate),
+						addTrace(String.format("Calculated %s of %s = %s", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
 					}
 					returnResult = result;
 				}
 			} else {
-				addTrace(new ParameterizedMessage("Retrieved literal {} of {} = {}", addIRI(predicate),
+				addTrace(String.format("Retrieved literal %s of %s = %s", addIRI(predicate),
 						addIRI(getSuperValue()), getHTMLValue(objectValue)));
 				returnResult = Resource.create(getSource(), objectValue, this.getEvaluationContext());
 			}
@@ -685,7 +681,7 @@ public class Thing extends Resource {
 			}
 			//getSource();
 			//Since changed the database, we need to xclear any cache values.
-			PathQLRepository.clearCache();
+			PathQLRepository.clearCaches();
 
 		} catch (Exception e) {
 			throw e;
@@ -822,7 +818,7 @@ public class Thing extends Resource {
 			connection.add(this.getIRI(), propertyIri, literal, this.getGraphName());
 		}
 		//Since changed the database, we need to xclear any cache values.
-		PathQLRepository.clearCache();
+		PathQLRepository.clearCaches();
 	}
 
 	/**
@@ -890,11 +886,11 @@ public class Thing extends Resource {
 	@Deprecated
 	public final Resource getFact(PredicateElement predicateElement) {
 		String key = getFactKey(predicateElement);
-		addTrace(new ParameterizedMessage("Seeking value {} of {} using customQueryOptions {}",
+		addTrace(String.format("Seeking value %s of %s using customQueryOptions {}",
 				addIRI(predicateElement.getPredicate()), addIRI(getSuperValue()), getCustomQueryOptions()));
 		if (notTracing() && getCachedResources().containsKey(key)) {
 			Resource result = getCachedResources().get(key);
-			addTrace(new ParameterizedMessage("Retrieved cache {} of {} = {}", predicateElement.toString(),
+			addTrace(String.format("Retrieved cache %s of %s = %s", predicateElement.toString(),
 					addIRI(getSuperValue()), getHTMLValue(result.getValue())));
 			return result;
 		} else {
@@ -925,7 +921,7 @@ public class Thing extends Resource {
 		}
 		if (returnResult != null)
 			return returnResult;
-		addTrace(new ParameterizedMessage("Error: No predicate {} found for subject {}", addIRI(predicate),
+		addTrace(String.format("Error: No predicate %s found for subject %s", addIRI(predicate),
 				addThisIRI()));
 		// It could be there are reified attributes associated with scripts or signals
 		Resource reifiedValue = getReifiedValue(getSource().createIRI(Evaluator.RDF_STATEMENT), predicate);

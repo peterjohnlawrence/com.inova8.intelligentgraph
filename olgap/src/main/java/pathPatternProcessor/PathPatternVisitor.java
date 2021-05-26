@@ -8,7 +8,6 @@ import static org.eclipse.rdf4j.model.util.Values.*;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.eclipse.rdf4j.model.IRI;
 
 import Exceptions.ScriptFailedException;
@@ -533,9 +532,9 @@ public PathPatternVisitor(Thing thing) {
 			qnameElement.setIri(qname);
 			return qnameElement;
 		}else {
-			if (thing!=null) thing.addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
-			throw new ScriptFailedException("QNAME",  new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
-			//return null;
+			String message = String.format("Error identifying namespace of qName %s", ctx.getText());
+			if (thing!=null) thing.addTrace(message);
+			throw new ScriptFailedException("QNAME", message);
 		}
 	}
 
@@ -556,9 +555,9 @@ public PathPatternVisitor(Thing thing) {
 			pname_nsElement.setIri(qname);
 			return pname_nsElement;
 		}else {
-			if (thing!=null) thing.addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
-			throw new ScriptFailedException("QNAME",  new ParameterizedMessage("Error identifying namespace of qName {}", ctx.getText()));
-			//return null;
+			String message = String.format("Error identifying namespace of qName %s", ctx.getText());
+			if (thing!=null) thing.addTrace(message);
+			throw new ScriptFailedException("QNAME", message);
 		}
 	}
 

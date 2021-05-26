@@ -3,9 +3,8 @@
  */
 package olgap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
@@ -22,6 +21,7 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
@@ -30,7 +30,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 public class TrianglesFunction  implements Function{
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(TrianglesFunction.class);
+	private static final Logger logger   = LoggerFactory.getLogger(TrianglesFunction.class);
 	
 	/** The conn. */
 	public RepositoryConnection conn;
@@ -43,7 +43,7 @@ public class TrianglesFunction  implements Function{
 	 */
 	public TrianglesFunction() {
 		super();
-		logger.info(new ParameterizedMessage("Initiating TrianglesFunction"));
+		logger.info("Initiating TrianglesFunction");
 		workingRep = new SailRepository(new MemoryStore());
 		workingRep.init();
 	}

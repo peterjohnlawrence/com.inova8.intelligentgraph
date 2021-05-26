@@ -12,10 +12,8 @@ import org.python.core.Options;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.model.IRI;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
@@ -25,7 +23,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 public class Evaluator {
 
 	/** The Constant logger. */
-	static private final Logger logger = LogManager.getLogger(Evaluator.class);
+	private static final Logger logger   = LoggerFactory.getLogger(Evaluator.class);
 
 	/** The Constant sources. */
 	static protected final Sources sources = new Sources();
@@ -168,10 +166,10 @@ public class Evaluator {
 	 */
 	public static boolean setTrace(boolean trace) {
 		if (trace) {
-			Configurator.setRootLevel(Level.TRACE);
+			//Configurator.setRootLevel(Level.TRACE);
 			Evaluator.trace = true;
 		} else {
-			Configurator.setRootLevel(Level.DEBUG);
+			//Configurator.setRootLevel(Level.DEBUG);
 			Evaluator.trace = false;
 		}
 		return Evaluator.trace;

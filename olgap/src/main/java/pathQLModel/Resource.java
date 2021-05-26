@@ -3,9 +3,9 @@
  */
 package pathQLModel;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.Message;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 
@@ -29,8 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.logging.log4j.LogManager;
-
  /**
   * The Class Resource.
   */
@@ -40,7 +38,7 @@ import org.apache.logging.log4j.LogManager;
 	private Value superValue;
 	
 	/** The logger. */
-	protected final Logger logger = LogManager.getLogger(Resource.class);
+	protected final Logger logger = LoggerFactory.getLogger(Resource.class);
 	
 	/** The evaluation context. */
 	protected EvaluationContext evaluationContext;	
@@ -258,22 +256,13 @@ import org.apache.logging.log4j.LogManager;
 			return true;
 	}
 
-	/** 
-	 * Adds the trace.
-	 *
-	 * @param message the message
-	 */
-	public void addTrace(Message message) {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
-			evaluationContext.getTracer().addTrace(message);
-	}
 
 	/**
 	 * Adds the trace.
 	 *
 	 * @param message the message
 	 */
-	protected void addTrace(String message) {
+	public void addTrace(String message) {
 		if (evaluationContext!=null && evaluationContext.getTracer() != null)
 			evaluationContext.getTracer().addTrace(message);
 	}
@@ -615,8 +604,9 @@ import org.apache.logging.log4j.LogManager;
 		}else {
 			IRI namespace = getNamespace(predicateIRIParts[0]);
 			if(namespace==null) {
-				logger.error(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
-				addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
+				String message = String.format("Error identifying namespace of qName %s", predicateIRI);			
+				logger.error(message);
+				addTrace(message);
 			}else {
 				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
 			}

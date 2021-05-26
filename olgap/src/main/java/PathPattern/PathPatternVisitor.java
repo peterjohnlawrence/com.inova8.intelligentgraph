@@ -1,6 +1,4 @@
-/*
- * inova8 2020
- */
+// Generated from PathPattern.g4 by ANTLR 4.9
 package PathPattern;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

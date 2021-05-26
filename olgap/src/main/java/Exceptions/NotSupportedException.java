@@ -3,8 +3,6 @@
  */
 package Exceptions;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
-
 /**
  * The Class RepositoryException.
  */
@@ -21,12 +19,12 @@ public class NotSupportedException extends HandledException{
 	}
 
 
-	public NotSupportedException(String code, ParameterizedMessage parameterizedMessage, Exception e) {
-		super(code, parameterizedMessage,e);
+	public NotSupportedException(String code,String message, Exception e) {
+		super(code, message,e);
 	}
 
-	public NotSupportedException(String code, ParameterizedMessage parameterizedMessage) {
-		super(code, parameterizedMessage);
+	public NotSupportedException(String code, String message) {
+		super(code, message);
 	}
 
 }

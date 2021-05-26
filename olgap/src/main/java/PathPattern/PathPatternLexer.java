@@ -1,6 +1,4 @@
-/*
- * inova8 2020
- */
+// Generated from PathPattern.g4 by ANTLR 4.9
 package PathPattern;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -11,42 +9,26 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-/**
- * The Class PathPatternLexer.
- */
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class PathPatternLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.9", RuntimeMetaData.VERSION); }
 
-	/** The Constant _decisionToDFA. */
 	protected static final DFA[] _decisionToDFA;
-	
-	/** The Constant _sharedContextCache. */
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
-	
-	/** The Constant WS. */
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, INTEGER=13, INVERSE=14, REIFIER=15, DEREIFIER=16, 
 		RDFTYPE=17, ANYPREDICATE=18, OPERATOR=19, DQLITERAL=20, SQLITERAL=21, 
 		IRI_REF=22, PNAME_NS=23, VARNAME=24, PN_LOCAL=25, WS=26;
-	
-	/** The channel names. */
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
 
-	/** The mode names. */
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
 
-	/**
-	 * Make rule names.
-	 *
-	 * @return the string[]
-	 */
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
@@ -56,30 +38,15 @@ public class PathPatternLexer extends Lexer {
 			"PN_CHARS_BASE", "WS"
 		};
 	}
-	
-	/** The Constant ruleNames. */
 	public static final String[] ruleNames = makeRuleNames();
 
-	/**
-	 * Make literal names.
-	 *
-	 * @return the string[]
-	 */
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'/'", "'>'", "'|'", "'('", "')'", "'{'", "','", "'}'", "'!'", 
 			"'['", "']'", "';'", null, "'^'", "'@'", "'#'", "'a'", "'*'"
 		};
 	}
-	
-	/** The Constant _LITERAL_NAMES. */
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	
-	/**
-	 * Make symbolic names.
-	 *
-	 * @return the string[]
-	 */
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -88,16 +55,10 @@ public class PathPatternLexer extends Lexer {
 			"PN_LOCAL", "WS"
 		};
 	}
-	
-	/** The Constant _SYMBOLIC_NAMES. */
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
-	
-	/** The Constant VOCABULARY. */
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
-	 * The Constant tokenNames.
-	 *
 	 * @deprecated Use {@link #VOCABULARY} instead.
 	 */
 	@Deprecated
@@ -116,22 +77,12 @@ public class PathPatternLexer extends Lexer {
 		}
 	}
 
-	/**
-	 * Gets the token names.
-	 *
-	 * @return the token names
-	 */
 	@Override
 	@Deprecated
 	public String[] getTokenNames() {
 		return tokenNames;
 	}
 
-	/**
-	 * Gets the vocabulary.
-	 *
-	 * @return the vocabulary
-	 */
 	@Override
 
 	public Vocabulary getVocabulary() {
@@ -139,65 +90,29 @@ public class PathPatternLexer extends Lexer {
 	}
 
 
-	/**
-	 * Instantiates a new path pattern lexer.
-	 *
-	 * @param input the input
-	 */
 	public PathPatternLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
-	/**
-	 * Gets the grammar file name.
-	 *
-	 * @return the grammar file name
-	 */
 	@Override
 	public String getGrammarFileName() { return "PathPattern.g4"; }
 
-	/**
-	 * Gets the rule names.
-	 *
-	 * @return the rule names
-	 */
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
-	/**
-	 * Gets the serialized ATN.
-	 *
-	 * @return the serialized ATN
-	 */
 	@Override
 	public String getSerializedATN() { return _serializedATN; }
 
-	/**
-	 * Gets the channel names.
-	 *
-	 * @return the channel names
-	 */
 	@Override
 	public String[] getChannelNames() { return channelNames; }
 
-	/**
-	 * Gets the mode names.
-	 *
-	 * @return the mode names
-	 */
 	@Override
 	public String[] getModeNames() { return modeNames; }
 
-	/**
-	 * Gets the atn.
-	 *
-	 * @return the atn
-	 */
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	/** The Constant _serializedATN. */
 	public static final String _serializedATN =
 		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\34\u00df\b\1\4\2"+
 		"\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4"+
@@ -279,8 +194,6 @@ public class PathPatternLexer extends Lexer {
 		"\u00de\b \2\2\u00de@\3\2\2\2\27\2\\\u0087\u008d\u008f\u0098\u009a\u00a2"+
 		"\u00a4\u00aa\u00b2\u00b6\u00bb\u00c0\u00c2\u00c6\u00ca\u00ce\u00d0\u00d4"+
 		"\u00db\3\b\2\2";
-	
-	/** The Constant _ATN. */
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

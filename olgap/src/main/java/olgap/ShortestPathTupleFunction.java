@@ -153,9 +153,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
@@ -177,6 +176,7 @@ import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.spin.function.InverseMagicProperty;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 
@@ -187,7 +187,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 public class ShortestPathTupleFunction implements InverseMagicProperty {
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(ShortestPathTupleFunction.class);
+	private static final Logger logger   = LoggerFactory.getLogger(ShortestPathTupleFunction.class);
 	
 	/**
 	 * The Class ResultsIterator.
@@ -201,7 +201,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		 */
 		private ResultsIterator(Iteration<? extends BindingSet, ? extends QueryEvaluationException> iter) {
 			super(iter);
-			logger.info(new ParameterizedMessage("Initiating ShortestPathTupleFunction"));
+			logger.info("Initiating ShortestPathTupleFunction");
 		}
 		
 		/**
@@ -358,7 +358,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		RepositoryConnection workingConn;
 		workingConn = workingRep.getConnection();
 		workingConn.begin();
-		ValueFactory factory = workingRep.getValueFactory();
+		//ValueFactory factory = workingRep.getValueFactory();
 		IRI edgePredicateIRI = iri("http://", "edge");
 //		IRI startNodePredicateIRI = factory.createIRI("http://", "startNode");
 //		IRI endNodePredicateIRI = factory.createIRI("http://", "endNode");

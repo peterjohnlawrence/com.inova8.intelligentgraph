@@ -4,10 +4,8 @@
 package pathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.Message;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.Dataset;
 
@@ -19,7 +17,7 @@ import pathQLRepository.PathQLRepository;
 public class EvaluationContext {
 	
 	/** The logger. */
-	protected final Logger logger = LogManager.getLogger(EvaluationContext.class);
+	protected final Logger logger = LoggerFactory.getLogger(EvaluationContext.class);
 	
 	/** The tracer. */
 	private Tracer tracer = new Tracer();
@@ -193,8 +191,8 @@ public class EvaluationContext {
 		}else {
 			IRI namespace = getNamespace(predicateIRIParts[0]);
 			if(namespace==null) {
-				logger.error(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
-				addTrace(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
+				logger.error("Error identifying namespace of qName {}", predicateIRI);
+				addTrace(String.format("Error identifying namespace of qName %s", predicateIRI));
 			}else {
 				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
 			}
@@ -226,15 +224,6 @@ public class EvaluationContext {
 			return true;
 	}
 
-	/**
-	 * Adds the trace.
-	 *
-	 * @param message the message
-	 */
-	public void addTrace(Message message) {
-		if (tracer != null)
-			tracer.addTrace(message);
-	}
 
 	/**
 	 * Adds the trace.

@@ -3,9 +3,8 @@
  */
 package olgap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
@@ -58,7 +57,7 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 public class EccentricityFunction  implements Function{
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(EccentricityFunction.class);
+	private static final Logger logger   = LoggerFactory.getLogger(EccentricityFunction.class);
 	
 	/** The conn. */
 	public RepositoryConnection conn;
@@ -74,7 +73,7 @@ public class EccentricityFunction  implements Function{
 	 */
 	public EccentricityFunction() {
 		super();
-		logger.info(new ParameterizedMessage("Initiating EccentricityFunction"));
+		logger.info("Initiating EccentricityFunction");
 		workingRep = new SailRepository(new MemoryStore());
 		workingRep.init();
 	}

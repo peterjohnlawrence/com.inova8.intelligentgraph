@@ -5,8 +5,6 @@ package Exceptions;
 
 import javax.script.ScriptException;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
-
 /**
  * The Class ScriptFailedException.
  */
@@ -32,8 +30,8 @@ public class ScriptFailedException extends HandledException{
 	 * @param parameterizedMessage the parameterized message
 	 * @param e the e
 	 */
-	public ScriptFailedException(String code, ParameterizedMessage parameterizedMessage, Exception e) {
-		super(code, parameterizedMessage,e);
+	public ScriptFailedException(String code, String message, Exception e) {
+		super(code, message,e);
 	}
 
 	/**
@@ -42,8 +40,8 @@ public class ScriptFailedException extends HandledException{
 	 * @param code the code
 	 * @param parameterizedMessage the parameterized message
 	 */
-	public ScriptFailedException(String code, ParameterizedMessage parameterizedMessage) {
-		super(code, parameterizedMessage);
+	public ScriptFailedException(String code, String message) {
+		super(code, message);
 	}
 
 }

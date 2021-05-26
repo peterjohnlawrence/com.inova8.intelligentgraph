@@ -16,9 +16,8 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -58,7 +57,7 @@ import pathQL.PathParser;
 public class PathQLRepository {
 
 	/** The Constant logger. */
-	private final Logger logger = LogManager.getLogger(PathQLRepository.class);
+	private static final Logger logger   = LoggerFactory.getLogger(PathQLRepository.class);
 	private static final String FAILEDTOADDGRAPH_EXCEPTION = "Failed To Add Graph";
 	private static final String FAILEDTOOPENGRAPH_EXCEPTION = "Failed To Open Graph";
 	private static final String FAILEDTOREMOVEGRAPH_EXCEPTION = "Failed To Remove Graph";
@@ -248,7 +247,7 @@ public class PathQLRepository {
 			return null;
 		}
 	}
-	static void clearCaches() {
+	public static void clearCaches() {
 		for( PathQLRepository pathRepository:pathQLRepositories.values()) {
 			pathRepository.clearCache();
 		}
@@ -398,7 +397,7 @@ public class PathQLRepository {
 			predicateReificationTypes.put(((IRI) reificationPredicate).stringValue(), newReificationType);
 		}
 		isLazyLoaded = true;
-		this.logger.debug(initializedReification + initializedReifications.toString());
+		logger.debug(initializedReification + initializedReifications.toString());
 	}
 
 	/**
@@ -470,8 +469,8 @@ public class PathQLRepository {
 		if (customQueryOptionsArray.length == 0) {
 			return null;
 		} else if (customQueryOptionsArray.length % 2 != 0) {
-			logger.error(new ParameterizedMessage("Must have matching args tag/value pairs '{}'",
-					customQueryOptionsArray.length));
+			logger.error("Must have matching args tag/value pairs '{}'",
+					customQueryOptionsArray.length);
 			return null;
 		} else {
 			CustomQueryOptions customQueryOptions = new CustomQueryOptions();
@@ -519,8 +518,8 @@ public class PathQLRepository {
 							"Unrecognized script language:" + scriptString.getDatatype().getLocalName());
 				}
 			} catch (ScriptException e) {
-				logger.error(new ParameterizedMessage("Failed to compile '{}' language  script of  with contents:\n {}",
-						scriptString.getDatatype().getLocalName(), scriptString.toString()));
+				logger.error("Failed to compile '{}' language  script of  with contents:\n {}",
+						scriptString.getDatatype().getLocalName(), scriptString.toString());
 				throw e;
 			}
 		}
@@ -546,7 +545,7 @@ public class PathQLRepository {
 				return seeqSource;
 			} catch (Exception e) {
 				//logger.error(String.format("Failed to compile '%s' language  script of  with contents:\n %s",scriptString.getDatatype().getLocalName(), scriptString.toString()));
-				logger.error(new ParameterizedMessage("Failed to connect to SEEQSource '{}'", seeqServer));
+				logger.error("Failed to connect to SEEQSource '{}'", seeqServer);
 				throw e;
 			}
 		}
@@ -558,7 +557,7 @@ public class PathQLRepository {
 	 * @param args
 	 *            the args
 	 */
-	public static void clearCache(Value... args) {
+	public  void clearCache(Value... args) {
 		for( Thing thing:things.values()) {
 			thing.getCachedResources().clear();
 		}
@@ -571,7 +570,7 @@ public class PathQLRepository {
 //			if (customQueryOptions.containsKey("service"))
 //				clearServiceCache(customQueryOptions);
 //		}
-		//logger.debug(new ParameterizedMessage("Caches cleared {}"));
+		//logger.debug("Caches cleared {}");
 	}
 
 	/**
@@ -601,7 +600,7 @@ public class PathQLRepository {
 				}
 			}
 		} else {
-			logger.error(new ParameterizedMessage("Failed to connect to clear cache"));
+			logger.error("Failed to connect to clear cache");
 		}
 
 	}
@@ -978,7 +977,7 @@ public class PathQLRepository {
 		} else {
 			IRI namespace = getNamespace(predicateIRIParts[0], localPrefixes);
 			if (namespace == null) {
-				logger.error(new ParameterizedMessage("Error identifying namespace of qName {}", predicateIRI));
+				logger.error("Error identifying namespace of qName {}", predicateIRI);
 			} else {
 				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
 			}
@@ -1080,17 +1079,17 @@ public class PathQLRepository {
 				((Model) result).add(cacheContext, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.CACHE_DATE_TIME),
 						literal(new Date()), cacheContext);
 				cacheConnection.add((Model) result, cacheContext);
-				thing.addTrace(new ParameterizedMessage("Results cached to service {} in graph {}",
+				thing.addTrace(String.format("Results cached to service %s in graph %s",
 						addService(this.getCacheService()), addService(cacheContext.stringValue())));
 			} catch (Exception e) {
-				logger.error(new ParameterizedMessage(
+				logger.error(
 						"Failed to write results to cache  {} with context \n {} with exception {}", result.toString(),
-						cacheContext), e);
-				thing.addTrace(new ParameterizedMessage("Results NOT cached to service:{}",
+						cacheContext, e);
+				thing.addTrace(String.format("Results NOT cached to service:%s",
 						addService(this.getCacheService())));
 			}
 		} else {
-			thing.addTrace(new ParameterizedMessage("No service to cached results"));
+			thing.addTrace("No service to cached results");
 		}
 	}
 
@@ -1109,10 +1108,10 @@ public class PathQLRepository {
 			Graph addedGraph = new Graph(this,graphNameIri);
 			graphs.put(graphNameIri, addedGraph);
 			getPublicContexts().add(graphNameIri);
-			logger.debug(new ParameterizedMessage("Added new graph {} ", graphNameIri.stringValue()));
+			logger.debug("Added new graph {} ", graphNameIri.stringValue());
 		} catch (Exception qe) {
-			throw new ServerException(FAILEDTOADDGRAPH_EXCEPTION, new ParameterizedMessage(
-					"Failed to add graph {} with exception {}", graphName, qe.getMessage()), qe);
+			throw new ServerException(FAILEDTOADDGRAPH_EXCEPTION, String.format(
+					"Failed to add graph %s with exception %s", graphName, qe.getMessage()), qe);
 		}
 		return new Graph(this, graphNameIri);
 	}
@@ -1129,10 +1128,10 @@ public class PathQLRepository {
 			} else {
 				getPublicContexts().add(graphNameIri);
 			}
-			logger.debug(new ParameterizedMessage("Got graph {} ", graphNameIri.stringValue()));
+			logger.debug("Got graph {} ", graphNameIri.stringValue());
 		} catch (Exception qe) {
-			throw new ServerException(FAILEDTOOPENGRAPH_EXCEPTION, new ParameterizedMessage(
-					"Failed to get graph {} with exception {}", graphName, qe.getMessage()), qe);
+			throw new ServerException(FAILEDTOOPENGRAPH_EXCEPTION, String.format(
+					"Failed to get graph %s with exception %s", graphName, qe.getMessage()), qe);
 		}
 		return new Graph(this, graphNameIri);
 	}
@@ -1145,14 +1144,14 @@ public class PathQLRepository {
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (contextExists) {
 				connection.clear(graphNameIri);
-				logger.debug(new ParameterizedMessage("Removed graph {} ", graphNameIri.stringValue()));
+				logger.debug("Removed graph {} ", graphNameIri.stringValue());
 			}else {
 				return null;
-			//	throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  new ParameterizedMessage("Failed to remove graph {}. Does not exist", graphName)); 
+			//	throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  String.format("Failed to remove graph %s. Does not exist", graphName)); 
 			}
 
 		} catch (Exception qe) {
-			throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  new ParameterizedMessage("Failed to remove graph {}", graphName, qe.getMessage()), qe); 
+			throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  String.format("Failed to remove graph %s", graphName, qe.getMessage()), qe); 
 		}
 		return graphNameIri;
 	}
@@ -1172,8 +1171,8 @@ public class PathQLRepository {
 			}
 			
 		} catch (Exception qe) {
-			throw new ServerException(FAILEDTOCLOSEGRAPH_EXCEPTION, new ParameterizedMessage(
-					"Failed to close graph {} with exception {}", graphName, qe.getMessage()), qe);
+			throw new ServerException(FAILEDTOCLOSEGRAPH_EXCEPTION, String.format(
+					"Failed to close graph %s with exception %s", graphName, qe.getMessage()), qe);
 		}
 	}
 	public void initializeContexts() {

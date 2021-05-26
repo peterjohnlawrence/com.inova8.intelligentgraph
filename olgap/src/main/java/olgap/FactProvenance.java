@@ -17,9 +17,8 @@ import pathCalc.Thing;
 import pathQLRepository.PathQLRepository;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ParameterizedMessage;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -28,14 +27,14 @@ import org.apache.logging.log4j.LogManager;
 public class FactProvenance extends Evaluator implements Function {
 	
 	/** The logger. */
-	private final Logger logger = LogManager.getLogger(FactProvenance.class);
+	private static final Logger logger   = LoggerFactory.getLogger(FactProvenance.class);
 
 	/**
 	 * Instantiates a new fact provenance.
 	 */
 	public FactProvenance()  {
 		super();
-		logger.info(new ParameterizedMessage("Initiating FactProvenance"));
+		logger.info("Initiating FactProvenance");
 	}
 	
 	/**
@@ -60,11 +59,11 @@ public class FactProvenance extends Evaluator implements Function {
 	 */
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
-		logger.debug(new ParameterizedMessage("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),args));
+		logger.debug("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),args);
 		if(args.length <2) {
-			ParameterizedMessage message = new ParameterizedMessage("At least subject, and predicate arguments required");
+			String message ="At least subject, and predicate arguments required";
 			logger.error(message);
-			return tripleSource.getValueFactory().createLiteral(message.toString());
+			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
 
 			IRI subject ;
@@ -73,9 +72,9 @@ public class FactProvenance extends Evaluator implements Function {
 				subject = (IRI) args[0];
 				predicate = (IRI) args[1];
 			} catch(Exception e) {
-				ParameterizedMessage message = new ParameterizedMessage("Subject and predicate must be valid IRI");
+				String message = "Subject and predicate must be valid IRI";
 				logger.error(message);
-				return tripleSource.getValueFactory().createLiteral(message.toString());
+				return tripleSource.getValueFactory().createLiteral(message);
 			}
 			try{
 				Value[] argumentArray = Arrays.copyOfRange(args,2, args.length);

@@ -3,8 +3,6 @@
  */
 package Exceptions;
 
-import org.apache.logging.log4j.message.ParameterizedMessage;
-
 /**
  * The Class NullValueReturnedException.
  */
@@ -19,8 +17,8 @@ public class NullValueReturnedException extends HandledException{
 	 * @param code the code
 	 * @param parameterizedMessage the parameterized message
 	 */
-	public NullValueReturnedException(String code, ParameterizedMessage parameterizedMessage) {
-		super(code, parameterizedMessage);
+	public NullValueReturnedException(String code, String message) {
+		super(code, message);
 	}
 
 
