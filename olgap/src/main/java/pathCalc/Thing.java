@@ -465,7 +465,7 @@ public class Thing extends Resource {
 					Resource result = this.handleScript(literalValue, predicate);//getFact(predicate, literalValue);
 					if (result != null) {
 
-						getCachedResources().put(key, result);
+						//getCachedResources().put(key, result);
 						addTrace(String.format("Calculated %s of %s = %s", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
 					}

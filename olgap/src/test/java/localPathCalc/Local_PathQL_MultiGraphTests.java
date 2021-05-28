@@ -191,14 +191,22 @@ class Local_PathQL_MultiGraphTests {
 	@Order(20)
 	void test_20() {
 		try {
-			Thing myCountry = addGraph2();
+		//	Thing myCountry = addGraph2();
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
+			Thing myCountry = graph.getThing(":Country");
+			myCountry.addFact(":sales", "1");
+			myCountry.addFact(":sales", "2");
+			myCountry.addFact(":sales", "3");
+			myCountry.addFact(":sales", "4");
+			myCountry.addFact(":sales", "5");
+		//	myCountry.addFact(":sales", "60");
 			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			assertEquals(3.0, averageCountrySales);
 			
 		} catch (Exception e) {
@@ -213,13 +221,21 @@ class Local_PathQL_MultiGraphTests {
 	@Order(30)
 	void test_30() {
 		try {
-			Thing myCountry = addGraph3();
+			//Thing myCountry = addGraph3();
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
+			Thing myCountry = graph.getThing(":Country");
+			myCountry.addFact(":sales", "10");
+			myCountry.addFact(":sales", "20");
+			myCountry.addFact(":sales", "30");
+			myCountry.addFact(":sales", "40");
+			myCountry.addFact(":sales", "50");
 			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
 			assertEquals(150.0, totalCountrySales);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			source.closeGraph("<http://inova8.com/calc2graph/testGraph3>");
+		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			
 		} catch (Exception e) {
 			fail();
@@ -233,20 +249,29 @@ class Local_PathQL_MultiGraphTests {
 	@Order(40)
 	void test_40() {
 		try {
-			Thing myCountry = addGraph4();
+			//Thing myCountry = addGraph4();
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph4>");
+			Thing myCountry = graph.getThing(":Country");
+			myCountry.addFact(":sales", "100");
+			myCountry.addFact(":sales", "200");
+			myCountry.addFact(":sales", "300");
+			myCountry.addFact(":sales", "400");
+			myCountry.addFact(":sales", "500");
 			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(300.0, averageCountrySales);
-			myCountry.addFact(":sales", "600");
-			 averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
+		    myCountry.addFact(":sales", "600");
+		    averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(350, averageCountrySales);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
+			source.closeGraph("<http://inova8.com/calc2graph/testGraph4>");
+		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			
 		} catch (Exception e) {
 			fail();
 		}
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 	}
 
 
@@ -297,11 +322,65 @@ class Local_PathQL_MultiGraphTests {
 			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=javax.script.ScriptException: Exceptions.ScriptFailedException: Error identifying namespace of qName :sales;",result);
 
 		} catch (Exception e) {
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			fail();
 			e.printStackTrace();
 		}
 	}
-	
+	@Test
+	@Order(65)
+	void ig_65() {
+		
+		try {
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
+			Thing myCountry= addGraph2();
+			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
+			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o \n"
+					+ "FROM <http://inova8.com/calc2graph/testGraph2>\n"
+					+ "FROM <http://default>\n"
+				//	+ "FROM <file://calc2graph.data.ttl>\n"
+				//	+ "FROM <file://calc2graph.def.ttl>\n"
+					+ "{\n"
+					+"VALUES(?s){(<http://inova8.com/calc2graph/def/Country>)} "
+					+ "  ?s  :averageSales  ?o } limit 10";
+
+
+			String result = Query.runSPARQL(conn, queryString1);
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=javax.script.ScriptException: Exceptions.ScriptFailedException: Error identifying namespace of qName :sales;",result);
+
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+		}
+
+		try {
+			Thing myCountry=addGraph3();
+			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
+			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
+			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
+					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
+					+ "FROM <http://default>\n"
+			//		+ "FROM <file://calc2graph.data.ttl>\r\n"
+			//		+ "FROM <file://calc2graph.def.ttl>\r\n"
+					+ "{\r\n"
+					+ "  ?s  :totalSales  ?o} limit 10";
+
+
+			String result = Query.runSPARQL(conn, queryString1);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;",result);
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			 result = Query.runSPARQL(conn, queryString1);
+			assertEquals("",result);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Ig 70.
 	 */
@@ -310,19 +389,29 @@ class Local_PathQL_MultiGraphTests {
 	void ig_70() {
 
 		try {
-			Thing myCountry=addGraph3();
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
+			Thing myCountry = graph.getThing(":Country1");
+			myCountry.addFact(":sales", "100");
+			myCountry.addFact(":sales", "200");
+			myCountry.addFact(":sales", "300");
+			myCountry.addFact(":sales", "400");
+			myCountry.addFact(":sales", "500");
 			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
-					+ "FROM <file://calc2graph.data.ttl>\r\n"
-					+ "FROM <file://calc2graph.def.ttl>\r\n"
+					+ "FROM <http://default>\n"
+//					+ "FROM <file://calc2graph.data.ttl>\r\n"
+//					+ "FROM <file://calc2graph.def.ttl>\r\n"
 					+ "{\r\n"
 					+ "  ?s  :totalSales  ?o} limit 10";
 
 
 			String result = Query.runSPARQL(conn, queryString1);
 			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;",result);
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			 result = Query.runSPARQL(conn, queryString1);
+			assertEquals("",result);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -344,8 +433,9 @@ class Local_PathQL_MultiGraphTests {
 			conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph4>\r\n"
-					+ "FROM <file://calc2graph.data.ttl>\r\n"
-					+ "FROM <file://calc2graph.def.ttl>\r\n"
+					+ "FROM <http://default>\n"
+//					+ "FROM <file://calc2graph.data.ttl>\r\n"
+//					+ "FROM <file://calc2graph.def.ttl>\r\n"
 					+ "{\r\n"
 					+ "  ?s  :averageSales  ?o } limit 10";
 
@@ -373,8 +463,9 @@ class Local_PathQL_MultiGraphTests {
 					+ "  ?s  :averageSales  ?o.\r\n"
 					+ "} "
 					+ "FROM <http://inova8.com/calc2graph/testGraph4>\r\n"
-					+ "FROM <file://calc2graph.data.ttl>\r\n"
-					+ "FROM <file://calc2graph.def.ttl>\r\n"
+					+ "FROM <http://default>\n"
+//					+ "FROM <file://calc2graph.data.ttl>\r\n"
+//					+ "FROM <file://calc2graph.def.ttl>\r\n"
 					+ "{\r\n"
 					+ "  ?s  :averageSales  ?o } limit 10";
 

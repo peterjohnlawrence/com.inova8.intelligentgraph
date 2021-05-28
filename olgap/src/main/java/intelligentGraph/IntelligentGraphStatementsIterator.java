@@ -22,7 +22,7 @@ import pathQLRepository.PathQLRepository;
 /**
  * The Class IntelligentGraphStatementsIterator.
  */
-public class IntelligentGraphStatementsIterator extends AbstractCloseableIteration< Statement, SailException> { // CloseableIteration
+public class IntelligentGraphStatementsIterator extends AbstractCloseableIteration< IntelligentStatement, SailException> { // CloseableIteration
 	
 	/** The statements iterator. */
 	private CloseableIteration<? extends Statement, SailException> statementsIterator;
@@ -33,7 +33,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	
 	/** The intelligent graph connection. */
 	private IntelligentGraphConnection intelligentGraphConnection;
-	
+	private EvaluationContext evaluationContext;
 	/** The contexts. */
 	private Resource[] contexts;
 	
@@ -53,6 +53,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 		this.intelligentGraphSail = intelligentGraphSail;
 		this.intelligentGraphConnection = intelligentGraphConnection;
 		this.contexts = contexts;
+		this.evaluationContext = new EvaluationContext(getSource().getPrefixes(), contexts);
 	}
 	
 	/**
@@ -60,8 +61,8 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	 *
 	 * @return the statements iterator
 	 */
-	public CloseableIteration<? extends Statement, SailException> getStatementsIterator() {
-		return statementsIterator;
+	public CloseableIteration<? extends IntelligentStatement, SailException> getStatementsIterator() {
+		return (CloseableIteration< IntelligentStatement, SailException>) statementsIterator;
 	}
 	
 	/**
@@ -89,7 +90,6 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	 */
 	public PathQLRepository getSource() {
 		return PathQLRepository.create(intelligentGraphConnection);
-		//return new PathQLRepository(intelligentGraphConnection);
 	}
 	
 	/**
@@ -103,6 +103,10 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 
 	 return	getStatementsIterator().hasNext();
 	}
+	private EvaluationContext getEvaluationContext() {
+
+	 return  evaluationContext;
+	}
 
 	/**
 	 * Next.
@@ -111,29 +115,30 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	 * @throws SailException the sail exception
 	 */
 	@Override
-	public Statement next() throws SailException {
-		Statement nextStatement = getStatementsIterator().next();
-		if( nextStatement.getObject().isLiteral()) {
-			SimpleLiteral literalValue = (SimpleLiteral)(nextStatement.getObject());
-			if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
-				PathQLRepository source = getSource();
-				EvaluationContext evaluationContext = new EvaluationContext(source.getPrefixes(), contexts);
-				Thing subjectThing = Thing.create(source, (IRI)nextStatement.getContext(), nextStatement.getSubject(), evaluationContext);	
-				 try {
-					 pathQLModel.Resource fact = subjectThing.getFact(nextStatement.getPredicate(),//new PredicateElement(getSource(),nextStatement.getPredicate()),
-							 literalValue);
-					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), fact.getSuperValue(), nextStatement.getContext());
-				 }catch (Exception e) {
-					 String exceptionMessage = e.getMessage();
-					 if (exceptionMessage==null) exceptionMessage="Exception w/o message";
-					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), literal(exceptionMessage), nextStatement.getContext());
-				 }
-			}else {
-				return nextStatement;
-			}
-		}	else {
-			return nextStatement;
-		}
+	public IntelligentStatement next() throws SailException {
+		//Evaluation moved to getObject in IntelligentStatement so that evalation only performed if object value requested
+//		if( nextStatement.getObject().isLiteral()) {
+//			SimpleLiteral literalValue = (SimpleLiteral)(nextStatement.getObject());
+//			if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
+//				PathQLRepository source = getSource();
+//				EvaluationContext evaluationContext = new EvaluationContext(source.getPrefixes(), contexts);
+//				Thing subjectThing = Thing.create(source, (IRI)nextStatement.getContext(), nextStatement.getSubject(), evaluationContext);	
+//				 try {
+//					 pathQLModel.Resource fact = subjectThing.getFact(nextStatement.getPredicate(),//new PredicateElement(getSource(),nextStatement.getPredicate()),
+//							 literalValue);
+//					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), fact.getSuperValue(), nextStatement.getContext());
+//				 }catch (Exception e) {
+//					 String exceptionMessage = e.getMessage();
+//					 if (exceptionMessage==null) exceptionMessage="Exception w/o message";
+//					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), literal(exceptionMessage), nextStatement.getContext());
+//				 }
+//			}else {
+//				return nextStatement;
+//			}
+//		}	else {
+//			return nextStatement;
+//		}
+		return  new IntelligentStatement(getStatementsIterator().next(),getSource(),getEvaluationContext());
 	}
 
 	/**

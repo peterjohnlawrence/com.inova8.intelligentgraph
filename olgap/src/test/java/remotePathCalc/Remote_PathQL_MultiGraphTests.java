@@ -3,9 +3,11 @@
  */
 package remotePathCalc;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -18,6 +20,7 @@ import pathQLModel.Resource;
 import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
 import pathQLResults.ResourceResults;
+import utilities.Query;
 
 /**
  * The Class RemoteThingTests.
@@ -148,8 +151,8 @@ class Remote_PathQL_MultiGraphTests {
 			myCountry.addFact(":sales", "500");
 			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			
-			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
+			Double averageCountrySales;
+			averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(300.0, averageCountrySales);
 		    averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(300.0, averageCountrySales);
@@ -190,6 +193,47 @@ class Remote_PathQL_MultiGraphTests {
 			//}
 		} catch (Exception e) {
 			fail();
+		}
+	}
+	/**
+	 * Ig 70.
+	 */
+	@Test
+	@Order(70)
+	void ig_70() {
+
+		try {
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
+			Thing myCountry = graph.getThing(":Country1");
+			myCountry.addFact(":sales", "100");
+			myCountry.addFact(":sales", "200");
+			myCountry.addFact(":sales", "300");
+			myCountry.addFact(":sales", "400");
+			myCountry.addFact(":sales", "500");
+			RepositoryConnection conn = source.getRepository().getConnection();
+			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
+			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
+			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
+					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
+					+ "FROM <http://default>\n"
+//					+ "FROM <file://calc2graph.data.ttl>\r\n"
+//					+ "FROM <file://calc2graph.def.ttl>\r\n"
+					+ "{\r\n"
+					+ "  ?s  :totalSales  ?o} limit 10";
+
+
+			String result = Query.runSPARQL(conn, queryString1);
+		
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;",result);
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			 result = Query.runSPARQL(conn, queryString1);
+			assertEquals("",result);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+			
+		}finally {
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 		}
 	}
 }

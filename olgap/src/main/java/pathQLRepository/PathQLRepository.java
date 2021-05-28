@@ -1146,6 +1146,7 @@ public class PathQLRepository {
 				connection.clear(graphNameIri);
 				logger.debug("Removed graph {} ", graphNameIri.stringValue());
 			}else {
+				logger.error("Failed to remove graph {} ", graphNameIri.stringValue());
 				return null;
 			//	throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,  String.format("Failed to remove graph %s. Does not exist", graphName)); 
 			}

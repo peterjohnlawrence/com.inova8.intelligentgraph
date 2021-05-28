@@ -22,8 +22,6 @@ import org.eclipse.rdf4j.query.algebra.evaluation.QueryBindingSet;
 import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.impl.SimpleBinding;
 import org.eclipse.rdf4j.sail.SailConnection;
-import org.eclipse.rdf4j.sail.evaluation.SailTripleSource;
-
 import intelligentGraph.IntelligentGraphSail.ResponseType;
 import pathCalc.CustomQueryOptions;
 import pathCalc.EvaluationContext;
@@ -74,8 +72,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	public IntelligentGraphEvaluator(CloseableIteration<? extends BindingSet, QueryEvaluationException> iter,
 			QueryContext queryContext, ProjectionElemList originalProjectionElemList) {
 		this.queryContext = queryContext;
-		this.evaluator = //(AbstractCloseableIteration<? extends BindingSet, QueryEvaluationException>) 
-				iter;
+		this.evaluator = iter;
 		this.originalProjectionElemList = originalProjectionElemList;
 		if (this.originalProjectionElemList != null)
 			this.originalTargetNames = originalProjectionElemList.getTargetNames();
@@ -105,12 +102,12 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	 * @return the parameters
 	 */
 	public Properties getParameters() {
-		return ((IntelligentGraphSail) queryContext.getAttribute("sail")).getParameters();
+		return ((IntelligentGraphSail) queryContext.getAttribute(IntelligentGraphConnection.SAIL)).getParameters();
 	}
 
 
 	public Prefixes getPrefixes() {
-		return (Prefixes) queryContext.getAttribute("prefixes");
+		return (Prefixes) queryContext.getAttribute(IntelligentGraphConnection.PREFIXES);
 	}
 
 	/**
@@ -119,7 +116,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	 * @return the tuple expr
 	 */
 	public TupleExpr getTupleExpr() {
-		return ((TupleExpr) queryContext.getAttribute("tupleExpr"));
+		return ((TupleExpr) queryContext.getAttribute(IntelligentGraphConnection.TUPLEEXPR));
 	}
 
 	/**
@@ -128,7 +125,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	 * @return the dataset
 	 */
 	public Dataset getDataset() {
-		return ((Dataset) queryContext.getAttribute("dataset"));
+		return ((Dataset) queryContext.getAttribute(IntelligentGraphConnection.DATASET));
 	}
 
 	/**
@@ -149,7 +146,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	 * @return the query type
 	 */
 	public QueryType getQueryType() {
-		return ((QueryType) queryContext.getAttribute("queryType"));
+		return ((QueryType) queryContext.getAttribute(IntelligentGraphConnection.QUERYTYPE));
 	}
 
 	/**
@@ -158,9 +155,8 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	 * @return the source
 	 */
 	public PathQLRepository getSource() {
-		SailConnection conn = (SailConnection) queryContext.getAttribute("wrappedCon");
-	//	return PathQLRepository.create((IntelligentGraphConnection) conn) ;
-		return  PathQLRepository.create(new SailTripleSource(conn, true, null));
+		SailConnection conn = (SailConnection) queryContext.getAttribute(IntelligentGraphConnection.INTELLIGENTGRAPHCONNECTION);
+		return PathQLRepository.create((IntelligentGraphConnection) conn) ;	
 	}
 
 	/**

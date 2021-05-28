@@ -50,6 +50,7 @@ import pathQLResults.ResourceResults;
 import utilities.Query;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
+import static org.eclipse.rdf4j.model.util.Values.literal;
 /**
  * The Class PathQLTests.
  */
@@ -207,6 +208,38 @@ class Local_CRUD_Test {
 			for(Statement statement: statements) {
 				Value object = statement.getObject();
 				assertEquals(0.7, ((Literal) object).doubleValue(),0);
+			}
+		} catch (Exception e) {
+
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(4)
+	void ig_4() {
+
+		try {
+			RepositoryResult<Statement> statements = conn.getStatements((org.eclipse.rdf4j.model.Resource)iri("http://inova8.com/calc2graph/id/Unit1"), iri("http://inova8.com/pathql/getFacts"), literal("<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>"));
+			for(Statement statement: statements) {
+				Value object = statement.getObject();
+				assertEquals("http://inova8.com/calc2graph/id/BatteryLimit1",  object.stringValue());
+			}
+		} catch (Exception e) {
+
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(5)
+	void ig_5() {
+
+		try {
+			RepositoryResult<Statement> statements = conn.getStatements((org.eclipse.rdf4j.model.Resource)iri("http://inova8.com/calc2graph/id/Unit1"), iri("http://inova8.com/pathql/getFacts"), literal("<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>/<http://inova8.com/calc2graph/def/density>"));
+			for(Statement statement: statements) {
+				Value object = statement.getObject();
+				assertEquals(".42",  object.stringValue());
 			}
 		} catch (Exception e) {
 

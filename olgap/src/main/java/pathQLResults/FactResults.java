@@ -10,7 +10,6 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import pathCalc.Thing;
-import pathPatternElement.Edge;
 import pathPatternElement.Path;
 import pathPatternElement.PathElement;
 import pathQLModel.Fact;
@@ -73,6 +72,9 @@ public class FactResults extends ResourceResults {
 			return thing;
 		}
 		else {
+			//No script string should ever get here without having been processed first, so treat them all as literals
+			//TODO somehow there are paths that get directly here:-(
+//			return  Resource.create(getSource(), factValue, this.getEvaluationContext());
 			Value factPredicate = next.getValue(getPathElement().getTargetPredicate().getName());
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
 			Thing thing = Thing.create(getSource(),this.getThing().getGraphName(), factThing ,this.getEvaluationContext());
