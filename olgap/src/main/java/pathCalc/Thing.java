@@ -26,23 +26,21 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
-import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
-
 import Exceptions.CircularReferenceException;
 import Exceptions.HandledException;
 import Exceptions.NotSupportedException;
 import Exceptions.NullValueReturnedException;
 import Exceptions.ScriptFailedException;
 import pathPatternElement.PredicateElement;
-import pathPatternElement.Variable;
 import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
 import pathQL.PathQL;
+import pathQLModel.Fact;
 import pathQLModel.NullValue;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
@@ -100,6 +98,8 @@ public class Thing extends Resource {
 			if(evaluationContext!=null) {
 				if(thing.evaluationContext.getPrefixes()==null || thing.evaluationContext.getPrefixes().isEmpty())thing.evaluationContext.setPrefixes(evaluationContext.getPrefixes());
 				if(evaluationContext.getCustomQueryOptions()!=null && !evaluationContext.getCustomQueryOptions().isEmpty())thing.evaluationContext.setCustomQueryOptions(evaluationContext.getCustomQueryOptions());
+				if(evaluationContext.getTracer()!=null && evaluationContext.getTracer().isTracing())thing.evaluationContext.setTracer(evaluationContext.getTracer());
+				if(evaluationContext.getDataset()!=null )thing.evaluationContext.setDataset(evaluationContext.getDataset());
 			}
 			return thing;
 		} else {
@@ -256,7 +256,8 @@ public class Thing extends Resource {
 	 *             the path pattern exception
 	 */
 	public final ResourceResults getFacts(String predicatePattern) throws PathPatternException {
-
+		//CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
+		//return new ResourceStatementResults( statementIterator,this);
 		return PathQL.evaluate(this, predicatePattern);
 	}
 
@@ -464,8 +465,8 @@ public class Thing extends Resource {
 				} else {
 					Resource result = this.handleScript(literalValue, predicate);//getFact(predicate, literalValue);
 					if (result != null) {
-
-						//getCachedResources().put(key, result);
+						//TODO validate caching
+						getCachedResources().put(key, result);
 						addTrace(String.format("Calculated %s of %s = %s", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
 					}
@@ -690,16 +691,9 @@ public class Thing extends Resource {
 
 	private void deleteFacts(pathQLResults.ResourceResults facts) throws QueryEvaluationException, RepositoryException {
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
-		PredicateElement predicateElement = (PredicateElement) facts.getPathElement();
 		while (facts.hasNext()) {
-			BindingSet bindingSet = facts.nextBindingSet();
-			Variable subject = predicateElement.getTargetSubject();
-			Variable predicate = predicateElement.getTargetPredicate();
-			Variable target = predicateElement.getTargetVariable();
-			Value subjectValue = bindingSet.getValue(subject.getName());
-			Value predicateValue = bindingSet.getValue(predicate.getName());
-			Value targetValue = bindingSet.getValue(target.getName());
-			connection.remove((IRI) subjectValue, (IRI) predicateValue, targetValue, this.getGraphName());
+			Fact nextFact = facts.nextFact();		
+			connection.remove(nextFact.getSubjectIRI(), nextFact.getPredicateIRI(), nextFact.getValue(), this.getGraphName());
 		}
 	}
 
@@ -711,23 +705,10 @@ public class Thing extends Resource {
 		ReificationType reificationType = this.getSource().getReificationTypes()
 				.get(predicateElement.getReification().stringValue());
 		if (reificationType != null) {
-			Variable reification = predicateElement.getReifiedVariable();
-			//			Variable subject = predicateElement.getTargetSubject();
-			//			Variable predicate = predicateElement.getTargetPredicate();
-			//			Variable target = predicateElement.getTargetVariable();
-			while (facts.hasNext()) {
-				BindingSet bindingSet = facts.nextBindingSet();
-				IRI reificationValue = (IRI) bindingSet.getValue(reification.getName());
 
-				//This will clean out any reference to the reification, including metadata
+			while (facts.hasNext()) {
+				IRI reificationValue = facts.nextReifiedValue();		
 				connection.remove(reificationValue, null, null, this.getGraphName());
-				//				Value subjectValue = bindingSet.getValue(subject.getName());
-				//				Value predicateValue = bindingSet.getValue(predicate.getName());
-				//				Value targetValue = bindingSet.getValue(target.getName());	
-				//				connection.remove(reificationValue, Evaluator.RDF_TYPE_IRI, predicateElement.getReification() , this.getGraph().getGraphName());
-				//				connection.remove(reificationValue, reificationType.getReificationSubject(), subjectValue, this.getGraph().getGraphName());
-				//				connection.remove(reificationValue, reificationType.getReificationPredicate() ,predicateValue, this.getGraph().getGraphName());
-				//				connection.remove(reificationValue, reificationType.getReificationObject() ,targetValue, this.getGraph().getGraphName());
 			}
 		} else {
 			logger.error("Reified type not supported:" + predicateElement.toString());

@@ -7,16 +7,11 @@ import java.util.Properties;
 
 import org.eclipse.rdf4j.common.iteration.AbstractCloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.sail.SailException;
-import static org.eclipse.rdf4j.model.util.Values.literal;
 import pathCalc.EvaluationContext;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
 import pathQLRepository.PathQLRepository;
 
 /**
@@ -35,6 +30,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	private IntelligentGraphConnection intelligentGraphConnection;
 	private EvaluationContext evaluationContext;
 	/** The contexts. */
+	@SuppressWarnings("unused")
 	private Resource[] contexts;
 	
 	/**
@@ -61,6 +57,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	 *
 	 * @return the statements iterator
 	 */
+	@SuppressWarnings("unchecked")
 	public CloseableIteration<? extends IntelligentStatement, SailException> getStatementsIterator() {
 		return (CloseableIteration< IntelligentStatement, SailException>) statementsIterator;
 	}
@@ -116,28 +113,6 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	 */
 	@Override
 	public IntelligentStatement next() throws SailException {
-		//Evaluation moved to getObject in IntelligentStatement so that evalation only performed if object value requested
-//		if( nextStatement.getObject().isLiteral()) {
-//			SimpleLiteral literalValue = (SimpleLiteral)(nextStatement.getObject());
-//			if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
-//				PathQLRepository source = getSource();
-//				EvaluationContext evaluationContext = new EvaluationContext(source.getPrefixes(), contexts);
-//				Thing subjectThing = Thing.create(source, (IRI)nextStatement.getContext(), nextStatement.getSubject(), evaluationContext);	
-//				 try {
-//					 pathQLModel.Resource fact = subjectThing.getFact(nextStatement.getPredicate(),//new PredicateElement(getSource(),nextStatement.getPredicate()),
-//							 literalValue);
-//					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), fact.getSuperValue(), nextStatement.getContext());
-//				 }catch (Exception e) {
-//					 String exceptionMessage = e.getMessage();
-//					 if (exceptionMessage==null) exceptionMessage="Exception w/o message";
-//					 return getValueFactory().createStatement(nextStatement.getSubject(), nextStatement.getPredicate(), literal(exceptionMessage), nextStatement.getContext());
-//				 }
-//			}else {
-//				return nextStatement;
-//			}
-//		}	else {
-//			return nextStatement;
-//		}
 		return  new IntelligentStatement(getStatementsIterator().next(),getSource(),getEvaluationContext());
 	}
 

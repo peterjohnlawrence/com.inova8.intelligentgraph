@@ -12,12 +12,11 @@ import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iterator.CloseableIterationIterator;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
-import org.eclipse.rdf4j.query.BindingSet;
-
 import pathCalc.EvaluationContext;
 import pathCalc.Thing;
 import pathCalc.Tracer;
 import pathPatternElement.PathElement;
+import pathQLModel.Fact;
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
 
@@ -35,36 +34,23 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	/** The source. */
 	protected PathQLRepository source;
 
-	/** The resource set. */
-	CloseableIteration<BindingSet, QueryEvaluationException> resourceSet;
 
 	/**
 	 * Instantiates a new resource results.
 	 *
 	 * @param resourceSet the resource set
 	 */
-	public ResourceResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet) {
-		this.resourceSet =resourceSet;
+	public ResourceResults() {
 	}
+	
 	
 	/**
 	 * Instantiates a new resource results.
 	 *
+	 * @param resourceSet the resource set
 	 * @param thing the thing
 	 */
 	public ResourceResults( Thing thing ){
-
-		this.thing = thing; 
-	}
-	
-	/**
-	 * Instantiates a new resource results.
-	 *
-	 * @param resourceSet the resource set
-	 * @param thing the thing
-	 */
-	public ResourceResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing ){
-		this.resourceSet =resourceSet;
 		this.thing = thing; 
 	}
 	
@@ -75,8 +61,8 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 * @param thing the thing
 	 * @param pathElement the path element
 	 */
-	public ResourceResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing, PathElement pathElement  ){
-		this.resourceSet =resourceSet;
+	public ResourceResults( Thing thing, PathElement pathElement  ){
+
 		this.thing = thing; 
 		this.pathElement = pathElement;
 	}
@@ -88,8 +74,7 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 * @param source the source
 	 * @param pathElement the path element
 	 */
-	public ResourceResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet, PathQLRepository source,  PathElement pathElement  ){
-		this.resourceSet =resourceSet;
+	public ResourceResults( PathQLRepository source,  PathElement pathElement  ){
 		this.source = source; 
 		this.pathElement = pathElement;
 	}
@@ -108,65 +93,6 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		this.thing = thing; 
 
 	}
-	
-	/**
-	 * Checks for next.
-	 *
-	 * @return true, if successful
-	 * @throws QueryEvaluationException the query evaluation exception
-	 */
-	@Override
-	public boolean hasNext() throws QueryEvaluationException {
-		return getResourceSet().hasNext();
-	}
-
-	/**
-	 * Next.
-	 *
-	 * @return the resource
-	 * @throws QueryEvaluationException the query evaluation exception
-	 */
-	@Override
-	public Resource next() throws QueryEvaluationException {
-		BindingSet next = getResourceSet().next();
-		//return thing.getSource().resourceFactory(getTracer(), next.getValue(getPathElement().getTargetVariable().getName()), getStack(), getCustomQueryOptions(),getPrefixes());
-		return Resource.create(thing.getSource(), next.getValue(getPathElement().getTargetVariable().getName()), getEvaluationContext());
-	}
-
-	/**
-	 * Removes the.
-	 *
-	 * @throws QueryEvaluationException the query evaluation exception
-	 */
-	@Override
-	public void remove() throws QueryEvaluationException {
-		resourceSet.remove();	
-	}
-
-	/**
-	 * Close.
-	 *
-	 * @throws QueryEvaluationException the query evaluation exception
-	 */
-	@Override
-	public void close() throws QueryEvaluationException {
-		resourceSet.close();		
-	}
-
-	/**
-	 * Gets the statements.
-	 *
-	 * @return the statements
-	 */
-	protected	CloseableIteration<BindingSet, QueryEvaluationException> getStatements() {
-		return (CloseableIteration<BindingSet, QueryEvaluationException>) resourceSet;
-	}
-	
-	/**
-	 * Gets the source.
-	 *
-	 * @return the source
-	 */
 	public PathQLRepository getSource() {
 		if(source!=null)
 			return source;
@@ -197,17 +123,6 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 			return null;
 	}
 
-	/**
-	 * Gets the prefixes.
-	 *
-	 * @return the prefixes
-	 */
-//	protected HashMap<String, IRI> getPrefixes() {
-//		if(thing!=null)
-//			return thing.getPrefixes();
-//		else 
-//			return getSource().getPrefixes();
-//	}
 	protected EvaluationContext getEvaluationContext() {
 		if(thing!=null)
 			return thing.getEvaluationContext();
@@ -276,32 +191,10 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	public Iterator<Resource> iterator() {
 		return new CloseableIterationIterator<>(this);
 	}
-	
-	/**
-	 * Next binding set.
-	 *
-	 * @return the binding set
-	 */
-	public BindingSet nextBindingSet() {
-		return getResourceSet().next();
-	}
 
-	/**
-	 * Gets the resource set.
-	 *
-	 * @return the resource set
-	 */
-	public CloseableIteration<BindingSet, QueryEvaluationException> getResourceSet() {
-		return resourceSet;
-	}
-	
-	/**
-	 * Next resource.
-	 *
-	 * @return the resource
-	 */
 	public abstract Resource nextResource();
-	
+	public abstract Fact nextFact();	
+	public abstract IRI nextReifiedValue();
 	/**
 	 * Count.
 	 *

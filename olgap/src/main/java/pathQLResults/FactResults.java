@@ -19,7 +19,7 @@ import pathQLRepository.PathQLRepository;
 /**
  * The Class FactResults.
  */
-public class FactResults extends ResourceResults {
+public class FactResults extends ResourceBindingSetResults {
 
 	/**
 	 * Instantiates a new fact results.

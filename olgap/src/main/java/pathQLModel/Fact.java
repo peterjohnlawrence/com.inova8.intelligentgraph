@@ -63,7 +63,9 @@ public class Fact extends Resource {
 	public Resource getPredicate() {
 		return predicate;
 	}
-	
+	public IRI getPredicateIRI() {
+		return (IRI) predicate.getSuperValue();
+	}	
 	/**
 	 * Gets the subject.
 	 *
@@ -72,7 +74,9 @@ public class Fact extends Resource {
 	public Resource getSubject() {
 		return subject;
 	}
-
+	public IRI getSubjectIRI() {
+		return (IRI) subject.getSuperValue();
+	}
 	/**
 	 * To string.
 	 *

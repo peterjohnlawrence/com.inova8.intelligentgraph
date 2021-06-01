@@ -37,7 +37,6 @@ import pathPatternElement.PathElement;
 import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
 import pathQLRepository.PathQLRepository;
-import pathQLResults.StatementResults;
 
 //import pathCalc.Prefixes;
 
@@ -53,7 +52,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	static final String INTELLIGENTGRAPHCONNECTION = "intelligentGraphConnection";
 	static final String TUPLEEXPR = "tupleExpr";
 	static final String SAIL = "sail";
-	private static final String GETFACTS = "http://inova8.com/pathql/getFacts";
+	public static final String GETFACTS = "http://inova8.com/pathql/getFacts";
 	private static final String GETFACT = "http://inova8.com/pathql/getFact";
 	protected final Logger logger = LoggerFactory.getLogger(IntelligentGraphConnection.class);
 	/** The intelligent graph sail. */
@@ -188,7 +187,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		BindingSet bindings = new QueryBindingSet();
 		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(pathElementPattern,bindings);
-		return (CloseableIteration<? extends IntelligentStatement, SailException>) new StatementResults( resultsIterator,thing, pathElement);
+		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement);
 	}
 
 	/**

@@ -13,7 +13,7 @@ import pathQLModel.MatchFact;
  * The Class MatchResults.
  */
 @Deprecated
-public class MatchResults extends ResourceResults {
+public class MatchResults extends ResourceBindingSetResults {
 	
 	/**
 	 * Instantiates a new match results.

@@ -14,7 +14,7 @@ import pathQLModel.Resource;
 /**
  * The Class PathQLResults.
  */
-public class PathQLResults extends ResourceResults {
+public class PathQLResults extends ResourceBindingSetResults {
 	
 	/**
 	 * Instantiates a new path QL results.

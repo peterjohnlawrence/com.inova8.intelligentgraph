@@ -137,16 +137,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	public PathQLRepository getSource() {
 		return source;
 	}
-	
-//	/**
-//	 * Gets the cached values.
-//	 *
-//	 * @return the cached values
-//	 */
-//	public HashMap<String, Resource> getCachedValues() {
-//		return getCachedResources();
-//	}
-	
 	/**
 	 * Gets the custom query options.
 	 *
@@ -180,8 +170,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	public void setTracer(Tracer tracer) {
 		if (evaluationContext!=null)
 			 evaluationContext.setTracer(tracer);
-//		this.tracer = tracer;
-//		return this;
 	}
 
 	/**

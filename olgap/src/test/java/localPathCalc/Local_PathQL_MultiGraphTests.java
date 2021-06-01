@@ -319,7 +319,7 @@ class Local_PathQL_MultiGraphTests {
 
 			String result = Query.runSPARQL(conn, queryString1);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=javax.script.ScriptException: Exceptions.ScriptFailedException: Error identifying namespace of qName :sales;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;",result);
 
 		} catch (Exception e) {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
@@ -350,7 +350,7 @@ class Local_PathQL_MultiGraphTests {
 
 			String result = Query.runSPARQL(conn, queryString1);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=javax.script.ScriptException: Exceptions.ScriptFailedException: Error identifying namespace of qName :sales;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;",result);
 
 		} catch (Exception e) {
 			fail();
@@ -401,14 +401,14 @@ class Local_PathQL_MultiGraphTests {
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
 					+ "FROM <http://default>\n"
-//					+ "FROM <file://calc2graph.data.ttl>\r\n"
-//					+ "FROM <file://calc2graph.def.ttl>\r\n"
+					+ "FROM <file://calc2graph.data.ttl>\r\n"
+					+ "FROM <file://calc2graph.def.ttl>\r\n"
 					+ "{\r\n"
 					+ "  ?s  :totalSales  ?o} limit 10";
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country1;o=1500.0;",result);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			 result = Query.runSPARQL(conn, queryString1);
 			assertEquals("",result);
