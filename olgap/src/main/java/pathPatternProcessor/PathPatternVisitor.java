@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.util.Values;
 
 import Exceptions.ScriptFailedException;
 import PathPattern.PathPatternBaseVisitor;
@@ -32,10 +34,15 @@ import PathPattern.PathPatternParser.PredicateContext;
 import PathPattern.PathPatternParser.PredicateRefContext;
 import PathPattern.PathPatternParser.PropertyListNotEmptyContext;
 import PathPattern.PathPatternParser.QnameContext;
+import PathPattern.PathPatternParser.QueryOptionContext;
+import PathPattern.PathPatternParser.QueryOptionsContext;
+import PathPattern.PathPatternParser.QueryStringContext;
 import PathPattern.PathPatternParser.RdfTypeContext;
 import PathPattern.PathPatternParser.ReifiedPredicateContext;
+import PathPattern.PathPatternParser.TypeContext;
 import PathPattern.PathPatternParser.VerbContext;
 import PathPattern.PathPatternParser.VerbObjectListContext;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.AlternativePathElement;
 import pathPatternElement.BoundPathElement;
@@ -48,11 +55,12 @@ import pathPatternElement.ObjectElement;
 import pathPatternElement.ObjectListValueElement;
 import pathPatternElement.PathElement;
 import pathPatternElement.PredicateElement;
+import pathPatternElement.QueryOptionsPathElement;
 import pathPatternElement.SequencePathElement;
 import pathPatternElement.ValueElement;
 import pathPatternElement.VerbObjectList;
 import pathQLRepository.PathQLRepository;
-
+import static org.eclipse.rdf4j.model.util.Values.literal;
 /**
  * The Class PathPatternVisitor.
  */
@@ -75,6 +83,44 @@ public PathPatternVisitor(Thing thing) {
 		this.source = thing.getSource();
 	}
 	
+	@Override
+	public PathElement visitQueryString(QueryStringContext ctx) {
+		// queryString : pathPattern queryOptions? EOF ;
+		PathElement pathElement =   visit(ctx.pathPattern()) ;
+		if(ctx.queryOptions()!=null ) {
+			pathElement.setCustomQueryOptions(visit(ctx.queryOptions()).getCustomQueryOptions()) ;
+		}
+		return pathElement;
+	}
+
+	@Override
+	public QueryOptionsPathElement visitQueryOptions(QueryOptionsContext ctx) {
+		// queryOptions : ( queryOption )+;
+		// queryOption: KEY '=' literal ('^^' type )?;
+		// KEY : '&' [a-zA-Z]+ ; 
+		CustomQueryOptions customQueryOptions= new CustomQueryOptions();
+		for( QueryOptionContext queryOption: ctx.queryOption()) {
+			 String key = queryOption.KEY().getText().substring(1);
+			 LiteralValueElement literal = (LiteralValueElement) visit(queryOption.literal());
+			 if(queryOption.type()!=null) {
+				  IriRefValueElement type = (IriRefValueElement) visit(queryOption.type()) ;
+				   Literal typeLiteral = Values.literal(Values.getValueFactory(),literal.getLiteral().getLabel(),type.getIri());
+				   customQueryOptions.add(key, typeLiteral);
+			 }else {
+				 customQueryOptions.add(key, literal.getLiteral());
+			 }
+		}
+		QueryOptionsPathElement queryOptionsPathElement = new QueryOptionsPathElement(getSource());
+		queryOptionsPathElement.setCustomQueryOptions(customQueryOptions);
+		return queryOptionsPathElement;
+	}
+
+	@Override
+	public IriRefValueElement visitType(TypeContext ctx) {
+		//type : qname;
+		return visitQname(ctx.qname());
+	}
+
 	/**
 	 * Gets the source.
 	 *

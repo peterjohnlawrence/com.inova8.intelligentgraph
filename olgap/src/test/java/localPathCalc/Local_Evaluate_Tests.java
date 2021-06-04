@@ -6,32 +6,18 @@ package localPathCalc;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import org.apache.commons.io.FileUtils;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.Sail;
-import org.eclipse.rdf4j.sail.lucene.LuceneSail;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Evaluator;
 import pathQL.PathQL;
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
 import pathQLResults.FactResults;
 import pathQLResults.PathQLResults;
+import utilities.Query;
 
 /**
  * The Class PathQLTests.
@@ -40,35 +26,30 @@ import pathQLResults.PathQLResults;
 class Local_Evaluate_Tests {
 	
 	/** The lucenesail. */
-	static LuceneSail lucenesail ;
+//	static LuceneSail lucenesail ;
 	
-	/** The conn. */
-	private static RepositoryConnection conn;
-	
-	/** The repository triple source. */
-	static RepositoryTripleSource repositoryTripleSource;
+
 	
 	/** The source. */
 	private static PathQLRepository source;
-	
-	/** The evaluator. */
-	private static Evaluator evaluator;
+	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
 	/**
-	 * Test 0.
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
 	 */
-	@Test
-	@Order(0)
-	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
-	void test_0() {
-		try {
-			evaluator.clearCache();
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
 
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_Evaluate_Tests/");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");	
+
+		source = PathQLRepository.create(workingRep);
+		source.prefix("<http://inova8.com/calc2graph/def/>");
+		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
+	}
 	/**
 	 * Pathql 1.
 	 */
@@ -178,39 +159,4 @@ class Local_Evaluate_Tests {
 		}
 	}
 
-	/**
-	 * Sets the up before class.
-	 *
-	 * @throws Exception the exception
-	 */
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/Local_Evaluate_Tests/");
-		FileUtils.deleteDirectory(dataDir);
-	
-		Sail baseSail = new NativeStore(dataDir);
-	    lucenesail = new LuceneSail();
-		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
-		lucenesail.setBaseSail(baseSail);
-	
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
-		//org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
-	
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null));
-	
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null));
-		repositoryTripleSource = new RepositoryTripleSource(conn);
-		source = PathQLRepository.create(workingRep);
-		source.prefix("<http://inova8.com/calc2graph/def/>");
-		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
-		evaluator = new Evaluator();
-	}
 }

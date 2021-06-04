@@ -8,6 +8,46 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface PathPatternListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#queryString}.
+	 * @param ctx the parse tree
+	 */
+	void enterQueryString(PathPatternParser.QueryStringContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#queryString}.
+	 * @param ctx the parse tree
+	 */
+	void exitQueryString(PathPatternParser.QueryStringContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#queryOptions}.
+	 * @param ctx the parse tree
+	 */
+	void enterQueryOptions(PathPatternParser.QueryOptionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#queryOptions}.
+	 * @param ctx the parse tree
+	 */
+	void exitQueryOptions(PathPatternParser.QueryOptionsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#queryOption}.
+	 * @param ctx the parse tree
+	 */
+	void enterQueryOption(PathPatternParser.QueryOptionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#queryOption}.
+	 * @param ctx the parse tree
+	 */
+	void exitQueryOption(PathPatternParser.QueryOptionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PathPatternParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterType(PathPatternParser.TypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PathPatternParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitType(PathPatternParser.TypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boundPattern}
 	 * labeled alternative in {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree

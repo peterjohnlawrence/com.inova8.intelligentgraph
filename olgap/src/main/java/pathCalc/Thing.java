@@ -195,44 +195,27 @@ public class Thing extends Resource {
 		return key;
 	}
 
-	/**
-	 * Gets the fact.
-	 *
-	 * @param predicateElement
-	 *            the predicate element
-	 * @param scriptString
-	 *            the script string
-	 * @return the fact
-	 */
-//	@Deprecated
-//	public final Resource getFact(PredicateElement predicateElement, SimpleLiteral scriptString) {
-//		Resource fact = this.handleScript(scriptString, predicateElement.getPredicate());
-//		return fact;
-//	}
 
-	/**
-	 * Gets the fact.
-	 *
-	 * @param predicate
-	 *            the predicate
-	 * @param scriptString
-	 *            the script string
-	 * @return the fact
-	 */
 	public final Resource getFact(IRI predicate, SimpleLiteral scriptString) {
 		Resource fact = processFactObjectValue(predicate,scriptString );//this.handleScript(scriptString, predicate);
 		return fact;
 	}
 
-	/**
-	 * Gets the fact.
-	 *
-	 * @param predicatePattern
-	 *            the predicate pattern
-	 * @return the fact
-	 * @throws PathPatternException
-	 *             the path pattern exception
-	 */
+	public final Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException{
+		logger.debug("getFact{}\n", predicatePattern);
+		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions);
+		if (factValues == null) {
+			return new NullValue();
+		} else if (factValues.hasNext()) {
+			return factValues.next();
+		} else {
+			factValues.close();
+			return new NullValue();
+		}
+		
+	}
+
+
 	public final Resource getFact(String predicatePattern) throws PathPatternException {
 		logger.debug("getFact{}\n", predicatePattern);
 		ResourceResults factValues =  getFacts( predicatePattern);
@@ -246,17 +229,21 @@ public class Thing extends Resource {
 		}
 	}
 
-	/**
-	 * Gets the facts.
-	 *
-	 * @param predicatePattern
-	 *            the predicate pattern
-	 * @return the facts
-	 * @throws PathPatternException
-	 *             the path pattern exception
-	 */
+	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
+	//	CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
+		//return new ResourceStatementResults( statementIterator,this);
+		supersedeCustomQueryOptions(customQueryOptions);
+		return PathQL.evaluate(this, predicatePattern);
+	}
+	public void supersedeCustomQueryOptions(CustomQueryOptions customQueryOptions) {
+		if(customQueryOptions!=null && !customQueryOptions.isEmpty()) {
+			customQueryOptions.addInherited(this.getEvaluationContext().getCustomQueryOptions());
+			this.getEvaluationContext().setCustomQueryOptions(customQueryOptions);
+		}
+	}
+
 	public final ResourceResults getFacts(String predicatePattern) throws PathPatternException {
-		//CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
+	//	CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
 		//return new ResourceStatementResults( statementIterator,this);
 		return PathQL.evaluate(this, predicatePattern);
 	}
@@ -466,7 +453,7 @@ public class Thing extends Resource {
 					Resource result = this.handleScript(literalValue, predicate);//getFact(predicate, literalValue);
 					if (result != null) {
 						//TODO validate caching
-						getCachedResources().put(key, result);
+						//getCachedResources().put(key, result);
 						addTrace(String.format("Calculated %s of %s = %s", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
 					}
@@ -642,26 +629,20 @@ public class Thing extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	/**
-	 * Trace fact.
-	 *
-	 * @param predicatePattern
-	 *            the predicate pattern
-	 * @return the string
-	 * @throws PathPatternException
-	 *             the path pattern exception
-	 */
-	public String traceFact(String predicatePattern) throws PathPatternException {
+	public String traceFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
 		if (this.getEvaluationContext() == null) {
 			this.evaluationContext = new EvaluationContext();
 		}
+		supersedeCustomQueryOptions(customQueryOptions);
 		this.getEvaluationContext().setTracing(true);
 		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);
 		if (factValues.hasNext()) {
 			factValues.next();
 		}
 		return this.getEvaluationContext().getTrace();
+	}
+	public String traceFact(String predicatePattern) throws PathPatternException {
+		return traceFact(predicatePattern, null);
 	}
 
 	public void deleteFacts(String pathQL) throws Exception {

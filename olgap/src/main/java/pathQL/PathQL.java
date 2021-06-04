@@ -61,8 +61,9 @@ public class PathQL {
 	 * @throws PathPatternException the path pattern exception
 	 */
 	public  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL) throws PathPatternException {
-		PathElement pathElement = PathParser.parsePathPattern(thing, pathQL);
+		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);////PathParser.parsePathPattern(thing, pathQL);
 		if(pathElement!=null ) {
+			thing.supersedeCustomQueryOptions(pathElement.getCustomQueryOptions());
 			return evaluate(thing, pathElement);
 		}else {
 			throw new  PathPatternException();

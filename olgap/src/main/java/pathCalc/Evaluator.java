@@ -135,7 +135,6 @@ public class Evaluator {
 		} catch (NoSuchAlgorithmException e) {
 			logger.error(e.getMessage());
 		}
-
 	}
 
 	/**

@@ -5,6 +5,7 @@ package pathPatternElement;
 
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants.EdgeCode;
 import pathPatternProcessor.PathConstants.Operator;
@@ -69,6 +70,8 @@ public abstract class PathElement {
 
 	/** The source. */
 	private PathQLRepository source;
+
+	private CustomQueryOptions customQueryOptions;
 	
 	/**
 	 * Instantiates a new path element.
@@ -102,7 +105,9 @@ public abstract class PathElement {
 	 *
 	 * @return the string
 	 */
-	public abstract String toString();
+	public String toString() {
+		return leftPathElement.toString() + rightPathElement.toString();
+	};
 	
 	/**
 	 * To SPARQL.
@@ -616,6 +621,14 @@ public abstract class PathElement {
  */
 protected PathQLRepository getSource() {
 		return this.source ;
+	}
+
+	public CustomQueryOptions getCustomQueryOptions() {
+		return customQueryOptions;
+	}
+
+	public void setCustomQueryOptions(CustomQueryOptions customQueryOptions) {
+		this.customQueryOptions = customQueryOptions;
 	}
 
 }

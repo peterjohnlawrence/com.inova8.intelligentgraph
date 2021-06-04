@@ -11,7 +11,7 @@ import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.IriRefContext;
 import PathPattern.PathPatternParser.PathEltOrInverseContext;
-import PathPattern.PathPatternParser.PathPatternContext;
+import PathPattern.PathPatternParser.QueryStringContext;
 import pathCalc.Thing;
 import pathPatternElement.IriRefValueElement;
 import pathPatternElement.PathElement;
@@ -30,7 +30,7 @@ public class PathParser {
 	/** The path pattern visitor. */
 	//private final static Logger logger = LogManager.getLogger(PathParser.class);
 	static PathPatternVisitor pathPatternVisitor ;//= new PathPatternVisitor();
-	
+	static PathPatternVisitor queryStringVisitor ;
 	/**
 	 * Parses the path pattern.
 	 *
@@ -43,10 +43,15 @@ public class PathParser {
 	public static PathElement parsePathPattern(Thing thing, String pathPattern)
 			throws RecognitionException, PathPatternException {
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);		
-		PathElement pathElement = parser(pathPattern, pathPatternVisitor);	
+		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
 		return pathElement;
 	}
-
+//	public static PathElement parseQueryString(Thing thing, String queryString)
+//			throws RecognitionException, PathPatternException {
+//		PathPatternVisitor queryStringVisitor = new PathPatternVisitor(thing);		
+//		PathElement pathElement = pathPatternParser(queryString, queryStringVisitor);	
+//		return pathElement;
+//	}
 	/**
 	 * Parses the path pattern.
 	 *
@@ -59,20 +64,38 @@ public class PathParser {
 	public static PathElement parsePathPattern(PathQLRepository source, String pathPattern)
 			throws RecognitionException, PathPatternException {
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(source);
-		PathElement pathElement = parser(pathPattern, pathPatternVisitor);	
+		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
 		return pathElement;
 	}
-	
-	/**
-	 * Parser.
-	 *
-	 * @param pathPattern the path pattern
-	 * @param pathPatternVisitor the path pattern visitor
-	 * @return the path element
-	 * @throws RecognitionException the recognition exception
-	 * @throws PathPatternException the path pattern exception
-	 */
-	private static PathElement parser(String pathPattern, PathPatternVisitor pathPatternVisitor)
+//	private static PathElement queryStringParser(String pathPattern, PathPatternVisitor pathPatternVisitor)
+//			throws RecognitionException, PathPatternException {
+//		PathErrorListener errorListener = new PathErrorListener(pathPattern);
+//		CharStream input = CharStreams.fromString( pathPattern);
+//		PathPatternLexer lexer = new PathPatternLexer(input);
+//		lexer.removeErrorListeners(); 
+//		lexer.addErrorListener(errorListener); 
+//		CommonTokenStream tokens = new CommonTokenStream(lexer);
+//		PathPatternParser parser = new PathPatternParser(tokens);
+//		parser.removeErrorListeners(); 
+//		parser.addErrorListener(errorListener); 
+//		QueryStringContext queryStringTree = parser.queryString();
+//		PathElement pathElement = pathPatternVisitor.visit(queryStringTree);
+//
+//		if( errorListener.toString()!=null) {
+//			if(parser.getNumberOfSyntaxErrors()==0) {
+//				//Lexer only error
+//				throw new PathPatternException(errorListener.toString(),ErrorCode.LEXER);
+//			}else {
+//				//Parser error
+//				throw new PathPatternException(errorListener.toString(),ErrorCode.PARSER);
+//			}
+//		}
+//		pathElement.setPathPattern(pathPattern);
+//		pathElement.indexVisitor(null,0,null);
+//		return pathElement;
+//
+//	}
+	private static PathElement pathPatternParser(String pathPattern, PathPatternVisitor pathPatternVisitor)
 			throws RecognitionException, PathPatternException {
 		PathErrorListener errorListener = new PathErrorListener(pathPattern);
 		CharStream input = CharStreams.fromString( pathPattern);
@@ -83,8 +106,10 @@ public class PathParser {
 		PathPatternParser parser = new PathPatternParser(tokens);
 		parser.removeErrorListeners(); 
 		parser.addErrorListener(errorListener); 
-		PathPatternContext pathPatternTree = parser.pathPattern();
-		PathElement pathElement = pathPatternVisitor.visit(pathPatternTree);
+		//PathPatternContext pathPatternTree = parser.pathPattern();
+		QueryStringContext queryStringTree = parser.queryString();
+		//PathElement pathElement = pathPatternVisitor.visit(pathPatternTree);
+		PathElement pathElement = pathPatternVisitor.visit(queryStringTree);
 
 		if( errorListener.toString()!=null) {
 			if(parser.getNumberOfSyntaxErrors()==0) {

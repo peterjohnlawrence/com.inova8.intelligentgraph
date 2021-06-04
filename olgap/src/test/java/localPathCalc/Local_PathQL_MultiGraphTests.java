@@ -26,6 +26,7 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.Sail;
 import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -56,7 +57,7 @@ class Local_PathQL_MultiGraphTests {
 	
 	/** The conn. */
 	private static RepositoryConnection conn;	
-
+	private static org.eclipse.rdf4j.repository.Repository workingRep ;
 	
 	/**
 	 * Sets the up before class.
@@ -65,43 +66,15 @@ class Local_PathQL_MultiGraphTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-
-		File dataDir = new File("src/test/resources/datadir/Local_PathQL_MultiGraphTests/");
-		FileUtils.deleteDirectory(dataDir);
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_PathQL_MultiGraphTests/");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 		
-		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
-		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
-		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
-		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
-		
-		LuceneSail  lucenesail = new LuceneSail();
-		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
-
-		Sail baseSail = new NativeStore(dataDir);		
-		lucenesail.setBaseSail(baseSail);
-		intelligentGraphSail.setBaseSail(lucenesail);
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
-		
-//		Sail baseSail = new NativeStore(dataDir);		
-//		intelligentGraphSail.setBaseSail(baseSail);		
-//		lucenesail.setBaseSail(intelligentGraphSail);	
-//		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
-//		
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null));
-
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null),iri("http://default"));
+ 		conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		source =  PathQLRepository.create(workingRep);
-		//source = PathQLRepository.create(workingRep);
+
 	}
 /**
  * Adds the graph 2.

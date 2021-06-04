@@ -5,8 +5,15 @@ package utilities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
+import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.BooleanQuery;
@@ -17,11 +24,51 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.algebra.evaluation.iterator.QueryContextIteration;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
+import org.eclipse.rdf4j.sail.Sail;
+import org.eclipse.rdf4j.sail.config.SailConfigException;
+import org.eclipse.rdf4j.sail.lucene.LuceneSail;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
+import intelligentGraph.IntelligentGraphConfig;
+import intelligentGraph.IntelligentGraphFactory;
+import intelligentGraph.IntelligentGraphSail;
+import static org.eclipse.rdf4j.model.util.Values.iri;
 /**
  * The Class Query.
  */
 public class Query {
+	public static org.eclipse.rdf4j.repository.Repository createNativeLuceneIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
+		File dataDir = new File(dir);
+		FileUtils.deleteDirectory(dataDir);
+		
+		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
+		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
+		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
+		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
+		
+		LuceneSail lucenesail = new LuceneSail();
+		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
+
+		Sail baseSail = new NativeStore(dataDir);		
+		lucenesail.setBaseSail(baseSail);
+		intelligentGraphSail.setBaseSail(lucenesail);
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
+		return workingRep;
+	}
+	public static void addFile(org.eclipse.rdf4j.repository.Repository workingRep, String dataFilename)
+			throws FileNotFoundException, IOException, RDFParseException, UnsupportedRDFormatException,
+			RepositoryException {
+		InputStream dataInput = new FileInputStream(dataFilename);
+		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
+		RepositoryConnection conn = workingRep.getConnection();
+		conn.add(dataModel.getStatements(null, null, null),iri("file://"+dataFilename));
+	}
 
 	/**
 	 * Run boolean.

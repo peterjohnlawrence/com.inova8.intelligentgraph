@@ -466,30 +466,43 @@ public class PathQLRepository {
 	 * @return the custom query options
 	 */
 	public CustomQueryOptions getCustomQueryOptions(Value[] customQueryOptionsArray) {
-		if (customQueryOptionsArray.length == 0) {
-			return null;
-		} else if (customQueryOptionsArray.length % 2 != 0) {
-			logger.error("Must have matching args tag/value pairs '{}'",
-					customQueryOptionsArray.length);
-			return null;
-		} else {
-			CustomQueryOptions customQueryOptions = new CustomQueryOptions();
-			for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2) {
-				String customQueryOptionParameter = customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue();
-				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
-				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
-					customQueryOptions.put(customQueryOptionParameter,
-							pathQLModel.Resource.create(this, literal(customQueryOptionValue), null));//TODO
-				if (customQueryOptionParameter.equals("service")) {
-					String service = customQueryOptionValue;
-					if (customQueryOptionValue.indexOf('?') > 0) {
-						service = customQueryOptionValue.substring(0, customQueryOptionValue.indexOf('?'));
-					}
-					setCacheService(service);
+		CustomQueryOptions customQueryOptions = CustomQueryOptions.create(this, customQueryOptionsArray);
+		if(customQueryOptions!=null) {
+			if (customQueryOptions.contains("service")) {
+				pathQLModel.Resource service = customQueryOptions.get("service");
+				String serviceURL = service.toString();
+				String serviceIRI = null;
+				if (serviceURL.indexOf('?') > 0) {
+					serviceIRI = serviceURL.substring(0, serviceURL.indexOf('?'));
 				}
+				if(serviceIRI!=null) setCacheService(serviceIRI);
 			}
-			return customQueryOptions;
 		}
+		return customQueryOptions;
+//		if (customQueryOptionsArray.length == 0) {
+//			return null;
+//		} else if (customQueryOptionsArray.length % 2 != 0) {
+//			logger.error("Must have matching args tag/value pairs '{}'",
+//					customQueryOptionsArray.length);
+//			return null;
+//		} else {
+//			CustomQueryOptions customQueryOptions = new CustomQueryOptions();
+//			for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2) {
+//				String customQueryOptionParameter = customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue();
+//				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
+//				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
+//					customQueryOptions.put(customQueryOptionParameter,
+//							pathQLModel.Resource.create(this, literal(customQueryOptionValue), null));
+//				if (customQueryOptionParameter.equals("service")) {
+//					String service = customQueryOptionValue;
+//					if (customQueryOptionValue.indexOf('?') > 0) {
+//						service = customQueryOptionValue.substring(0, customQueryOptionValue.indexOf('?'));
+//					}
+//					setCacheService(service);
+//				}
+//			}
+//			return customQueryOptions;
+//		}
 	}
 
 	/**
@@ -1021,7 +1034,7 @@ public class PathQLRepository {
 	 */
 	public ContextAwareConnection getContextAwareConnection() {
 		if (repository != null) {
-			ContextAwareConnection contextAwareConnection = new ContextAwareConnection(repository);
+			ContextAwareConnection contextAwareConnection = new PathQLContextAwareConnection(repository);
 			if (getPublicContexts().size() > 0) {
 				IRI[] publicContextsArray = {};
 				contextAwareConnection.setReadContexts(getPublicContexts().toArray(publicContextsArray));
@@ -1042,7 +1055,7 @@ public class PathQLRepository {
 	 *             the illegal argument exception
 	 */
 	private ContextAwareConnection publicContextAwareConnection() throws RepositoryException, IllegalArgumentException {
-		ContextAwareConnection contextAwareConnection = new ContextAwareConnection(repository);
+		ContextAwareConnection contextAwareConnection = new PathQLContextAwareConnection(repository);
 		RepositoryResult<Resource> contextIDs = contextAwareConnection.getContextIDs();
 		for (Resource contextID : contextIDs) {
 			if (contextAwareConnection.hasStatement(contextID, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE),
@@ -1056,15 +1069,12 @@ public class PathQLRepository {
 		return contextAwareConnection;
 	}
 
-	/**
-	 * Gets the thing.
-	 *
-	 * @param iri
-	 *            the iri
-	 * @param customQueryOptions
-	 *            the custom query options
-	 * @return the thing
-	 */
+	public Thing getThing(IRI iri) {
+		return Thing.create(this, iri, null);
+	}
+	public Thing getThing(String iri) {
+		return getThing( iri(iri));
+	}
 	public Thing getThing(IRI iri, CustomQueryOptions customQueryOptions) {
 		return Thing.create(this, iri, new EvaluationContext(customQueryOptions));
 	}

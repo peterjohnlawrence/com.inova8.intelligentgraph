@@ -4,41 +4,16 @@
 package localPathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
-import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Stack;
-
-import org.apache.commons.io.FileUtils;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.NotifyingSailConnection;
-import org.eclipse.rdf4j.sail.Sail;
-import org.eclipse.rdf4j.sail.lucene.LuceneSail;
-import org.eclipse.rdf4j.sail.lucene.QuerySpec;
-import org.eclipse.rdf4j.sail.lucene.SearchIndex;
-import org.eclipse.rdf4j.sail.lucene.SearchQueryEvaluator;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import olgap.ClearCache;
 import pathCalc.CustomQueryOptions;
-import pathCalc.EvaluationContext;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
 import pathQL.Match;
@@ -48,30 +23,21 @@ import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
 import pathQLResults.MatchResults;
 import pathQLResults.ResourceResults;
+import utilities.Query;
 
 /**
  * The Class ThingTests.
  */
+@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_PathQL_GetFactTests {
 	
-	/** The lucenesail. */
-	static LuceneSail lucenesail ;
-	
-	/** The conn. */
-	private static RepositoryConnection conn;
-	
-	/** The repository triple source. */
-	static RepositoryTripleSource repositoryTripleSource;
+
 	
 	/** The source. */
 	private static PathQLRepository source;
 	
-	/** The evaluator. */
-	private static Evaluator evaluator;
 
-	/** The match. */
-	private static Match match;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 	/**
 	 * Sets the up before class.
@@ -80,34 +46,14 @@ class Local_PathQL_GetFactTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/Local_PathQL_GetFactTests/");
-		FileUtils.deleteDirectory(dataDir);
-
-		Sail baseSail = new NativeStore(dataDir);
-	    lucenesail = new LuceneSail();
-		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
-		lucenesail.setBaseSail(baseSail);
-
-		workingRep = new SailRepository(lucenesail);
-		//org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
-
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null));
-
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null));
-		repositoryTripleSource = new RepositoryTripleSource(conn);
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_PathQL_GetFactTests/");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
+		
 		source = PathQLRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
-		evaluator = new Evaluator();
-		match = new Match(source);
+
 	}
 	
 	/**
@@ -130,20 +76,7 @@ class Local_PathQL_GetFactTests {
 	void assertEqualsWOSpaces(String actual, String expected){
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
-	/**
-	 * Test 0.
-	 */
-	@Test
-	@Order(0)
-	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
-	void test_0() {
-		try {
-			evaluator.clearCache();
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
+
 
 	/**
 	 * Match 1.
@@ -153,20 +86,7 @@ class Local_PathQL_GetFactTests {
 	void match_1() {
 
 		try {
-//			NotifyingSailConnection luceneConnection = lucenesail.getConnection();
-//			SearchIndex luceneIndex = lucenesail.getLuceneIndex();
-//			
-//			String matchesVarName = "anon";
-//			String propertyVarName = "property";
-//			String scoreVarName = "score";
-//			String snippetVarName = "snippet";
-//			//IRI subject = iri("entity");
-//			String queryString = "Unit1";
-//			IRI propertyURI = null;
-//			SearchQueryEvaluator querySpec = new QuerySpec(matchesVarName, propertyVarName, scoreVarName, snippetVarName, null,
-//					queryString, propertyURI);
-//			Collection<BindingSet> queryResultSet = luceneIndex.evaluate(querySpec);
-
+			Match match=new Match(source);
 			MatchResults matchResultsIterator = match.entityMatch("Unit1");
 			while (matchResultsIterator.hasNext()) {
 				MatchFact nextMatch = matchResultsIterator.nextResource();
@@ -186,12 +106,10 @@ class Local_PathQL_GetFactTests {
 	 */
 	@Test
 	@Order(1)
-	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
 	void test_1() {
-		Resource result;
 		try {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			result = $this.getFact("<http://inova8.com/calc2graph/def/testProperty1>");
+			$this.getFact("<http://inova8.com/calc2graph/def/testProperty1>");
 		} catch (Exception e) {
 			assertEquals("javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.CircularReferenceException: Circular reference encountered when evaluating <http://inova8.com/calc2graph/def/testProperty2> of <http://inova8.com/calc2graph/id/BatteryLimit1>.\r\n"
 					+ "[<http://inova8.com/calc2graph/def/testProperty2> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions=\r\n"
@@ -813,8 +731,8 @@ class Local_PathQL_GetFactTests {
 			Thing myCountry = graph.getThing(":Country1");
 			myCountry.addFact(":time", "$customQueryOptions.get(\"time\") ;", Evaluator.GROOVY);
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
-			customQueryOptions.put("time",42);
-			customQueryOptions.put("name","Peter");
+			customQueryOptions.add("time",42);
+			customQueryOptions.add("name","Peter");
 			Thing myCountry1 = graph.getThing( ":Country1",customQueryOptions);
 			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>");
 			assertEquals("42", result.stringValue());
@@ -823,24 +741,5 @@ class Local_PathQL_GetFactTests {
 			e.printStackTrace();
 		} 
 	}
-	/**
-	 * Test 100.
-	 */
-	@Test
-	@Order(100)
-	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
-	void test_100() {
-		try {
-			ClearCache clearCache = new ClearCache();
-			org.eclipse.rdf4j.model.Value result = clearCache.evaluate(repositoryTripleSource,
-					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/testProperty4"),
-					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
-							iri("http://inova8.com/calc2graph/def/groovy")));
-			assertEquals("true", result.stringValue());
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
+
 }

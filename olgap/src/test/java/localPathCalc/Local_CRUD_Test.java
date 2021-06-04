@@ -7,45 +7,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Properties;
-
-import org.antlr.v4.runtime.RecognitionException;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.Sail;
-import org.eclipse.rdf4j.sail.lucene.LuceneSail;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import intelligentGraph.IntelligentGraphConfig;
-import intelligentGraph.IntelligentGraphFactory;
-import intelligentGraph.IntelligentGraphSail;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
-import pathPatternProcessor.PathPatternException;
-import pathQL.PathQL;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
 import pathQLResults.ResourceResults;
 import utilities.Query;
 
@@ -65,12 +43,8 @@ class Local_CRUD_Test {
 	static RepositoryTripleSource repositoryTripleSource;
 	
 	/** The source. */
-	private static PathQLRepository source;
-	
-	/** The evaluator. */
-	private static Evaluator evaluator;
-
-
+	//private static PathQLRepository source;
+	static org.eclipse.rdf4j.repository.Repository workingRep ;
 	/**
 	 * Sets the up before class.
 	 *
@@ -78,42 +52,15 @@ class Local_CRUD_Test {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/Local_CRUD_Test/");
-		FileUtils.deleteDirectory(dataDir);
-		
-		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
-		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
-		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
-		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
-		
-		LuceneSail lucenesail = new LuceneSail();
-		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_CRUD_Test/");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 
-		
-		Sail baseSail = new NativeStore(dataDir);		
-		lucenesail.setBaseSail(baseSail);
-		intelligentGraphSail.setBaseSail(lucenesail);
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
-		
-		
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
 		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null),iri("http://default"));
-
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null),iri("http://default"));
-
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
-		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
-		source = PathQLRepository.create(workingRep);
+		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 	}
 
-	
 	/**
 	 * Ig 0.
 	 */
@@ -122,6 +69,7 @@ class Local_CRUD_Test {
 	void ig_0() {
 
 		try {
+			PathQLRepository source = PathQLRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Thing myCountry = graph.getThing(":Country1");
@@ -148,6 +96,7 @@ class Local_CRUD_Test {
 	void ig_1() {
 
 		try {
+			PathQLRepository source = PathQLRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Thing myCountry = graph.getThing(":Country2");
@@ -202,7 +151,7 @@ class Local_CRUD_Test {
 		try {
 			RepositoryResult<Statement> statements = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/calc2graph/def/testProperty1"), null);
 			for(Statement statement: statements) {
-				Value object = statement.getObject();
+				statement.getObject();
 			}
 			statements = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), iri("http://inova8.com/calc2graph/def/testProperty1"), null);
 			for(Statement statement: statements) {

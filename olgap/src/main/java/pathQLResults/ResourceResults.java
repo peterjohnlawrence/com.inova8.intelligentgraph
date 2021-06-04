@@ -6,12 +6,12 @@ package pathQLResults;
 import java.util.Iterator;
 import java.lang.Iterable;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iterator.CloseableIterationIterator;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
+
+import pathCalc.CustomQueryOptions;
 import pathCalc.EvaluationContext;
 import pathCalc.Thing;
 import pathCalc.Tracer;
@@ -146,7 +146,7 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 *
 	 * @return the custom query options
 	 */
-	protected ConcurrentHashMap<String, Resource> getCustomQueryOptions() {
+	protected CustomQueryOptions getCustomQueryOptions() {
 		if(thing!=null)
 			return thing.getCustomQueryOptions();
 		else 

@@ -27,6 +27,7 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.Sail;
 import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -54,20 +55,12 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_Sparql_IntelligentGraphTests {
 	
-	
-	/** The conn. */
 	private static RepositoryConnection conn;
-	
-	/** The repository triple source. */
-	static RepositoryTripleSource repositoryTripleSource;
-	
-	/** The source. */
 	private static PathQLRepository source;
 	
-	/** The evaluator. */
-	private static Evaluator evaluator;
 
 
+	private static org.eclipse.rdf4j.repository.Repository workingRep;
 	/**
 	 * Sets the up before class.
 	 *
@@ -75,42 +68,47 @@ class Local_Sparql_IntelligentGraphTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/Local_Sparql_IntelligentGraphTests/");
-		FileUtils.deleteDirectory(dataDir);
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_Sparql_IntelligentGraphTests/");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 		
-		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
-		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
-		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
-		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
-		
-		LuceneSail lucenesail = new LuceneSail();
-		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
-		
+//		
+//		File dataDir = new File("src/test/resources/datadir/Local_Sparql_IntelligentGraphTests/");
+//		FileUtils.deleteDirectory(dataDir);
+//		
+//		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
+//		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
+//		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
+//		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
+//		
+//		LuceneSail lucenesail = new LuceneSail();
+//		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
+//		
+////		Sail baseSail = new NativeStore(dataDir);		
+////		intelligentGraphSail.setBaseSail(baseSail);
+////		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
+//		
 //		Sail baseSail = new NativeStore(dataDir);		
-//		intelligentGraphSail.setBaseSail(baseSail);
+//		lucenesail.setBaseSail(baseSail);
+//		intelligentGraphSail.setBaseSail(lucenesail);
 //		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
-		
-		Sail baseSail = new NativeStore(dataDir);		
-		lucenesail.setBaseSail(baseSail);
-		intelligentGraphSail.setBaseSail(lucenesail);
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
-		
-//		Sail baseSail = new NativeStore(dataDir);		
-//		intelligentGraphSail.setBaseSail(baseSail);		
-//		lucenesail.setBaseSail(intelligentGraphSail);	
-//		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
-		
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
+//		
+////		Sail baseSail = new NativeStore(dataDir);		
+////		intelligentGraphSail.setBaseSail(baseSail);		
+////		lucenesail.setBaseSail(intelligentGraphSail);	
+////		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
+//		
+//		String dataFilename = "src/test/resources/calc2graph.data.ttl";
+//		InputStream dataInput = new FileInputStream(dataFilename);
+//		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
+//		conn = workingRep.getConnection();
+//		conn.add(dataModel.getStatements(null, null, null),iri("http://default"));
+//
+//		String modelFilename = "src/test/resources/calc2graph.def.ttl";
+//		InputStream modelInput = new FileInputStream(modelFilename);
+//		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
 		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null),iri("http://default"));
-
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null),iri("http://default"));
+//		conn.add(modelModel.getStatements(null, null, null),iri("http://default"));
 //		boolean namespace = conn.getNamespaces().hasNext();
 //		boolean context = conn.getContextIDs().hasNext();
 //		long size = conn.size();

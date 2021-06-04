@@ -11,6 +11,30 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface PathPatternVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link PathPatternParser#queryString}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQueryString(PathPatternParser.QueryStringContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PathPatternParser#queryOptions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQueryOptions(PathPatternParser.QueryOptionsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PathPatternParser#queryOption}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQueryOption(PathPatternParser.QueryOptionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PathPatternParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(PathPatternParser.TypeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code boundPattern}
 	 * labeled alternative in {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree

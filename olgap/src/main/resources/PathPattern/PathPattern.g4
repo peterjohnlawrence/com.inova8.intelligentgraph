@@ -58,9 +58,16 @@
 
 grammar PathPattern;
 
-pathPattern : binding ('/'|'>') pathPatterns EOF #boundPattern
- 			| binding  EOF #matchOnlyPattern
- 			| pathPatterns  EOF #pathOnlyPattern;
+queryString : pathPattern queryOptions? EOF ;
+
+queryOptions : ( queryOption )+;
+queryOption: KEY '=' literal ('^^' type )?;
+KEY : '&' [a-zA-Z]+ ; 
+type : qname;
+
+pathPattern : binding ('/'|'>') pathPatterns  #boundPattern
+ 			| binding  #matchOnlyPattern
+ 			| pathPatterns  #pathOnlyPattern;
 
 binding : factFilterPattern  ;
 pathPatterns :  pathEltOrInverse cardinality?  #Path  
@@ -123,7 +130,7 @@ IRI_REF
        
 PNAME_NS : PN_PREFIX? (':'|'~')  ;
     
-VARNAME : '?' [a-zA-Z]+ ;		// match upper-case identifiers for now
+VARNAME : '?' [a-zA-Z]+ ;		
 
 fragment
 PN_CHARS_U

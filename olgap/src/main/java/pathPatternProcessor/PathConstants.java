@@ -71,7 +71,8 @@ VERBOBJECTLIST,
  /** The cardinality. */
  CARDINALITY, 
  /** The binding. */
- BINDING
+ BINDING,
+ QUERYOPTIONS
 	}
 	
 	/**
