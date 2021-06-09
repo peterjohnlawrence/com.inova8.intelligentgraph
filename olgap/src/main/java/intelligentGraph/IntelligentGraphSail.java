@@ -3,14 +3,24 @@
  */
 package intelligentGraph;
 
+import static org.eclipse.rdf4j.model.util.Values.iri;
+
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.rdf4j.common.iteration.CloseableIteration;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.helpers.NotifyingSailWrapper;
 
 import pathCalc.Evaluator;
+import pathCalc.Prefixes;
 
 
 /**
@@ -48,8 +58,13 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	protected final Properties parameters = new Properties();
 	
 	/** The evaluator. */
-	protected final Evaluator evaluator = new Evaluator();
-	
+	//protected final Evaluator evaluator = new Evaluator();
+	private final Prefixes prefixes=new Prefixes();
+	private final HashSet<IRI> publicContexts=new HashSet<IRI>();
+	private final HashSet<IRI> privateContexts=new HashSet<IRI>();	
+	private  Boolean isLazyLoaded=false;
+
+	public static final String URN_CUSTOM_QUERY_OPTIONS = "urn:customQueryOptions";	
 	/**
 	 * Instantiates a new intelligent graph sail.
 	 */
@@ -57,7 +72,34 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 		super();
 
 	}
-	
+	public void initializeContexts() {
+		publicContexts.clear();
+		privateContexts.clear();
+		IntelligentGraphConnection connection = this.getConnection();
+		CloseableIteration<? extends Resource, SailException> connectionIDs = connection.getContextIDs();
+		while(connectionIDs.hasNext()) {
+			Resource connectionID = connectionIDs.next();
+			CloseableIteration<? extends IntelligentStatement, SailException> contextPrivacies = connection.getStatements(connectionID, iri(Evaluator.SCRIPTNAMESPACE, Evaluator.ISPRIVATE), null, false);
+			publicContexts.add((IRI) connectionID);
+			while(contextPrivacies.hasNext()) {
+				Statement contextPrivacy = contextPrivacies.next();
+				Value privacy = contextPrivacy.getObject();
+				if(privacy.stringValue()=="true") {
+					privateContexts.add((IRI) connectionID);
+					publicContexts.remove((IRI) connectionID);
+				}
+			}
+		}
+
+	}
+	public void initializePrefixes() {
+		IntelligentGraphConnection connection = this.getConnection();
+		CloseableIteration<? extends Namespace, SailException> namespaces = connection.getNamespaces();
+		while(namespaces.hasNext()) {
+			Namespace namespace = namespaces.next();
+			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
+		}
+	}
 	/**
 	 * Sets the parameter.
 	 *
@@ -76,7 +118,30 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public Properties getParameters() {
 		return parameters;
 	}
-	
+	public HashSet<IRI>  getPrivateContexts() {
+		if(!isLazyLoaded) {
+			initializeContexts();
+			initializePrefixes();
+			isLazyLoaded=true;
+		}
+		return privateContexts;
+	}
+	public HashSet<IRI>  getPublicContexts() {
+		if(!isLazyLoaded) {
+			initializeContexts();
+			initializePrefixes();
+			isLazyLoaded=true;
+		}
+		return publicContexts;
+	}
+	public Prefixes getPrefixes() {
+		if(!isLazyLoaded) {
+			initializeContexts();
+			initializePrefixes();
+			isLazyLoaded=true;
+		}
+		return prefixes;
+	}
 	/**
 	 * Initialize.
 	 *
@@ -85,7 +150,6 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	@Override
 	public void initialize() throws SailException {
 		super.initialize();
-		
 	}
 	
 	/**
@@ -112,8 +176,6 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public ValueFactory getValueFactory() {
 		return getBaseSail().getValueFactory();
 	}
-//	public PathQLRepository getSource() {
-//		return source;
-//	}
+
 	
 }

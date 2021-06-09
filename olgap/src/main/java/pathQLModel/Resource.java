@@ -142,6 +142,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	 *
 	 * @return the custom query options
 	 */
+	@Deprecated
 	public  CustomQueryOptions getCustomQueryOptions() {
 		if (evaluationContext!=null)
 			return evaluationContext.getCustomQueryOptions();

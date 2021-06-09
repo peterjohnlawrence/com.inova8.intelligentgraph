@@ -6,6 +6,7 @@ package localPathCalc;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -45,10 +46,16 @@ class Local_Evaluate_Tests {
 		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_Evaluate_Tests/");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");	
+		
+		RepositoryConnection conn = workingRep.getConnection();
+		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
+		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
+		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 
 		source = PathQLRepository.create(workingRep);
-		source.prefix("<http://inova8.com/calc2graph/def/>");
-		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
+//		source.prefix("<http://inova8.com/calc2graph/def/>");
+//		source.prefix("id","<http://inova8.com/calc2graph/id/>");
+//		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 	}
 	/**
 	 * Pathql 1.
@@ -58,13 +65,15 @@ class Local_Evaluate_Tests {
 	void pathql_1() {
 
 		try {
-			PathQLResults pathqlResultsIterator = (PathQLResults) PathQL.evaluate(source,"[ eq :Unit1]");
-			while (pathqlResultsIterator.hasNext()) {
+			PathQLResults pathqlResultsIterator = (PathQLResults) PathQL.evaluate(source,"[ eq id:Unit1]");
+			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
-						"MatchFact [Fact [Resource[ object=null], predicate=null, subject=http://inova8.com/calc2graph/def/Unit1],snippet=null, score=null]",
+						"MatchFact [Fact [Resource[ object=null], predicate=null, subject=http://inova8.com/calc2graph/id/Unit1],snippet=null, score=null]",
 						nextMatch.toString());
-				break;
+				return;
+			}else {
+				fail();
 			}
 		} catch (Exception e) {
 			fail();
@@ -80,12 +89,14 @@ class Local_Evaluate_Tests {
 
 		try {
 			PathQLResults pathqlResultsIterator = (PathQLResults) PathQL.evaluate(source,"[ like 'Unit1']");
-			while (pathqlResultsIterator.hasNext()) {
+			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
 						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.309943199157715]",
 						nextMatch.toString());
-				break;
+				return;
+			}else {
+				fail();
 			}
 		} catch (Exception e) {
 			fail();
@@ -101,13 +112,15 @@ class Local_Evaluate_Tests {
 	void pathql_3() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ eq :Unit1]/:hasProductBatteryLimit");
-			while (pathqlResultsIterator.hasNext()) {
+			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit");
+			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
 						"Fact [Resource[ object=http://inova8.com/calc2graph/id/BatteryLimit2], predicate=http://inova8.com/calc2graph/def/hasProductBatteryLimit, subject=http://inova8.com/calc2graph/id/Unit1]",
 						nextMatch.toString());
-				break;
+				return;
+			}else {
+				fail();
 			}
 		} catch (Exception e) {
 			fail();
@@ -123,13 +136,15 @@ class Local_Evaluate_Tests {
 	void pathql_4() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ eq :Unit1]/:hasProductBatteryLimit/:volumeFlow");
-			while (pathqlResultsIterator.hasNext()) {
+			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit/:volumeFlow");
+			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
 						"Fact [Resource[ object=\"40\"^^<http://www.w3.org/2001/XMLSchema#int>], predicate=http://inova8.com/calc2graph/def/volumeFlow, subject=http://inova8.com/calc2graph/id/BatteryLimit2]",
 						nextMatch.toString());
-				break;
+				return;
+			}else {
+				fail();
 			}
 		} catch (Exception e) {
 			fail();
@@ -146,12 +161,14 @@ class Local_Evaluate_Tests {
 		
 		try {
 			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ like \"Unit1\"]>:hasProductBatteryLimit");
-			while (pathqlResultsIterator.hasNext()) {
+			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
 						"Fact [Resource[ object=http://inova8.com/calc2graph/id/BatteryLimit2], predicate=http://inova8.com/calc2graph/def/hasProductBatteryLimit, subject=http://inova8.com/calc2graph/id/Unit1]",
 						nextMatch.toString());
-				break;
+				return;
+			}else {
+				fail();
 			}
 		} catch (Exception e) {
 			fail();

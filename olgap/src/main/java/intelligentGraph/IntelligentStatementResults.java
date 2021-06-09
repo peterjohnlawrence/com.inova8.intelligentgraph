@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.sail.SailException;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
 
@@ -22,15 +23,19 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
 	Thing thing;
 	PathElement pathElement;
+	IntelligentGraphConnection intelligentGraphConnection;
 	private String pred;
 	private String obj;
 	private String subj;
 	private SimpleValueFactory simpleValueFactory;
+	private CustomQueryOptions customQueryOptions;
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
-			PathElement pathElement) {
+			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions) {
 		this.resultsIterator=resultsIterator;
 		this.thing=thing;
 		this.pathElement=pathElement;
+		this.intelligentGraphConnection=intelligentGraphConnection;
+		this.customQueryOptions=customQueryOptions;
 		subj = pathElement.getTargetSubject().toString();
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
@@ -48,9 +53,9 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		Binding predBinding =nextBindingset.getBinding(pred);
 		Binding objBinding =nextBindingset.getBinding(obj);
 		if(subjBinding!=null && predBinding!=null && objBinding!=null )
-			return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), objBinding.getValue(),null),null,null);
+			return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), objBinding.getValue(),null),null,thing.getEvaluationContext(), customQueryOptions);
 		else
-			return new IntelligentStatement(null, null, null);
+			return new IntelligentStatement(null, null, null,null);
 	}
 
 	@Override

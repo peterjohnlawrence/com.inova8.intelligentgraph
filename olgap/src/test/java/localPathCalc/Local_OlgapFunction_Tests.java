@@ -30,6 +30,7 @@ import olgap.FactValue;
 import olgap.ObjectValue;
 import pathCalc.Evaluator;
 import pathQLRepository.PathQLRepository;
+import utilities.Query;
 
 /**
  * The Class PathCalcTests.
@@ -37,12 +38,10 @@ import pathQLRepository.PathQLRepository;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_OlgapFunction_Tests {
 	
-	/** The conn. */
 	private static RepositoryConnection conn;
-	
-	/** The repository triple source. */
+	private static PathQLRepository source;
 	static RepositoryTripleSource repositoryTripleSource;
-	
+	private static org.eclipse.rdf4j.repository.Repository workingRep;
 	/**
 	 * Sets the up before class.
 	 *
@@ -50,24 +49,21 @@ class Local_OlgapFunction_Tests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/Local_OlgapFunction_Tests/");
-		FileUtils.deleteDirectory(dataDir);
-		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
-
-		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-		InputStream dataInput = new FileInputStream(dataFilename);
-		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
-		conn = workingRep.getConnection();
-		conn.add(dataModel.getStatements(null, null, null));
 		
-		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-		InputStream modelInput = new FileInputStream(modelFilename);
-		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_OlgapFunction_Tests/");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
+		
 		conn = workingRep.getConnection();
-		conn.add(modelModel.getStatements(null, null, null));
+
+		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
+		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
+		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
+		source = PathQLRepository.create(workingRep);
+		
 		repositoryTripleSource = new RepositoryTripleSource(conn);
 		//new PathQLRepository(repositoryTripleSource);
-		new Evaluator();
+		//new Evaluator();
 	}
 	
 	/**
@@ -79,11 +75,7 @@ class Local_OlgapFunction_Tests {
 	void test_0() {
 		try {
 			ClearCache clearCache = new ClearCache();
-			org.eclipse.rdf4j.model.Value result = clearCache.evaluate(repositoryTripleSource,
-					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
-					iri("http://inova8.com/calc2graph/def/testProperty4"),
-					literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
-							iri("http://inova8.com/script/groovy")));
+			org.eclipse.rdf4j.model.Value result = clearCache.evaluate(repositoryTripleSource);
 			assertEquals("true", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -145,8 +137,8 @@ class Local_OlgapFunction_Tests {
 					iri("http://inova8.com/calc2graph/id/BatteryLimit1"),
 					iri("http://inova8.com/calc2graph/def/testProperty3"));
 			assertEquals("javax.script.ScriptException: java.lang.NumberFormatException: For input string: \"javax.script.ScriptException: java.lang.NumberFormatException: For input string: \"Circular reference encountered when evaluating <http://inova8.com/calc2graph/def/testProperty3> of <http://inova8.com/calc2graph/id/BatteryLimit1>.\r\n"
-					+ "[<http://inova8.com/calc2graph/def/testProperty3> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions={time=\"42\"^^<http://www.w3.org/2001/XMLSchema#integer>}\r\n"
-					+ ", <http://inova8.com/calc2graph/def/testProperty2> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions={time=\"42\"^^<http://www.w3.org/2001/XMLSchema#integer>}\r\n"
+					+ "[<http://inova8.com/calc2graph/def/testProperty3> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions=\r\n"
+					+ ", <http://inova8.com/calc2graph/def/testProperty2> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions=\r\n"
 					+ "]\"\"", result.stringValue());
 		} catch (Exception e) {
 			fail();

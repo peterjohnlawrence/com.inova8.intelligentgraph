@@ -45,7 +45,7 @@ public class PathResults extends ResourceBindingSetResults{
 			Value factPredicate = next.getValue(getPathElement().getTargetPredicate().getName());
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
 			Thing thing = Thing.create(getThing().getSource(), factThing,this.getEvaluationContext());
-			return thing.processFactObjectValue((IRI) factPredicate,  factValue);
+			return thing.processFactObjectValue((IRI) factPredicate,  factValue,this.getEvaluationContext().getCustomQueryOptions());
 		} 
 	}
 

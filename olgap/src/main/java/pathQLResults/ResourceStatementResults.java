@@ -6,6 +6,7 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
 import pathQLModel.Fact;
@@ -14,23 +15,31 @@ import pathQLRepository.PathQLRepository;
 
 public  class ResourceStatementResults extends ResourceResults {
 	CloseableIteration<Statement, RepositoryException> statementSet;
+	private CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator;
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,
-			PathQLRepository source, PathElement pathElement) {
+			PathQLRepository source, PathElement pathElement,CustomQueryOptions customQueryOptions) {
 
-		super( source, pathElement);
+		super( source, pathElement,customQueryOptions);
 		this.statementSet =statementSet;
 	}
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,  Thing thing ){
 		super( thing);
 		this.statementSet =statementSet;
 	}
-	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,  Thing thing, PathElement pathElement  ){
-		super( thing,pathElement);
+	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,  Thing thing, PathElement pathElement ,CustomQueryOptions customQueryOptions ){
+		super( thing,pathElement,customQueryOptions);
 		this.statementSet =statementSet;
 	}
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet) {
 		super();
 		this.statementSet =statementSet;
+	}
+
+	public ResourceStatementResults(
+			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator, Thing thing,
+			Object pathElement,CustomQueryOptions customQueryOptions) {
+		super( thing,(PathElement) pathElement,customQueryOptions);
+		this.localStatementIterator =localStatementIterator;
 	}
 	public  Resource nextResource() {
 		return thing;
@@ -40,13 +49,18 @@ public  class ResourceStatementResults extends ResourceResults {
 	protected	CloseableIteration<Statement, RepositoryException> getStatements() {
 		return (CloseableIteration<Statement, RepositoryException>) statementSet;
 	}
+	protected	CloseableIteration<? extends  Statement, QueryEvaluationException> getLocalStatementIterator() {
+		return localStatementIterator;
+	}
 	@Override
 	public void close() throws QueryEvaluationException {
-		statementSet.close();		
+		if(statementSet!=null) statementSet.close();
+		if(localStatementIterator!=null) localStatementIterator.close();	
 	}
 	@Override
 	public void remove() throws QueryEvaluationException {
-		statementSet.remove();	
+		if(statementSet!=null)  statementSet.remove();	
+		if(localStatementIterator!=null)  localStatementIterator.remove();	
 	}
 	public CloseableIteration<Statement, RepositoryException> getStatementSet() {
 		return statementSet;
@@ -56,13 +70,20 @@ public  class ResourceStatementResults extends ResourceResults {
 	}
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
-		return getStatementSet().hasNext();
+		if(statementSet!=null)  return getStatementSet().hasNext();
+		if(localStatementIterator!=null)  return localStatementIterator.hasNext();
+		return false;
 	}
 
 	@Override
 	public Resource next() throws QueryEvaluationException {
-		 Statement next = getStatementSet().next();
+		if(statementSet!=null) { Statement next = getStatementSet().next();
 		return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
+		}
+		if(localStatementIterator!=null) { Statement next = localStatementIterator.next();
+		return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
+		}
+		return null;
 	}
 	@Override
 	public Fact nextFact() {

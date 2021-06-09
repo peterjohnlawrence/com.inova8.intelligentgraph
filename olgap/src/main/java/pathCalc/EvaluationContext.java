@@ -32,9 +32,11 @@ public class EvaluationContext {
 	private Prefixes prefixes = new Prefixes();
 	
 	/** The dataset. */
+	@Deprecated
 	private Dataset dataset;
 	
 	/** The contexts. */
+	@Deprecated
 	private org.eclipse.rdf4j.model.Resource[] contexts;
 
 	/**
@@ -110,9 +112,11 @@ public class EvaluationContext {
 	 *
 	 * @param prefixes the prefixes
 	 */
+	@Deprecated
 	public void setPrefixes(Prefixes prefixes) {
 		this.prefixes = prefixes;
 	}
+	@Deprecated
 	public void setCustomQueryOptions(CustomQueryOptions customQueryOptions) {
 		this.customQueryOptions = customQueryOptions;
 	}
@@ -160,6 +164,8 @@ public class EvaluationContext {
 	 *
 	 * @return the custom query options
 	 */
+	
+	@Deprecated
 	public  CustomQueryOptions getCustomQueryOptions() {
 		return customQueryOptions;
 	}
@@ -169,6 +175,7 @@ public class EvaluationContext {
 	 *
 	 * @return the prefixes
 	 */
+	@Deprecated
 	public Prefixes getPrefixes() {
 		return prefixes;
 	}
@@ -312,6 +319,7 @@ public class EvaluationContext {
 	 *
 	 * @return the dataset
 	 */
+	@Deprecated
 	public Dataset getDataset() {
 		return dataset;
 	}
@@ -321,6 +329,7 @@ public class EvaluationContext {
 	 *
 	 * @param dataset the new dataset
 	 */
+	@Deprecated
 	public void setDataset(Dataset dataset) {
 		this.dataset = dataset;
 	}
@@ -330,6 +339,7 @@ public class EvaluationContext {
 	 *
 	 * @return the contexts
 	 */
+	@Deprecated
 	public org.eclipse.rdf4j.model.Resource[] getContexts() {
 		return contexts;
 	}

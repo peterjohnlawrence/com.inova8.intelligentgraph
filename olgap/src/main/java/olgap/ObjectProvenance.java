@@ -89,7 +89,7 @@ public class ObjectProvenance extends Evaluator implements Function {
 					evaluationContext.setTracing(true);
 					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
 					pathQLModel.Resource fact = subjectThing.getFact( predicate,//new PredicateElement(source,predicate),
-							literalValue);
+							literalValue,customQueryOptions);
 					if( fact != null) {
 						fact.getValue();
 						logger.debug("Trace\r\n"+evaluationContext.getTrace());

@@ -24,6 +24,7 @@ import pathQLRepository.PathQLRepository;
  * The Class ResourceResults.
  */
 public abstract class ResourceResults implements CloseableIteration<Resource, QueryEvaluationException> , Iterable<Resource>{
+	protected CustomQueryOptions customQueryOptions; 
 	
 	/** The path element. */
 	protected PathElement pathElement; 
@@ -61,10 +62,11 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 * @param thing the thing
 	 * @param pathElement the path element
 	 */
-	public ResourceResults( Thing thing, PathElement pathElement  ){
+	public ResourceResults( Thing thing, PathElement pathElement, CustomQueryOptions customQueryOptions ){
 
 		this.thing = thing; 
 		this.pathElement = pathElement;
+		this.customQueryOptions = customQueryOptions;
 	}
 	
 	/**
@@ -74,9 +76,10 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 * @param source the source
 	 * @param pathElement the path element
 	 */
-	public ResourceResults( PathQLRepository source,  PathElement pathElement  ){
+	public ResourceResults( PathQLRepository source,  PathElement pathElement ,CustomQueryOptions customQueryOptions ){
 		this.source = source; 
 		this.pathElement = pathElement;
+		this.customQueryOptions = customQueryOptions;
 	}
 	
 	/**
@@ -147,10 +150,11 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 * @return the custom query options
 	 */
 	protected CustomQueryOptions getCustomQueryOptions() {
-		if(thing!=null)
-			return thing.getCustomQueryOptions();
-		else 
-			return null;
+//		if(thing!=null)
+//			return thing.getCustomQueryOptions();
+//		else 
+//			return null;
+		return this.customQueryOptions;
 	}
 	
 	/**

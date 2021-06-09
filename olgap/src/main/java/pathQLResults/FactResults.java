@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.Path;
 import pathPatternElement.PathElement;
@@ -29,8 +30,8 @@ public class FactResults extends ResourceBindingSetResults {
 	 * @param pathElement the path element
 	 */
 	public FactResults(CloseableIteration<BindingSet, QueryEvaluationException> factSet, Thing thing,
-			PathElement pathElement) {
-		super(factSet, thing, pathElement);
+			PathElement pathElement,CustomQueryOptions customQueryOptions) {
+		super(factSet, thing, pathElement,customQueryOptions);
 	}
 	
 	/**
@@ -41,8 +42,8 @@ public class FactResults extends ResourceBindingSetResults {
 	 * @param pathElement the path element
 	 */
 	public FactResults(CloseableIteration<BindingSet, QueryEvaluationException> factSet, PathQLRepository source,
-			PathElement pathElement) {
-		super(factSet, source, pathElement);
+			PathElement pathElement,CustomQueryOptions customQueryOptions) {
+		super(factSet, source, pathElement,customQueryOptions);
 	}
 	
 	/**
@@ -77,8 +78,9 @@ public class FactResults extends ResourceBindingSetResults {
 //			return  Resource.create(getSource(), factValue, this.getEvaluationContext());
 			Value factPredicate = next.getValue(getPathElement().getTargetPredicate().getName());
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
-			Thing thing = Thing.create(getSource(),this.getThing().getGraphName(), factThing ,this.getEvaluationContext());
-			return thing.processFactObjectValue((IRI) factPredicate,factValue);
+			//Thing thing = Thing.create(getSource(),this.getThing().getGraphName(), factThing ,this.getEvaluationContext());
+			Thing thing = Thing.create(getSource(),factThing ,this.getEvaluationContext());
+			return thing.processFactObjectValue((IRI) factPredicate,factValue,this.customQueryOptions);
 		}
 	}
 	

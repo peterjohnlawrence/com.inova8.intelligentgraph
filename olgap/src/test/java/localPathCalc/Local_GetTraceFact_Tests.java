@@ -13,9 +13,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Evaluator;
 import pathCalc.Thing;
-import pathQL.Match;
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
 import utilities.Query;
@@ -25,16 +23,11 @@ import utilities.Query;
  */
 @SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Local_PathQL_CacheTests {
+class Local_GetTraceFact_Tests {
 		
 	/** The source. */
 	private static PathQLRepository source;
 	
-	/** The evaluator. */
-	private static Evaluator evaluator;
-
-	/** The match. */
-	private static Match match;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 	/**
 	 * Sets the up before class.
@@ -43,7 +36,7 @@ class Local_PathQL_CacheTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_PathQL_CacheTests/");
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_GetTraceFact_Tests/");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");	
 		source = PathQLRepository.create(workingRep);
@@ -60,7 +53,7 @@ class Local_PathQL_CacheTests {
 		try {
 			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"));
 			Resource result1 = $this.getFact(":volumeFlow");
-			String trace = $this.traceFact(":massThroughput");
+			$this.traceFact(":massThroughput");
 			$this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"));
 			Resource result2 = $this.getFact(":massThroughput");
 			
@@ -73,5 +66,18 @@ class Local_PathQL_CacheTests {
 		}
 
 	}
+	@Test
+	@Order(2)
+	void test_2() {
+		try {
+			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"));
+			Resource result1 = $this.getFact(":volumeFlow");
+			
+			assertEquals("59", result1.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 
+	}
 }

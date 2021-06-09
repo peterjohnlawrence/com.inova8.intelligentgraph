@@ -84,7 +84,7 @@ public class FactDebug extends Evaluator implements Function {
 				evaluationContext.setTracing(true);
 				Thing subjectThing = Thing.create(source, subject, evaluationContext);
 				subjectThing.getFact(predicate,//new PredicateElement(source, predicate),
-						scriptLiteral);
+						scriptLiteral,customQueryOptions);
 				logger.debug("Trace\r\n"+evaluationContext.getTrace());
 				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());
 			}catch(Exception e) {

@@ -5,50 +5,20 @@ package localPathCalc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.antlr.v4.runtime.RecognitionException;
-import org.apache.commons.io.FileUtils;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Namespace;
-import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.RepositoryResult;
-import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.Sail;
-import org.eclipse.rdf4j.sail.lucene.LuceneSail;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import intelligentGraph.IntelligentGraphConfig;
-import intelligentGraph.IntelligentGraphFactory;
-import intelligentGraph.IntelligentGraphSail;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
 import pathPatternProcessor.PathPatternException;
-import pathQL.PathQL;
-import pathQLModel.Resource;
 import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
 import utilities.Query;
-
-import static org.eclipse.rdf4j.model.util.Values.iri;
 /**
  * The Class PathQLTests.
  */
@@ -72,47 +42,8 @@ class Local_Sparql_IntelligentGraphTests {
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 		
-//		
-//		File dataDir = new File("src/test/resources/datadir/Local_Sparql_IntelligentGraphTests/");
-//		FileUtils.deleteDirectory(dataDir);
-//		
-//		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
-//		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
-//		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
-//		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
-//		
-//		LuceneSail lucenesail = new LuceneSail();
-//		lucenesail.setParameter(LuceneSail.LUCENE_RAMDIR_KEY, "true");
-//		
-////		Sail baseSail = new NativeStore(dataDir);		
-////		intelligentGraphSail.setBaseSail(baseSail);
-////		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
-//		
-//		Sail baseSail = new NativeStore(dataDir);		
-//		lucenesail.setBaseSail(baseSail);
-//		intelligentGraphSail.setBaseSail(lucenesail);
-//		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
-//		
-////		Sail baseSail = new NativeStore(dataDir);		
-////		intelligentGraphSail.setBaseSail(baseSail);		
-////		lucenesail.setBaseSail(intelligentGraphSail);	
-////		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(lucenesail);
-//		
-//		String dataFilename = "src/test/resources/calc2graph.data.ttl";
-//		InputStream dataInput = new FileInputStream(dataFilename);
-//		Model dataModel = Rio.parse(dataInput, "", RDFFormat.TURTLE);
-//		conn = workingRep.getConnection();
-//		conn.add(dataModel.getStatements(null, null, null),iri("http://default"));
-//
-//		String modelFilename = "src/test/resources/calc2graph.def.ttl";
-//		InputStream modelInput = new FileInputStream(modelFilename);
-//		Model modelModel = Rio.parse(modelInput, "", RDFFormat.TURTLE);
 		conn = workingRep.getConnection();
-//		conn.add(modelModel.getStatements(null, null, null),iri("http://default"));
-//		boolean namespace = conn.getNamespaces().hasNext();
-//		boolean context = conn.getContextIDs().hasNext();
-//		long size = conn.size();
-//		int i=1;
+
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		source = PathQLRepository.create(workingRep);
@@ -126,9 +57,12 @@ class Local_Sparql_IntelligentGraphTests {
 	 * @throws PathPatternException the path pattern exception
 	 */
 	private Thing addGraph2() throws RecognitionException, PathPatternException {
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
-		Thing myCountry = graph.getThing(":Country1");
+		Thing myCountry = graph.getThing(":Country2");
 		myCountry.addFact(":sales", "1");
 		myCountry.addFact(":sales", "2");
 		myCountry.addFact(":sales", "3");
@@ -148,9 +82,12 @@ class Local_Sparql_IntelligentGraphTests {
 	 * @throws PathPatternException the path pattern exception
 	 */
 	private Thing addGraph3() throws RecognitionException, PathPatternException {
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
-		Thing myCountry = graph.getThing(":Country1");
+		Thing myCountry = graph.getThing(":Country3");
 		myCountry.addFact(":sales", "10");
 		myCountry.addFact(":sales", "20");
 		myCountry.addFact(":sales", "30");
@@ -169,9 +106,12 @@ class Local_Sparql_IntelligentGraphTests {
 	 * @throws PathPatternException the path pattern exception
 	 */
 	private Thing addGraph4() throws RecognitionException, PathPatternException {
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+		source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph4>");
-		Thing myCountry = graph.getThing(":Country1");
+		Thing myCountry = graph.getThing(":Country4");
 		myCountry.addFact(":sales", "100");
 		myCountry.addFact(":sales", "200");
 		myCountry.addFact(":sales", "300");
@@ -210,7 +150,7 @@ class Local_Sparql_IntelligentGraphTests {
 	void ig_1() {
 
 		try {
-			String queryString1 = "select $o  ?time FROM <http://default> WHERE {VALUES(?time){(41)(42)} <http://inova8.com/calc2graph/id/BatteryLimit1> <http://inova8.com/calc2graph/def/testProperty6> $o } ";
+			String queryString1 = "select $o  ?time FROM <file://src/test/resources/calc2graph.data.ttl> WHERE {VALUES(?time){(41)(42)} <http://inova8.com/calc2graph/id/BatteryLimit1> <http://inova8.com/calc2graph/def/testProperty6> $o } ";
 
 			String result = Query.runSPARQL(conn, queryString1);
 			assertEquals("time=41;o=41;time=42;o=42;"
@@ -222,32 +162,7 @@ class Local_Sparql_IntelligentGraphTests {
 		}
 	}
 
-	/**
-	 * Ig 2.
-	 */
-	@Test
-	@Order(2)
-	void ig_2() {
 
-		try {
-			//RepositoryResult<Statement> results = conn.getStatements(null, iri("http://inova8.com/calc2graph/def/volumeFlow"), null);
-			//   RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null, null);
-			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/calc2graph/def/volumeFlow"), null, iri("http://default"));
-			Statement result;
-			while( results.hasNext()) {
-				result=results.next();
-				org.eclipse.rdf4j.model.Resource subject = result.getSubject();
-				 Value object = result.getObject();
-				 assertEquals("(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/volumeFlow, \"59\"^^<http://www.w3.org/2001/XMLSchema#int>, http://default) [http://default]",result.toString());
-				 break;
-				
-			}
-		//	
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Ig 3.
@@ -435,7 +350,7 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "{\n"
 					+ "  <http://inova8.com/calc2graph/id/BatteryLimit1>  <http://inova8.com/calc2graph/def/testProperty2> ?o }";
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=javax.script.ScriptException: java.lang.NumberFormatException: For input string: \\\"javax.script.ScriptException: java.lang.NumberFormatException: For input string: \\\"Circular reference encountered when evaluating <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> of <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>.\\r\\n[<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>; queryOptions={o=\\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\"); $this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>}\\r\\n, <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty3> <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>; queryOptions={o=\\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\"); $this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>}\\r\\n]\\\"\\\";",result);
+			assertEquals("o=javax.script.ScriptException: java.lang.NumberFormatException: For input string: \\\"javax.script.ScriptException: java.lang.NumberFormatException: For input string: \\\"Circular reference encountered when evaluating <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> of <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>.\\r\\n[<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2> <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>; queryOptions=o=\\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\"); $this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>\\r\\n, <http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty3> <http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>; queryOptions=o=\\\"$this.prefix(\\\"<http:\\/\\/inova8.com\\/calc2graph\\/def\\/>\\\"); $this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>\\r\\n]\\\"\\\";",result);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -507,7 +422,7 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/1999/02/22-rdf-syntax-ns#subjectId, http://inova8.com/calc2graph/id/BatteryLimit1)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/long, \"501\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/massFlow, \"24.77999922633171\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
-					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty4, \"0.21670999999999999\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty4, \"0.3805866666666667\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/volumeFlow, \"59\"^^<http://www.w3.org/2001/XMLSchema#int>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://inova8.com/calc2graph/def/BatteryLimit)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit1\")\n"
@@ -537,7 +452,7 @@ class Local_Sparql_IntelligentGraphTests {
 	void ig_13() {
 
 		try {
-			String queryString1 = "CONSTRUCT{<http://inova8.com/context>  <http://inova8.com/context/time>   42. ?s <http://inova8.com/calc2graph/def/testProperty6> $o   }FROM <http://default> WHERE {select ?time ?s $o {VALUES(?time){(41)} ?s <http://inova8.com/calc2graph/def/testProperty6> $o }} ";
+			String queryString1 = "CONSTRUCT{<http://inova8.com/context>  <http://inova8.com/context/time>   42. ?s <http://inova8.com/calc2graph/def/testProperty6> $o   } WHERE {select ?time ?s $o {VALUES(?time){(41)} ?s <http://inova8.com/calc2graph/def/testProperty6> $o }} ";
 
 			String result = Query.runCONSTRUCT(conn, queryString1);
 			assertEquals("(http://inova8.com/context, http://inova8.com/context/time, \"42\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"

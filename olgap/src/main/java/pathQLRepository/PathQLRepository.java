@@ -70,6 +70,8 @@ public class PathQLRepository {
 
 	/** The repository. */
 	private org.eclipse.rdf4j.repository.Repository repository;
+	
+	private final  FactCache factCache=new FactCache();
 
 	/** The cache connection. */
 	private RepositoryConnection cacheConnection;
@@ -213,6 +215,9 @@ public class PathQLRepository {
 
 	}
 
+	public  FactCache getFactCache() {
+		return factCache;
+	}
 	/**
 	 * Gets the triple source.
 	 *
@@ -405,6 +410,7 @@ public class PathQLRepository {
 	 *
 	 * @return the cache rep
 	 */
+	@Deprecated
 	public org.eclipse.rdf4j.repository.Repository getCacheRep() {
 		return this.cacheRep;
 	}
@@ -415,6 +421,7 @@ public class PathQLRepository {
 	 * @param cacheRep
 	 *            the new cache rep
 	 */
+	@Deprecated
 	public void setCacheRep(org.eclipse.rdf4j.repository.Repository cacheRep) {
 		this.cacheRep = cacheRep;
 	}
@@ -571,9 +578,10 @@ public class PathQLRepository {
 	 *            the args
 	 */
 	public  void clearCache(Value... args) {
-		for( Thing thing:things.values()) {
-			thing.getCachedResources().clear();
-		}
+		factCache.clear();
+//		for( Thing thing:things.values()) {
+//			thing.getCachedResources().clear();
+//		}
 //		things.clear();
 		compiledScripts.clear();
 		seeqSources.clear();
@@ -872,7 +880,6 @@ public class PathQLRepository {
 	 * @return the prefixes
 	 */
 	public Prefixes getPrefixes() {
-
 		return prefixes;
 	}
 
@@ -921,6 +928,8 @@ public class PathQLRepository {
 	 *            the iri
 	 * @return the path QL repository
 	 */
+	
+	@Deprecated
 	public PathQLRepository prefix(String prefix, String IRI) {
 		org.eclipse.rdf4j.model.IRI iri = trimAndCheckIRIString(IRI);
 		if (iri != null) {
@@ -934,11 +943,13 @@ public class PathQLRepository {
 
 	/**
 	 * Prefix.
+
 	 *
 	 * @param IRI
 	 *            the iri
 	 * @return the path QL repository
 	 */
+	@Deprecated
 	public PathQLRepository prefix(String IRI) {
 		return this.prefix("", IRI);
 	}
@@ -1209,5 +1220,7 @@ public class PathQLRepository {
 	public HashSet<IRI> getPublicContexts() {
 		return publicContexts;
 	}
-
+	public HashSet<IRI> getPrivateContexts() {
+		return privateContexts;
+	}
 }

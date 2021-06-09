@@ -3,7 +3,15 @@
  */
 package intelligentGraph;
 
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.antlr.v4.runtime.RecognitionException;
@@ -24,6 +32,7 @@ import org.eclipse.rdf4j.query.algebra.evaluation.QueryBindingSet;
 import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.StrictEvaluationStrategy;
 import org.eclipse.rdf4j.query.algebra.helpers.VarNameCollector;
+import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.sail.NotifyingSailConnection;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.UpdateContext;
@@ -31,6 +40,7 @@ import org.eclipse.rdf4j.sail.helpers.NotifyingSailConnectionWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Prefixes;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
@@ -52,6 +62,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	static final String INTELLIGENTGRAPHCONNECTION = "intelligentGraphConnection";
 	static final String TUPLEEXPR = "tupleExpr";
 	static final String SAIL = "sail";
+	public static CustomQueryOptions customQueryOptions;
 	public static final String GETFACTS = "http://inova8.com/pathql/getFacts";
 	private static final String GETFACT = "http://inova8.com/pathql/getFact";
 	protected final Logger logger = LoggerFactory.getLogger(IntelligentGraphConnection.class);
@@ -70,11 +81,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	public IntelligentGraphConnection(NotifyingSailConnection wrappedCon, IntelligentGraphSail intelligentGraphSail) {
 		super(wrappedCon);
 		this.intelligentGraphSail= intelligentGraphSail;
-		CloseableIteration<? extends Namespace, SailException> namespaces = wrappedCon.getNamespaces();
-		while(namespaces.hasNext()) {
-			Namespace namespace = namespaces.next();
-			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
-		}
 	}
 	
 	
@@ -136,9 +142,15 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 * @return the prefixes
 	 */
 	public Prefixes getPrefixes() {
-		return prefixes;
+		return intelligentGraphSail.getPrefixes();
+		
 	}
-
+	public HashSet<IRI> getPublicContexts() {
+		return intelligentGraphSail.getPublicContexts();
+	}
+	public HashSet<IRI> getPrivateContexts() {
+		return intelligentGraphSail.getPrivateContexts();
+	}
 	/**
 	 * Gets the statements.
 	 *
@@ -181,13 +193,84 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		} catch (PathPatternException e) {
 			throw e;
 		}
-		
-		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(),thing.getDataset(), null);
 		TupleExpr pathElementPattern = pathElement.pathPatternQuery(thing,null,null);
+		
+		CustomQueryOptions customQueryOptions = prepareCustomQueryOptions(pathElement, contexts);
+		SimpleDataset dataset = prepareDataset(customQueryOptions, contexts);
+			
+		
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		BindingSet bindings = new QueryBindingSet();
+		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(),dataset, null);
 		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(pathElementPattern,bindings);
-		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement);
+
+		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement,this,customQueryOptions);
+	}
+
+
+	private SimpleDataset prepareDataset(CustomQueryOptions customQueryOptions, Resource... contexts)
+			throws IllegalArgumentException {
+		SimpleDataset dataset = getDataset(contexts);
+		if(customQueryOptions!=null && !customQueryOptions.isEmpty()) {
+			if(dataset==null)
+				dataset = new SimpleDataset();
+			dataset.addDefaultGraph(iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
+		}
+		return dataset;
+	}
+
+
+	private CustomQueryOptions prepareCustomQueryOptions(PathElement pathElement, Resource... contexts) {
+		CustomQueryOptions customQueryOptions = URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,getPrefixes());
+		CustomQueryOptions pathQLCustomQueryOptions = pathElement.getCustomQueryOptions();
+		if( pathQLCustomQueryOptions !=null) {
+			pathQLCustomQueryOptions.addInherited(customQueryOptions);
+			customQueryOptions= pathQLCustomQueryOptions;
+		}
+		return customQueryOptions;
+	}
+
+	private SimpleDataset getDataset(Resource[] contexts) {
+		if(contexts==null) {
+			//If contexts==null then return null. This is the default 'get everything' that is assumed
+			return null;	
+		}else if(containsCustomQueryOptions(contexts)) {
+			//If contexts==urn:customQueryOptions *ONLY* then parse the query options, and add *ALL* public contexts to the dataset		
+			SimpleDataset dataset = new SimpleDataset();
+			for (Resource graph : contexts) {
+				dataset.addDefaultGraph((IRI)graph);
+			}
+			if(containsOnlyPrivateContexts(contexts) ) {
+				//If contexts==urn:customQueryOptions and private contexts then add all public contexts as well.
+				for (IRI graph : getPublicContexts()) {
+					dataset.addDefaultGraph(graph);
+				}
+			}
+			return dataset;
+		}else {
+			SimpleDataset dataset = new SimpleDataset();
+			for (Resource graph : contexts) {
+				dataset.addDefaultGraph((IRI) graph);
+			}
+			return dataset;
+		}
+	}
+	private Boolean containsCustomQueryOptions(Resource[] contexts) {
+		for(Resource context:contexts) {
+			if(context.stringValue().startsWith(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	private Boolean containsOnlyPrivateContexts(Resource[] contexts) {
+		for(Resource context:contexts) {
+			if(context.stringValue().startsWith(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS) ) {
+			}else if( getPublicContexts().contains(context.stringValue())){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -264,5 +347,4 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		}
 		return null;
 	}
-
 }

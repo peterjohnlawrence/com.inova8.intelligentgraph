@@ -3,40 +3,18 @@
  */
 package localPathCalc;
 
-import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Set;
-
 import org.antlr.v4.runtime.RecognitionException;
-import org.apache.commons.io.FileUtils;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.TupleQuery;
-import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.Sail;
-import org.eclipse.rdf4j.sail.lucene.LuceneSail;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import intelligentGraph.IntelligentGraphConfig;
-import intelligentGraph.IntelligentGraphConnection;
-import intelligentGraph.IntelligentGraphFactory;
-import intelligentGraph.IntelligentGraphSail;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
 import pathPatternProcessor.PathPatternException;
@@ -50,7 +28,7 @@ import utilities.Query;
  * The Class RemoteThingTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Local_PathQL_MultiGraphTests {
+class Local_MultiGraphAddGetFact_Tests {
 
 	/** The source. */
 	private static PathQLRepository source;
@@ -66,7 +44,7 @@ class Local_PathQL_MultiGraphTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_PathQL_MultiGraphTests/");
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_MultiGraphAddGetFact_Tests/");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 		
@@ -268,186 +246,6 @@ class Local_PathQL_MultiGraphTests {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph5>");
 		} catch (Exception e) {
 			fail();
-		}
-	}
-	
-	/**
-	 * Ig 60.
-	 */
-	@Test
-	@Order(60)
-	void ig_60() {
-		
-		try {
-			Thing myCountry= addGraph2();
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o \n"
-					+ "FROM <http://inova8.com/calc2graph/testGraph2>\n"
-					+ "FROM <file://calc2graph.data.ttl>\n"
-					+ "FROM <file://calc2graph.def.ttl>\n"
-					+ "{\n"
-					+ "  ?s  :averageSales  ?o } limit 10";
-
-
-			String result = Query.runSPARQL(conn, queryString1);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;",result);
-
-		} catch (Exception e) {
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			fail();
-			e.printStackTrace();
-		}
-	}
-	@Test
-	@Order(65)
-	void ig_65() {
-		
-		try {
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
-			Thing myCountry= addGraph2();
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o \n"
-					+ "FROM <http://inova8.com/calc2graph/testGraph2>\n"
-					+ "FROM <http://default>\n"
-				//	+ "FROM <file://calc2graph.data.ttl>\n"
-				//	+ "FROM <file://calc2graph.def.ttl>\n"
-					+ "{\n"
-					+"VALUES(?s){(<http://inova8.com/calc2graph/def/Country>)} "
-					+ "  ?s  :averageSales  ?o } limit 10";
-
-
-			String result = Query.runSPARQL(conn, queryString1);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;",result);
-
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-		}
-
-		try {
-			Thing myCountry=addGraph3();
-			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
-			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
-			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
-					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
-					+ "FROM <http://default>\n"
-			//		+ "FROM <file://calc2graph.data.ttl>\r\n"
-			//		+ "FROM <file://calc2graph.def.ttl>\r\n"
-					+ "{\r\n"
-					+ "  ?s  :totalSales  ?o} limit 10";
-
-
-			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;",result);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
-			 result = Query.runSPARQL(conn, queryString1);
-			assertEquals("",result);
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
-	/**
-	 * Ig 70.
-	 */
-	@Test
-	@Order(70)
-	void ig_70() {
-
-		try {
-			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
-			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":sales", "100");
-			myCountry.addFact(":sales", "200");
-			myCountry.addFact(":sales", "300");
-			myCountry.addFact(":sales", "400");
-			myCountry.addFact(":sales", "500");
-			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
-			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
-			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
-					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
-					+ "FROM <http://default>\n"
-					+ "FROM <file://calc2graph.data.ttl>\r\n"
-					+ "FROM <file://calc2graph.def.ttl>\r\n"
-					+ "{\r\n"
-					+ "  ?s  :totalSales  ?o} limit 10";
-
-
-			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country1;o=1500.0;",result);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
-			 result = Query.runSPARQL(conn, queryString1);
-			assertEquals("",result);
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Ig 80.
-	 */
-	@Test
-	@Order(80)
-	void ig_80() {
-
-		try {
-			Thing myCountry=addGraph4();
-			String averageSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			conn.setNamespace("", "http://inova8.com/calc2graph/def/");
-			conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
-			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
-					+ "FROM <http://inova8.com/calc2graph/testGraph4>\r\n"
-					+ "FROM <http://default>\n"
-//					+ "FROM <file://calc2graph.data.ttl>\r\n"
-//					+ "FROM <file://calc2graph.def.ttl>\r\n"
-					+ "{\r\n"
-					+ "  ?s  :averageSales  ?o } limit 10";
-
-
-			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=300.0;",result);
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Ig 90.
-	 */
-	@Test
-	@Order(90)
-	void ig_90() {
-
-		try {
-			Thing myCountry = addGraph4();
-			String averageSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> CONSTRUCT{\r\n"
-					+ "  ?s  :averageSales  ?o.\r\n"
-					+ "} "
-					+ "FROM <http://inova8.com/calc2graph/testGraph4>\r\n"
-					+ "FROM <http://default>\n"
-//					+ "FROM <file://calc2graph.data.ttl>\r\n"
-//					+ "FROM <file://calc2graph.def.ttl>\r\n"
-					+ "{\r\n"
-					+ "  ?s  :averageSales  ?o } limit 10";
-
-
-			String result = Query.runCONSTRUCT(conn, queryString1);
-			assertEquals("(http://inova8.com/calc2graph/def/Country, http://inova8.com/calc2graph/def/averageSales, \"300.0\"^^<http://www.w3.org/2001/XMLSchema#double>)\n",result);
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
 		}
 	}
 }

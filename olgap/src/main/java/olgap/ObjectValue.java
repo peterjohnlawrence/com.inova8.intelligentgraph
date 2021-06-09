@@ -88,7 +88,7 @@ public class ObjectValue extends Evaluator implements Function {
 					//Thing subjectThing = source.thingFactory( null, subject, new Stack<String>(),customQueryOptions);	
 					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
 					pathQLModel.Resource fact = subjectThing.getFact(predicate,//new PredicateElement(source,predicate),
-							literalValue); 
+							literalValue,customQueryOptions); 
 					if( fact != null) {
 						Value result = fact.getValue();
 						//source.writeModelToCache(result, cacheContext);

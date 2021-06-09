@@ -15,8 +15,9 @@ import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.evaluation.EvaluationStrategy;
 import org.eclipse.rdf4j.query.algebra.evaluation.QueryBindingSet;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.StrictEvaluationStrategy;
+import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryException;
-
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
 import pathPatternProcessor.PathPatternException;
@@ -46,7 +47,7 @@ public class PathQL {
 	public static ResourceResults evaluate(PathQLRepository source,String pathQL) throws RecognitionException, PathPatternException {	
 		PathElement element = PathParser.parsePathPattern(source, pathQL);		
 		if(element!=null ) {
-			return evaluate(source, element);
+			return evaluate(source, element,null);
 		}else {
 			throw new  PathPatternException();
 		}
@@ -60,11 +61,19 @@ public class PathQL {
 	 * @return the path QL results. resource results
 	 * @throws PathPatternException the path pattern exception
 	 */
-	public  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL) throws PathPatternException {
-		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);////PathParser.parsePathPattern(thing, pathQL);
+	public  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL) throws PathPatternException{
+		return evaluate( thing,  pathQL,null);
+	}
+	public  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL,CustomQueryOptions customQueryOptions) throws PathPatternException {
+		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
 		if(pathElement!=null ) {
-			thing.supersedeCustomQueryOptions(pathElement.getCustomQueryOptions());
-			return evaluate(thing, pathElement);
+			CustomQueryOptions pathCustomQueryOptions = pathElement.getCustomQueryOptions();
+			if(pathCustomQueryOptions!=null) {
+				pathCustomQueryOptions.addInherited(customQueryOptions);
+				return evaluate(thing, pathElement,pathCustomQueryOptions);
+			}else {
+				return evaluate(thing, pathElement,customQueryOptions);
+			}
 		}else {
 			throw new  PathPatternException();
 		}
@@ -80,7 +89,7 @@ public class PathQL {
 	 * @throws MalformedQueryException the malformed query exception
 	 * @throws QueryEvaluationException the query evaluation exception
 	 */
-	private static pathQLResults.ResourceResults evaluate(PathQLRepository source,PathElement element)
+	private static pathQLResults.ResourceResults evaluate(PathQLRepository source,PathElement element,CustomQueryOptions customQueryOptions )
 			throws RepositoryException, MalformedQueryException, QueryEvaluationException {
 		PathQLResults boundResultsIterator = null ;
 		if (element.getIsBound()) {
@@ -101,7 +110,7 @@ public class PathQL {
 				MatchJoinIterator matchJoinIterator = new MatchJoinIterator(evaluationStrategy, boundResultsIterator.getResourceSet(),rightArgTupleExpr);
 			
 				//return new PathQLResultsIterator(matchJoinIterator);
-				return new FactResults(matchJoinIterator,source,element.getRightPathElement());
+				return new FactResults(matchJoinIterator,source,element.getRightPathElement(), customQueryOptions);
 			}else {
 				return boundResultsIterator;
 			}
@@ -111,7 +120,9 @@ public class PathQL {
 		}
 		return boundResultsIterator;
 	}
-
+	public static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement){
+		return evaluate( thing,  pathElement,null);
+	}
 	/**
 	 * Evaluate.
 	 *
@@ -119,9 +130,10 @@ public class PathQL {
 	 * @param pathElement the path element
 	 * @return the path QL results. resource results
 	 */
-	public static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement) {
-
-		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(thing.getSource().getTripleSource(),thing.getDataset(), null);
+	public static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement,CustomQueryOptions customQueryOptions) {
+		SimpleDataset dataset = thing.getDataset(customQueryOptions);
+		
+		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(thing.getSource().getTripleSource(),dataset, null);
 		TupleExpr pathElementPattern = pathElement.pathPatternQuery(thing,null,null);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		BindingSet bindings = new QueryBindingSet();
@@ -130,7 +142,7 @@ public class PathQL {
 		logger.debug( "pathQL="+ pathElement.toString());
 		logger.debug("sourceVariable="+ pathElement.getTargetSubject().toString()+" targetPredicate="+ pathElement.getTargetPredicate().toString()+" targetVariable="+ pathElement.getTargetVariable().toString());
 		logger.debug("pathPattern=\n"+ pathElementPattern.toString());
-		return new FactResults( resultsIterator,thing, pathElement);
+		return new FactResults( resultsIterator,thing, pathElement, customQueryOptions);
 	}
 
 

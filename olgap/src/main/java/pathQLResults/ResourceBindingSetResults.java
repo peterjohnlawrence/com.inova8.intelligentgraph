@@ -6,6 +6,7 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
 import pathPatternElement.PredicateElement;
@@ -17,17 +18,17 @@ import pathQLRepository.PathQLRepository;
 public abstract class ResourceBindingSetResults extends ResourceResults {
 	CloseableIteration<BindingSet, QueryEvaluationException> resourceSet;
 	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,
-			PathQLRepository source, PathElement pathElement) {
+			PathQLRepository source, PathElement pathElement,CustomQueryOptions customQueryOptions) {
 
-		super( source, pathElement);
+		super( source, pathElement,customQueryOptions);
 		this.resourceSet =resourceSet;
 	}
 	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing ){
 		super( thing);
 		this.resourceSet =resourceSet;
 	}
-	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing, PathElement pathElement  ){
-		super( thing,pathElement);
+	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing, PathElement pathElement,CustomQueryOptions customQueryOptions  ){
+		super( thing,pathElement,customQueryOptions);
 		this.resourceSet =resourceSet;
 	}
 	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet) {

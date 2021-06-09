@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
+
 import javax.script.CompiledScript;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
@@ -25,8 +27,6 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
-import org.eclipse.rdf4j.model.util.ModelBuilder;
-import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -36,6 +36,8 @@ import Exceptions.HandledException;
 import Exceptions.NotSupportedException;
 import Exceptions.NullValueReturnedException;
 import Exceptions.ScriptFailedException;
+import intelligentGraph.IntelligentGraphConnection;
+import intelligentGraph.IntelligentGraphSail;
 import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
@@ -48,6 +50,7 @@ import pathQLRepository.PathQLRepository;
 import pathQLRepository.ReificationType;
 import pathQLRepository.SEEQSource;
 import pathQLResults.ResourceResults;
+import pathQLResults.ResourceStatementResults;
 
 /**
  * The Class Thing.
@@ -87,12 +90,13 @@ public class Thing extends Resource {
 	 */
 	public static Thing create(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
-		return Thing.create( source,  Graph.DEFAULTGRAPH, superValue,	 evaluationContext);
+		return Thing.create( source,  null, superValue,	 evaluationContext);
 	}
 	public static Thing create(PathQLRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		Thing thing;
-		String graphThingKey = graphIri.stringValue()+"~"+ superValue.stringValue();
+
+		String graphThingKey = superValue.stringValue();//graphIri.stringValue()+"~"+ superValue.stringValue();
 		if (superValue != null && source != null && source.getThings().containsKey(graphThingKey)) {
 			thing = source.getThings().get(graphThingKey);
 			if(evaluationContext!=null) {
@@ -101,11 +105,14 @@ public class Thing extends Resource {
 				if(evaluationContext.getTracer()!=null && evaluationContext.getTracer().isTracing())thing.evaluationContext.setTracer(evaluationContext.getTracer());
 				if(evaluationContext.getDataset()!=null )thing.evaluationContext.setDataset(evaluationContext.getDataset());
 			}
+			//Overwrite the graphName if not null
+			if(graphIri!=null)thing.graphName= graphIri;
 			return thing;
 		} else {
 			thing = new Thing(source, superValue, evaluationContext);
 			if (source != null)
 				source.getThings().put(graphThingKey, thing);
+			if(graphIri==null)graphIri= Graph.DEFAULTGRAPH;
 			thing.graphName = graphIri;
 		}
 		if (evaluationContext != null)
@@ -164,6 +171,7 @@ public class Thing extends Resource {
 	 *
 	 * @return the cached resources
 	 */
+	@Deprecated
 	public HashMap<String, Resource> getCachedResources() {
 		if( cachedResources==null) {
 			cachedResources= new HashMap<String, Resource> ();
@@ -178,6 +186,7 @@ public class Thing extends Resource {
 	 *            the predicate element
 	 * @return the fact key
 	 */
+	@Deprecated
 	private String getFactKey(PredicateElement predicateElement) {
 		return getFactKey(predicateElement.getPredicate());
 	}
@@ -189,6 +198,7 @@ public class Thing extends Resource {
 	 *            the predicate
 	 * @return the fact key
 	 */
+	@Deprecated
 	private String getFactKey(IRI predicate) {
 		String key = predicate.stringValue() + "." + StringUtils.join(this.getCustomQueryOptions()).hashCode() + "."
 				+ StringUtils.join(getSource().getPublicContexts()).hashCode();
@@ -196,8 +206,8 @@ public class Thing extends Resource {
 	}
 
 
-	public final Resource getFact(IRI predicate, SimpleLiteral scriptString) {
-		Resource fact = processFactObjectValue(predicate,scriptString );//this.handleScript(scriptString, predicate);
+	public final Resource getFact(IRI predicate, SimpleLiteral scriptString, CustomQueryOptions customQueryOptions) {
+		Resource fact = processFactObjectValue(predicate,scriptString,  customQueryOptions );//this.handleScript(scriptString, predicate);
 		return fact;
 	}
 
@@ -230,11 +240,34 @@ public class Thing extends Resource {
 	}
 
 	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
-	//	CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
-		//return new ResourceStatementResults( statementIterator,this);
-		supersedeCustomQueryOptions(customQueryOptions);
-		return PathQL.evaluate(this, predicatePattern);
+		//This could be configured to process locally in a client or remotely in the server. Not sure both are required.
+		boolean remoteHostProcessing = true;
+		if(remoteHostProcessing) {
+			org.eclipse.rdf4j.model.Resource[] contextArray = prepareDataset(customQueryOptions);
+			 ResourceStatementResults results = null ;
+			if(this.getSource().getTripleSource()!=null) {
+				 CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource().getTripleSource().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern),contextArray);
+				 results = new ResourceStatementResults( localStatementIterator,this, null, customQueryOptions);
+			}else if(this.getSource().getContextAwareConnection()!=null) {
+				CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern),contextArray);
+				 results = new ResourceStatementResults( statementIterator,this, null, customQueryOptions);
+			}
+	
+			return results;
+		}else {
+			return PathQL.evaluate(this, predicatePattern,customQueryOptions);
+		}
 	}
+	private org.eclipse.rdf4j.model.Resource[] prepareDataset(CustomQueryOptions customQueryOptions) {
+		SimpleDataset dataset = getDataset( customQueryOptions);
+		if(dataset!=null) {
+			Set<IRI> contexts = dataset.getDefaultGraphs();
+			org.eclipse.rdf4j.model.Resource[] contextArray=contexts.toArray(new org.eclipse.rdf4j.model.Resource[0]);
+			return contextArray;
+		}else
+			return new  org.eclipse.rdf4j.model.Resource[0];
+	}
+	@Deprecated
 	public void supersedeCustomQueryOptions(CustomQueryOptions customQueryOptions) {
 		if(customQueryOptions!=null && !customQueryOptions.isEmpty()) {
 			customQueryOptions.addInherited(this.getEvaluationContext().getCustomQueryOptions());
@@ -243,9 +276,7 @@ public class Thing extends Resource {
 	}
 
 	public final ResourceResults getFacts(String predicatePattern) throws PathPatternException {
-	//	CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
-		//return new ResourceStatementResults( statementIterator,this);
-		return PathQL.evaluate(this, predicatePattern);
+		return getFacts(predicatePattern,null);
 	}
 
 	/**
@@ -298,9 +329,10 @@ public class Thing extends Resource {
 	 *            the script string
 	 * @param predicate
 	 *            the predicate
+	 * @param customQueryOptions 
 	 * @return the resource
 	 */
-	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate) {
+	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate, CustomQueryOptions customQueryOptions) {
 		if (predicate.equals(iri(Evaluator.SCRIPTPROPERTY))) {
 			return Resource.create(getSource(), scriptString, this.getEvaluationContext());
 		} else {
@@ -325,7 +357,7 @@ public class Thing extends Resource {
 							"Reference script <%s> not found for  %s of  subject %s", scriptIRI, predicate, this), qe);
 				}
 				if (scriptCodeliteral != null) {
-					return handleScript(scriptCodeliteral, predicate);
+					return handleScript(scriptCodeliteral, predicate,customQueryOptions);
 				} else {
 					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION, String.format(
 							"Reference script null <%s> for %s of subject %s", scriptIRI, predicate, this));
@@ -352,8 +384,8 @@ public class Thing extends Resource {
 					//	scriptBindings.put("$tripleSource", getSource().getTripleSource());
 						scriptBindings.put("$this", this);
 					//	scriptBindings.put("$property",		Thing.create(getSource(), predicate, this.getEvaluationContext()));
-						scriptBindings.put("$customQueryOptions", getCustomQueryOptions());
-						scriptBindings.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
+						scriptBindings.put("$customQueryOptions",customQueryOptions);// getCustomQueryOptions());
+					//	scriptBindings.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
 						Resource result;
 						try {
 							pushStack(stackKey);
@@ -435,25 +467,33 @@ public class Thing extends Resource {
 	 *            the object value
 	 * @return Processes the objectValue
 	 */
-	public Resource processFactObjectValue(IRI predicate, Value objectValue) {
+	public Resource processFactObjectValue(IRI predicate, Value objectValue, CustomQueryOptions customQueryOptions) {
 		Resource returnResult = null;
 		SimpleLiteral literalValue;
 		{
 			literalValue = (SimpleLiteral) objectValue;
 			if (Evaluator.isScriptEngine(literalValue.getDatatype())) {
 				String key = getFactKey(predicate);
-				if (notTracing() && getCachedResources().containsKey(key)) {
-					Resource result = getCachedResources().get(key);
+			//	if (notTracing() && getCachedResources().containsKey(key)) {
+				org.eclipse.rdf4j.model.Resource customQueryOptionsContext;
+				if(customQueryOptions!=null)
+					customQueryOptionsContext = customQueryOptions.getContext();
+				else
+					 customQueryOptionsContext = CustomQueryOptions.getEmptyContext();
+				if (notTracing() && getSource().getFactCache().contains(this.getIRI(), predicate, customQueryOptionsContext)) {
+					//Resource result = getCachedResources().get(key);
+					Value resultValue =  getSource().getFactCache().getFacts(this.getIRI(), predicate, customQueryOptionsContext);
 					logger.debug("Retrieved cache {} of {} = {}", predicate.stringValue(),
-							addIRI(getSuperValue()), getHTMLValue(result.getValue()));
+							addIRI(getSuperValue()), getHTMLValue(resultValue));
 					addTrace(String.format("Retrieved cache %s of %s = %s", predicate.stringValue(),
-							addIRI(getSuperValue()), getHTMLValue(result.getValue())));
-					returnResult = result;
+							addIRI(getSuperValue()), getHTMLValue(resultValue)));
+					returnResult = Resource.create(getSource(), resultValue, evaluationContext);
 				} else {
-					Resource result = this.handleScript(literalValue, predicate);//getFact(predicate, literalValue);
+					Resource result = this.handleScript(literalValue, predicate,customQueryOptions);//getFact(predicate, literalValue);
 					if (result != null) {
 						//TODO validate caching
 						//getCachedResources().put(key, result);
+						getSource().getFactCache().addFact(this.getIRI(), predicate,result.getSuperValue() ,customQueryOptionsContext);
 						addTrace(String.format("Calculated %s of %s = %s", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
 					}
@@ -515,8 +555,8 @@ public class Thing extends Resource {
 				case "double":
 					return Resource.create(getSource(), literal(((pathQLModel.Literal) result).doubleValue()),
 							this.getEvaluationContext());
-				case "string":
-					return Resource.create(getSource(), literal(result), this.getEvaluationContext());
+				case "string": 
+					return Resource.create(getSource(), literal(content.stringValue()), this.getEvaluationContext());
 				default:
 					logger.error("No literal handler found for result {} of class {}", result.toString(),
 							((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName());
@@ -635,7 +675,7 @@ public class Thing extends Resource {
 		}
 		supersedeCustomQueryOptions(customQueryOptions);
 		this.getEvaluationContext().setTracing(true);
-		ResourceResults factValues = PathQL.evaluate(this, predicatePattern);
+		ResourceResults factValues = PathQL.evaluate(this, predicatePattern,customQueryOptions);
 		if (factValues.hasNext()) {
 			factValues.next();
 		}
@@ -797,7 +837,7 @@ public class Thing extends Resource {
 	 *
 	 * @return the dataset
 	 */
-	public Dataset getDataset() {
+	public SimpleDataset getDataset(org.eclipse.rdf4j.model.Resource... declaredContexts) {
 		//The graphs can be defined in three ways: as the dataset of a tuplequery, as contexts in getStatements query, or as explicitly defined graphs in a PathCalc query
 		SimpleDataset dataset = (SimpleDataset) getEvaluationContext().getDataset();
 		if (dataset != null)
@@ -807,13 +847,20 @@ public class Thing extends Resource {
 			if (publicContexts == null || publicContexts.isEmpty()) {
 				org.eclipse.rdf4j.model.Resource[] contexts = getEvaluationContext().getContexts();
 				if (contexts == null || contexts.length == 0) {
+					//TODO temp
+//					dataset = new SimpleDataset();
+//					for (org.eclipse.rdf4j.model.Resource resource : declaredContexts) {
+//						dataset.addDefaultGraph((IRI) resource);
+//					}
+//					return dataset;
+					
 					return null;
 				} else {
 					dataset = new SimpleDataset();
 					for (org.eclipse.rdf4j.model.Resource resource : contexts) {
 						dataset.addDefaultGraph((IRI) resource);
 					}
-					getEvaluationContext().setDataset(dataset);
+				//	getEvaluationContext().setDataset(dataset);
 					return dataset;
 				}
 			} else {
@@ -821,10 +868,16 @@ public class Thing extends Resource {
 				for (IRI graph : publicContexts) {
 					dataset.addDefaultGraph(graph);
 				}
-				getEvaluationContext().setDataset(dataset);
+			//	getEvaluationContext().setDataset(dataset);
 				return dataset;
 			}
 		}
+	}
+	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
+		SimpleDataset dataset = getDataset();
+		if(customQueryOptions!=null)
+			dataset.addDefaultGraph(iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
+		return dataset;
 	}
 	/**
 	 * Gets the thing.
@@ -879,7 +932,7 @@ public class Thing extends Resource {
 		while (objectStatements.hasNext()) {
 			Statement objectStatement = objectStatements.next();
 			Value objectValue = objectStatement.getObject();
-			returnResult = processFactObjectValue(predicate, objectValue);
+			returnResult = processFactObjectValue(predicate, objectValue,this.getCustomQueryOptions());
 		}
 		if (returnResult != null)
 			return returnResult;

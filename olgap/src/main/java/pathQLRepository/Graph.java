@@ -59,11 +59,13 @@ public Thing getThing(String thing) throws RecognitionException, PathPatternExce
 	return getThing(thingIri);
 }
  public Thing getThing(IRI thing) {
-	 return  getThing(thing, null);
+	 return Thing.create(this.getSource(),this.getGraphName(),  (Value)thing, new EvaluationContext());
  }
+ @Deprecated
  public Thing getThing(IRI thing,CustomQueryOptions customQueryOptions) {
 	 return Thing.create(this.getSource(),this.getGraphName(),  (Value)thing, new EvaluationContext(customQueryOptions));
  }
+ @Deprecated
  public Thing getThing(String thing, CustomQueryOptions customQueryOptions) throws RecognitionException, PathPatternException {
 		IRI thingIri = PathParser.parseIriRef(source,thing).getIri();
 		return getThing(thingIri, customQueryOptions);

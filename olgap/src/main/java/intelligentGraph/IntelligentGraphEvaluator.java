@@ -249,8 +249,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								evaluationContext);
 						try {
 							pathQLModel.Resource fact = subjectThing.getFact(
-									(IRI) nextBindingSet.getValue("predicate"),//new PredicateElement(getSource(), (IRI) nextBindingSet.getValue("predicate")),
-									literalValue);
+									(IRI) nextBindingSet.getValue("predicate"),	literalValue,customQueryOptions);
 							Binding modifiedBindingValue = new SimpleBinding("object", fact.getValue());
 							modifiedBindingSet.addBinding(modifiedBindingValue);
 							return modifiedBindingSet;
@@ -305,15 +304,15 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								Value subject = getSubjectValue(boundStatement, nextBindingSet);
 								IRI predicate = getPredicateValue(boundStatement, nextBindingSet);
 								ResponseType responseType = getResponseType(bindingValueName);
+								customQueryOptions= getCustomQueryOptions(nextBindingSet);
 								EvaluationContext evaluationContext = new EvaluationContext(
-										getCustomQueryOptions(nextBindingSet), getDataset(), getPrefixes());
+										customQueryOptions, getDataset(), getPrefixes());
 								switch (responseType) {
 								case VALUE:
 									Thing subjectThing = Thing.create(getSource(), subject, evaluationContext);
 									try {
 										pathQLModel.Resource fact = subjectThing
-												.getFact(predicate,//new PredicateElement(getSource(), predicate),
-														literalValue);
+												.getFact(predicate,	literalValue,customQueryOptions);
 										Binding modifiedBindingValue = new SimpleBinding(modifiedBindingValueName,
 												fact.getValue());
 										modifiedBindingSet.addBinding(modifiedBindingValue);
@@ -329,8 +328,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								case TRACE:
 									evaluationContext.setTracing(true);
 									Thing subjectThingTrace = Thing.create(getSource(), subject, evaluationContext);
-									subjectThingTrace.getFact(predicate,//new PredicateElement(getSource(), predicate),
-											literalValue);
+									subjectThingTrace.getFact(predicate,literalValue,customQueryOptions);
 									Binding modifiedBindingValueTrace = new SimpleBinding(modifiedBindingValueName,
 											literal(evaluationContext.getTrace()));
 									modifiedBindingSet.addBinding(modifiedBindingValueTrace);
@@ -345,8 +343,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 							Thing subjectThing = Thing.create(getSource(), Evaluator.ANONTHING, evaluationContext);
 							try {
 								pathQLModel.Resource fact = subjectThing.getFact(
-										Evaluator.ANONPREDICATE,//new PredicateElement(getSource(), Evaluator.ANONPREDICATE), 
-										literalValue);
+										Evaluator.ANONPREDICATE,literalValue,null);
 								Binding modifiedBindingValue = new SimpleBinding(bindingValue.getName(),
 										fact.getValue());
 								modifiedBindingSet.addBinding(modifiedBindingValue);

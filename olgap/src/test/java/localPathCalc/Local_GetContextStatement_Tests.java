@@ -5,7 +5,8 @@ package localPathCalc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
@@ -19,12 +20,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import intelligentGraph.IntelligentGraphSail;
 import utilities.Query;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -33,7 +29,7 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
  * The Class PathQLTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Local_CRUD_Test {
+class Local_GetContextStatement_Tests {
 	
 	
 	/** The conn. */
@@ -52,82 +48,16 @@ class Local_CRUD_Test {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_CRUD_Test/");
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_GetContextStatement_Tests/");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 
 		conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
 
-	/**
-	 * Ig 0.
-	 */
-	@Test
-	@Order(0)
-	void ig_0() {
-
-		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
-			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph1>");
-			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":sales", "1");
-			myCountry.addFact(":sales", "2");
-			myCountry.addFact(":sales", "3");
-			myCountry.addFact(":sales", "4");
-			ResourceResults facts = myCountry.getFacts(":sales[ge '2';lt '4']");
-			Integer factsinrange = facts.count();
-			assertEquals(2, factsinrange);
-			myCountry.deleteFacts(":sales[eq '3']");
-			factsinrange = myCountry.getFacts(":sales[ge '2';lt '4']").count();
-			assertEquals(1, factsinrange);
-			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph1>");
-			assertEquals(true, closed);
-		} catch (Exception e) {
-
-			fail();
-			e.printStackTrace();
-		}
-	}
-	@Test
-	@Order(1)
-	void ig_1() {
-
-		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
-			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
-			Thing myCountry = graph.getThing(":Country2");
-			myCountry.addFact(":Attribute@:sales", "1");
-			myCountry.addFact(":Attribute@:sales", "2");
-			myCountry.addFact(":Attribute@:sales", "3");
-			myCountry.addFact(":Attribute@:sales", "4");
-			ResourceResults facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
-			Integer factsinrange = facts.count();
-			assertEquals(2, factsinrange);
-			myCountry.deleteFacts(":Attribute@:sales[eq '3']");
-			facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
-			factsinrange = facts.count();
-			assertEquals(1, factsinrange);
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			Resource averageSales = myCountry.getFact(":averageSales");
-			assertEquals(2.3333333333333335, averageSales.doubleValue());
-			Thing country3= myCountry.getThing(":Country3");
-			String averageSalesScript3 = "totalSales=0; count=0; myCountry=$this.getThing(\":Country2\"); for(sales in myCountry.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			country3.addFact(":averageSales", averageSalesScript3, Evaluator.GROOVY) ;
-			Resource averageSales3 = myCountry.getFact(":averageSales");
-			assertEquals(2.3333333333333335, averageSales3.doubleValue());
-			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals(true, closed);
-		} catch (Exception e) {
-
-			fail();
-			e.printStackTrace();
-		}
-	}	
 	@Test
 	@Order(2)
 	void ig_2() {
@@ -192,6 +122,75 @@ class Local_CRUD_Test {
 			}
 		} catch (Exception e) {
 
+			fail();
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	@Order(6)
+	void ig_6() {
+
+		try {
+			//RepositoryResult<Statement> results = conn.getStatements(null, iri("http://inova8.com/calc2graph/def/volumeFlow"), null);
+			//   RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null, null);
+			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/calc2graph/def/volumeFlow"), null, iri("file://src/test/resources/calc2graph.data.ttl"));
+			Statement result;
+			if( results.hasNext()) {
+				result=results.next();
+				 assertEquals("(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/volumeFlow, \"59\"^^<http://www.w3.org/2001/XMLSchema#int>, file://src/test/resources/calc2graph.data.ttl) [file://src/test/resources/calc2graph.data.ttl]",result.toString());
+				 return;
+				
+			}else
+				fail();
+		//	
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(7)
+	void ig_7() {
+
+		try {
+
+			//&time='42'^^xsd:int
+			String param1 = URLEncoder.encode("43^^xsd:int", StandardCharsets.UTF_8.toString());
+			String param2 = URLEncoder.encode("2019^^xsd:double", StandardCharsets.UTF_8.toString());
+			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/pathql/getFacts"), literal(":testProperty6"),iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?time="+param1+"&date="+param2));
+			Statement result;
+			if( results.hasNext()) {
+				result=results.next();
+				 assertEquals("(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty6, \"43\"^^<http://www.w3.org/2001/XMLSchema#integer>) [null]",result.toString());
+				 return;
+				
+			}else
+				fail();
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(8)
+	void ig_8() {
+
+		try {
+
+			//&time='42'^^xsd:int
+			String param1 = URLEncoder.encode("43.0", StandardCharsets.UTF_8.toString());
+			String param2 = URLEncoder.encode("", StandardCharsets.UTF_8.toString());
+			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/pathql/getFacts"), literal(":testProperty6"),iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?time="+param1+"&date="+param2));
+			Statement result;
+			if( results.hasNext()) {
+				result=results.next();
+				 assertEquals("(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty6, \"43.0\") [null]",result.toString());
+				 return;
+				
+			}else
+				fail();
+		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
