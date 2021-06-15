@@ -114,7 +114,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	 */
 	@Override
 	public IntelligentStatement next() throws SailException {
-		return  new IntelligentStatement(getStatementsIterator().next(),getSource(),getEvaluationContext(),null);
+		return  new IntelligentStatement(getStatementsIterator().next(),getSource(),getEvaluationContext(),null,this.contexts);
 	}
 
 	/**

@@ -23,7 +23,9 @@ import org.slf4j.Logger;
 
 /**
  * The Class FactDebug.
+
  */
+@Deprecated
 public class FactDebug extends Evaluator implements Function {
 	
 	/** The logger. */

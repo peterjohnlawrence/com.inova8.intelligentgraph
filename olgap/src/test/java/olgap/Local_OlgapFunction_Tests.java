@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package localPathCalc;
+package olgap;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;

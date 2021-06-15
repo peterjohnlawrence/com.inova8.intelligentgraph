@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -57,9 +58,10 @@ class Local_Evaluate_Tests {
 //		source.prefix("id","<http://inova8.com/calc2graph/id/>");
 //		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 	}
-	/**
-	 * Pathql 1.
-	 */
+	@AfterAll
+	static void closeClass() throws Exception {
+		//conn.close();
+	}
 	@Test
 	@Order(1)
 	void pathql_1() {

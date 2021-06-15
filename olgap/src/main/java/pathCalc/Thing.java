@@ -36,6 +36,7 @@ import Exceptions.HandledException;
 import Exceptions.NotSupportedException;
 import Exceptions.NullValueReturnedException;
 import Exceptions.ScriptFailedException;
+import intelligentGraph.FactCache;
 import intelligentGraph.IntelligentGraphConnection;
 import intelligentGraph.IntelligentGraphSail;
 import pathPatternElement.PredicateElement;
@@ -52,24 +53,17 @@ import pathQLRepository.SEEQSource;
 import pathQLResults.ResourceResults;
 import pathQLResults.ResourceStatementResults;
 
-/**
- * The Class Thing.
- */
 public class Thing extends Resource {
 
-	/** The Constant NULLVALUERETURNED_EXCEPTION. */
+	@Deprecated
 	private static final String NULLVALUERETURNED_EXCEPTION = "NullValueReturned";
-
-	/** The Constant SCRIPTFAILED_EXCEPTION. */
+	@Deprecated
 	private static final String SCRIPTFAILED_EXCEPTION = "ScriptFailed";
-
-	/** The Constant CIRCULARREFERENCE_EXCEPTION. */
+	@Deprecated
 	private static final String CIRCULARREFERENCE_EXCEPTION = "CircularReference";
-
-	/** The Constant SCRIPTNOTFOUND_EXCEPTION. */
+	@Deprecated
 	private static final String SCRIPTNOTFOUND_EXCEPTION = null;
-
-	/** The Constant NULLVALUESCRIPT_EXCEPTION. */
+	@Deprecated
 	private static final String NULLVALUESCRIPT_EXCEPTION = null;
 	/** The logger. */
 	protected final Logger logger = LoggerFactory.getLogger(Thing.class);
@@ -99,11 +93,13 @@ public class Thing extends Resource {
 		String graphThingKey = superValue.stringValue();//graphIri.stringValue()+"~"+ superValue.stringValue();
 		if (superValue != null && source != null && source.getThings().containsKey(graphThingKey)) {
 			thing = source.getThings().get(graphThingKey);
+			thing.setSource(source);
 			if(evaluationContext!=null) {
 				if(thing.evaluationContext.getPrefixes()==null || thing.evaluationContext.getPrefixes().isEmpty())thing.evaluationContext.setPrefixes(evaluationContext.getPrefixes());
 				if(evaluationContext.getCustomQueryOptions()!=null && !evaluationContext.getCustomQueryOptions().isEmpty())thing.evaluationContext.setCustomQueryOptions(evaluationContext.getCustomQueryOptions());
 				if(evaluationContext.getTracer()!=null && evaluationContext.getTracer().isTracing())thing.evaluationContext.setTracer(evaluationContext.getTracer());
 				if(evaluationContext.getDataset()!=null )thing.evaluationContext.setDataset(evaluationContext.getDataset());
+				thing.evaluationContext.setContexts(evaluationContext.getContexts());
 			}
 			//Overwrite the graphName if not null
 			if(graphIri!=null)thing.graphName= graphIri;
@@ -137,23 +133,10 @@ public class Thing extends Resource {
 		this.setSource(source);
 	}
 
-	/**
-	 * Gets the graph.
-	 *
-	 * @return the graph
-	 */
 	public IRI getGraphName() {
 		return graphName;
 	}
 
-
-	/**
-	 * Generate cache context.
-	 *
-	 * @param predicate
-	 *            the predicate
-	 * @return the iri
-	 */
 	private final IRI generateCacheContext(IRI predicate) {
 		String key;
 		if (predicate != null) {
@@ -166,11 +149,6 @@ public class Thing extends Resource {
 		return cacheContextIRI;
 	}
 
-	/**
-	 * Gets the cached resources.
-	 *
-	 * @return the cached resources
-	 */
 	@Deprecated
 	public HashMap<String, Resource> getCachedResources() {
 		if( cachedResources==null) {
@@ -179,25 +157,11 @@ public class Thing extends Resource {
 		return cachedResources;
 	}
 
-	/**
-	 * Gets the fact key.
-	 *
-	 * @param predicateElement
-	 *            the predicate element
-	 * @return the fact key
-	 */
 	@Deprecated
 	private String getFactKey(PredicateElement predicateElement) {
 		return getFactKey(predicateElement.getPredicate());
 	}
 
-	/**
-	 * Gets the fact key.
-	 *
-	 * @param predicate
-	 *            the predicate
-	 * @return the fact key
-	 */
 	@Deprecated
 	private String getFactKey(IRI predicate) {
 		String key = predicate.stringValue() + "." + StringUtils.join(this.getCustomQueryOptions()).hashCode() + "."
@@ -206,13 +170,14 @@ public class Thing extends Resource {
 	}
 
 
-	public final Resource getFact(IRI predicate, SimpleLiteral scriptString, CustomQueryOptions customQueryOptions) {
-		Resource fact = processFactObjectValue(predicate,scriptString,  customQueryOptions );//this.handleScript(scriptString, predicate);
+	public final Resource getFact(IRI predicate, SimpleLiteral scriptString, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) {
+		Resource fact = processFactObjectValue(predicate,scriptString,  customQueryOptions ,contexts);//this.handleScript(scriptString, predicate);
 		return fact;
 	}
 
 	public final Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException{
 		logger.debug("getFact{}\n", predicatePattern);
+
 		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions);
 		if (factValues == null) {
 			return new NullValue();
@@ -243,16 +208,16 @@ public class Thing extends Resource {
 		//This could be configured to process locally in a client or remotely in the server. Not sure both are required.
 		boolean remoteHostProcessing = true;
 		if(remoteHostProcessing) {
-			org.eclipse.rdf4j.model.Resource[] contextArray = prepareDataset(customQueryOptions);
-			 ResourceStatementResults results = null ;
-			if(this.getSource().getTripleSource()!=null) {
-				 CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource().getTripleSource().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern),contextArray);
-				 results = new ResourceStatementResults( localStatementIterator,this, null, customQueryOptions);
-			}else if(this.getSource().getContextAwareConnection()!=null) {
-				CloseableIteration<Statement, RepositoryException>  statementIterator  = 	this.getSource().getContextAwareConnection().getStatements(this.getIRI(),iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern),contextArray);
-				 results = new ResourceStatementResults( statementIterator,this, null, customQueryOptions);
-			}
-	
+			//this.supersedeCustomQueryOptions(customQueryOptions);
+			SimpleDataset dataset = getDataset( customQueryOptions);
+			dataset.addDefaultGraph(this.graphName);
+			org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+			ResourceStatementResults results = null;
+				CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
+						.getRepository().getConnection()
+						.getStatements(this.getIRI(),
+								iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
+				results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
 			return results;
 		}else {
 			return PathQL.evaluate(this, predicatePattern,customQueryOptions);
@@ -330,9 +295,10 @@ public class Thing extends Resource {
 	 * @param predicate
 	 *            the predicate
 	 * @param customQueryOptions 
+	 * @param contexts 
 	 * @return the resource
 	 */
-	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate, CustomQueryOptions customQueryOptions) {
+	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate, CustomQueryOptions customQueryOptions,org.eclipse.rdf4j.model.Resource ... contexts) {
 		if (predicate.equals(iri(Evaluator.SCRIPTPROPERTY))) {
 			return Resource.create(getSource(), scriptString, this.getEvaluationContext());
 		} else {
@@ -357,7 +323,7 @@ public class Thing extends Resource {
 							"Reference script <%s> not found for  %s of  subject %s", scriptIRI, predicate, this), qe);
 				}
 				if (scriptCodeliteral != null) {
-					return handleScript(scriptCodeliteral, predicate,customQueryOptions);
+					return handleScript(scriptCodeliteral, predicate,customQueryOptions, contexts);
 				} else {
 					throw new ScriptFailedException(NULLVALUESCRIPT_EXCEPTION, String.format(
 							"Reference script null <%s> for %s of subject %s", scriptIRI, predicate, this));
@@ -465,35 +431,34 @@ public class Thing extends Resource {
 	 *            the predicate
 	 * @param objectValue
 	 *            the object value
+	 * @param contexts 
 	 * @return Processes the objectValue
 	 */
-	public Resource processFactObjectValue(IRI predicate, Value objectValue, CustomQueryOptions customQueryOptions) {
+	public Resource processFactObjectValue(IRI predicate, Value objectValue, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) {
 		Resource returnResult = null;
 		SimpleLiteral literalValue;
 		{
 			literalValue = (SimpleLiteral) objectValue;
 			if (Evaluator.isScriptEngine(literalValue.getDatatype())) {
-				String key = getFactKey(predicate);
-			//	if (notTracing() && getCachedResources().containsKey(key)) {
 				org.eclipse.rdf4j.model.Resource customQueryOptionsContext;
 				if(customQueryOptions!=null)
 					customQueryOptionsContext = customQueryOptions.getContext();
 				else
 					 customQueryOptionsContext = CustomQueryOptions.getEmptyContext();
-				if (notTracing() && getSource().getFactCache().contains(this.getIRI(), predicate, customQueryOptionsContext)) {
+				FactCache factCache = getSource().getIntelligentGraphConnection().getIntelligentGraphSail().getFactCache();
+				if (notTracing() && factCache.contains(this.getIRI(), predicate, customQueryOptionsContext)) {
 					//Resource result = getCachedResources().get(key);
-					Value resultValue =  getSource().getFactCache().getFacts(this.getIRI(), predicate, customQueryOptionsContext);
+					Value resultValue =  factCache.getFacts(this.getIRI(), predicate, customQueryOptionsContext);
 					logger.debug("Retrieved cache {} of {} = {}", predicate.stringValue(),
 							addIRI(getSuperValue()), getHTMLValue(resultValue));
 					addTrace(String.format("Retrieved cache %s of %s = %s", predicate.stringValue(),
 							addIRI(getSuperValue()), getHTMLValue(resultValue)));
 					returnResult = Resource.create(getSource(), resultValue, evaluationContext);
 				} else {
-					Resource result = this.handleScript(literalValue, predicate,customQueryOptions);//getFact(predicate, literalValue);
+					Resource result = this.handleScript(literalValue, predicate,customQueryOptions,contexts);//getFact(predicate, literalValue);
 					if (result != null) {
 						//TODO validate caching
-						//getCachedResources().put(key, result);
-						getSource().getFactCache().addFact(this.getIRI(), predicate,result.getSuperValue() ,customQueryOptionsContext);
+						factCache.addFact(this.getIRI(), predicate,result.getSuperValue() ,customQueryOptionsContext);
 						addTrace(String.format("Calculated %s of %s = %s", addIRI(predicate),
 								addIRI(getSuperValue()), result.getHTMLValue()));
 					}
@@ -591,6 +556,7 @@ public class Thing extends Resource {
 	 *            the iri
 	 * @return the thing
 	 */
+	@Deprecated
 	public Thing prefix(String prefix, String IRI) {
 		org.eclipse.rdf4j.model.IRI iri = PathQLRepository.trimAndCheckIRIString(IRI);
 		if (iri != null) {
@@ -609,6 +575,7 @@ public class Thing extends Resource {
 	 *            the iri
 	 * @return the thing
 	 */
+	@Deprecated
 	public Thing prefix(String IRI) {
 		return this.prefix("", IRI);
 	}
@@ -685,42 +652,59 @@ public class Thing extends Resource {
 		return traceFact(predicatePattern, null);
 	}
 
-	public void deleteFacts(String pathQL) throws Exception {
-		try {
-			PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(this, pathQL);
-			pathQLResults.ResourceResults facts;
-			if (predicateElement != null) {
-				facts = PathQL.evaluate(this, predicateElement);
-			} else {
-				throw new PathPatternException();
-			}
-			if (predicateElement.getIsReified()) {
-				deleteReifiedFacts(facts);
-			} else if (predicateElement.getIsDereified()) {
-				throw new NotSupportedException("derifiedFact deletion");
-			} else {
-				deleteFacts(facts);
-			}
-			//getSource();
-			//Since changed the database, we need to xclear any cache values.
-			PathQLRepository.clearCaches();
+	public void deleteFacts(String predicatePattern) throws Exception {		
+		boolean remoteHostProcessing = true;
+		if(remoteHostProcessing) {
+			org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
+//			if (this.getSource().getTripleSource() != null) { 
+//				 this.getSource().getTripleSource().removeStatements(this.getIRI(),
+//								iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
+//				
+//			} else if (this.getSource().getContextAwareConnection() != null) {
+				 this.getSource().getRepository().getConnection().remove(this.getIRI(),
+							iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
+						//.getIntelligentGraphConnection().removeStatements(this.getIRI(),
+						//		iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
+//			}
 
-		} catch (Exception e) {
-			throw e;
+		}else {
+			try {
+				PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(this, predicatePattern);
+				pathQLResults.ResourceResults facts;
+				if (predicateElement != null) {
+					facts = PathQL.evaluate(this, predicateElement);
+				} else {
+					throw new PathPatternException();
+				}
+				if (predicateElement.getIsReified()) {
+					deleteReifiedFacts(facts);
+				} else if (predicateElement.getIsDereified()) {
+					throw new NotSupportedException("derifiedFact deletion");
+				} else {
+					deleteFacts(facts);
+				}
+				//getSource();
+				//Since changed the database, we need to xclear any cache values.
+				PathQLRepository.clearCaches();
+	
+			} catch (Exception e) {
+				throw e;
+			}
+			
 		}
 	}
-
+	@Deprecated
 	private void deleteFacts(pathQLResults.ResourceResults facts) throws QueryEvaluationException, RepositoryException {
-		RepositoryConnection connection = this.getSource().getContextAwareConnection();
+		RepositoryConnection connection = this.getSource().getRepository().getConnection();//getContextAwareConnection();
 		while (facts.hasNext()) {
 			Fact nextFact = facts.nextFact();		
 			connection.remove(nextFact.getSubjectIRI(), nextFact.getPredicateIRI(), nextFact.getValue(), this.getGraphName());
 		}
 	}
-
+	@Deprecated
 	private void deleteReifiedFacts(pathQLResults.ResourceResults facts)
 			throws QueryEvaluationException, RepositoryException {
-		RepositoryConnection connection = this.getSource().getContextAwareConnection();
+		RepositoryConnection connection = this.getSource().getRepository().getConnection();//getContextAwareConnection();
 		PredicateElement predicateElement = (PredicateElement) facts.getPathElement();
 
 		ReificationType reificationType = this.getSource().getReificationTypes()
@@ -817,6 +801,7 @@ public class Thing extends Resource {
 
 		} else {
 			IRI propertyIri = predicateElement.getPredicate();
+			
 			connection.add(this.getIRI(), propertyIri, literal, this.getGraphName());
 		}
 		//Since changed the database, we need to xclear any cache values.
@@ -842,8 +827,15 @@ public class Thing extends Resource {
 		SimpleDataset dataset = (SimpleDataset) getEvaluationContext().getDataset();
 		if (dataset != null)
 			return dataset;
-		else {
-			HashSet<IRI> publicContexts = getSource().getPublicContexts();
+		else { 
+			HashSet<IRI> publicContexts;
+			if(this.getSource().getIntelligentGraphConnection()!=null) {
+				publicContexts = this.getSource().getIntelligentGraphConnection().getIntelligentGraphSail().getPublicContexts();
+			}else {
+				publicContexts = getSource().getPublicContexts();
+			}
+		//	HashSet<IRI> publicContexts = this.getSource().getIntelligentGraphConnection().getIntelligentGraphSail().getPublicContexts();
+		//	HashSet<IRI> publicContexts = getSource().getPublicContexts();
 			if (publicContexts == null || publicContexts.isEmpty()) {
 				org.eclipse.rdf4j.model.Resource[] contexts = getEvaluationContext().getContexts();
 				if (contexts == null || contexts.length == 0) {
@@ -874,9 +866,11 @@ public class Thing extends Resource {
 		}
 	}
 	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
-		SimpleDataset dataset = getDataset();
-		if(customQueryOptions!=null)
+		SimpleDataset dataset = new SimpleDataset();//getDataset();
+		if(customQueryOptions!=null) {
+			if(dataset==null)dataset=new SimpleDataset();
 			dataset.addDefaultGraph(iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
+		}
 		return dataset;
 	}
 	/**
@@ -891,13 +885,7 @@ public class Thing extends Resource {
 		IRI thingIri = PathParser.parseIriRef(this.getSource(),thing).getIri();
 		return create(this.getSource(), thingIri,this.getEvaluationContext());
 	}
-	/**
-	 * Gets the fact.
-	 *
-	 * @param predicateElement
-	 *            the predicate element
-	 * @return Finds factvalue in the pattern { :thing :predicate ?factValue }
-	 */
+
 	@Deprecated
 	public final Resource getFact(PredicateElement predicateElement) {
 		String key = getFactKey(predicateElement);
@@ -912,18 +900,7 @@ public class Thing extends Resource {
 			return retrieveFact(predicateElement.getPredicate(), key);
 		}
 	}
-	/**
-	 * Retrieve fact.
-	 *
-	 * @param predicate
-	 *            the predicate
-	 * @param key
-	 *            the key
-	 * @return Finds factvalue in the pattern { :thing :predicate ?factValue }
-	 *         unless key can be found in cache
-	 * @throws QueryEvaluationException
-	 *             the query evaluation exception
-	 */
+
 	@Deprecated
 	private Resource retrieveFact(IRI predicate, String key) throws QueryEvaluationException {
 		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = getSource()

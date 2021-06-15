@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FactValue.
  */
+@Deprecated
 public class FactValue extends Evaluator implements Function {
 	
 	/** The logger. */

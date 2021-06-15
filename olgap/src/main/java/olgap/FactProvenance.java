@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FactProvenance.
  */
+@Deprecated
 public class FactProvenance extends Evaluator implements Function {
 	
 	/** The logger. */

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -49,6 +50,10 @@ class Local_SPARQL_Tests {
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		source =  PathQLRepository.create(workingRep);
 
+	}
+	@AfterAll
+	static void closeClass() throws Exception {
+		conn.close();
 	}
 /**
  * Adds the graph 2.

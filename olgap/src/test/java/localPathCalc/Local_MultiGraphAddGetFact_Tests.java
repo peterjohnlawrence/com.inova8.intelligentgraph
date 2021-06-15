@@ -8,13 +8,17 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.antlr.v4.runtime.RecognitionException;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import pathCalc.CustomQueryOptions;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
 import pathPatternProcessor.PathPatternException;
@@ -23,6 +27,8 @@ import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
 import pathQLResults.ResourceResults;
 import utilities.Query;
+import static org.eclipse.rdf4j.model.util.Values.iri;
+import static org.eclipse.rdf4j.model.util.Values.literal;
 
 /**
  * The Class RemoteThingTests.
@@ -44,8 +50,9 @@ class Local_MultiGraphAddGetFact_Tests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_MultiGraphAddGetFact_Tests/");
-		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
+		//workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_MultiGraphAddGetFact_Tests/");
+		workingRep = Query.createMemoryIntelligentGraphRepository("src/test/resources/datadir/Local_MultiGraphAddGetFact_Tests/");
+	//	Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 		
  		conn = workingRep.getConnection();
@@ -53,6 +60,10 @@ class Local_MultiGraphAddGetFact_Tests {
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		source =  PathQLRepository.create(workingRep);
 
+	}
+	@AfterAll
+	static void closeClass() throws Exception {
+		conn.close();
 	}
 /**
  * Adds the graph 2.
@@ -145,6 +156,11 @@ class Local_MultiGraphAddGetFact_Tests {
 		//	Thing myCountry = addGraph2();
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Thing myCountry = graph.getThing(":Country");
+//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("1"), iri("http://inova8.com/calc2graph/testGraph2"));
+//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("2"), iri("http://inova8.com/calc2graph/testGraph2"));
+//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("3"), iri("http://inova8.com/calc2graph/testGraph2"));
+//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("4"), iri("http://inova8.com/calc2graph/testGraph2"));
+//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("5"), iri("http://inova8.com/calc2graph/testGraph2"));
 			myCountry.addFact(":sales", "1");
 			myCountry.addFact(":sales", "2");
 			myCountry.addFact(":sales", "3");
@@ -153,11 +169,23 @@ class Local_MultiGraphAddGetFact_Tests {
 		//	myCountry.addFact(":sales", "60");
 			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
-			
-			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
-			
-			source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
-		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
+			customQueryOptions.add("time",42);
+		    customQueryOptions.add("name","Peter");
+			Double averageCountrySales = myCountry.getFact(":averageSales",customQueryOptions).doubleValue() ;
+		//	myCountry.deleteFacts(":sales");
+		//	source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
+		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null);
+		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null,iri("http://default"));
+		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null,iri("http://inova8.com/calc2graph/testGraph1"));
+		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null,iri("http://inova8.com/calc2graph/testGraph2"));
+		//	conn.clear(iri("http://inova8.com/calc2graph/testGraph2"));
+		//	conn.clear(iri("http://inova8.com/calc2graph/testGraph1"));
+		//	conn.clear(iri("http://default"));
+		//	conn.remove((org.eclipse.rdf4j.model.Resource)null, (IRI)null, (Value)null, iri("http://inova8.com/calc2graph/testGraph2"));
+		//	conn.clear();
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+
 			assertEquals(3.0, averageCountrySales);
 			
 		} catch (Exception e) {
@@ -185,8 +213,9 @@ class Local_MultiGraphAddGetFact_Tests {
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
 			assertEquals(150.0, totalCountrySales);
-			source.closeGraph("<http://inova8.com/calc2graph/testGraph3>");
-		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			myCountry.deleteFacts(":sales");
+		//	source.closeGraph("<http://inova8.com/calc2graph/testGraph3>");
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			
 		} catch (Exception e) {
 			fail();
@@ -214,6 +243,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(300.0, averageCountrySales);
 		    myCountry.addFact(":sales", "600");
+		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 		    averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(350, averageCountrySales);
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph4>");

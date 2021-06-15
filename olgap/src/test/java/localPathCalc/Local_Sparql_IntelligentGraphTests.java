@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -48,7 +49,10 @@ class Local_Sparql_IntelligentGraphTests {
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		source = PathQLRepository.create(workingRep);
 	}
-
+	@AfterAll
+	static void closeClass() throws Exception {
+		conn.close();
+	}
 	/**
 	 * Adds the graph 2.
 	 *
@@ -422,7 +426,7 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/1999/02/22-rdf-syntax-ns#subjectId, http://inova8.com/calc2graph/id/BatteryLimit1)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/long, \"501\"^^<http://www.w3.org/2001/XMLSchema#integer>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/massFlow, \"24.77999922633171\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
-					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty4, \"0.3805866666666667\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
+					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/testProperty4, \"0.25497000000000003\"^^<http://www.w3.org/2001/XMLSchema#double>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://inova8.com/calc2graph/def/volumeFlow, \"59\"^^<http://www.w3.org/2001/XMLSchema#int>)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://inova8.com/calc2graph/def/BatteryLimit)\n"
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit1, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit1\")\n"

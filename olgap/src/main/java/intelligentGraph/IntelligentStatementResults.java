@@ -29,13 +29,15 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private String subj;
 	private SimpleValueFactory simpleValueFactory;
 	private CustomQueryOptions customQueryOptions;
+	private Resource[] contexts;
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
-			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions) {
+			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
 		this.thing=thing;
 		this.pathElement=pathElement;
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
+		this.contexts = contexts;
 		subj = pathElement.getTargetSubject().toString();
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();

@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -47,7 +48,10 @@ class Local_GetContextFact_Tests {
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
-
+	@AfterAll
+	static void closeClass() throws Exception {
+		//conn.close();
+	}
 	
 	/**
 	 * Removes the white spaces.
@@ -94,7 +98,9 @@ class Local_GetContextFact_Tests {
 			customQueryOptions2.add("time",43);
 			result = myCountry1.getFact("<http://inova8.com/calc2graph/def/myOption>",customQueryOptions2 );
 			assertEquals("43", result.stringValue());
-			result = myCountry.getFact(":myOption&time='2019'^^xsd:int" );
+			CustomQueryOptions  customQueryOptions3 = new CustomQueryOptions();
+			customQueryOptions3.add("time",2019);
+			result = myCountry.getFact(":myOption&time='2019'^^xsd:int",customQueryOptions3 );
 			assertEquals("2019", result.stringValue());
 			ResourceResults results = myCountry.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
 			for (Resource result1:results ) {

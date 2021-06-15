@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -49,6 +50,7 @@ class Local_GetContextStatement_Tests {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_GetContextStatement_Tests/");
+		//workingRep = Query.createMemoryIntelligentGraphRepository("src/test/resources/datadir/Local_GetContextStatement_Tests/");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 
@@ -57,7 +59,10 @@ class Local_GetContextStatement_Tests {
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
-
+	@AfterAll
+	static void closeClass() throws Exception {
+		conn.close();
+	}
 	@Test
 	@Order(2)
 	void ig_2() {

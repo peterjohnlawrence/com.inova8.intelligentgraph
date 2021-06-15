@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -53,10 +54,11 @@ class Local_AddGetDeleteFact_Test {
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 	}
+	@AfterAll
+	static void closeClass() throws Exception {
+		conn.close();
+	}
 
-	/**
-	 * Ig 0.
-	 */
 	@Test
 	@Order(0)
 	void ig_0() {
@@ -77,8 +79,9 @@ class Local_AddGetDeleteFact_Test {
 			myCountry.deleteFacts(":sales[eq '3']");
 			factsinrange = myCountry.getFacts(":sales[ge '2';lt '4']").count();
 			assertEquals(1, factsinrange);
-			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph1>");
-			assertEquals(true, closed);
+			//Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph1>");
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
+			//assertEquals(true, closed);
 		} catch (Exception e) {
 
 			fail();

@@ -581,6 +581,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	 * @param predicateIRI the predicate IRI
 	 * @return the iri
 	 */
+	
+	@Deprecated
 	public IRI convertQName(String predicateIRI) {
 		predicateIRI=PathQLRepository.trimIRIString( predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":");
@@ -609,6 +611,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	 * @param namespaceString the namespace string
 	 * @return the namespace
 	 */
+	@Deprecated
 	private IRI getNamespace(String namespaceString) {
 		IRI namespace = getPrefixes().get(namespaceString);
 		return namespace;
@@ -620,6 +623,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	 *
 	 * @return the prefixes
 	 */
+	@Deprecated
 	public ConcurrentHashMap<String, IRI> getPrefixes() {
 		if(this.getEvaluationContext()!=null )
 			return this.getEvaluationContext().getPrefixes();

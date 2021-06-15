@@ -29,6 +29,7 @@ public class EvaluationContext {
 	private CustomQueryOptions customQueryOptions = new   CustomQueryOptions();	
 	
 	/** The prefixes. */
+	@Deprecated
 	private Prefixes prefixes = new Prefixes();
 	
 	/** The dataset. */
@@ -36,7 +37,6 @@ public class EvaluationContext {
 	private Dataset dataset;
 	
 	/** The contexts. */
-	@Deprecated
 	private org.eclipse.rdf4j.model.Resource[] contexts;
 
 	/**
@@ -339,9 +339,16 @@ public class EvaluationContext {
 	 *
 	 * @return the contexts
 	 */
-	@Deprecated
+
 	public org.eclipse.rdf4j.model.Resource[] getContexts() {
-		return contexts;
+		if(contexts!=null)
+			return contexts;
+		else
+			return new  org.eclipse.rdf4j.model.Resource[0];
+	}
+
+	public void setContexts(org.eclipse.rdf4j.model.Resource[] contexts) {
+		this.contexts = contexts;
 	}
 
 }

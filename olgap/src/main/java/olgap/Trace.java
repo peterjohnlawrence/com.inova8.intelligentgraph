@@ -18,6 +18,7 @@ public class Trace extends Evaluator implements Function{
 
 	@SuppressWarnings("static-access")
 	@Override
+	@Deprecated
 	public Value evaluate(ValueFactory valueFactory, Value... args) throws ValueExprEvaluationException {
 		try {
 			boolean setTraceOn = ((SimpleLiteral)args[0]).booleanValue();

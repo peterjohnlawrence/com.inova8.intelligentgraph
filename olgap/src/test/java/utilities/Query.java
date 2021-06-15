@@ -33,6 +33,7 @@ import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 import org.eclipse.rdf4j.sail.Sail;
 import org.eclipse.rdf4j.sail.config.SailConfigException;
 import org.eclipse.rdf4j.sail.lucene.LuceneSail;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 import intelligentGraph.IntelligentGraphConfig;
@@ -58,6 +59,20 @@ public class Query {
 		Sail baseSail = new NativeStore(dataDir);		
 		lucenesail.setBaseSail(baseSail);
 		intelligentGraphSail.setBaseSail(lucenesail);
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
+		return workingRep;
+	}
+	public static org.eclipse.rdf4j.repository.Repository createMemoryIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
+		File dataDir = new File(dir);
+		FileUtils.deleteDirectory(dataDir);
+		
+		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
+		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
+		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
+
+		Sail baseSail = new MemoryStore();		
+
+		intelligentGraphSail.setBaseSail(baseSail);
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
 		return workingRep;
 	}

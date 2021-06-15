@@ -88,7 +88,7 @@ class QueryStringParserTests {
 		CharStream input = CharStreams.fromString( ":parent[:gender :female]/:parent[:gender :male; :birthplace [rdfs:label 'Maidstone']]/:parent&time='2019'&date='45'&double='42'");
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidstone ] ] / <http://default/parent>&date=\"45\"&double=\"42\"&time=\"2019\""
-				 , element.toString()+element.getCustomQueryOptions().toString());
+				 , element.toString()+"&"+element.getCustomQueryOptions().toString());
 	}
 	/**
 	 * Test 0.
@@ -99,7 +99,7 @@ class QueryStringParserTests {
 		CharStream input = CharStreams.fromString( ":parent&time='2019'&date='45'&double='42'^^xsd:double");
 		PathElement element = prepareElement(input);
 		assertEquals ("<http://default/parent>&date=\"45\"&double=\"42\"^^<http://www.w3.org/2001/XMLSchema#double>&time=\"2019\""
-				 , element.toString()+element.getCustomQueryOptions().toString());
+				 , element.toString()+"&"+element.getCustomQueryOptions().toString());
 	}
 
 }

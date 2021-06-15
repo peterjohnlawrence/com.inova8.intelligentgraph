@@ -33,6 +33,7 @@ public class ObjectValue extends Evaluator implements Function {
 	/**
 	 * Instantiates a new object value.
 	 */
+	@Deprecated
 	public ObjectValue()  {
 		super();
 		logger.info("Initiating ObjectValue");
