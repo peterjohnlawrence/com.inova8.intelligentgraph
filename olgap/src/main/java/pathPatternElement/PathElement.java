@@ -3,8 +3,8 @@
  */
 package pathPatternElement;
 
-import org.eclipse.rdf4j.query.algebra.TupleExpr;
-
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -23,11 +23,11 @@ public abstract class PathElement {
 
 	private String pathPattern;
 
-	private Integer minCardinality = null;
+	public Integer minCardinality = 1;
 
-	private Integer maxCardinality = null;
-
-	private Boolean unboundedCardinality = null;
+	public Integer maxCardinality = 1;
+	
+	private Integer pathShare =0;
 
 	private Integer level;
 
@@ -53,6 +53,8 @@ public abstract class PathElement {
 
 	private CustomQueryOptions customQueryOptions;
 
+	private boolean imIt;
+
 	public PathElement(PathQLRepository source) {
 		this.source = source;
 	}
@@ -77,9 +79,9 @@ public abstract class PathElement {
 
 	public abstract Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode);
 
-	public abstract TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable);
-
-	public TupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable);
+	public abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, Integer pathIteration);
+	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		if (getIsBound())
 			return getLeftPathElement().boundPatternQuery(thing, sourceVariable, targetVariable);
 		else
@@ -128,6 +130,7 @@ public abstract class PathElement {
 	}
 
 	public String getCardinalityString() {
+		if(getMinCardinality()==1 && ( getMaxCardinality()!=null && getMaxCardinality()== 1) ) return "";
 		String cardinality = "";
 		if (getMinCardinality() != null) {
 			cardinality += "{" + getMinCardinality();
@@ -142,6 +145,7 @@ public abstract class PathElement {
 	}
 
 	public String getMinCardinalityString() {
+		if(getMinCardinality()==1 &&  ( getMaxCardinality()!=null && getMaxCardinality()== 1) ) return "";
 		String cardinality = "";
 		if (getMinCardinality() != null) {
 			cardinality += "#{" + getMinCardinality() + "\n";
@@ -150,6 +154,7 @@ public abstract class PathElement {
 	}
 
 	public String getMaxCardinalityString() {
+		if(getMinCardinality()==1 && ( getMaxCardinality()!=null && getMaxCardinality()== 1 )) return "";
 		String cardinality = "";
 		if (getMinCardinality() != null) {
 			if (getMaxCardinality() != null) {
@@ -163,18 +168,17 @@ public abstract class PathElement {
 	}
 
 	protected String addCardinality(String predicateString) {
+		if(getMinCardinality()==1 &&  ( getMaxCardinality()!=null && getMaxCardinality()== 1 ) ) return predicateString;
 		if (getMinCardinality() != null) {
 			predicateString = "(" + predicateString + "){" + getMinCardinality();
 			if (getMaxCardinality() != null) {
 				predicateString += "," + getMaxCardinality();
 			} else if (getUnboundedCardinality() != null) {
 				predicateString += ",*";
-
 			}
 			predicateString += "}";
 		}
 		return predicateString;
-
 	}
 
 	public Integer getMinCardinality() {
@@ -194,13 +198,112 @@ public abstract class PathElement {
 	}
 
 	public Boolean getUnboundedCardinality() {
-		return unboundedCardinality;
+		if(getMaxCardinality() == null ) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	public void setUnboundedCardinality(Boolean unboundedCardinality) {
-		this.unboundedCardinality = unboundedCardinality;
+		if(unboundedCardinality) this.setMaxCardinality( null);
+	}
+	 public Integer getMaximumPathLength() {
+		 return (getLeftPathElement().getMaximumPathLength() + getRightPathElement().getMaximumPathLength())*getMaxCardinality();
+	 }
+	 public Integer getMinimumPathLength() {
+		 return (getLeftPathElement().getMinimumPathLength() + getRightPathElement().getMinimumPathLength())*getMinCardinality();
+	 }
+	 public void setPathShare(Integer pathShare) {
+		 this.pathShare=pathShare;
+		 if( this.getLeftPathElement()!=null)
+			 this.getLeftPathElement().setPathShare(pathShare);
+	 }
+	 public Integer getPathShare () {
+		 return pathShare;
+	 }
+	 public Boolean hasNext() {
+		while( passOnPathShare()) {// &&  getLeftPathElement().hasNext() && getRightPathElement().hasNext()) {
+			return true;
+		}
+		return false;
+	 }
+	 private Boolean incrementRightPathElement(PathElement parentPathElement) {
+		 if(getRightPathElement()!=null) {
+			return  getRightPathElement().incrementRightPathElement(this);
+		 }else {
+			 if(canIncrementMore()) {
+				 pathShare++;
+				 imIt=true;
+				 return true;
+			 }else {
+				 return parentPathElement.incrementNextLeftPathElement(parentPathElement);
+			 }
+		 }
+	 }
+	 
+	private Boolean incrementNextLeftPathElement(PathElement parentPathElement) {
+		 if(getLeftPathElement()!=null) {
+			 if(getLeftPathElement().getRightPathElement()!=null && getLeftPathElement().getRightPathElement().canIncrementMore()) {
+				 return  getLeftPathElement().getRightPathElement().incrementRightPathElement(this);
+			 }else {
+				 if(getLeftPathElement().canIncrementMore()) {
+					 getLeftPathElement().setPathShare(getLeftPathElement().getPathShare()+1);
+					 imIt=true;
+					 return true;
+				 }else {
+					 return parentPathElement.incrementNextLeftPathElement(parentPathElement);
+				 }
+			 }
+		 }
+		 return false;
 	}
 
+	private Boolean passOnPathShare() {
+		//First increment the rightmost if we can
+		 if(getLeftPathElement().canIncrementMore()) {
+			 if(getRightPathElement().canDecrementMore() ) {
+				getLeftPathElement().setPathShare(getLeftPathElement().getPathShare()+1); 
+				//Then set the left most to the remainder
+				getRightPathElement().setPathShare(getRightPathElement().getPathShare()-1);	
+				return true;
+			 }else {
+				 if(pathShare==0) {
+					 return false;
+				 }else {
+					// pathShare --;
+					 getRightPathElement().setPathShare(pathShare);
+					 getLeftPathElement().setPathShare(0);
+					 return true;
+				 }
+			 }			 
+		 }else {
+			 if(pathShare==0) {
+				 return false;
+			 }else {
+				// pathShare --;
+				 getRightPathElement().setPathShare(pathShare);
+				 getLeftPathElement().setPathShare(0);
+				 return true;
+			 }		 
+		 }
+	}
+	public Boolean canIncrementMore() {
+		if(( getRightPathElement()!=null && getRightPathElement().canIncrementMore() )||( getLeftPathElement()!=null && getLeftPathElement().canIncrementMore()))
+			return true;
+		else 
+			return false;
+	}
+	public Boolean canDecrementMore(){
+		if(getPathShare()==0)
+			return false;
+		else
+			return true;
+	}
+	public String getPathShareString() {
+		StringBuilder pathShareString = new StringBuilder("");
+		return  pathShareString.append("{").append(getMinCardinality()).append(",").append(getMinCardinality()+pathShare).append(",").append(getMaxCardinality()).append(",left").append(getLeftPathElement().getPathShareString()).append(",right").append(getRightPathElement().getPathShareString()).append("}").toString();
+	}
 	public Integer getLevel() {
 		return level;
 	}

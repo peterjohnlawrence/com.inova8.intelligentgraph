@@ -9,6 +9,9 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.algebra.Compare;
 import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
+import path.Edge;
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.Thing;
 
 import org.eclipse.rdf4j.query.algebra.Filter;
@@ -16,8 +19,6 @@ import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
-import org.eclipse.rdf4j.query.algebra.Var;
-
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
 import pathQLRepository.PathQLRepository;
@@ -97,7 +98,12 @@ public class PredicateElement extends PathElement {
 		operator = PathConstants.Operator.PREDICATE;
 		setPredicate(predicate);
 	}
-
+	 public Integer getMaximumPathLength() {
+		 return getMaxCardinality();
+	 }
+	 public Integer getMinimumPathLength() {
+		 return getMinCardinality();
+	 }
 	/**
 	 * Gets the checks if is inverse of.
 	 *
@@ -106,7 +112,22 @@ public class PredicateElement extends PathElement {
 	public Boolean getIsInverseOf() {
 		return isInverseOf;
 	}
-
+	public Boolean hasNext() {
+		if((getPathShare() + getMinimumPathLength()) <= getMaximumPathLength())
+			return true;
+		else
+			return false;	
+	}
+	public Boolean canIncrementMore(){
+		return ((getPathShare() + getMinCardinality()) < getMaxCardinality());
+	}
+	public Boolean canDecrementMore(){
+		return ( getPathShare() > 0 );
+	}
+	public String getPathShareString() {
+		StringBuilder pathShareString = new StringBuilder("");
+		return  pathShareString.append("{").append(getMinCardinality()).append(",").append(getMinCardinality()+getPathShare()).append(",").append(getMaxCardinality()).append("}").toString();
+	}
 	/**
 	 * Sets the checks if is inverse of.
 	 *
@@ -205,7 +226,7 @@ public class PredicateElement extends PathElement {
 	 * @return the reified variable
 	 */
 	public Variable getReifiedVariable() {
-		String reificationValue = "r" + getExitIndex();//(getIndex() + 1);
+		String reificationValue = "r" + getExitIndex();
 		Variable reificationVariable = new Variable(reificationValue);
 		return reificationVariable;
 	}
@@ -522,231 +543,283 @@ public class PredicateElement extends PathElement {
 
 		return boundPredicateToSPARQL(sourceValue, targetValue);
 	}
-	
-	/**
-	 * Unbound path pattern query.
-	 *
-	 * @param thing the thing
-	 * @return the tuple expr
-	 */
-	@Deprecated
-	public TupleExpr unboundPathPatternQuery(Thing thing) {
-		return pathPatternQuery(thing, this.sourceVariable,this.targetVariable);
+
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, Integer pathIteration) {
+		if(sourceVariable==null)sourceVariable = this.getSourceVariable();
+		if(targetVariable==null)targetVariable = this.getTargetVariable();	
+		if (getIsReified()) {
+			return pathReifiedPredicatePatternQuery(thing, sourceVariable, targetVariable,this.getReifiedVariable(),pathIteration);
+		} else {
+			return pathPredicatePatternQuery(thing, sourceVariable, targetVariable,pathIteration);
+		}
 	}
 
-	/**
-	 * Path pattern query.
-	 *
-	 * @param thing the thing
-	 * @param sourceVariable the source variable
-	 * @param targetVariable the target variable
-	 * @return the tuple expr
-	 */
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		if(sourceVariable==null)sourceVariable = this.getSourceVariable();
-		if(targetVariable==null)targetVariable = this.getTargetVariable();
-		 
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+		return pathPatternQuery(thing, sourceVariable, targetVariable,1);
+	}
+
+	private PathTupleExpr pathReifiedPredicatePatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, Variable reificationVariable,
+			Integer pathIteration) {
+		PathTupleExpr predicatePattern = null;
+		if(pathIteration>0) {
+			Variable intermediateSourceVariable = null ;
+			Variable intermediateTargetVariable = null;
+			Variable priorIntermediateTargetVariable = null ;
+			Variable intermediateReificationVariable  = null ;
+			for( int iteration = 1; iteration<=pathIteration;iteration++ ) {
+				if( iteration==1) {
+					intermediateSourceVariable = sourceVariable;
+				}
+				if(iteration<pathIteration) {	
+					 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+					intermediateTargetVariable = new Variable(targetVariable.getName()+"_i"+iteration);
+					priorIntermediateTargetVariable = intermediateTargetVariable;				
+				}
+				if( iteration==pathIteration) {
+					if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+					intermediateTargetVariable = targetVariable;
+					intermediateReificationVariable  = reificationVariable;
+				}else {
+					intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
+				}
+				predicatePattern = pathReifiedPredicatePatternTupleExpr(thing, predicatePattern,intermediateSourceVariable, intermediateTargetVariable, intermediateReificationVariable);
+			}
+			return predicatePattern;
+		}else {
+			return null;
+		}
+	}
+	private PathTupleExpr pathReifiedPredicatePatternTupleExpr(Thing thing, PathTupleExpr predicatePattern, Variable sourceVariable, Variable targetVariable,Variable reificationVariable) {
 		ArrayList<Variable> targetVariables = new ArrayList<Variable>();
 		if (objectFilterElement != null)
 			targetVariables = objectFilterElement.bindTargetVariable(targetVariable);
 		if (targetVariables.size() == 0)
 			targetVariables.add(getTargetObject());
-		if (getIsReified()) {
-			TupleExpr reifiedPredicatePattern = null;
-			Variable reificationVariable = getReifiedVariable();
-			Variable predicateVariable = getPredicateVariable();
-			IRI subject = getReifications().getReificationSubject(reification);
-			IRI isSubjectOf = getReifications().getReificationIsSubjectOf(reification);
-			IRI property = getReifications().getReificationPredicate(reification);
-			IRI isPropertyOf = getReifications().getReificationIsPredicateOf(reification);
-			IRI object = getReifications().getReificationObject(reification);
-			IRI isObjectOf = getReifications().getReificationIsObjectOf(reification);
-			Var subjectVariable = new Var("subject" + getExitIndex(),subject);//(getIndex() + 1), subject);
-			Var isSubjectOfVariable = new Var("isSubjectOf" +  getExitIndex(),isSubjectOf);// (getIndex() + 1), isSubjectOf);
-			Var propertyVariable = new Var("property" +   getExitIndex(),property);//  (getIndex() + 1), property);
-			Var isPropertyOfVariable = new Var("isPropertyOf" +   getExitIndex(),isPropertyOf);//  (getIndex() + 1), isPropertyOf);
-			Var objectVariable = new Var("object" + getExitIndex(),object);// (getIndex() + 1), object);
-			Var isObjectOfVariable = new Var("isObjectOf" + getExitIndex(),isObjectOf);// (getIndex() + 1), isObjectOf);
-			//Part1
-			TupleExpr part1Pattern = null;
-			if (isInverseOf) {
-				if (object != null && isObjectOf != null) {
-					StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
-							sourceVariable);
-					StatementPattern isObjectOfPattern = new StatementPattern(sourceVariable, isObjectOfVariable,
-							reificationVariable);
-					part1Pattern = new Union(objectPattern, isObjectOfPattern);
-				} else if (object != null) {
-					StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
-							sourceVariable);
-					part1Pattern = objectPattern;
-				} else if (isObjectOf != null) {
-					StatementPattern isObjectOfPattern = new StatementPattern(targetVariable, isObjectOfVariable,
-							sourceVariable);
-					part1Pattern = isObjectOfPattern;
-				} else {
-				}
+		TupleExpr reifiedPredicatePattern = null;
+		Variable predicateVariable = getPredicateVariable();
+		IRI subject = getReifications().getReificationSubject(reification);
+		IRI isSubjectOf = getReifications().getReificationIsSubjectOf(reification);
+		IRI property = getReifications().getReificationPredicate(reification);
+		IRI isPropertyOf = getReifications().getReificationIsPredicateOf(reification);
+		IRI object = getReifications().getReificationObject(reification);
+		IRI isObjectOf = getReifications().getReificationIsObjectOf(reification);
+		Variable subjectVariable = new Variable("subject" + getExitIndex(),subject);
+		Variable isSubjectOfVariable = new Variable("isSubjectOf" +  getExitIndex(),isSubjectOf);
+		Variable propertyVariable = new Variable("property" +   getExitIndex(),property);
+		Variable isPropertyOfVariable = new Variable("isPropertyOf" +   getExitIndex(),isPropertyOf);
+		Variable objectVariable = new Variable("object" + getExitIndex(),object);
+		Variable isObjectOfVariable = new Variable("isObjectOf" + getExitIndex(),isObjectOf);
+		//Part1
+		TupleExpr part1Pattern = null;
+		if (isInverseOf) {
+			if (object != null && isObjectOf != null) {
+				StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
+						sourceVariable);
+				StatementPattern isObjectOfPattern = new StatementPattern(sourceVariable, isObjectOfVariable,
+						reificationVariable);
+				part1Pattern = new Union(objectPattern, isObjectOfPattern);
+			} else if (object != null) {
+				StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
+						sourceVariable);
+				part1Pattern = objectPattern;
+			} else if (isObjectOf != null) {
+				StatementPattern isObjectOfPattern = new StatementPattern(targetVariable, isObjectOfVariable,
+						sourceVariable);
+				part1Pattern = isObjectOfPattern;
 			} else {
+			}
+		} else {
+			if (subject != null && isSubjectOf != null) {
+				StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
+						sourceVariable);
+				StatementPattern isSubjectOfPattern = new StatementPattern(sourceVariable, isSubjectOfVariable,
+						reificationVariable);
+				part1Pattern = new Union(subjectPattern, isSubjectOfPattern);
+			} else if (subject != null) {
+				StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
+						sourceVariable);
+				part1Pattern = subjectPattern;
+			} else if (isSubjectOf != null) {
+				StatementPattern isSubjectOfPattern = new StatementPattern(sourceVariable, isSubjectOfVariable,
+						reificationVariable);
+				part1Pattern = isSubjectOfPattern;
+			} else {
+			}
+		}
+		//Part2
+		TupleExpr part2Pattern = null;
+		if (property != null && isPropertyOf != null) {
+			StatementPattern propertyPattern = new StatementPattern(reificationVariable, propertyVariable,
+					predicateVariable);
+			StatementPattern isPropertyOfPattern = new StatementPattern(predicateVariable, isPropertyOfVariable,
+					reificationVariable);
+			part2Pattern = new Union(propertyPattern, isPropertyOfPattern);
+		} else if (property != null) {
+			StatementPattern propertyPattern = new StatementPattern(reificationVariable, propertyVariable,
+					predicateVariable);
+			part2Pattern = propertyPattern;
+		} else if (isPropertyOf != null) {
+			StatementPattern isPropertyOfPattern = new StatementPattern(predicateVariable, isPropertyOfVariable,
+					reificationVariable);
+			part2Pattern = isPropertyOfPattern;
+		} else {
+		}
+
+		TupleExpr part12Pattern = null;
+		if (part1Pattern != null && part2Pattern != null)
+			part12Pattern = new Join(part1Pattern, part2Pattern);
+		else if (part1Pattern != null)
+			part12Pattern = part1Pattern;
+		else if (part2Pattern != null)
+			part12Pattern = part2Pattern;
+		//Part3	
+		TupleExpr part3Pattern = null;
+		for (Variable aTargetVariable : targetVariables) {
+			TupleExpr aTargetPattern = null;
+			if (isInverseOf) {
 				if (subject != null && isSubjectOf != null) {
 					StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
-							sourceVariable);
-					StatementPattern isSubjectOfPattern = new StatementPattern(sourceVariable, isSubjectOfVariable,
+							aTargetVariable);
+					StatementPattern isSubjectOfPattern = new StatementPattern(aTargetVariable, isSubjectOfVariable,
 							reificationVariable);
-					part1Pattern = new Union(subjectPattern, isSubjectOfPattern);
+					aTargetPattern = new Union(subjectPattern, isSubjectOfPattern);
 				} else if (subject != null) {
 					StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
-							sourceVariable);
-					part1Pattern = subjectPattern;
+							aTargetVariable);
+					aTargetPattern = subjectPattern;
 				} else if (isSubjectOf != null) {
-					StatementPattern isSubjectOfPattern = new StatementPattern(sourceVariable, isSubjectOfVariable,
+					StatementPattern isSubjectOfPattern = new StatementPattern(aTargetVariable, isSubjectOfVariable,
 							reificationVariable);
-					part1Pattern = isSubjectOfPattern;
+					aTargetPattern = isSubjectOfPattern;
 				} else {
-				}
-			}
-			//Part2
-			TupleExpr part2Pattern = null;
-			if (property != null && isPropertyOf != null) {
-				StatementPattern propertyPattern = new StatementPattern(reificationVariable, propertyVariable,
-						predicateVariable);
-				StatementPattern isPropertyOfPattern = new StatementPattern(predicateVariable, isPropertyOfVariable,
-						reificationVariable);
-				part2Pattern = new Union(propertyPattern, isPropertyOfPattern);
-			} else if (property != null) {
-				StatementPattern propertyPattern = new StatementPattern(reificationVariable, propertyVariable,
-						predicateVariable);
-				part2Pattern = propertyPattern;
-			} else if (isPropertyOf != null) {
-				StatementPattern isPropertyOfPattern = new StatementPattern(predicateVariable, isPropertyOfVariable,
-						reificationVariable);
-				part2Pattern = isPropertyOfPattern;
-			} else {
-			}
-
-			TupleExpr part12Pattern = null;
-			if (part1Pattern != null && part2Pattern != null)
-				part12Pattern = new Join(part1Pattern, part2Pattern);
-			else if (part1Pattern != null)
-				part12Pattern = part1Pattern;
-			else if (part2Pattern != null)
-				part12Pattern = part2Pattern;
-			//Part3	
-			TupleExpr part3Pattern = null;
-			for (Var aTargetVariable : targetVariables) {
-				TupleExpr aTargetPattern = null;
-				if (isInverseOf) {
-					if (subject != null && isSubjectOf != null) {
-						StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
-								aTargetVariable);
-						StatementPattern isSubjectOfPattern = new StatementPattern(aTargetVariable, isSubjectOfVariable,
-								reificationVariable);
-						aTargetPattern = new Union(subjectPattern, isSubjectOfPattern);
-					} else if (subject != null) {
-						StatementPattern subjectPattern = new StatementPattern(reificationVariable, subjectVariable,
-								aTargetVariable);
-						aTargetPattern = subjectPattern;
-					} else if (isSubjectOf != null) {
-						StatementPattern isSubjectOfPattern = new StatementPattern(aTargetVariable, isSubjectOfVariable,
-								reificationVariable);
-						aTargetPattern = isSubjectOfPattern;
-					} else {
-					}
-				} else {
-					if (object != null && isObjectOf != null) {
-						StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
-								aTargetVariable);
-						StatementPattern isObjectOfPattern = new StatementPattern(aTargetVariable, isObjectOfVariable,
-								reificationVariable);
-						aTargetPattern = new Union(objectPattern, isObjectOfPattern);
-					} else if (object != null) {
-						StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
-								aTargetVariable);
-						aTargetPattern = objectPattern;
-					} else if (isObjectOf != null) {
-						StatementPattern isObjectOfPattern = new StatementPattern(aTargetVariable, isObjectOfVariable,
-								reificationVariable);
-						aTargetPattern = isObjectOfPattern;
-					} else {
-					}
-				}
-
-				if (part3Pattern != null) {
-					Join newPart3Pattern = new Join(part3Pattern, aTargetPattern);
-					part3Pattern = newPart3Pattern;
-				} else {
-					part3Pattern = aTargetPattern;
-				}
-
-			}
-
-
-
-			if (part12Pattern != null && part3Pattern != null)
-				reifiedPredicatePattern = new Join(part12Pattern, part3Pattern);
-			else if (part12Pattern != null)
-				reifiedPredicatePattern = part12Pattern;
-			else if (part3Pattern != null)
-				reifiedPredicatePattern = part3Pattern;
-			
-			if (objectFilterElement != null) {
-				reifiedPredicatePattern =  objectFilterElement.filterExpression( thing,getTargetObject(),null, reifiedPredicatePattern);
-//				ValueExpr objectFilterExpression = (ValueExpr) objectFilterElement.filterExpression( thing,getTargetObject(),null,null); 
-//				if(objectFilterExpression!=null) {
-//					//Join newObjectFilterPattern = new Join(objectFilterPattern, reifiedPredicatePattern);
-//					Filter newObjectFilterPattern = new Filter(reifiedPredicatePattern,objectFilterExpression);
-//					reifiedPredicatePattern = newObjectFilterPattern;
-//				}
-			}			
-			if (statementFilterElement != null) {
-				reifiedPredicatePattern =   statementFilterElement.filterExpression(  thing,reificationVariable,null,reifiedPredicatePattern); 
-//				ValueExpr statementFilterExpression =  (ValueExpr) statementFilterElement.filterExpression(  thing,reificationVariable,null,null); 
-//				if(statementFilterExpression!=null) {
-//					//Join newStatementFilterPattern = new Join(statementFilterPattern, reifiedPredicatePattern);
-//					Filter newStatementFilterPattern = new Filter( reifiedPredicatePattern,statementFilterExpression);
-//					reifiedPredicatePattern = newStatementFilterPattern;
-//				}
-			}			
-			return reifiedPredicatePattern;
-		} else {
-			TupleExpr predicatePattern = null;
-			if (isNegated) {
-				Var predicateVariable = new Var(getPredicateSPARQLVariable());
-				//TODO
-				Var variable = new Var("p2", predicate);
-				if (isInverseOf) {
-					StatementPattern inverseOfPattern = new StatementPattern(targetVariable, predicateVariable,
-							sourceVariable);
-					Compare filterExpression = new Compare(predicateVariable, variable, CompareOp.NE);
-					predicatePattern = new Filter(inverseOfPattern, filterExpression);
-				} else {
-					predicatePattern = new StatementPattern(sourceVariable, predicateVariable,
-							targetVariable);
 				}
 			} else {
-				Var predicateVariable = new Var(getPredicateSPARQLVariable(), predicate);
-
-				if (isInverseOf) {
-					predicatePattern = new StatementPattern(targetVariable, predicateVariable,
-							sourceVariable);
+				if (object != null && isObjectOf != null) {
+					StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
+							aTargetVariable);
+					StatementPattern isObjectOfPattern = new StatementPattern(aTargetVariable, isObjectOfVariable,
+							reificationVariable);
+					aTargetPattern = new Union(objectPattern, isObjectOfPattern);
+				} else if (object != null) {
+					StatementPattern objectPattern = new StatementPattern(reificationVariable, objectVariable,
+							aTargetVariable);
+					aTargetPattern = objectPattern;
+				} else if (isObjectOf != null) {
+					StatementPattern isObjectOfPattern = new StatementPattern(aTargetVariable, isObjectOfVariable,
+							reificationVariable);
+					aTargetPattern = isObjectOfPattern;
 				} else {
-					predicatePattern = new StatementPattern(sourceVariable, predicateVariable,
-							targetVariable);
 				}
 			}
-			
-			if (objectFilterElement != null) {
-				 predicatePattern = (TupleExpr) objectFilterElement.filterExpression( thing,targetVariable,null,predicatePattern);
-//				if(objectFilterExpression!=null) {
-//					Join newObjectFilterPattern = new Join((TupleExpr) objectFilterExpression, predicatePattern);
-//					//Filter newObjectFilterPattern = new Filter( predicatePattern,objectFilterExpression);
-//					predicatePattern = newObjectFilterPattern;
-//				}
-			}	
+
+			if (part3Pattern != null) {
+				Join newPart3Pattern = new Join(part3Pattern, aTargetPattern);
+				part3Pattern = newPart3Pattern;
+			} else {
+				part3Pattern = aTargetPattern;
+			}
+
+		}
+
+		if (part12Pattern != null && part3Pattern != null)
+			reifiedPredicatePattern = new Join(part12Pattern, part3Pattern);
+		else if (part12Pattern != null)
+			reifiedPredicatePattern = part12Pattern;
+		else if (part3Pattern != null)
+			reifiedPredicatePattern = part3Pattern;
+		
+		if (objectFilterElement != null) {
+			reifiedPredicatePattern =  objectFilterElement.filterExpression( thing,getTargetObject(),null, reifiedPredicatePattern).getTupleExpr();
+		}			
+		if (statementFilterElement != null) {
+			reifiedPredicatePattern =   statementFilterElement.filterExpression(  thing,reificationVariable,null,reifiedPredicatePattern).getTupleExpr(); 
+		}
+		Edge edge = new Edge(sourceVariable,getReification(), predicateVariable, targetVariable, getIsInverseOf(), getIsDereified());	
+		if(predicatePattern==null) {
+			predicatePattern= new PathTupleExpr(reifiedPredicatePattern); //reifiedPredicatePattern;
+		}else{
+			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), reifiedPredicatePattern));
+		}
+		predicatePattern.getPath().add(edge);
+		return predicatePattern;
+	}
+
+	private PathTupleExpr pathPredicatePatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, Integer pathIteration) {
+		PathTupleExpr predicatePattern = null;
+		if(pathIteration>0) {
+			Variable intermediateSourceVariable = null ;
+			Variable intermediateTargetVariable = null;
+			Variable priorIntermediateTargetVariable = null ;
+			for( int iteration = 1; iteration<=pathIteration;iteration++ ) {
+				if( iteration==1) {
+					intermediateSourceVariable = sourceVariable;
+				}
+				if(iteration<pathIteration) {
+					
+					 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+					
+					intermediateTargetVariable = new Variable(targetVariable.getName()+"_i"+iteration);
+					priorIntermediateTargetVariable = intermediateTargetVariable;
+					
+				}
+				if( iteration==pathIteration) {
+					if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+					intermediateTargetVariable = targetVariable;
+				}
+				predicatePattern = pathPredicatePatternTupleExpr(thing, predicatePattern, intermediateSourceVariable,
+						intermediateTargetVariable);
+			}
 			return predicatePattern;
+		}else {
+			return null;
+			//return new SameTerm(sourceVariable,targetVariable);
 		}
 	}
 
+	private PathTupleExpr pathPredicatePatternTupleExpr(Thing thing, PathTupleExpr predicatePattern,
+			Variable intermediateSourceVariable, Variable intermediateTargetVariable) {
+		TupleExpr intermediatePredicatePattern;
+		Variable predicateVariable ;
+		if (isNegated) {
+			 predicateVariable = new Variable(getPredicateSPARQLVariable());
+			//TODO
+			 Variable variable = new Variable("p2", predicate);
+			if (isInverseOf) {
+				StatementPattern inverseOfPattern = new StatementPattern(intermediateTargetVariable, predicateVariable,
+						intermediateSourceVariable);
+				Compare filterExpression = new Compare(predicateVariable, variable, CompareOp.NE);
+				intermediatePredicatePattern = new Filter(inverseOfPattern, filterExpression);
+			} else {
+				intermediatePredicatePattern = new StatementPattern(intermediateSourceVariable, predicateVariable,
+						intermediateTargetVariable);
+			}
+		} else {
+			predicateVariable = new Variable(getPredicateSPARQLVariable(), predicate);
+
+			if (isInverseOf) {
+				intermediatePredicatePattern = new StatementPattern(intermediateTargetVariable, predicateVariable,
+						intermediateSourceVariable);
+			} else {
+				intermediatePredicatePattern = new StatementPattern(intermediateSourceVariable, predicateVariable,
+						intermediateTargetVariable);
+			}
+		}
+		
+		if (objectFilterElement != null) {
+			intermediatePredicatePattern = (TupleExpr) objectFilterElement.filterExpression( thing,intermediateTargetVariable,null,intermediatePredicatePattern).getTupleExpr();
+		}	
+		Edge edge = new Edge(intermediateSourceVariable, predicateVariable, intermediateTargetVariable, getIsInverseOf());	
+		
+		if(predicatePattern==null) {
+			predicatePattern = new PathTupleExpr(intermediatePredicatePattern);
+		}else{
+			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), intermediatePredicatePattern));
+		}
+		predicatePattern.getPath().add(edge);
+		return predicatePattern;
+	}
 	/**
 	 * Gets the predicate variable.
 	 *

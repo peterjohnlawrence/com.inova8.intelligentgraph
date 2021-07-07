@@ -56,12 +56,30 @@ class Local_GetContextStatement_Tests {
 
 		conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
+		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
+	}
+	@Test
+	@Order(1)
+	void ig_1() {
+
+		try {
+			RepositoryResult<Statement> statements = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null, null);
+			for(Statement statement: statements) {
+				Value object = statement.getObject();
+				assertEquals("http://inova8.com/calc2graph/def/BatteryLimit", object.stringValue());
+				break;
+			}
+		} catch (Exception e) {
+
+			fail();
+			e.printStackTrace();
+		}
 	}
 	@Test
 	@Order(2)

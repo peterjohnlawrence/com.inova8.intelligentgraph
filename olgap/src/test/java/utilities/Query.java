@@ -40,9 +40,7 @@ import intelligentGraph.IntelligentGraphConfig;
 import intelligentGraph.IntelligentGraphFactory;
 import intelligentGraph.IntelligentGraphSail;
 import static org.eclipse.rdf4j.model.util.Values.iri;
-/**
- * The Class Query.
- */
+
 public class Query {
 	public static org.eclipse.rdf4j.repository.Repository createNativeLuceneIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
 		File dataDir = new File(dir);

@@ -199,7 +199,7 @@ public class EvaluationContext {
 			IRI namespace = getNamespace(predicateIRIParts[0]);
 			if(namespace==null) {
 				logger.error("Error identifying namespace of qName {}", predicateIRI);
-				addTrace(String.format("Error identifying namespace of qName %s", predicateIRI));
+				getTracer().traceQNameError( predicateIRI);
 			}else {
 				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
 			}
@@ -218,12 +218,7 @@ public class EvaluationContext {
 		return namespace;
 	}
 
-	
-	/**
-	 * Not tracing.
-	 *
-	 * @return true, if successful
-	 */
+	@Deprecated
 	protected boolean notTracing() {
 		if (tracer != null)
 			return false;
@@ -232,113 +227,39 @@ public class EvaluationContext {
 	}
 
 
-	/**
-	 * Adds the trace.
-	 *
-	 * @param message the message
-	 */
-	protected void addTrace(String message) {
-		if (tracer != null)
-			tracer.addTrace(message);
-	}
-
-	/**
-	 * Adds the script.
-	 *
-	 * @param script the script
-	 */
-	protected void addScript(String script) {
-		if (tracer != null)
-			tracer.addScript(script);
-	}
 	
-	/**
-	 * Decrement trace level.
-	 */
-	protected void decrementTraceLevel() {
-		if (tracer != null)
-			tracer.decrementLevel();
-	}
-
-	/**
-	 * Increment trace level.
-	 */
-	protected void incrementTraceLevel() {
-		if (tracer != null)
-			tracer.incrementLevel();
-	}
-	
-	/**
-	 * Gets the trace.
-	 *
-	 * @return the trace
-	 */
+	@Deprecated
 	public String getTrace() {
-		return tracer.getTrace();
+		return tracer.getTraceHTML();
 
 	}
 	
-	/**
-	 * Indent script for trace.
-	 *
-	 * @param script the script
-	 * @return the string
-	 */
-	protected String indentScriptForTrace(String script) {
-		if (tracer != null)
-			return tracer.indentScriptForTrace(script);
-		else
-			return null;
-	}
 	
-	/**
-	 * Sets the tracing.
-	 *
-	 * @param b the new tracing
-	 */
+	@Deprecated
 	public void setTracing(boolean b) {
 		if (tracer != null)
 			tracer.setTracing(b);
 		
 	}
-	
-	/**
-	 * Checks if is tracing.
-	 *
-	 * @return true, if is tracing
-	 */
+
+	@Deprecated
 	public boolean isTracing() {
 		if (tracer != null)
 			return tracer.isTracing();
 		else
 			return false;
 	}
-	
-	/**
-	 * Gets the dataset.
-	 *
-	 * @return the dataset
-	 */
+
 	@Deprecated
 	public Dataset getDataset() {
 		return dataset;
 	}
-	
-	/**
-	 * Sets the dataset.
-	 *
-	 * @param dataset the new dataset
-	 */
+
 	@Deprecated
 	public void setDataset(Dataset dataset) {
 		this.dataset = dataset;
 	}
 	
-	/**
-	 * Gets the contexts.
-	 *
-	 * @return the contexts
-	 */
 
 	public org.eclipse.rdf4j.model.Resource[] getContexts() {
 		if(contexts!=null)

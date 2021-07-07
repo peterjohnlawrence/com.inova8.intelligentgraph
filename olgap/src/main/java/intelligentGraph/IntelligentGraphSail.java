@@ -53,11 +53,11 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	private  Boolean contextsAreLazyLoaded=false;
 	private  Boolean prefixesAreLazyLoaded=false;
 	public static final String URN_CUSTOM_QUERY_OPTIONS = "urn:customQueryOptions";	
-	private final  IntelligentEvaluator intelligentEvaluator=new IntelligentEvaluator();
+	private final  IntelligentEvaluator intelligentEvaluator;
 
 	public IntelligentGraphSail() {
 		super();
-
+		intelligentEvaluator=new IntelligentEvaluator(this);
 	}
 	public void initializeContexts() {
 		publicContexts.clear();
@@ -147,17 +147,12 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public ValueFactory getValueFactory() {
 		return getBaseSail().getValueFactory();
 	}
-	private boolean notTracing() {
-		return false;
-	}
-	@Deprecated
-	private EvaluationContext getEvaluationContext() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	public void clearCache() {
-		intelligentEvaluator.clearCache(null);
+		intelligentEvaluator.clearCache();
 		
+	}
+	public void clearCache(Value obj) {
+		intelligentEvaluator.clearCache(obj);
 	}
 	public FactCache getFactCache() {
 		return intelligentEvaluator.getFactCache();
@@ -191,5 +186,6 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public void setContextsAreLazyLoaded(Boolean contextsAreLazyLoaded) {
 		this.contextsAreLazyLoaded = contextsAreLazyLoaded;
 	}
+
 	
 }

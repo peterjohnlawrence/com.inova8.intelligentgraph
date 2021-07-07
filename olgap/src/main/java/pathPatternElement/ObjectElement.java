@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.query.algebra.TupleExpr;
-
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -148,10 +148,15 @@ public class ObjectElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		return null;
 	}
-	
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+			Integer pathIteration) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	/**
 	 * Index visitor.
 	 *
@@ -206,6 +211,8 @@ public class ObjectElement extends PathElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 }

@@ -5,6 +5,8 @@ package pathPatternElement;
 
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -82,11 +84,15 @@ public class BoundPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable);
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+		return pathPatternQuery(thing,  sourceVariable,  targetVariable,1);
+	}
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+			Integer pathIteration) {
+		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable);
 		return rightPattern;
 	}
-
 	/**
 	 * Gets the checks if is negated.
 	 *
@@ -141,11 +147,11 @@ public class BoundPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public TupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		if(sourceVariable==null)sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();
-		TupleExpr boundPattern = getLeftPathElement().boundPatternQuery(thing,sourceVariable,targetVariable) ;
-		return boundPattern;
+		TupleExpr boundPattern = getLeftPathElement().boundPatternQuery(thing,sourceVariable,targetVariable).getTupleExpr() ;
+		return new PathTupleExpr(boundPattern);
 	}
 
 	/**
@@ -169,5 +175,7 @@ public class BoundPathElement extends PathElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

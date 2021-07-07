@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.util.Values;
 
@@ -29,7 +30,6 @@ public class URNCustomQueryOptionsDecode {
 					try {
 						queryString = URLDecoder.decode(context.stringValue(), StandardCharsets.UTF_8.toString());
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					customQueryOptions = URNCustomQueryOptionsDecode.splitQuery(queryString,prefixes);
@@ -42,35 +42,24 @@ public class URNCustomQueryOptionsDecode {
 		else 
 			return null;
 	}
-	/**
-	 * Decode parameters in query part of a URI into a map from parameter name
-	 * to its parameter values. For parameters that occur multiple times each
-	 * value is collected. Proper decoding of the parameters is performed.
-	 * 
-	 * Example
-	 * 
-	 * <pre>
-	 * a=1&b=2&c=&a=4
-	 * </pre>
-	 * 
-	 * is converted into
-	 * 
-	 * <pre>
-	 * {a=[Optional[1], Optional[4]], b=[Optional[2]], c=[Optional.empty]}
-	 * </pre>
-	 * 
-	 * @param query
-	 *            the query part of an URI
-	 * @return map of parameters names into a list of their values.
-	 * 
-	 */
+	public static ArrayList<Resource> getCoreContexts(org.eclipse.rdf4j.model.Resource[] contexts) {	
+		ArrayList<Resource> coreContexts = new ArrayList<Resource>() ;
+		if(contexts!=null) {
+			for(org.eclipse.rdf4j.model.Resource context:contexts) {
+				if(!context.stringValue().startsWith(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS) ) {
+					coreContexts.add(context);
+				}
+			}
+			return coreContexts;
+		}
+		else 
+			return coreContexts;
+	}
 	public static CustomQueryOptions splitQuery(String query,Prefixes prefixes) {
 		if (query == null || query.isEmpty()) {
 			return null;
 		}
 		query = query.substring(query.indexOf("?") + 1);
-		//Map<String, List<Resource>> queryOptions = Arrays.stream(query.split("&")).map(p -> splitQueryParameter(p,prefixes)).collect(groupingBy(e -> e.get0(), // group by parameter name
-		//		mapping(e -> e.get1(), toList())));// keep parameter values and assemble into list
 		CustomQueryOptions customQueryOptions= new CustomQueryOptions();
 		for(String queryParam: query.split("&")) {
 			 Pair<String, Value> pair = splitQueryParameter(queryParam, prefixes) ;

@@ -15,9 +15,11 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import path.Path;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import pathCalc.Thing;
-import pathPatternElement.Path;
 import pathPatternElement.PathElement;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathPatternException;
@@ -75,7 +77,10 @@ class PathPatternPathTests {
 		PathElement element =  PathParser.parsePathPattern(thing,":parent1/:parent2/:parent3");
 		Path path = new Path();
 		path = element.visitPath(path);
-		assertEquals ("[n0,http://default/parent1,n1,DIRECT][n1,http://default/parent2,n2,DIRECT][n2,http://default/parent3,n3,DIRECT]" , path.toString());
+		assertEquals ("[n0,http://default/parent1,n1,DIRECT]\r\n"
+				+ "[n1,http://default/parent2,n2,DIRECT]\r\n"
+				+ "[n2,http://default/parent3,n3,DIRECT]\r\n"
+				+ "" , path.toString());
 	}
 
 
@@ -91,7 +96,10 @@ class PathPatternPathTests {
 		PathElement element = PathParser.parsePathPattern(thing,":parent1[:gender :female]/^:child2[:gender :male; :birthplace [rdfs:label 'Maidstone']]/:parent3");
 		Path path = new Path();
 		path = element.visitPath(path);
-		assertEquals ("[n0,http://default/parent1,n1,DIRECT][n1,http://default/child2,n2,INVERSE][n2,http://default/parent3,n3,DIRECT]"
+		assertEquals ("[n0,http://default/parent1,n1,DIRECT]\r\n"
+				+ "[n1,http://default/child2,n2,INVERSE]\r\n"
+				+ "[n2,http://default/parent3,n3,DIRECT]\r\n"
+				+ ""
 				 , path.toString());
 	}
 
@@ -107,7 +115,9 @@ class PathPatternPathTests {
 		PathElement element = PathParser.parsePathPattern(thing,"^:hasProductBatteryLimit>:massThroughput");
 		Path path = new Path();
 		path = element.visitPath(path);
-		assertEquals ("[n0,http://default/hasProductBatteryLimit,n1,INVERSE][n1,http://default/massThroughput,n2,DIRECT]" ,path.toString());
+		assertEquals ("[n0,http://default/hasProductBatteryLimit,n1,INVERSE]\r\n"
+				+ "[n1,http://default/massThroughput,n2,DIRECT]\r\n"
+				+ "" ,path.toString());
 	}	
 	
 	/**
@@ -122,6 +132,11 @@ class PathPatternPathTests {
 		PathElement element = PathParser.parsePathPattern(thing,":Location@:appearsOn[ eq [ rdfs:label \"Calc2Graph1\"] ]#/^:lat/:long/^:left/:right");
 		Path path = new Path();
 		path = element.visitPath(path);
-		assertEquals ("[n0,<http://default/Location>@http://default/appearsOn,r1,DIRECT,true][r1,http://default/lat,n2,INVERSE][n2,http://default/long,n3,DIRECT][n3,http://default/left,n4,INVERSE][n4,http://default/right,n5,DIRECT]" , path.toString());
+		assertEquals ("[n0,<http://default/Location>@http://default/appearsOn,r1,DIRECT,true]\r\n"
+				+ "[r1,http://default/lat,n2,INVERSE]\r\n"
+				+ "[n2,http://default/long,n3,DIRECT]\r\n"
+				+ "[n3,http://default/left,n4,INVERSE]\r\n"
+				+ "[n4,http://default/right,n5,DIRECT]\r\n"
+				+ "" , path.toString());
 	}
 }

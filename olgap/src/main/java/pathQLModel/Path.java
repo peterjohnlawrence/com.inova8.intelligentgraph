@@ -5,9 +5,7 @@ package pathQLModel;
 
 import java.util.HashSet;
 
-/**
- * The Class Path.
- */
+@Deprecated
 public class Path extends HashSet<PathFact>{
 
 	/** The Constant serialVersionUID. */

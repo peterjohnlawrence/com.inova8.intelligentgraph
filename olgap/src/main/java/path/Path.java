@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package pathPatternElement;
+package path;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class Path extends ArrayList<Edge>  {
 	public String toString() {
 		String pathString = "";
 		for ( Edge edge : this) {
-			pathString += edge.toString();
+			pathString += edge.toString() +"\r\n";
 		};
 		return pathString;
 	}

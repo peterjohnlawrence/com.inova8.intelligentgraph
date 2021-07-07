@@ -6,6 +6,8 @@ package pathPatternElement;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
 
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -29,11 +31,7 @@ public class AlternativePathElement extends PathElement{
 		operator= PathConstants.Operator.ALTERNATIVE;
 	}
 
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
+
 	@Override
 	public String toString() {
 		String toString="";
@@ -43,11 +41,7 @@ public class AlternativePathElement extends PathElement{
 		return toString + "(" + getLeftPathElement().toString() + " | " + getRightPathElement().toString()  + ")";
 	}
 
-	/**
-	 * To SPARQL.
-	 *
-	 * @return the string
-	 */
+
 	@Override
 	public
 	String toSPARQL() {
@@ -56,43 +50,29 @@ public class AlternativePathElement extends PathElement{
 		return alternateString;
 	}
 
-	/**
-	 * To HTML.
-	 *
-	 * @return the string
-	 */
+
 	@Override
 	public
 	String toHTML() {
 		return  getLeftPathElement().toHTML() + " | " + getRightPathElement().toHTML() ;
 	}
 
-	/**
-	 * Path pattern query.
-	 *
-	 * @param thing the thing
-	 * @param sourceVariable the source variable
-	 * @param targetVariable the target variable
-	 * @return the tuple expr
-	 */
+
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable) ;
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+		return pathPatternQuery(thing,sourceVariable,targetVariable,1) ;
+	}
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+			Integer pathIteration) {
+		TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable).getTupleExpr() ;
 		getRightPathElement().setSourceVariable(getLeftPathElement().getSourceVariable());
 		getRightPathElement().setTargetVariable(getLeftPathElement().getTargetVariable());
-		TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable);
-		Union unionPattern = new Union(leftPattern,rightPattern); 
-		return unionPattern;
-	}
-	
-	/**
-	 * Index visitor.
-	 *
-	 * @param baseIndex the base index
-	 * @param entryIndex the entry index
-	 * @param edgeCode the edge code
-	 * @return the integer
-	 */
+		TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable).getTupleExpr();
+	//	Union unionPattern =new TupleExprPath( new Union(leftPattern,rightPattern)); 
+		return new PathTupleExpr( new Union(leftPattern,rightPattern));
+	}	
+
 	@Override
 	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode ) {
 		setBaseIndex(baseIndex);
@@ -132,6 +112,8 @@ public class AlternativePathElement extends PathElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 

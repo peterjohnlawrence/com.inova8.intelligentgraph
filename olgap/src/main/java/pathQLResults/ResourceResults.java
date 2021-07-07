@@ -150,32 +150,9 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 * @return the custom query options
 	 */
 	protected CustomQueryOptions getCustomQueryOptions() {
-//		if(thing!=null)
-//			return thing.getCustomQueryOptions();
-//		else 
-//			return null;
 		return this.customQueryOptions;
 	}
-	
-	/**
-	 * Gets the predicate.
-	 *
-	 * @return the predicate
-	 */
-	@Deprecated
-	public IRI getPredicate() {
-		return null;
-	}
-	
-	/**
-	 * Gets the reification type.
-	 *
-	 * @return the reification type
-	 */
-	@Deprecated
-	public IRI getReificationType() {
-		return null;
-	}
+
 	
 	/**
 	 * Gets the path element.
@@ -240,5 +217,12 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		}
 		return total;
 	 
+	}
+	public String toString() {
+		String toString="";
+		while( hasNext()) {
+			toString +=next().toString();
+		}
+		return toString;
 	}
 }

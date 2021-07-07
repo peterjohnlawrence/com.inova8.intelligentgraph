@@ -6,6 +6,9 @@ package pathPatternElement;
 import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
+import path.Edge;
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -17,16 +20,17 @@ import pathQLRepository.PathQLRepository;
 public class SequencePathElement extends PathElement {
 
 	/** The is negated. */
-	private Boolean isNegated=false;
+	private Boolean isNegated = false;
 
 	/**
 	 * Instantiates a new sequence path element.
 	 *
-	 * @param source the source
+	 * @param source
+	 *            the source
 	 */
 	public SequencePathElement(PathQLRepository source) {
 		super(source);
-		operator=PathConstants.Operator.SEQUENCE;
+		operator = PathConstants.Operator.SEQUENCE;
 	}
 
 	/**
@@ -38,7 +42,7 @@ public class SequencePathElement extends PathElement {
 	public String toSPARQL() {
 
 		String sequenceString = getMinCardinalityString();
-		sequenceString+=getLeftPathElement().toSPARQL();
+		sequenceString += getLeftPathElement().toSPARQL();
 		sequenceString += getRightPathElement().toSPARQL();
 		sequenceString += getMaxCardinalityString();
 		return sequenceString;
@@ -69,20 +73,81 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing the thing
-	 * @param sourceVariable the source variable
-	 * @param targetVariable the target variable
+	 * @param thing
+	 *            the thing
+	 * @param sourceVariable
+	 *            the source variable
+	 * @param targetVariable
+	 *            the target variable
 	 * @return the tuple expr
 	 */
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable) ;
-		getRightPathElement().setSourceVariable(getLeftPathElement().getTargetVariable());
-		TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable);
-		Join joinPattern = new Join(leftPattern,rightPattern); 
-		return joinPattern;
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+		return pathPatternQuery(thing, sourceVariable, targetVariable, 1);
 	}
-	
+
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+			Integer pathIteration) {
+		/*			
+				 	TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,pathIteration) ;
+					getRightPathElement().setSourceVariable(getLeftPathElement().getTargetVariable());
+					TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,pathIteration);
+					Join joinPattern = new Join(leftPattern,rightPattern); 
+					return joinPattern;
+		*/
+
+		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
+		if(targetVariable==null)targetVariable = this.getTargetVariable();	
+		Join intermediateJoinPattern = null;
+		PathTupleExpr joinPattern = null;
+
+		if (pathIteration > 0) {
+			Variable intermediateSourceVariable = null;
+			Variable intermediateVariable = null;
+			Variable intermediateTargetVariable = null;
+			Variable priorIntermediateTargetVariable = null;
+			for (int iteration = 1; iteration <= pathIteration; iteration++) {
+				if (iteration == 1) {
+					intermediateSourceVariable = sourceVariable;
+					intermediateVariable= getLeftPathElement().getTargetVariable();
+					intermediateTargetVariable=targetVariable;
+				}
+				if (iteration < pathIteration) {
+					if (iteration > 1) 
+						intermediateSourceVariable = priorIntermediateTargetVariable;
+					intermediateTargetVariable = new Variable(sourceVariable.getName() + "_i" + iteration);
+					intermediateVariable = new Variable(sourceVariable.getName() + "_in" + iteration);
+					priorIntermediateTargetVariable = intermediateTargetVariable;
+				}
+				if (iteration == pathIteration) {
+					if (iteration > 1) {
+						intermediateSourceVariable = priorIntermediateTargetVariable;
+						intermediateVariable = new Variable(sourceVariable.getName() + "_in" + iteration);
+						intermediateTargetVariable = targetVariable;
+					}
+				}
+				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,
+						intermediateVariable, 1);//pathIteration);			
+				PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
+						1);//pathIteration);
+				intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
+				if (joinPattern == null) {
+					joinPattern = new PathTupleExpr(intermediateJoinPattern);
+
+				} else {
+					joinPattern.setTupleExpr(new Join(joinPattern.getTupleExpr(), intermediateJoinPattern));
+				}
+				joinPattern.getPath().addAll(leftPattern.getPath());
+				joinPattern.getPath().addAll(rightPattern.getPath());
+			}
+			return joinPattern;
+		} else {
+			return null;
+		}
+
+	}
+
 	/**
 	 * Gets the checks if is negated.
 	 *
@@ -95,7 +160,8 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Sets the checks if is negated.
 	 *
-	 * @param isNegated the new checks if is negated
+	 * @param isNegated
+	 *            the new checks if is negated
 	 */
 	public void setIsNegated(Boolean isNegated) {
 		this.isNegated = isNegated;
@@ -104,9 +170,12 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Index visitor.
 	 *
-	 * @param baseIndex the base index
-	 * @param entryIndex the entry index
-	 * @param edgeCode the edge code
+	 * @param baseIndex
+	 *            the base index
+	 * @param entryIndex
+	 *            the entry index
+	 * @param edgeCode
+	 *            the edge code
 	 * @return the integer
 	 */
 	@Override
@@ -114,21 +183,22 @@ public class SequencePathElement extends PathElement {
 		setBaseIndex(baseIndex);
 		setEntryIndex(entryIndex);
 		Integer leftExitIndex = getLeftPathElement().indexVisitor(baseIndex, entryIndex, edgeCode);
-		
+
 		if (getLeftPathElement().getOperator().equals(PathConstants.Operator.PREDICATE)
 				&& ((PredicateElement) getLeftPathElement()).getIsDereified()) {
 			setEdgeCode(EdgeCode.DEREIFIED);
 		}
-		
+
 		Integer rightExitIndex = getRightPathElement().indexVisitor(baseIndex, leftExitIndex, getEdgeCode());
-		setExitIndex(rightExitIndex) ;
+		setExitIndex(rightExitIndex);
 		return rightExitIndex;
 	}
 
 	/**
 	 * Visit path.
 	 *
-	 * @param path the path
+	 * @param path
+	 *            the path
 	 * @return the path
 	 */
 	@Override
@@ -137,4 +207,5 @@ public class SequencePathElement extends PathElement {
 		path = getRightPathElement().visitPath(path);
 		return path;
 	}
+
 }

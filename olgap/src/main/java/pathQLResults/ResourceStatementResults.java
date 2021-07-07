@@ -16,14 +16,14 @@ import pathQLRepository.PathQLRepository;
 public class ResourceStatementResults extends ResourceResults {
 	CloseableIteration<Statement, RepositoryException> statementSet;
 	private CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator;
-
+	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,
 			PathQLRepository source, PathElement pathElement, CustomQueryOptions customQueryOptions) {
 
 		super(source, pathElement, customQueryOptions);
 		this.statementSet = statementSet;
 	}
-
+	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet, Thing thing) {
 		super(thing);
 		this.statementSet = statementSet;
@@ -34,7 +34,7 @@ public class ResourceStatementResults extends ResourceResults {
 		super(thing, pathElement, customQueryOptions);
 		this.statementSet = statementSet;
 	}
-
+	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet) {
 		super();
 		this.statementSet = statementSet;
@@ -97,6 +97,7 @@ public class ResourceStatementResults extends ResourceResults {
 	public Resource next() throws QueryEvaluationException {
 		if (statementSet != null) {
 			Statement next = getStatementSet().next();
+			thing.getEvaluationContext().getTracer().traceFactReturnStatement(thing,next.getPredicate(), next.getObject());
 			return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
 		}
 		if (localStatementIterator != null) {

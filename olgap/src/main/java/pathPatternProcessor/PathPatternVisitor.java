@@ -66,17 +66,10 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
  */
 public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 	
-	/** The thing. */
 	Thing thing;
 	
-	/** The source. */
 	private PathQLRepository source;
 
-	/**
- * Instantiates a new path pattern visitor.
- *
- * @param thing the thing
- */
 public PathPatternVisitor(Thing thing) {
 		super();
 		this.thing = thing;
@@ -130,34 +123,18 @@ public PathPatternVisitor(Thing thing) {
 		return source;
 	}
 
-	/**
-	 * Instantiates a new path pattern visitor.
-	 *
-	 * @param source the source
-	 */
 	public PathPatternVisitor(PathQLRepository source) {
 		super();
 	this.source = source;
 	}
 	
-	/**
-	 * Gets the prefixes.
-	 *
-	 * @return the prefixes
-	 */
 	private ConcurrentHashMap<String, IRI> getPrefixes() {
-		if (thing!=null) 
-			return thing.getPrefixes();
-		else
+		//if (thing!=null) 
+		//	return thing.getPrefixes();
+		//else
 			return getSource().getPrefixes();
 	}
-	
-	/**
-	 * Visit bound pattern.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
+
 	@Override 
 	public PathElement visitBoundPattern(PathPatternParser.BoundPatternContext ctx) { 
 		// boundPattern :  binding ('/'|'>') pathPatterns EOF 
@@ -166,13 +143,7 @@ public PathPatternVisitor(Thing thing) {
 		pathElement.setRightPathElement(visit(ctx.pathPatterns()));
 		return pathElement;	
 	}
-	
-	/**
-	 * Visit match only pattern.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
+
 	@Override 
 	public PathElement visitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { 
 		// matchOnlyPattern: pathPattern :  binding  EOF 
@@ -181,12 +152,7 @@ public PathPatternVisitor(Thing thing) {
 		return pathElement;	
 	}
 	
-	/**
-	 * Visit path only pattern.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
+
 	@Override 
 	public PathElement visitPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { 
 		//pathOnlyPattern: pathPatterns  EOF #pathOnlyPattern
@@ -194,24 +160,14 @@ public PathPatternVisitor(Thing thing) {
 		return pathPatterns;
 		}
 	
-	/**
-	 * Visit binding.
-	 *
-	 * @param ctx the ctx
-	 * @return the fact filter element
-	 */
+
 	@Override
 	public FactFilterElement  visitBinding(BindingContext ctx) {
 		//binding : factFilterPattern ('/'|'>') ;	
 		return (FactFilterElement) visit(ctx.factFilterPattern());
 	}
 	
-	/**
-	 * Visit path.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
+
 	@Override
 	public PathElement visitPath(PathContext ctx) {
 		//pathPattern :  pathEltOrInverse cardinality?  #Path  
@@ -226,12 +182,6 @@ public PathPatternVisitor(Thing thing) {
 		return pathElement;
 	}
 
-	/**
-	 * Visit cardinality.
-	 *
-	 * @param ctx the ctx
-	 * @return the cardinality element
-	 */
 	@Override
 	public CardinalityElement visitCardinality(CardinalityContext ctx) {
 		//cardinality :	  '{'  INTEGER (',' ( INTEGER )? )?  '}'  
@@ -240,18 +190,14 @@ public PathPatternVisitor(Thing thing) {
 		 String maxCardinalityText = ctx.getChild(3).getText();
 		 if(maxCardinalityText.equals("}")) {
 			 cardinalityElement.setUnboundedCardinality(true);
+			 cardinalityElement.setMaxCardinality(null);
 		 }else {
 			 cardinalityElement.setMaxCardinality(Integer.decode(maxCardinalityText));
 		 }
 		return cardinalityElement;
 	}
 
-	/**
-	 * Visit path sequence.
-	 *
-	 * @param ctx the ctx
-	 * @return the sequence path element
-	 */
+
 	@Override
 	public SequencePathElement visitPathSequence(PathSequenceContext ctx) {
 		//pathPatterns :   pathPatterns '/'  pathPatterns  #PathSequence
@@ -265,12 +211,6 @@ public PathPatternVisitor(Thing thing) {
 		}
 	}
 
-	/**
-	 * Visit path alternative.
-	 *
-	 * @param ctx the ctx
-	 * @return the alternative path element
-	 */
 	@Override
 	public AlternativePathElement visitPathAlternative(PathAlternativeContext ctx) {
 		// pathPatterns :  pathPatterns '|'  pathPatterns  #PathAlternative 
@@ -284,12 +224,6 @@ public PathPatternVisitor(Thing thing) {
 		}
 	}
 
-	/**
-	 * Visit path parentheses.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
 	@Override
 	public PathElement visitPathParentheses(PathParenthesesContext ctx) {
 		// pathPatterns :    '(' pathPatterns ')' cardinality?  #PathParentheses;
@@ -308,12 +242,6 @@ public PathPatternVisitor(Thing thing) {
 		return pathParentheses;
 	}
 
-	/**
-	 * Visit path elt or inverse.
-	 *
-	 * @param ctx the ctx
-	 * @return the predicate element
-	 */
 	@Override
 	public PredicateElement visitPathEltOrInverse(PathEltOrInverseContext ctx) {
 		// pathEltOrInverse : negation? INVERSE? predicate ;
@@ -332,12 +260,6 @@ public PathPatternVisitor(Thing thing) {
 		return pathEltOrInverseElement;
 	}
 
-	/**
-	 * Visit predicate.
-	 *
-	 * @param ctx the ctx
-	 * @return the predicate element
-	 */
 	@Override
 	public PredicateElement visitPredicate(PredicateContext ctx) {
 		// predicate :   ( reifiedPredicate | predicateRef | rdfType | '*' ) factFilterPattern? #objectFilterPattern
@@ -370,12 +292,6 @@ public PathPatternVisitor(Thing thing) {
 		return predicateElement;
 	}
 
-	/**
-	 * Visit reified predicate.
-	 *
-	 * @param ctx the ctx
-	 * @return the predicate element
-	 */
 	@Override
 	public PredicateElement visitReifiedPredicate(ReifiedPredicateContext ctx) {
 		// reifiedPredicate :  iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ; #statementFilterPattern
@@ -396,12 +312,7 @@ public PathPatternVisitor(Thing thing) {
 		return reifiedPredicateElement;
 	}
 
-	/**
-	 * Visit predicate ref.
-	 *
-	 * @param ctx the ctx
-	 * @return the iri ref value element
-	 */
+
 	@Override
 	public IriRefValueElement visitPredicateRef(PredicateRefContext ctx) {
 		// predicateRef :  IRI_REF  | rdfType  |  qname | pname_ns ;
@@ -423,12 +334,6 @@ public PathPatternVisitor(Thing thing) {
 		return predicateRefElement;
 	}
 
-	/**
-	 * Visit iri ref.
-	 *
-	 * @param ctx the ctx
-	 * @return the iri ref value element
-	 */
 	@Override
 	public IriRefValueElement visitIriRef(IriRefContext ctx) {
 		// iriRef  : IRI_REF  |  qname | pname_ns ;  
@@ -446,36 +351,18 @@ public PathPatternVisitor(Thing thing) {
 		return iriRefElement;
 	}
 
-	/**
-	 * Visit dereifier.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
 	@Override
 	public PathElement visitDereifier(DereifierContext ctx) {
 		//dereifier : DEREIFIER ; 
 		return super.visitDereifier(ctx);
 	}
 
-	/**
-	 * Visit fact filter pattern.
-	 *
-	 * @param ctx the ctx
-	 * @return the fact filter element
-	 */
 	@Override
 	public FactFilterElement visitFactFilterPattern(FactFilterPatternContext ctx) {
 		// factFilterPattern : '['  propertyListNotEmpty   ']';
 		return (FactFilterElement) visit(ctx.propertyListNotEmpty());
 	}
 
-	/**
-	 * Visit property list not empty.
-	 *
-	 * @param ctx the ctx
-	 * @return the fact filter element
-	 */
 	@Override
 	public FactFilterElement visitPropertyListNotEmpty(PropertyListNotEmptyContext ctx) {
 		// propertyListNotEmpty :   verbObjectList ( ';' ( verbObjectList )? )* ;  
@@ -499,12 +386,6 @@ public PathPatternVisitor(Thing thing) {
 		return propertyListNotEmptyElement;
 	}
 
-	/**
-	 * Visit verb.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
 	@Override
 	public PathElement visitVerb(VerbContext ctx) {
 		// verb : operator | pathEltOrInverse 
@@ -518,12 +399,6 @@ public PathPatternVisitor(Thing thing) {
 		return null;
 	}
 
-	/**
-	 * Visit object list.
-	 *
-	 * @param ctx the ctx
-	 * @return the object list value element
-	 */
 	@Override
 	public ObjectListValueElement visitObjectList(ObjectListContext ctx) {
 		// objectList : object ( ',' object )*;
@@ -543,12 +418,6 @@ public PathPatternVisitor(Thing thing) {
 		return objectListElement;
 	}
 
-	/**
-	 * Visit object.
-	 *
-	 * @param ctx the ctx
-	 * @return the value element
-	 */
 	@Override
 	public ValueElement visitObject(ObjectContext ctx) {
 		// object : iriRef  | literal | blankNodePropertyListPath ;
@@ -563,12 +432,6 @@ public PathPatternVisitor(Thing thing) {
 		return null;
 	}
 
-	/**
-	 * Visit qname.
-	 *
-	 * @param ctx the ctx
-	 * @return the iri ref value element
-	 */
 	@Override
 	public IriRefValueElement visitQname(QnameContext ctx) {
 		//qname : PNAME_NS PN_LOCAL; 
@@ -578,18 +441,11 @@ public PathPatternVisitor(Thing thing) {
 			qnameElement.setIri(qname);
 			return qnameElement;
 		}else {
-			String message = String.format("Error identifying namespace of qName %s", ctx.getText());
-			if (thing!=null) thing.addTrace(message);
-			throw new ScriptFailedException("QNAME", message);
+			if (thing!=null) thing.getEvaluationContext().getTracer().traceQNameError(ctx.getText());
+			throw new ScriptFailedException("QNAME", String.format("Error identifying namespace of qName %s", ctx.getText()));
 		}
 	}
 
-	/**
-	 * Visit pname ns.
-	 *
-	 * @param ctx the ctx
-	 * @return the iri ref value element
-	 */
 	@Override
 	public IriRefValueElement visitPname_ns(Pname_nsContext ctx) {
 		// pname_ns : PNAME_NS ;   
@@ -601,18 +457,11 @@ public PathPatternVisitor(Thing thing) {
 			pname_nsElement.setIri(qname);
 			return pname_nsElement;
 		}else {
-			String message = String.format("Error identifying namespace of qName %s", ctx.getText());
-			if (thing!=null) thing.addTrace(message);
-			throw new ScriptFailedException("QNAME", message);
+			if (thing!=null)  thing.getEvaluationContext().getTracer().traceQNameError(ctx.getText());
+			throw new ScriptFailedException("QNAME", String.format("Error identifying namespace of qName %s", ctx.getText()));
 		}
 	}
 
-	/**
-	 * Visit literal.
-	 *
-	 * @param ctx the ctx
-	 * @return the literal value element
-	 */
 	@Override
 	public LiteralValueElement visitLiteral(LiteralContext ctx) {
 		//literal : LITERAL ;
@@ -623,24 +472,12 @@ public PathPatternVisitor(Thing thing) {
 		return literalElement;
 	}
 
-	/**
-	 * Visit verb object list.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
 	@Override
 	public PathElement visitVerbObjectList(VerbObjectListContext ctx) {
 		// TODO Auto-generated method stub
 		return super.visitVerbObjectList(ctx);
 	}
 
-	/**
-	 * Visit operator.
-	 *
-	 * @param ctx the ctx
-	 * @return the filter operator value element
-	 */
 	@Override
 	public FilterOperatorValueElement visitOperator(OperatorContext ctx) {
 		// operator : OPERATOR ;
@@ -650,12 +487,6 @@ public PathPatternVisitor(Thing thing) {
 		return operatorElement;
 	}
 
-	/**
-	 * Visit rdf type.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
 	@Override
 	public PathElement visitRdfType(RdfTypeContext ctx) {
 		//rdfType : RDFTYPE ;

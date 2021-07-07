@@ -26,6 +26,20 @@ def:BatteryLimit
   a owl:Class ;
   rdfs:label "Battery limit" ;
 .
+def:Connection
+  a owl:Class ;
+  rdfs:label "Connection" ;
+  rdfs:subClassOf rdf:Statement ;
+  rdfs:subClassOf owl:Thing ;
+.
+def:Continuant
+  a owl:Class ;
+  rdfs:label "Continuant" ;
+.
+def:Equipment
+  a owl:Class ;
+  rdfs:label "Equipment" ;
+.
 def:Location
   a owl:Class ;
   rdfs:label "Location" ;
@@ -93,6 +107,48 @@ def:batteryLimits
   a rdf:Property ;
   rdfs:domain def:Unit ;
   rdfs:label "battery limits" ;
+.
+def:connectedTo
+  a owl:ObjectProperty ;
+  rdfs:domain def:Equipment ;
+  rdfs:label "connectedTo" ;
+  rdfs:range def:Equipment ;
+.
+<http://inova8.com/calc2graph/def/connection.Property>
+  a owl:ObjectProperty ;
+  rdfs:domain def:Connection ;
+  rdfs:label "connection.Property" ;
+  rdfs:range rdf:Property ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/calc2graph/def/property.of.Connection> ;
+.
+<http://inova8.com/calc2graph/def/connection.from.Continuant>
+  a owl:ObjectProperty ;
+  rdfs:domain def:Connection ;
+  rdfs:label "connection.from.Continuant" ;
+  rdfs:range def:Continuant ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/calc2graph/def/continuant.isFrom.Connection> ;
+.
+<http://inova8.com/calc2graph/def/connection.to.Continuant>
+  a owl:ObjectProperty ;
+  rdfs:domain def:Connection ;
+  rdfs:label "connection.to.Continuant" ;
+  rdfs:range def:Continuant ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/calc2graph/def/continuant.isTo.Connection> ;
+.
+<http://inova8.com/calc2graph/def/continuant.isFrom.Connection>
+  a owl:ObjectProperty ;
+  rdfs:domain def:Continuant ;
+  rdfs:label "continuant.is from.Connection" ;
+  rdfs:range def:Connection ;
+.
+<http://inova8.com/calc2graph/def/continuant.isTo.Connection>
+  a owl:ObjectProperty ;
+  rdfs:domain def:Continuant ;
+  rdfs:label "continuant.is to.Connection" ;
+  rdfs:range def:Connection ;
 .
 def:density
   a rdf:Property ;
@@ -226,6 +282,12 @@ def:productFrom
   a owl:ObjectProperty ;
   rdfs:label "property.Attribute" ;
 .
+<http://inova8.com/calc2graph/def/property.of.Connection>
+  a owl:ObjectProperty ;
+  rdfs:domain rdf:Property ;
+  rdfs:label "property.of.Connection" ;
+  rdfs:range def:Connection ;
+.
 <http://inova8.com/calc2graph/def/signal.SignalValue>
   a owl:ObjectProperty ;
   rdfs:domain def:Signal ;
@@ -288,12 +350,6 @@ def:width
   rdfs:domain def:Map ;
   rdfs:label "width" ;
   rdfs:range xsd:integer ;
-.
-<http://inova8.com/calc2graph/id/calculateMassFlow>
-  a script:Script ;
-.
-<http://inova8.com/calc2graph/id/calculateMassYield>
-  a script:Script ;
 .
 script:Script
   a owl:Class ;

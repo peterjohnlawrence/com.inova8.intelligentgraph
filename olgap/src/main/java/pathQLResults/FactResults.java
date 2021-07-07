@@ -9,9 +9,9 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
+import path.Path;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
-import pathPatternElement.Path;
 import pathPatternElement.PathElement;
 import pathQLModel.Fact;
 import pathQLModel.Resource;

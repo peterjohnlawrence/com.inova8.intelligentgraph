@@ -328,10 +328,16 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								case TRACE:
 									evaluationContext.setTracing(true);
 									Thing subjectThingTrace = Thing.create(getSource(), subject, evaluationContext);
-									subjectThingTrace.getFact(predicate,literalValue,customQueryOptions);
-									Binding modifiedBindingValueTrace = new SimpleBinding(modifiedBindingValueName,
-											literal(evaluationContext.getTrace()));
-									modifiedBindingSet.addBinding(modifiedBindingValueTrace);
+									try {								
+										subjectThingTrace.getFact(predicate,literalValue,customQueryOptions);
+										Binding modifiedBindingValueTrace = new SimpleBinding(modifiedBindingValueName,
+												literal(evaluationContext.getTracer().getTrace().asHTML()));
+										modifiedBindingSet.addBinding(modifiedBindingValueTrace);
+									}catch(Exception e) {
+										Binding modifiedBindingValueTrace = new SimpleBinding(modifiedBindingValueName,
+												literal(evaluationContext.getTracer().getTrace().asHTML()));
+										modifiedBindingSet.addBinding(modifiedBindingValueTrace);
+									}
 									break;
 								}
 							} else {

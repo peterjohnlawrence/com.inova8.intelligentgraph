@@ -17,6 +17,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
+import pathCalc.Trace;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
@@ -52,27 +53,6 @@ class Local_GetContextFact_Tests {
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
-	
-	/**
-	 * Removes the white spaces.
-	 *
-	 * @param input the input
-	 * @return the string
-	 */
-	String removeWhiteSpaces(String input) {
-	    return input.replaceAll("\\s+", "");
-	    //return input;
-	}
-	
-	/**
-	 * Assert equals WO spaces.
-	 *
-	 * @param actual the actual
-	 * @param expected the expected
-	 */
-	void assertEqualsWOSpaces(String actual, String expected){
-		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
-}	
 
 	@Test
 	@Order(1)
@@ -126,80 +106,17 @@ class Local_GetContextFact_Tests {
 			customQueryOptions1.add("time",42);
 		    customQueryOptions1.add("name","Peter");
 			Thing myCountry1 = graph.getThing( ":myCountry");
-			String result = myCountry1.traceFact("<http://inova8.com/calc2graph/def/myOption>",customQueryOptions1);
-			Query.assertEqualsWOSpaces("<ol style='list-style-type:none;'><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\n"
-					+ "</li>\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\n"
-					+ "<ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\n"
-					+ "</li>\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\n"
-					+ "<li>Retrieved literal <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\n"
-					+ "</ol>", result);
+			Trace result = myCountry1.traceFact("<http://inova8.com/calc2graph/def/myOption>",customQueryOptions1);
+			Query.assertEqualsWOSpaces("<olstyle='list-style-type:none;'><li>Gettingfacts'&lt;http://inova8.com/calc2graph/def/myOption&gt;'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a></li></li><li>...usingoptions:[name=&quot;Peter&quot;&amp;time=&quot;42&quot;^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;]</li></li><li>...withincontexts:[file://src/test/resources/calc2graph.def.ttl,http://inova8.com/calc2graph/contextGraph,file://src/test/resources/calc2graph.data.ttl]</li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>$customQueryOptions.get(&quot;time&quot;).integerValue();</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=42^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=42^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Retrievedcachedvalue<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=42^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Returnedfact'http://inova8.com/calc2graph/def/myOption'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=42^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><p></ol>"
+					, result.asHTML());
 			CustomQueryOptions  customQueryOptions2 = new CustomQueryOptions();
 			customQueryOptions2.add("time",43);
 			result = myCountry1.traceFact("<http://inova8.com/calc2graph/def/myOption>",customQueryOptions2 );
-			Query.assertEqualsWOSpaces("<ol style='list-style-type:none;'><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<li>Retrieved literal <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<li>Retrieved literal <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol>", result);
+			Query.assertEqualsWOSpaces("<olstyle='list-style-type:none;'><li>Gettingfacts'&lt;http://inova8.com/calc2graph/def/myOption&gt;'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a></li></li><li>...usingoptions:[time=&quot;43&quot;^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;]</li></li><li>...withincontexts:[file://src/test/resources/calc2graph.def.ttl,http://inova8.com/calc2graph/contextGraph,file://src/test/resources/calc2graph.data.ttl]</li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>$customQueryOptions.get(&quot;time&quot;).integerValue();</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=43^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=43^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Retrievedcachedvalue<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=43^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Returnedfact'http://inova8.com/calc2graph/def/myOption'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=43^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><p></ol>"
+					, result.asHTML());
 			result = myCountry1.traceFact("<http://inova8.com/calc2graph/def/myOption>&time='2019'^^xsd:int" );
-			Query.assertEqualsWOSpaces("<ol style='list-style-type:none;'><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<li>Retrieved literal <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 42^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<li>Retrieved literal <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 43^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  2019^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 2019^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a>, by invoking <b>groovy</b> script\r\n"
-					+ "</li>\r\n"
-					+ "<li><div  style='border: 1px solid black;'> <pre><code >$customQueryOptions.get(&quot;time&quot;).integerValue() ;</code></pre></div></li>\r\n"
-					+ "<ol style='list-style-type:none;'></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> =  2019^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol><li>Calculated <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 2019^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "<li>Retrieved literal <a href='http://inova8.com/calc2graph/def/myOption' target='_blank'>myOption</a> of <a href='http://inova8.com/calc2graph/def/myCountry' target='_blank'>myCountry</a> = 2019^^<a href='http://www.w3.org/2001/XMLSchema#int' target='_blank'>int</a></li>\r\n"
-					+ "</ol>", result);
+			Query.assertEqualsWOSpaces("<olstyle='list-style-type:none;'><li>Gettingfacts'&lt;http://inova8.com/calc2graph/def/myOption&gt;&amp;time='2019'^^xsd:int'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a></li></li><li>...withincontexts:[file://src/test/resources/calc2graph.def.ttl,http://inova8.com/calc2graph/contextGraph,file://src/test/resources/calc2graph.data.ttl]</li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>$customQueryOptions.get(&quot;time&quot;).integerValue();</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Retrievedcachedvalue<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Returnedfact'http://inova8.com/calc2graph/def/myOption'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><p></ol>"
+					, result.asHTML());
 			ResourceResults results = myCountry1.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
 			for (Resource result1:results ) {
 				Query.assertEqualsWOSpaces("2020", result1.stringValue());

@@ -166,7 +166,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try {
 			Thing $this = Thing.create(source,  iri("http://inova8.com/calc2graph/id/Unit1"), null);
-			$this.prefix("http://inova8.com/calc2graph/def/");
 			Double fact = 0.0;
 			for( Resource batterylimit: $this.getFacts(":hasProductBatteryLimit")) {
 				Resource factValue = batterylimit.getFact(":massFlow");
@@ -334,7 +333,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this =source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
 
 			assertEquals("400", result.stringValue());
@@ -353,7 +351,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#").getFact(":lat");
 			
 			assertEquals("400", result.stringValue());
@@ -372,7 +369,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph2]#");
 				
 			if(result!=null) 
@@ -410,7 +406,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]#");
 				
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL2", result.stringValue());
@@ -429,7 +424,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]");
 				
 			assertEquals("http://inova8.com/calc2graph/id/BatteryLimit2", result.stringValue());
@@ -448,7 +442,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/Calc2Graph1"),null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit1]#/:lat");
 			
 			assertEquals("400", result.stringValue());
@@ -466,7 +459,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#");
 			
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
@@ -484,7 +476,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#/:lat");
 			
 			assertEquals("400", result.stringValue());
@@ -502,7 +493,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"),null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph1 ]/:long");
 			
 			assertEquals("501", result.stringValue());
@@ -520,7 +510,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long");
 			
 			assertEquals("502", result.stringValue());
@@ -538,7 +527,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"),null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]");
 			
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
@@ -556,7 +544,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/Unit2"),null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 			
 			assertEquals("23.43999981880188", result.stringValue());
@@ -574,7 +561,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this =source.getThing( iri("http://inova8.com/calc2graph/id/Unit2"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 			
 			assertEquals("23.43999981880188", result.stringValue());
@@ -593,7 +579,6 @@ class Remote_PathQL_GetFactTests {
 		try{
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/Unit3"), null);
 
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massThroughput");
 			
 			assertEquals("24.77999922633171", result.stringValue());
@@ -611,7 +596,6 @@ class Remote_PathQL_GetFactTests {
 		
 		try{
 			Thing $this =source.getThing(  iri("http://inova8.com/calc2graph/id/Unit3"), null);
-			$this.prefix("id","<http://inova8.com/calc2graph/id/>");
 			Resource result = $this.getFact(":massFlowBalance");
 			
 			assertEquals("1.339999407529831", result.stringValue());

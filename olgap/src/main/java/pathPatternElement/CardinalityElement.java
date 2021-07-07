@@ -3,8 +3,8 @@
  */
 package pathPatternElement;
 
-import org.eclipse.rdf4j.query.algebra.TupleExpr;
-
+import path.Path;
+import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -14,15 +14,6 @@ import pathQLRepository.PathQLRepository;
  * The Class CardinalityElement.
  */
 public class CardinalityElement extends PathElement {
-	
-	/** The min cardinality. */
-	Integer minCardinality;
-	
-	/** The max cardinality. */
-	Integer maxCardinality;
-	
-	/** The unbounded cardinality. */
-	Boolean unboundedCardinality;
 
 	/**
 	 * Instantiates a new cardinality element.
@@ -43,7 +34,7 @@ public class CardinalityElement extends PathElement {
 		String cardinalityElement = "{" + minCardinality;
 		if (maxCardinality != null) {
 			cardinalityElement += "," + maxCardinality;
-		} else if (unboundedCardinality) {
+		} else if (getUnboundedCardinality()) {
 			cardinalityElement += ",*";
 		}
 		return cardinalityElement + "}";
@@ -59,7 +50,7 @@ public class CardinalityElement extends PathElement {
 		String cardinalityElement = "{" + minCardinality;
 		if (maxCardinality != null) {
 			cardinalityElement += "," + maxCardinality;
-		} else if (unboundedCardinality) {
+		} else if (getUnboundedCardinality()) {
 			cardinalityElement += ",*";
 		}
 		return cardinalityElement + "}";
@@ -87,11 +78,16 @@ public class CardinalityElement extends PathElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+			Integer pathIteration) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 	/**
 	 * Gets the checks if is negated.
 	 *
@@ -140,6 +136,8 @@ public class CardinalityElement extends PathElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 }

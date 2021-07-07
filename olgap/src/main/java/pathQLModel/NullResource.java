@@ -10,12 +10,12 @@ import pathQLResults.ResourceResults;
 /**
  * The Class NullValue.
  */
-public class NullValue extends Resource {
+public class NullResource extends Resource {
   
   /**
    * Instantiates a new null value.
    */
-  public NullValue(){
+  public NullResource(){
 	super(null);
 }
 

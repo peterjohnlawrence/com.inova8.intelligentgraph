@@ -150,11 +150,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return null;
 	}
 	
-	/**
-	 * Gets the tracer.
-	 *
-	 * @return the tracer
-	 */
+	@Deprecated
 	public Tracer getTracer() {
 		if (evaluationContext!=null)
 			return evaluationContext.getTracer();
@@ -162,31 +158,18 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return null;
 	}
 
-	/**
-	 * Sets the tracer.
-	 *
-	 * @param tracer the tracer
-	 * @return the resource
-	 */
+
 	public void setTracer(Tracer tracer) {
 		if (evaluationContext!=null)
 			 evaluationContext.setTracer(tracer);
 	}
 
-	/**
-	 * Gets the value.
-	 *
-	 * @return the value
-	 */
+
 	public Value getValue() {
 		return getSuperValue();
 	}
 
-	/**
-	 * Gets the HTML value.
-	 *
-	 * @return the HTML value
-	 */
+
 	public String getHTMLValue() {
 		switch (getValue().getClass().getSimpleName()) {
 		case "AbstractIRI":
@@ -208,13 +191,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			}
 		}
 	}
-	
-	/**
-	 * Gets the HTML value.
-	 *
-	 * @param objectValue the object value
-	 * @return the HTML value
-	 */
+	@Deprecated
 	public String getHTMLValue(Value objectValue) {
 		switch (objectValue.getClass().getSimpleName()) {
 		case "MemIRI":
@@ -228,17 +205,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 						+ "' target='_blank'>" + localDatatype + "</a>";
 			} catch (Exception e) {
 				return ((org.eclipse.rdf4j.model.Literal) objectValue).toString() + "(unknown value class: "
-						+ getValue().getClass().getSimpleName() + ")";
+						+ objectValue.getClass().getSimpleName() + ")";
 			}
 		}
 	}
 	
-	/**
-	 * Not tracing.
-	 *
-	 * @return true, if successful
-	 */
-	protected boolean notTracing() {
+	@Deprecated
+	public boolean notTracing() {
 		if (evaluationContext!=null && evaluationContext.getTracer()!= null)
 			return !evaluationContext.isTracing();
 		else
@@ -246,103 +219,19 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	}
 
 
-	/**
-	 * Adds the trace.
-	 *
-	 * @param message the message
-	 */
-	public void addTrace(String message) {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
-			evaluationContext.getTracer().addTrace(message);
-	}
-
-	/**
-	 * Adds the script.
-	 *
-	 * @param script the script
-	 */
-	protected void addScript(String script) {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
-			evaluationContext.getTracer().addScript(script);
-	}
-
-	/**
-	 * Adds the IRIH ref.
-	 *
-	 * @param iri the iri
-	 * @return the string
-	 */
-	protected String addIRIHRef(IRI iri) {
-		return "<a href='" + iri.stringValue() + "' target='_blank'>" + iri.getLocalName() + "</a>";
-	}
-
-	/**
-	 * Adds the IRI.
-	 *
-	 * @param iri the iri
-	 * @return the string
-	 */
-	protected String addIRI(IRI iri) {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
-			return addIRIHRef(iri);
-		else
-			return "";
-	}
-
-	/**
-	 * Adds the IRIH ref.
-	 *
-	 * @param value the value
-	 * @return the string
-	 */
-	protected String addIRIHRef(org.eclipse.rdf4j.model.Value value) {
-		IRI iri = (IRI) value;
-		return addIRIHRef(iri);
-	}
-
-	/**
-	 * Adds the IRI.
-	 *
-	 * @param value the value
-	 * @return the string
-	 */
-	public String addIRI(org.eclipse.rdf4j.model.Value value) {
-		IRI iri = (IRI) value;
-		return addIRI(iri);
-	}
-
-	/**
-	 * Adds the this IRI.
-	 *
-	 * @return the string
-	 */
-	protected String addThisIRI() {
-		IRI iri = (IRI) getValue();
-		return addIRI(iri);
-	}
-
-	/**
-	 * Decrement trace level.
-	 */
-	protected void decrementTraceLevel() {
+@Deprecated
+	public void decrementTraceLevel() {
 		if (evaluationContext!=null && evaluationContext.getTracer() != null)
 			evaluationContext.getTracer().decrementLevel();
 	}
 
-	/**
-	 * Increment trace level.
-	 */
-	protected void incrementTraceLevel() {
+@Deprecated
+	public void incrementTraceLevel() {
 		if (evaluationContext!=null && evaluationContext.getTracer() != null)
 			evaluationContext.getTracer().incrementLevel();
 	}
 
-	/**
-	 * Indent script for trace.
-	 *
-	 * @param script the script
-	 * @return the string
-	 */
+@Deprecated
 	protected String indentScriptForTrace(String script) {
 		if (evaluationContext!=null && evaluationContext.getTracer() != null)
 			return evaluationContext.getTracer().indentScriptForTrace(script);
@@ -594,10 +483,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			predicate = iri(predicateIRI);
 		}else {
 			IRI namespace = getNamespace(predicateIRIParts[0]);
-			if(namespace==null) {
-				String message = String.format("Error identifying namespace of qName %s", predicateIRI);			
-				logger.error(message);
-				addTrace(message);
+			if(namespace==null) {		
+				logger.error(String.format("Error identifying namespace of qName %s", predicateIRI));
+				this.getEvaluationContext().getTracer().traceQNameError(predicateIRI);
+			//	addTrace(message);
 			}else {
 				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
 			}

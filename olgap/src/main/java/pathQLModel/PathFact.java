@@ -5,9 +5,7 @@ package pathQLModel;
 
 import org.eclipse.rdf4j.model.Value;
 
-/**
- * The Class PathFact.
- */
+@Deprecated
 public class PathFact extends Fact {
 
 	/**

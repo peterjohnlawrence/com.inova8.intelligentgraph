@@ -21,6 +21,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Evaluator;
 import pathCalc.Thing;
+import pathCalc.Trace;
 import pathPatternProcessor.PathPatternException;
 import pathQLModel.Resource;
 import pathQLRepository.Graph;
@@ -156,34 +157,18 @@ class Local_MultiGraphAddGetFact_Tests {
 		//	Thing myCountry = addGraph2();
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Thing myCountry = graph.getThing(":Country");
-//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("1"), iri("http://inova8.com/calc2graph/testGraph2"));
-//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("2"), iri("http://inova8.com/calc2graph/testGraph2"));
-//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("3"), iri("http://inova8.com/calc2graph/testGraph2"));
-//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("4"), iri("http://inova8.com/calc2graph/testGraph2"));
-//			conn.add(iri("http://inova8.com/calc2graph/def/Country") ,iri("http://inova8.com/calc2graph/def/sales"), literal("5"), iri("http://inova8.com/calc2graph/testGraph2"));
 			myCountry.addFact(":sales", "1");
 			myCountry.addFact(":sales", "2");
 			myCountry.addFact(":sales", "3");
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
-		//	myCountry.addFact(":sales", "60");
+
 			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
 		    customQueryOptions.add("name","Peter");
 			Double averageCountrySales = myCountry.getFact(":averageSales",customQueryOptions).doubleValue() ;
-		//	myCountry.deleteFacts(":sales");
-		//	source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
-		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null);
-		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null,iri("http://default"));
-		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null,iri("http://inova8.com/calc2graph/testGraph1"));
-		//	conn.remove(iri("http://inova8.com/calc2graph/def/Country"), null, null,iri("http://inova8.com/calc2graph/testGraph2"));
-		//	conn.clear(iri("http://inova8.com/calc2graph/testGraph2"));
-		//	conn.clear(iri("http://inova8.com/calc2graph/testGraph1"));
-		//	conn.clear(iri("http://default"));
-		//	conn.remove((org.eclipse.rdf4j.model.Resource)null, (IRI)null, (Value)null, iri("http://inova8.com/calc2graph/testGraph2"));
-		//	conn.clear();
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 
 			assertEquals(3.0, averageCountrySales);
@@ -192,7 +177,39 @@ class Local_MultiGraphAddGetFact_Tests {
 			fail();
 		}
 	}
+	/**
+	 * Test 20.
+	 */
+	@Test
+	@Order(25)
+	void test_25() {
+		try {
+		//	Thing myCountry = addGraph2();
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
+			Thing myCountry = graph.getThing(":Country");
+			myCountry.addFact(":sales", "1");
+			myCountry.addFact(":sales", "2");
+			myCountry.addFact(":sales", "3");
+			myCountry.addFact(":sales", "4");
+			myCountry.addFact(":sales", "5");
 
+			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
+			customQueryOptions.add("time",42);
+		    customQueryOptions.add("name","Peter");
+			Trace averageCountrySalesTrace = myCountry.traceFact(":averageSales",customQueryOptions) ;
+			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
+			//Query.assertEqualsWOSpaces
+			assertEquals
+			("<ol style='list-style-type:none;'><li>Getting facts  ':averageSales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a></li></li><li>...using options: [name=&quot;Peter&quot;&amp;time=&quot;42&quot;^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;]</li></li><li>...within contexts: [file://src/test/resources/calc2graph.def.ttl, http://inova8.com/calc2graph/testGraph2]</li></li><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a>, by invoking <b>groovy</b> script\n"
+					+ "</li></li><li><div  style='border: 1px solid black;'> <pre><code >totalSales=0; count=0;for(sales in $this.getFacts(&quot;&lt;http://inova8.com/calc2graph/def/sales&gt;&quot;)){totalSales += &nbsp;sales.doubleValue();count++}; return totalSales/count;</code></pre></div></li><ol style='list-style-type:none;'><li>Getting facts '&lt;http://inova8.com/calc2graph/def/sales&gt;' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> </li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 1</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 2</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 4</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 5</li></li></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> =  3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li></ol><li>Calculated <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><li>Retrieved cached value <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><li>Returned fact 'http://inova8.com/calc2graph/def/averageSales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><p></ol>", 
+					averageCountrySalesTrace.asHTML());
+			
+		} catch (Exception e) {
+			fail();
+		}
+	}
 	/**
 	 * Test 30.
 	 */

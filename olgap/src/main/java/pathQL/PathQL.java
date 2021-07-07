@@ -106,7 +106,7 @@ public class PathQL {
 			
 			if(pathPattern!=null ) {
 				EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(), null);
-				TupleExpr rightArgTupleExpr = element.getRightPathElement().pathPatternQuery(null, null, null);
+				TupleExpr rightArgTupleExpr = element.getRightPathElement().pathPatternQuery(null, null, null).getTupleExpr();
 				MatchJoinIterator matchJoinIterator = new MatchJoinIterator(evaluationStrategy, boundResultsIterator.getResourceSet(),rightArgTupleExpr);
 			
 				//return new PathQLResultsIterator(matchJoinIterator);
@@ -134,7 +134,7 @@ public class PathQL {
 		SimpleDataset dataset = thing.getDataset(customQueryOptions);
 		
 		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(thing.getSource().getTripleSource(),dataset, null);
-		TupleExpr pathElementPattern = pathElement.pathPatternQuery(thing,null,null);
+		TupleExpr pathElementPattern = pathElement.pathPatternQuery(thing,null,null).getTupleExpr();
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		BindingSet bindings = new QueryBindingSet();
 		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(pathElementPattern,bindings);

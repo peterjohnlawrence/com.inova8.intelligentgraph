@@ -67,8 +67,8 @@ id:BatteryLimit1
   def:lat "<http://inova8.com/calc2graph/id/calculateLatitude>"^^script:groovy ;
   def:long "<http://inova8.com/calc2graph/id/calculateLongitude>"^^script:groovy ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
-  def:testProperty1 "$this.prefix(\"calc2graph\",\"<http://inova8.com/calc2graph/def/>\"); $this.getFact(\"calc2graph:testProperty2\").doubleValue()"^^script:groovy ;
-  def:testProperty2 "$this.prefix(\"<http://inova8.com/calc2graph/def/>\"); $this.getFact(\":testProperty3\").doubleValue()"^^script:groovy ;
+  def:testProperty1 " $this.getFact(\":testProperty2\").doubleValue()"^^script:groovy ;
+  def:testProperty2 " $this.getFact(\":testProperty3\").doubleValue()"^^script:groovy ;
   def:testProperty3 "$this.getFact(\"<http://inova8.com/calc2graph/def/testProperty2>\").doubleValue()"^^script:groovy ;
   def:testProperty4 "$this.getSignal(\"<SEEQ://host.docker.internal:34216/api/signals/4BE33085-0C32-41B4-A160-FA5A79B97581>\").doubleValue()"^^script:groovy ;
   def:testProperty5 "$this.getSignal(\"<http://inova8.com/calc2graph/id/Signal_1>\").doubleValue()"^^script:groovy ;
@@ -83,7 +83,7 @@ id:BatteryLimit2
   def:long 600 ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
   def:massYield "<http://inova8.com/calc2graph/id/calculateMassYield>"^^script:javascript ;
-  def:testProperty1 "$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");return $this.getThing(\"id:BatteryLimit2\").getFact(\":Attribute@:density\").doubleValue();"^^script:groovy ;
+  def:testProperty1 "return $this.getThing(\"id:BatteryLimit2\").getFact(\":Attribute@:density\").doubleValue();"^^script:groovy ;
   def:testProperty2 "return $this.getThing(\"<http://inova8.com/calc2graph/id/BatteryLimit2>\").getFact(\"<http://inova8.com/calc2graph/def/Attribute>@<http://inova8.com/calc2graph/def/density>\").doubleValue();"^^script:groovy ;
   def:volumeFlow "40;"^^script:javascript ;
   rdfs:label "BatteryLimit2" ;
@@ -111,6 +111,165 @@ id:Calc2Graph2
   def:width 1280 ;
   rdfs:isDefinedBy <http://localhost:8070/lens2odata/apartment/calc2graph/maps/Calc2Graph2.png> ;
   rdfs:label "Calc2Graph2" ;
+.
+id:Connection_1_2
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_1 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_2 ;
+  rdfs:label "Connection 1 2" ;
+.
+id:Connection_2_3
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_2 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_3 ;
+  rdfs:label "Connection 2 3" ;
+.
+id:Connection_3_4
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_3 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_4 ;
+  rdfs:label "Connection 3 4" ;
+.
+id:Connection_4_5
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_4 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_5 ;
+  rdfs:label "Connection 4 5" ;
+.
+id:Connection_5_6
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_5 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_6 ;
+  rdfs:label "Connection 5 6" ;
+.
+id:Connection_6_7
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_6 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_7 ;
+  rdfs:label "Connection 6 7" ;
+.
+id:Connection_7_8
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_7 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_8 ;
+  rdfs:label "Connection 7 8" ;
+.
+id:Connection_8_9
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_8 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_9 ;
+  rdfs:label "Connection 8 9" ;
+.
+id:Connection_9_1
+  a def:Connection ;
+  <http://inova8.com/calc2graph/def/connection.Property> def:connectedTo ;
+  <http://inova8.com/calc2graph/def/connection.from.Continuant> id:Continuant_9 ;
+  <http://inova8.com/calc2graph/def/connection.to.Continuant> id:Continuant_1 ;
+  rdfs:label "Connection 9 1" ;
+.
+id:Continuant_1
+  a def:Continuant ;
+  rdfs:label "Continuant 1" ;
+.
+id:Continuant_2
+  a def:Continuant ;
+  rdfs:label "Continuant 2" ;
+.
+id:Continuant_3
+  a def:Continuant ;
+  rdfs:label "Continuant 3" ;
+.
+id:Continuant_4
+  a def:Continuant ;
+  rdfs:label "Continuant 4" ;
+.
+id:Continuant_5
+  a def:Continuant ;
+  rdfs:label "Continuant 5" ;
+.
+id:Continuant_6
+  a def:Continuant ;
+  rdfs:label "Continuant 6" ;
+.
+id:Continuant_7
+  a def:Continuant ;
+  rdfs:label "Continuant 7" ;
+.
+id:Continuant_8
+  a def:Continuant ;
+  rdfs:label "Continuant 8" ;
+.
+id:Continuant_9
+  a def:Continuant ;
+  rdfs:label "Continuant 9" ;
+.
+id:Equipment_1
+  a def:Equipment ;
+  def:connectedTo id:Equipment_2 ;
+  def:connectedTo id:Equipment_2_1 ;
+  rdfs:label "Equipment 1" ;
+.
+id:Equipment_2
+  a def:Equipment ;
+  def:connectedTo id:Equipment_3 ;
+  rdfs:label "Equipment 2" ;
+.
+id:Equipment_2_1
+  a def:Equipment ;
+  def:connectedTo id:Equipment_2_2 ;
+  rdfs:label "Equipment 2 1" ;
+.
+id:Equipment_2_2
+  a def:Equipment ;
+  def:connectedTo id:Equipment_2_3 ;
+  rdfs:label "Equipment 2 2" ;
+.
+id:Equipment_2_3
+  a def:Equipment ;
+  rdfs:label "Equipment 2 3" ;
+.
+id:Equipment_3
+  a def:Equipment ;
+  def:connectedTo id:Equipment_4 ;
+  rdfs:label "Equipment 3" ;
+.
+id:Equipment_4
+  a def:Equipment ;
+  def:connectedTo id:Equipment_5 ;
+  rdfs:label "Equipment 4" ;
+.
+id:Equipment_5
+  a def:Equipment ;
+  def:connectedTo id:Equipment_6 ;
+  rdfs:label "Equipment 5" ;
+.
+id:Equipment_6
+  a def:Equipment ;
+  def:connectedTo id:Equipment_7 ;
+  rdfs:label "Equipment 6" ;
+.
+id:Equipment_7
+  a def:Equipment ;
+  def:connectedTo id:Equipment_8 ;
+  rdfs:label "Equipment 7" ;
+.
+id:Equipment_8
+  a def:Equipment ;
+  def:connectedTo id:Equipment_9 ;
+  rdfs:label "Equipment 8" ;
+.
+id:Equipment_9
+  a def:Equipment ;
+  def:connectedTo id:Equipment_1 ;
+  rdfs:label "Equipment 9" ;
 .
 id:Location_BL1
   a def:Location ;
@@ -426,7 +585,6 @@ return modelBuilder.build();"""^^script:groovy ;
   def:hasProductBatteryLimit id:BatteryLimit2 ;
   def:hasProductBatteryLimit id:BatteryLimit3 ;
   def:massFlowBalance """var massFlowBalance=0.0; 
-$this.prefix(\"calc2graph\",\"<http://inova8.com/calc2graph/def/>\");
 for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>\")){
 	massFlowBalance += batterylimit.getFact(\"<http://inova8.com/calc2graph/def/massFlow>\").doubleValue()
 }; 
@@ -434,8 +592,7 @@ for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasProduc
 	massFlowBalance -= batterylimit.getFact(\"<http://inova8.com/calc2graph/def/massFlow>\").doubleValue()
 }; 
 massFlowBalance;"""^^script:groovy ;
-  def:massThroughput """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-var massThroughput=0.0; 
+  def:massThroughput """var massThroughput=0.0; 
 for(batterylimit in $this.getFacts(\":hasProductBatteryLimit\")){
 	massThroughput += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
@@ -455,7 +612,6 @@ return maximumMassFlowBatteryLimit;"""^^script:groovy ;
 id:Unit2
   a def:Unit ;
   def:massFlowBalance """var massFlowBalance=0.0; 
-$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
 for(batterylimit in $this.getFacts(\":Parthood@:hasFeedBatteryLimit\")){
 	massFlowBalance += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
@@ -463,8 +619,7 @@ for(batterylimit in $this.getFacts(\":Parthood@:hasProductBatteryLimit\")){
 	massFlowBalance -= batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massFlowBalance;"""^^script:groovy ;
-  def:massThroughput """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-var massThroughput=0.0; 
+  def:massThroughput """var massThroughput=0.0; 
 for(batterylimit in $this.getFacts(\":Parthood@:hasProductBatteryLimit\")){
 	massThroughput += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
@@ -495,7 +650,6 @@ id:Unit2-product-BL3
 id:Unit3
   a def:Unit ;
   def:massFlowBalance """var massFlowBalance=0.0; 
-$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
 for(batterylimit in $this.getFacts(\"^:Parthood@:feedTo\")){
 	massFlowBalance += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
@@ -503,8 +657,7 @@ for(batterylimit in $this.getFacts(\"^:Parthood@:productFrom\")){
 	massFlowBalance -= batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massFlowBalance;"""^^script:groovy ;
-  def:massThroughput """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-var massThroughput=0.0; 
+  def:massThroughput """var massThroughput=0.0; 
 for(batterylimit in $this.getFacts(\"^:Parthood@:feedTo\")){
 	massThroughput += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
@@ -513,32 +666,29 @@ massThroughput;"""^^script:groovy ;
 .
 id:calculateLatitude
   a script:Script ;
-  script:scriptCode """$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");
-return $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();"""^^script:groovy ;
+  script:scriptCode "return $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();"^^script:groovy ;
   rdfs:label "calculateLatitude" ;
 .
 id:calculateLongitude
   a script:Script ;
-  script:scriptCode """$this.prefix(\"<http://inova8.com/calc2graph/def/>\").prefix(\"id\",\"<http://inova8.com/calc2graph/id/>\");
-return $this.getFact(\":Location@:appearsOn[ eq id:Calc2Graph1]#/:long\");"""^^script:groovy ;
+  script:scriptCode "return $this.getFact(\":Location@:appearsOn[ eq id:Calc2Graph1]#/:long\");"^^script:groovy ;
   rdfs:label "calculateLongitude" ;
 .
 id:calculateMassFlow
-  script:scriptCode """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  
+  a script:Script ;
+  script:scriptCode """var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  
 result;"""^^script:groovy ;
   rdfs:label "calculate mass flow" ;
   rdfs:range xsd:float ;
 .
 id:calculateMassYield
-  script:scriptCode """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-return  $this.getFact(\":massFlow\").floatValue()/$this.getFact(\"^:hasProductBatteryLimit/:massThroughput\").doubleValue();"""^^script:groovy ;
+  a script:Script ;
+  script:scriptCode "return  $this.getFact(\":massFlow\").floatValue()/$this.getFact(\"^:hasProductBatteryLimit/:massThroughput\").doubleValue();"^^script:groovy ;
   rdfs:label "calculate mass yield" ;
 .
 id:deduceDensity
   a script:Script ;
-  script:scriptCode """$this.prefix(\"<http://inova8.com/calc2graph/def/>\");
-var result= $this.getFact(\":density\").floatValue();  
+  script:scriptCode """var result= $this.getFact(\":density\").floatValue();  
 result;"""^^script:groovy ;
   rdfs:label "deduce density" ;
 .

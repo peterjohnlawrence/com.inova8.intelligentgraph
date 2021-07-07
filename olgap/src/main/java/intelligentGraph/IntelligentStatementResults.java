@@ -13,7 +13,7 @@ import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.sail.SailException;
-
+import static org.eclipse.rdf4j.model.util.Values.literal;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
@@ -30,6 +30,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private SimpleValueFactory simpleValueFactory;
 	private CustomQueryOptions customQueryOptions;
 	private Resource[] contexts;
+	private final Boolean trace;
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
@@ -38,6 +39,21 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		this.contexts = contexts;
+		this.trace=false;
+		subj = pathElement.getTargetSubject().toString();
+		pred = pathElement.getTargetPredicate().toString();
+		obj= pathElement.getTargetVariable().toString();
+		simpleValueFactory= SimpleValueFactory.getInstance();
+	}
+	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
+			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
+		this.resultsIterator=resultsIterator;
+		this.thing=thing;
+		this.pathElement=pathElement;
+		this.intelligentGraphConnection=intelligentGraphConnection;
+		this.customQueryOptions=customQueryOptions;
+		this.contexts = contexts;
+		this.trace = trace;
 		subj = pathElement.getTargetSubject().toString();
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
@@ -55,7 +71,12 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		Binding predBinding =nextBindingset.getBinding(pred);
 		Binding objBinding =nextBindingset.getBinding(obj);
 		if(subjBinding!=null && predBinding!=null && objBinding!=null )
-			return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), objBinding.getValue(),null),null,thing.getEvaluationContext(), customQueryOptions);
+			if(trace) {
+				thing.getEvaluationContext().getTracer().traceFactReturnValue(thing, predBinding.getValue().stringValue(), objBinding.getValue());
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), literal(thing.getEvaluationContext().getTrace()),null),null,thing.getEvaluationContext(), customQueryOptions);
+			}else {
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), objBinding.getValue(),null),null,thing.getEvaluationContext(), customQueryOptions);
+			}
 		else
 			return new IntelligentStatement(null, null, null,null);
 	}

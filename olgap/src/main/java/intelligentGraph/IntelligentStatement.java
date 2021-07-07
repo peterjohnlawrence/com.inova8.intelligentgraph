@@ -16,9 +16,6 @@ import pathQLRepository.PathQLRepository;
 
 public class IntelligentStatement extends ContextStatement {
 
-	/**
-	 * 
-	 */
 	final PathQLRepository source;
 	final EvaluationContext evaluationContext;
 	final CustomQueryOptions customQueryOptions;
@@ -40,7 +37,7 @@ public class IntelligentStatement extends ContextStatement {
 			SimpleLiteral literalValue = (SimpleLiteral)(contextStatement.getObject());
 			if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
 				Thing subjectThing = Thing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
-				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(getEvaluationContext().getContexts(),getEvaluationContext().getPrefixes());
+				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getIntelligentGraphConnection().getPrefixes());
 				 try {
 					 pathQLModel.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
 					 return fact.getSuperValue();

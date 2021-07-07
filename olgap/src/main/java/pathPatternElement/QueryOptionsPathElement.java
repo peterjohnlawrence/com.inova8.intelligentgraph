@@ -1,7 +1,6 @@
 package pathPatternElement;
 
-import org.eclipse.rdf4j.query.algebra.TupleExpr;
-
+import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -36,7 +35,7 @@ public class QueryOptionsPathElement extends PathElement{
 	}
 
 	@Override
-	public TupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
 		return null;
 	}
 
@@ -47,6 +46,13 @@ public class QueryOptionsPathElement extends PathElement{
 
 	@Override
 	public void setIsNegated(Boolean isDereified) {
+	}
+
+	@Override
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+			Integer pathIteration) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
