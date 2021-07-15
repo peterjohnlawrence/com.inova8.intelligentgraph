@@ -4,7 +4,7 @@ import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
 public class PathTupleExpr {
 	TupleExpr tupleExpr;
-	Path path = new Path();
+	PathBinding path = new PathBinding();
 	
 	public PathTupleExpr(TupleExpr tupleExpr) {
 		super();
@@ -18,7 +18,7 @@ public class PathTupleExpr {
 	public TupleExpr getTupleExpr() {
 		return tupleExpr;
 	}
-	public Path getPath() {
+	public PathBinding getPath() {
 		return path;
 	}
 	public String toString(){

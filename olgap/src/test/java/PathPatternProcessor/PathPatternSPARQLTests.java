@@ -73,9 +73,9 @@ class PathPatternSPARQLTests {
 	@Order(0)
 	void test_05() throws RecognitionException, PathPatternException {
 		PathElement element =  PathParser.parsePathPattern(thing,":parent1/:parent2/:parent3");
-		assertEquals ("?n0 <http://default/parent1> ?n1 .\n"
-				+ "?n1 <http://default/parent2> ?n2 .\n"
-				+ "?n2 <http://default/parent3> ?n3 .\n"
+		assertEquals ("?n0 <http://default/parent1> ?n1 .\r\n"
+				+ "?n1 <http://default/parent2> ?n2 .\r\n"
+				+ "?n2 <http://default/parent3> ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 
@@ -90,13 +90,13 @@ class PathPatternSPARQLTests {
 	@Order(0)
 	void test_0() throws RecognitionException, PathPatternException {
 		PathElement element = PathParser.parsePathPattern(thing,":parent1[:gender :female]/:parent2[:gender :male; :birthplace [rdfs:label 'Maidstone']]/:parent3");
-		assertEquals ("?n0 <http://default/parent1> ?n1 .\n"
-				+ "?n1 <http://default/gender> <http://default/female> .\n"
-				+ "?n1 <http://default/parent2> ?n2 .\n"
-				+ "?n2 <http://default/gender> <http://default/male> .\n"
-				+ "?n2 <http://default/birthplace> ?n2_1 .\n"
-				+ "?n2_1 <http://rdfs/label> 'Maidstone' .\n"
-				+ "?n2 <http://default/parent3> ?n3 .\n"
+		assertEquals ("?n0 <http://default/parent1> ?n1 .\r\n"
+				+ "?n1 <http://default/gender> <http://default/female> .\r\n"
+				+ "?n1 <http://default/parent2> ?n2 .\r\n"
+				+ "?n2 <http://default/gender> <http://default/male> .\r\n"
+				+ "?n2 <http://default/birthplace> ?n2_1 .\r\n"
+				+ "?n2_1 <http://rdfs/label> 'Maidstone' .\r\n"
+				+ "?n2 <http://default/parent3> ?n3 .\r\n"
 				+ ""
 				 , element.toSPARQL());
 	}
@@ -111,9 +111,9 @@ class PathPatternSPARQLTests {
 	@Order(1)
 	void test_1() throws RecognitionException, PathPatternException {
 		PathElement element = PathParser.parsePathPattern(thing,"^:Attribute@:volumeFlow");
-		assertEquals ("{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n0 }UNION{ ?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?r1 }}\n"
-				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/volumeFlow> }UNION{ <http://default/volumeFlow> <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> ?r1 }}\n"
-				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n1 }UNION{ ?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?r1 }}\n"
+		assertEquals ("{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n0 }UNION{ ?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?r1 }}\r\n"
+				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/volumeFlow> }UNION{ <http://default/volumeFlow> <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> ?r1 }}\r\n"
+				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n1 }UNION{ ?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?r1 }}\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -127,7 +127,7 @@ class PathPatternSPARQLTests {
 	@Order(2)
 	void test_2()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,"<http://local#volumeFlow>");
-		assertEquals ("?n0 <http://local#volumeFlow> ?n1 .\n"
+		assertEquals ("?n0 <http://local#volumeFlow> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -141,8 +141,8 @@ class PathPatternSPARQLTests {
 	@Order(3)
 	void test_3()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,"^:hasProductBatteryLimit>:massThroughput");
-		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
+		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" ,((PathElement)element).toSPARQL());
 	}
 	
@@ -156,8 +156,8 @@ class PathPatternSPARQLTests {
 	@Order(4)
 	void test_4()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing, ":volumeFlow [ gt \"35\" ]");
-		assertEquals ("?n0 <http://default/volumeFlow> ?n1 .\n"
-				+ "FILTER(?n1 gt '35')\n"
+		assertEquals ("?n0 <http://default/volumeFlow> ?n1 .\r\n"
+				+ "FILTER(?n1 gt '35')\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -171,11 +171,11 @@ class PathPatternSPARQLTests {
 	@Order(5)
 	void test_5()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,":Location@:appearsOn[ rdfs:label \"eastman3d\" ]#/:lat");
-		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\n"
-				+ "?n1 <http://rdfs/label> 'eastman3d' .\n"
-				+ "?r1 <http://default/lat> ?n2 .\n"
+		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\r\n"
+				+ "?n1 <http://rdfs/label> 'eastman3d' .\r\n"
+				+ "?r1 <http://default/lat> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -189,14 +189,14 @@ class PathPatternSPARQLTests {
 	@Order(6)
 	void test_6()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,":Location@:appearsOn[ eq [ rdfs:label \"Calc2Graph1\"] ]#/^:lat/:long/^:left/:right");
-		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\n"
-				+ "?n1 <http://rdfs/label> 'Calc2Graph1' .\n"
-				+ "?n2 <http://default/lat> ?r1 .\n"
-				+ "?n2 <http://default/long> ?n3 .\n"
-				+ "?n4 <http://default/left> ?n3 .\n"
-				+ "?n4 <http://default/right> ?n5 .\n"
+		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\r\n"
+				+ "?n1 <http://rdfs/label> 'Calc2Graph1' .\r\n"
+				+ "?n2 <http://default/lat> ?r1 .\r\n"
+				+ "?n2 <http://default/long> ?n3 .\r\n"
+				+ "?n4 <http://default/left> ?n3 .\r\n"
+				+ "?n4 <http://default/right> ?n5 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -210,14 +210,14 @@ class PathPatternSPARQLTests {
 	@Order(7)
 	void test_7()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,":volumeFlow [ gt \"35\" ; rdfs:label \"Calc2Graph1\" ; eq [ rdfs:label \"Calc2Graph2\"] , :Calc2Graph3 ,\"Calc2Graph4\" ]");
-		assertEquals ("?n0 <http://default/volumeFlow> <http://default/Calc2Graph3> .\n"
-				+ "FILTER(<http://default/Calc2Graph3> gt '35')\n"
-				+ "<http://default/Calc2Graph3> <http://rdfs/label> 'Calc2Graph1' .\n"
-				+ "<http://default/Calc2Graph3> <http://rdfs/label> 'Calc2Graph2' .\n"
-				+ "?n0 <http://default/volumeFlow> 'Calc2Graph4' .\n"
-				+ "FILTER('Calc2Graph4' gt '35')\n"
-				+ "'Calc2Graph4' <http://rdfs/label> 'Calc2Graph1' .\n"
-				+ "'Calc2Graph4' <http://rdfs/label> 'Calc2Graph2' .\n"
+		assertEquals ("?n0 <http://default/volumeFlow> <http://default/Calc2Graph3> .\r\n"
+				+ "FILTER(<http://default/Calc2Graph3> gt '35')\r\n"
+				+ "<http://default/Calc2Graph3> <http://rdfs/label> 'Calc2Graph1' .\r\n"
+				+ "<http://default/Calc2Graph3> <http://rdfs/label> 'Calc2Graph2' .\r\n"
+				+ "?n0 <http://default/volumeFlow> 'Calc2Graph4' .\r\n"
+				+ "FILTER('Calc2Graph4' gt '35')\r\n"
+				+ "'Calc2Graph4' <http://rdfs/label> 'Calc2Graph1' .\r\n"
+				+ "'Calc2Graph4' <http://rdfs/label> 'Calc2Graph2' .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -232,12 +232,12 @@ class PathPatternSPARQLTests {
 	void test_8() throws RecognitionException, PathPatternException {
 
 		PathElement element = PathParser.parsePathPattern(thing, ":Location@:appearsOn[ rdfs:label \"eastman3d\" ]#[a :Location ]/:lat");
-		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\n"
-				+ "?n1 <http://rdfs/label> 'eastman3d' .\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Location> .\n"
-				+ "?r1 <http://default/lat> ?n2 .\n"
+		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\r\n"
+				+ "?n1 <http://rdfs/label> 'eastman3d' .\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Location> .\r\n"
+				+ "?r1 <http://default/lat> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -251,11 +251,11 @@ class PathPatternSPARQLTests {
 	@Order(9)
 	void test_9()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing, ":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long");
-		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\n"
-				+ "?r1 <http://default/location.Map> <http://id/Calc2Graph2> .\n"
-				+ "?r1 <http://default/long> ?n2 .\n"
+		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\r\n"
+				+ "?r1 <http://default/location.Map> <http://id/Calc2Graph2> .\r\n"
+				+ "?r1 <http://default/long> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -270,11 +270,11 @@ class PathPatternSPARQLTests {
 	void test_10()  throws RecognitionException, PathPatternException {
 
 		PathElement element = PathParser.parsePathPattern(thing,":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph1']]#/:lat");
-		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\n"
-				+ "?n1 <http://rdfs/label> 'Calc2Graph1' .\n"
-				+ "?r1 <http://default/lat> ?n2 .\n"
+		assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+				+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1\r\n"
+				+ "?n1 <http://rdfs/label> 'Calc2Graph1' .\r\n"
+				+ "?r1 <http://default/lat> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}
 	
@@ -287,10 +287,10 @@ class PathPatternSPARQLTests {
 		try {
 
 			PathElement element = PathParser.parsePathPattern(thing,":Location@:appearsOn[eq id:Calc2Graph2]#");
-			assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://id/Calc2Graph2>\n"
-					+ "BIND(<http://id/Calc2Graph2> as <http://id/Calc2Graph2>)\n"
+			assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://id/Calc2Graph2>\r\n"
+					+ "BIND(<http://id/Calc2Graph2> as <http://id/Calc2Graph2>)\r\n"
 					+ "" , element.toSPARQL());
 		}catch(Exception e){
 			assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
@@ -317,12 +317,12 @@ class PathPatternSPARQLTests {
 		try {
 
 			PathElement element = PathParser.parsePathPattern(thing, ":Location@:appearsOn[eq id:Calc2Graph1, id:Calc2Graph2]#");
-			assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\n"
-					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\n"
-					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://id/Calc2Graph1>\n"
-					+ "BIND(<http://id/Calc2Graph1> as <http://id/Calc2Graph1>)\n"
-					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://id/Calc2Graph2>\n"
-					+ "BIND(<http://id/Calc2Graph1> as <http://id/Calc2Graph2>)\n"
+			assertEquals ("?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0\r\n"
+					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/appearsOn>\r\n"
+					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://id/Calc2Graph1>\r\n"
+					+ "BIND(<http://id/Calc2Graph1> as <http://id/Calc2Graph1>)\r\n"
+					+ "?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://id/Calc2Graph2>\r\n"
+					+ "BIND(<http://id/Calc2Graph1> as <http://id/Calc2Graph2>)\r\n"
 					+ "" , element.toSPARQL());
 		}catch(Exception e){
 			fail();
@@ -338,10 +338,10 @@ void test_14() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1, 42}/:massThroughput");
-		assertEquals ("#{1\n"
-				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "#,42}\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
+		assertEquals ("#{1\r\n"
+				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "#,42}\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -357,10 +357,10 @@ void test_15() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1,}/:massThroughput");
-		assertEquals ("#{1\n"
-				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "#,*}\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
+		assertEquals ("#{1\r\n"
+				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "#,20}\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -375,10 +375,10 @@ void test_15() {
 void test_16() {
 	try {
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
-		assertEquals ("#{1\n"
-				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
-				+ "#,2}\n"
+		assertEquals ("#{1\r\n"
+				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
+				+ "#,2}\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -394,11 +394,11 @@ void test_17() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
-		assertEquals ("#{1\n"
-				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
-				+ "#,2}\n"
-				+ "?n2 <http://default/massThroughput> ?n3 .\n"
+		assertEquals ("#{1\r\n"
+				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
+				+ "#,2}\r\n"
+				+ "?n2 <http://default/massThroughput> ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -414,7 +414,7 @@ void test_18() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "*");
-		assertEquals ("?n0 ?p0_1 ?n1 .\n"
+		assertEquals ("?n0 ?p0_1 ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -429,11 +429,11 @@ void test_19() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
-		assertEquals ("#{1\n"
-				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
-				+ "#,2}\n"
-				+ "?n2 ?p2_3 ?n3 .\n"
+		assertEquals ("#{1\r\n"
+				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
+				+ "#,2}\r\n"
+				+ "?n2 ?p2_3 ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -449,11 +449,11 @@ void test_20() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
-		assertEquals ("#{1\n"
-				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "?n1 ?p1_2 ?n2 .\n"
-				+ "#,2}\n"
-				+ "?n2 <http://default/massThroughput> ?n3 .\n"
+		assertEquals ("#{1\r\n"
+				+ "?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "?n1 ?p1_2 ?n2 .\r\n"
+				+ "#,2}\r\n"
+				+ "?n2 <http://default/massThroughput> ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -469,10 +469,10 @@ void test_21() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
-		assertEquals ("#{1\n"
-				+ "?n0 ?p0_1 ?n1 .\n"
-				+ "#,2}\n"
-				+ "?n1 <http://default/massThroughput> ?n2 .\n"
+		assertEquals ("#{1\r\n"
+				+ "?n0 ?p0_1 ?n1 .\r\n"
+				+ "#,2}\r\n"
+				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -488,8 +488,8 @@ void test_22() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/*");
-		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "?n1 ?p1_2 ?n2 .\n"
+		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "?n1 ?p1_2 ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -505,10 +505,10 @@ void test_23() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow)");
-		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "{{?n1 <http://default/massFlow> ?n2 .\n"
-				+ "}UNION{\n"
-				+ "?n1 <http://default/volumeFlow> ?n2 .\n"
+		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "{{?n1 <http://default/massFlow> ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "?n1 <http://default/volumeFlow> ?n2 .\r\n"
 				+ "}}" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -524,12 +524,12 @@ void test_24() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow  |:density)");
-		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "{{{{?n1 <http://default/massFlow> ?n2 .\n"
-				+ "}UNION{\n"
-				+ "?n1 <http://default/volumeFlow> ?n2 .\n"
-				+ "}}}UNION{\n"
-				+ "?n1 <http://default/density> ?n2 .\n"
+		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "{{{{?n1 <http://default/massFlow> ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "?n1 <http://default/volumeFlow> ?n2 .\r\n"
+				+ "}}}UNION{\r\n"
+				+ "?n1 <http://default/density> ?n2 .\r\n"
 				+ "}}" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -545,14 +545,14 @@ void test_25() {
 	try {
 		
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:temp | (:massFlow |! :volumeFlow  |! :density))");
-		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "{{?n1 <http://default/temp> ?n2 .\n"
-				+ "}UNION{\n"
-				+ "{{{{?n1 <http://default/massFlow> ?n2 .\n"
-				+ "}UNION{\n"
-				+ "?n1 ?p1_2 ?n2. FILTER(?p1_2!=<http://default/volumeFlow>)\n"
-				+ "}}}UNION{\n"
-				+ "?n1 ?p1_2 ?n2. FILTER(?p1_2!=<http://default/density>)\n"
+		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "{{?n1 <http://default/temp> ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "{{{{?n1 <http://default/massFlow> ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "?n1 ?p1_2 ?n2. FILTER(?p1_2!=<http://default/volumeFlow>)\r\n"
+				+ "}}}UNION{\r\n"
+				+ "?n1 ?p1_2 ?n2. FILTER(?p1_2!=<http://default/density>)\r\n"
 				+ "}}}}" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -568,14 +568,14 @@ void test_26() {
 	try {
 		
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(* | !(:massFlow |:volumeFlow  |:density))");
-		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\n"
-				+ "{{?n1 ?p1_2 ?n2 .\n"
-				+ "}UNION{\n"
-				+ "{{{{?n1 <http://default/massFlow> ?n2 .\n"
-				+ "}UNION{\n"
-				+ "?n1 <http://default/volumeFlow> ?n2 .\n"
-				+ "}}}UNION{\n"
-				+ "?n1 <http://default/density> ?n2 .\n"
+		assertEquals ("?n1 <http://default/hasProductBatteryLimit> ?n0 .\r\n"
+				+ "{{?n1 ?p1_2 ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "{{{{?n1 <http://default/massFlow> ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "?n1 <http://default/volumeFlow> ?n2 .\r\n"
+				+ "}}}UNION{\r\n"
+				+ "?n1 <http://default/density> ?n2 .\r\n"
 				+ "}}}}" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -591,16 +591,16 @@ void test_27() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(* | !^:hasProductBatteryLimit)/(* | !(:massFlow |:volumeFlow  |:density))");
-		assertEquals ("{{?n0 ?p0_1 ?n1 .\n"
-				+ "}UNION{\n"
-				+ "?n1?p0_1 ?n0. FILTER(?p0_1!=<http://default/hasProductBatteryLimit>).\n"
-				+ "}}{{?n1 ?p1_2 ?n2 .\n"
-				+ "}UNION{\n"
-				+ "{{{{?n1 <http://default/massFlow> ?n2 .\n"
-				+ "}UNION{\n"
-				+ "?n1 <http://default/volumeFlow> ?n2 .\n"
-				+ "}}}UNION{\n"
-				+ "?n1 <http://default/density> ?n2 .\n"
+		assertEquals ("{{?n0 ?p0_1 ?n1 .\r\n"
+				+ "}UNION{\r\n"
+				+ "?n1?p0_1 ?n0. FILTER(?p0_1!=<http://default/hasProductBatteryLimit>).\r\n"
+				+ "}}{{?n1 ?p1_2 ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "{{{{?n1 <http://default/massFlow> ?n2 .\r\n"
+				+ "}UNION{\r\n"
+				+ "?n1 <http://default/volumeFlow> ?n2 .\r\n"
+				+ "}}}UNION{\r\n"
+				+ "?n1 <http://default/density> ?n2 .\r\n"
 				+ "}}}}" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -616,11 +616,11 @@ void test_28() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(:Attribute@:density  |:density)");
-		assertEquals ("{{{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0 }UNION{ ?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?r1 }}\n"
-				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/density> }UNION{ <http://default/density> <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> ?r1 }}\n"
-				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1 }UNION{ ?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?r1 }}\n"
-				+ "}UNION{\n"
-				+ "?n0 <http://default/density> ?n1 .\n"
+		assertEquals ("{{{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?n0 }UNION{ ?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?r1 }}\r\n"
+				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://default/density> }UNION{ <http://default/density> <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> ?r1 }}\r\n"
+				+ "{{?r1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?n1 }UNION{ ?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?r1 }}\r\n"
+				+ "}UNION{\r\n"
+				+ "?n0 <http://default/density> ?n1 .\r\n"
 				+ "}}" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -636,8 +636,8 @@ void test_29() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "[ eq :Unit1]/:hasProductBatteryLimit");
-		assertEquals ("BIND(<http://default/Unit1> as ?n0)\n"
-				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
+		assertEquals ("BIND(<http://default/Unit1> as ?n0)\r\n"
+				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -653,8 +653,8 @@ void test_30() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "[ a :Unit]/:hasProductBatteryLimit");
-		assertEquals ("?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
-				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
+		assertEquals ("?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\r\n"
+				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -671,7 +671,7 @@ void test_31() {
 
 		PathElement element = PathParser.parsePathPattern(thing, "[ like \"Unit1\"]/:hasProductBatteryLimit");
 
-		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
+		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -687,7 +687,7 @@ void test_32() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "[ like \"Unit* NOT (location OR product*)\"]/:hasProductBatteryLimit");
-		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
+		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -703,8 +703,8 @@ void test_33() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "[ like \"Unit\" ; a :Unit]/:hasProductBatteryLimit");
-		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
-				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
+		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\r\n"
+				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -720,7 +720,7 @@ void test_34() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit");
-		assertEquals ("?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
+		assertEquals ("?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -736,8 +736,8 @@ void test_35() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit[a  :BatteryLimit]");
-		assertEquals ("?n0 <http://default/hasProductBatteryLimit> ?n1 .\n"
-				+ "?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/BatteryLimit> .\n"
+		assertEquals ("?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
+				+ "?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/BatteryLimit> .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();

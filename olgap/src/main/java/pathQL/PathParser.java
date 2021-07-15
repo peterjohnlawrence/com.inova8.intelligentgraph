@@ -14,6 +14,7 @@ import PathPattern.PathPatternParser.PathEltOrInverseContext;
 import PathPattern.PathPatternParser.QueryStringContext;
 import pathCalc.Thing;
 import pathPatternElement.IriRefValueElement;
+import pathPatternElement.Iterations;
 import pathPatternElement.PathElement;
 import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathErrorListener;
@@ -88,6 +89,7 @@ public class PathParser {
 		}
 		pathElement.setPathPattern(pathPattern);
 		pathElement.indexVisitor(null,0,null);
+		pathElement.setIterations(Iterations.create(pathElement));
 		return pathElement;
 
 	}

@@ -3,16 +3,18 @@
  */
 package pathQLResults;
 
+import java.io.IOException;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
-import path.Edge;
+import path.EdgeBinding;
 import path.Path;
+import path.PathBinding;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
@@ -26,7 +28,7 @@ public class PathResults extends ResourceResults{
 
 	private CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator;
 	private CloseableIteration<Statement, RepositoryException> pathSet;
-	public PathResults(CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator,Thing thing, PathElement pathElement  ) {
+	public PathResults(CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator,Thing thing, PathElement pathElement ) {
 		super( thing);
 		this.pathElement = pathElement;
 		this.pathIterator=pathIterator;
@@ -34,14 +36,20 @@ public class PathResults extends ResourceResults{
 
 
 	public PathResults(CloseableIteration<Statement, RepositoryException> pathSet, Thing thing,	PathElement pathElement, CustomQueryOptions customQueryOptions) {
+		super( thing);
 		this.pathElement = pathElement;
 		this.pathSet=pathSet;
 	}
 
-
-	public Path nextPath() {
+	public CloseableIteration<Statement, RepositoryException> getPathSet() {
+		return pathSet;
+	}
+	public PathBinding nextPath() {
+		Statement next = getPathSet().next();
+		
+		
 		//PathSet next = getPathSet().next();
-		Edge edge = new Edge(null, null, null, true);
+		EdgeBinding edge = new EdgeBinding(null, null, null, true);
 		return null;
 	}
 
@@ -65,14 +73,31 @@ public class PathResults extends ResourceResults{
 		if (pathSet != null)
 			return pathSet.hasNext();
 		if (pathIterator != null)
+			
 			return pathIterator.hasNext();
 		return false;
 	}
 
 
 	@Override
-	public Resource next() throws QueryEvaluationException {
-		// TODO Auto-generated method stub
+	public Path next() throws QueryEvaluationException {
+		if (pathSet != null) {
+			Statement next = getPathSet().next();
+			thing.getEvaluationContext().getTracer().traceFactReturnStatement(thing,next.getPredicate(), next.getObject());
+			try {
+				return Path.create(thing, next.getObject());
+			} catch (RDFParseException | UnsupportedRDFormatException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (pathIterator != null) {
+			Statement next = pathIterator.next();
+			try {
+				return Path.create(thing, next.getObject());
+			} catch (RDFParseException | UnsupportedRDFormatException | IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 
@@ -90,10 +115,17 @@ public class PathResults extends ResourceResults{
 		return null;
 	}
 
-
 	@Override
 	public IRI nextReifiedValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public String toString() {
+		String toString="";
+		while( hasNext()) {
+			toString +=next().toString();
+		}
+		return toString;
+	}
+
 }

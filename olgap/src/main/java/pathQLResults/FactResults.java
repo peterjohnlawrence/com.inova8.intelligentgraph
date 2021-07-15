@@ -9,7 +9,7 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
-import path.Path;
+import path.PathBinding;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
@@ -93,7 +93,7 @@ public class FactResults extends ResourceBindingSetResults {
 	@Override
 	public Resource nextResource() throws QueryEvaluationException {
 		BindingSet next = getResourceSet().next();
-		Path path = new Path();
+		PathBinding path = new PathBinding();
 		path = pathElement.visitPath(path);
 //		for(Edge edge:path) {
 			

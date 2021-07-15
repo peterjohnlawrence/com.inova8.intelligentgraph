@@ -622,16 +622,6 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		workingConn.commit();
 	}
 
-	/**
-	 * Increment back.
-	 *
-	 * @param workingConn the working conn
-	 * @param backIndex the back index
-	 * @param HTTP_FRONT the http front
-	 * @param HTTP_BACK the http back
-	 * @return the array list
-	 */
-	@SuppressWarnings("unused")
 	private ArrayList<BindingSet> incrementBack(RepositoryConnection workingConn, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
 		String graphB = LT +HTTP_BACK + (backIndex - 1) + GT;
@@ -671,16 +661,6 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		return path;
 	}
 	
-	/**
-	 * Increment back using service.
-	 *
-	 * @param workingConn the working conn
-	 * @param backIndex the back index
-	 * @param HTTP_FRONT the http front
-	 * @param HTTP_BACK the http back
-	 * @return the array list
-	 */
-	@SuppressWarnings("unused")
 	private ArrayList<BindingSet> incrementBackUsingService(RepositoryConnection workingConn, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
 		String graphB = LT +HTTP_BACK + (backIndex - 1) + GT;

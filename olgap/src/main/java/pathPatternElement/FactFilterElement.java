@@ -193,7 +193,7 @@ public class FactFilterElement extends ObjectElement{
 	@Override
 	public String toSPARQL() {
 
-		return toSPARQL( "?n"+ getEntryIndex() ) ; //getIndex() ) ;
+		return toSPARQL( "?n"+ getEntryIndex() ) ;
 	}
 
 

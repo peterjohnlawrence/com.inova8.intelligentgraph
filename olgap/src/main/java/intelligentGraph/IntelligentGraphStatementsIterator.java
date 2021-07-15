@@ -30,7 +30,6 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	private IntelligentGraphConnection intelligentGraphConnection;
 	private EvaluationContext evaluationContext;
 	/** The contexts. */
-	@SuppressWarnings("unused")
 	private Resource[] contexts;
 	
 	/**

@@ -6,7 +6,7 @@ package pathPatternElement;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
 
-import path.Path;
+import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
@@ -45,7 +45,7 @@ public class AlternativePathElement extends PathElement{
 	@Override
 	public
 	String toSPARQL() {
-		String alternateString = "{{" + getLeftPathElement().toSPARQL() +"}UNION{\n";
+		String alternateString = "{{" + getLeftPathElement().toSPARQL() +"}UNION{\r\n";
 		alternateString += getRightPathElement().toSPARQL() + "}}" ;
 		return alternateString;
 	}
@@ -108,7 +108,7 @@ public class AlternativePathElement extends PathElement{
 	 * @return the path
 	 */
 	@Override
-	public Path visitPath(Path path) {
+	public PathBinding visitPath(PathBinding path) {
 		// TODO Auto-generated method stub
 		return null;
 	}

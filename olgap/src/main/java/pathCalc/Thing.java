@@ -6,6 +6,7 @@ package pathCalc;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -31,6 +32,9 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
+
 import Exceptions.CircularReferenceException;
 import Exceptions.HandledException;
 import Exceptions.NullValueReturnedException;
@@ -223,26 +227,26 @@ public class Thing extends Resource {
 			return PathQL.evaluate(this, predicatePattern,customQueryOptions);
 		}
 	}
-	public final Resource getPath(String predicatePattern) throws PathPatternException {
+	public final Path getPath(String predicatePattern) throws PathPatternException, RDFParseException, UnsupportedRDFormatException, IOException {
 		logger.debug("getPath{}\n", predicatePattern);
 		ResourceResults pathValues =  getPaths( predicatePattern,null);
 		if (pathValues == null) {
 			this.getEvaluationContext().getTracer().tracePathReturnNull(this, predicatePattern);
-			return new NullResource();
+			return new NullPath();
 		} else if (pathValues.hasNext()) {
-			Resource nextPath = pathValues.next();
-			this.getEvaluationContext().getTracer().traceFactReturnValue(this, predicatePattern,nextPath);
-			return nextPath;
+			Path path = (Path) pathValues.next();
+			this.getEvaluationContext().getTracer().tracePathReturn(this, predicatePattern,path);
+			return path;
 		} else {
 			this.getEvaluationContext().getTracer().tracePathEmpty(this, predicatePattern);
 			pathValues.close();
-			return new NullResource();
+			return new NullPath();
 		}
 	}
-	public final ResourceResults getPaths(String predicatePattern) throws PathPatternException {
+	public final PathResults getPaths(String predicatePattern) throws PathPatternException {
 	 return  getPaths( predicatePattern, null);
 	}
-	public final ResourceResults getPaths(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
+	public final PathResults getPaths(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
 		//This could be configured to process locally in a client or remotely in the server. Not sure both are required.
 		boolean remoteHostProcessing = true;
 		logger.debug("getPaths{}\n", predicatePattern);
@@ -251,19 +255,19 @@ public class Thing extends Resource {
 			SimpleDataset dataset = getDataset( customQueryOptions);
 			dataset.addDefaultGraph(this.graphName);
 			org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
-			ResourceResults results = null;
+			PathResults results = null;
 			if(this.getSource().getRepository()==null ) {
 				CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getSource()
 						.getTripleSource()
 						.getStatements(this.getIRI(),
 								iri(IntelligentGraphConnection.GETPATHS), literal(predicatePattern), contextArray);
-				results = new ResourceStatementResults(localPathIterator, this, null, customQueryOptions);
+				results = new PathResults(localPathIterator, this, null);
 			}else {
 				CloseableIteration<Statement, RepositoryException> pathIterator = this.getSource()
 						.getRepository().getConnection()
 						.getStatements(this.getIRI(),
 								iri(IntelligentGraphConnection.GETPATHS), literal(predicatePattern), contextArray);
-				results = new ResourceStatementResults(pathIterator, this, null, customQueryOptions);
+				results = new PathResults(pathIterator, this, null, customQueryOptions);
 			}
 			return results;
 		}else {

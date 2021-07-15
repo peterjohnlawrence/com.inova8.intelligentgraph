@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import path.Path;
+import path.PathBinding;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import pathCalc.Thing;
@@ -75,7 +75,7 @@ class PathPatternPathTests {
 	@Order(1)
 	void test_1() throws RecognitionException, PathPatternException {
 		PathElement element =  PathParser.parsePathPattern(thing,":parent1/:parent2/:parent3");
-		Path path = new Path();
+		PathBinding path = new PathBinding();
 		path = element.visitPath(path);
 		assertEquals ("[n0,http://default/parent1,n1,DIRECT]\r\n"
 				+ "[n1,http://default/parent2,n2,DIRECT]\r\n"
@@ -94,7 +94,7 @@ class PathPatternPathTests {
 	@Order(2)
 	void test_2() throws RecognitionException, PathPatternException {
 		PathElement element = PathParser.parsePathPattern(thing,":parent1[:gender :female]/^:child2[:gender :male; :birthplace [rdfs:label 'Maidstone']]/:parent3");
-		Path path = new Path();
+		PathBinding path = new PathBinding();
 		path = element.visitPath(path);
 		assertEquals ("[n0,http://default/parent1,n1,DIRECT]\r\n"
 				+ "[n1,http://default/child2,n2,INVERSE]\r\n"
@@ -113,7 +113,7 @@ class PathPatternPathTests {
 	@Order(3)
 	void test_3()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,"^:hasProductBatteryLimit>:massThroughput");
-		Path path = new Path();
+		PathBinding path = new PathBinding();
 		path = element.visitPath(path);
 		assertEquals ("[n0,http://default/hasProductBatteryLimit,n1,INVERSE]\r\n"
 				+ "[n1,http://default/massThroughput,n2,DIRECT]\r\n"
@@ -130,7 +130,7 @@ class PathPatternPathTests {
 	@Order(4)
 	void test_4()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,":Location@:appearsOn[ eq [ rdfs:label \"Calc2Graph1\"] ]#/^:lat/:long/^:left/:right");
-		Path path = new Path();
+		PathBinding path = new PathBinding();
 		path = element.visitPath(path);
 		assertEquals ("[n0,<http://default/Location>@http://default/appearsOn,r1,DIRECT,true]\r\n"
 				+ "[r1,http://default/lat,n2,INVERSE]\r\n"

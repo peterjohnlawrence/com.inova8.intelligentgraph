@@ -9,8 +9,8 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.algebra.Compare;
 import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
-import path.Edge;
-import path.Path;
+import path.EdgeBinding;
+import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.Thing;
 
@@ -57,6 +57,7 @@ public class PredicateElement extends PathElement {
 	
 	/** The target object. */
 	private Variable targetObject = new Variable();
+
 
 	/**
 	 * Instantiates a new predicate element.
@@ -112,22 +113,36 @@ public class PredicateElement extends PathElement {
 	public Boolean getIsInverseOf() {
 		return isInverseOf;
 	}
-	public Boolean hasNext() {
-		if((getPathShare() + getMinimumPathLength()) <= getMaximumPathLength())
+	public Boolean hasNextCardinality(Integer iteration) {
+		 Integer cardinality = getCardinality(iteration-1);
+		 if( cardinality < getMaxCardinality()) {
+			 cardinality++;
+			setCardinality(iteration,cardinality);
 			return true;
-		else
-			return false;	
-	}
-	public Boolean canIncrementMore(){
-		return ((getPathShare() + getMinCardinality()) < getMaxCardinality());
-	}
-	public Boolean canDecrementMore(){
-		return ( getPathShare() > 0 );
-	}
-	public String getPathShareString() {
+		 }else {
+			setCardinality(iteration,getMinCardinality());
+			return false;
+		 }
+	 }
+	public String getPathShareString(Integer iteration) {
 		StringBuilder pathShareString = new StringBuilder("");
-		return  pathShareString.append("{").append(getMinCardinality()).append(",").append(getMinCardinality()+getPathShare()).append(",").append(getMaxCardinality()).append("}").toString();
+		return  pathShareString.append("{").append(getMinCardinality()).append(",")
+				.append(getCardinality(iteration))//cardinality)
+				.append(",").append(getMaxCardinality()).append("}").toString();
 	}
+//	public Boolean hasNext() {
+//		if((getPathShare() + getMinimumPathLength()) <= getMaximumPathLength())
+//			return true;
+//		else
+//			return false;	
+//	}
+//	public Boolean canIncrementMore(){
+//		return ((getPathShare() + getMinCardinality()) < getMaxCardinality());
+//	}
+//	public Boolean canDecrementMore(){
+//		return ( getPathShare() > 0 );
+//	}
+
 	/**
 	 * Sets the checks if is inverse of.
 	 *
@@ -414,7 +429,7 @@ public class PredicateElement extends PathElement {
 			targetValues.add(targetValue);
 
 		if (getIsReified()) {
-			String reificationValue = "?r" + getExitIndex(); //(getIndex() + 1);
+			String reificationValue = "?r" + getExitIndex(); 
 			IRI subject = getReifications().getReificationSubject(reification);
 			IRI isSubjectOf = getReifications().getReificationIsSubjectOf(reification);
 			IRI property = getReifications().getReificationPredicate(reification);
@@ -428,11 +443,11 @@ public class PredicateElement extends PathElement {
 					predicateString += "{{" + reificationValue + " <" + object.stringValue() + "> " + sourceValue;
 					predicateString += " }UNION{ ";
 					predicateString += sourceValue + " <" + isObjectOf.stringValue() + "> " + reificationValue
-							+ " }}\n";
+							+ " }}\r\n";
 				} else if (object != null) {
-					predicateString += reificationValue + " <" + object.stringValue() + "> " + sourceValue + "\n";
+					predicateString += reificationValue + " <" + object.stringValue() + "> " + sourceValue + "\r\n";
 				} else if (isObjectOf != null) {
-					predicateString += sourceValue + " <" + isObjectOf.stringValue() + "> " + reificationValue + "\n";
+					predicateString += sourceValue + " <" + isObjectOf.stringValue() + "> " + reificationValue + "\r\n";
 				} else {
 				}
 			} else {
@@ -441,11 +456,11 @@ public class PredicateElement extends PathElement {
 					predicateString += "{{" + reificationValue + " <" + subject.stringValue() + "> " + sourceValue;
 					predicateString += " }UNION{ ";
 					predicateString += sourceValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue
-							+ " }}\n";
+							+ " }}\r\n";
 				} else if (subject != null) {
-					predicateString += reificationValue + " <" + subject.stringValue() + "> " + sourceValue + "\n";
+					predicateString += reificationValue + " <" + subject.stringValue() + "> " + sourceValue + "\r\n";
 				} else if (isSubjectOf != null) {
-					predicateString += sourceValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue + "\n";
+					predicateString += sourceValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue + "\r\n";
 				} else {
 				}
 			}
@@ -455,13 +470,13 @@ public class PredicateElement extends PathElement {
 						+ getPredicateSPARQL();
 				predicateString += " }UNION{ ";
 				predicateString += getPredicateSPARQL() + " <" + isPropertyOf.stringValue() + "> " + reificationValue
-						+ " }}\n";
+						+ " }}\r\n";
 			} else if (property != null) {
 				predicateString += reificationValue + " <" + property.stringValue() + "> " + getPredicateSPARQL()
-						+ "\n";
+						+ "\r\n";
 			} else if (isPropertyOf != null) {
 				predicateString += getPredicateSPARQL() + " <" + isPropertyOf.stringValue() + "> " + reificationValue
-						+ "\n";
+						+ "\r\n";
 			} else {
 			}
 			for (String aTargetValue : targetValues) {
@@ -471,12 +486,12 @@ public class PredicateElement extends PathElement {
 						predicateString += "{{" + reificationValue + " <" + subject.stringValue() + "> " + aTargetValue;
 						predicateString += " }UNION{ ";
 						predicateString += aTargetValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue
-								+ " }}\n";
+								+ " }}\r\n";
 					} else if (subject != null) {
-						predicateString += reificationValue + " <" + subject.stringValue() + "> " + aTargetValue + "\n";
+						predicateString += reificationValue + " <" + subject.stringValue() + "> " + aTargetValue + "\r\n";
 					} else if (isSubjectOf != null) {
 						predicateString += aTargetValue + " <" + isSubjectOf.stringValue() + "> " + reificationValue
-								+ "\n";
+								+ "\r\n";
 					} else {
 					}
 				} else {
@@ -485,12 +500,12 @@ public class PredicateElement extends PathElement {
 						predicateString += "{{" + reificationValue + " <" + object.stringValue() + "> " + aTargetValue;
 						predicateString += " }UNION{ ";
 						predicateString += aTargetValue + " <" + isObjectOf.stringValue() + "> " + reificationValue
-								+ " }}\n";
+								+ " }}\r\n";
 					} else if (object != null) {
-						predicateString += reificationValue + " <" + object.stringValue() + "> " + aTargetValue + "\n";
+						predicateString += reificationValue + " <" + object.stringValue() + "> " + aTargetValue + "\r\n";
 					} else if (isObjectOf != null) {
 						predicateString += aTargetValue + " <" + isObjectOf.stringValue() + "> " + reificationValue
-								+ "\n";
+								+ "\r\n";
 					} else {
 					}
 				}
@@ -506,16 +521,16 @@ public class PredicateElement extends PathElement {
 				if (isNegated) {
 					if (isInverseOf) {
 						predicateString += aTargetValue + "?"+ getPredicateSPARQLVariable() + " " + sourceValue + ". FILTER("
-								+ "?"+ getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ").\n";
+								+ "?"+ getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ").\r\n";
 					} else {
 						predicateString += sourceValue + " ?" + getPredicateSPARQLVariable() + " " + aTargetValue
-								+ ". FILTER(?" + getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ")\n";
+								+ ". FILTER(?" + getPredicateSPARQLVariable() + "!=" + getPredicateSPARQL() + ")\r\n";
 					}
 				} else {
 					if (isInverseOf) {
-						predicateString += aTargetValue + " " + getPredicateSPARQL() + " " + sourceValue + " .\n";
+						predicateString += aTargetValue + " " + getPredicateSPARQL() + " " + sourceValue + " .\r\n";
 					} else {
-						predicateString += sourceValue + " " + getPredicateSPARQL() + " " + aTargetValue + " .\n";
+						predicateString += sourceValue + " " + getPredicateSPARQL() + " " + aTargetValue + " .\r\n";
 					}
 				}
 				if (objectFilterElement != null)
@@ -533,12 +548,12 @@ public class PredicateElement extends PathElement {
 	 * @return the string
 	 */
 	protected String unboundPredicateToSPARQL() {
-		String targetValue = "?n" + getExitIndex();// (getIndex() + 1);
+		String targetValue = "?n" + getExitIndex();
 		String sourceValue;
 		if (getEdgeCode() != null && getEdgeCode().equals(PathConstants.EdgeCode.DEREIFIED)) {
-			sourceValue = "?r" +  getEntryIndex();// (getIndex());
+			sourceValue = "?r" +  getEntryIndex();
 		} else {
-			sourceValue = "?n" + getEntryIndex();// (getIndex());
+			sourceValue = "?n" + getEntryIndex();
 		}
 
 		return boundPredicateToSPARQL(sourceValue, targetValue);
@@ -557,27 +572,28 @@ public class PredicateElement extends PathElement {
 
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		return pathPatternQuery(thing, sourceVariable, targetVariable,1);
+		return pathPatternQuery(thing, sourceVariable, targetVariable,0);
 	}
 
 	private PathTupleExpr pathReifiedPredicatePatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, Variable reificationVariable,
 			Integer pathIteration) {
 		PathTupleExpr predicatePattern = null;
-		if(pathIteration>0) {
+		
+		if(getCardinality(pathIteration)>0) {
 			Variable intermediateSourceVariable = null ;
 			Variable intermediateTargetVariable = null;
 			Variable priorIntermediateTargetVariable = null ;
 			Variable intermediateReificationVariable  = null ;
-			for( int iteration = 1; iteration<=pathIteration;iteration++ ) {
+			for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
 				if( iteration==1) {
 					intermediateSourceVariable = sourceVariable;
 				}
-				if(iteration<pathIteration) {	
+				if(iteration<getCardinality(pathIteration)) {	
 					 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 					intermediateTargetVariable = new Variable(targetVariable.getName()+"_i"+iteration);
 					priorIntermediateTargetVariable = intermediateTargetVariable;				
 				}
-				if( iteration==pathIteration) {
+				if( iteration==getCardinality(pathIteration)) {
 					if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 					intermediateTargetVariable = targetVariable;
 					intermediateReificationVariable  = reificationVariable;
@@ -736,7 +752,7 @@ public class PredicateElement extends PathElement {
 		if (statementFilterElement != null) {
 			reifiedPredicatePattern =   statementFilterElement.filterExpression(  thing,reificationVariable,null,reifiedPredicatePattern).getTupleExpr(); 
 		}
-		Edge edge = new Edge(sourceVariable,getReification(), predicateVariable, targetVariable, getIsInverseOf(), getIsDereified());	
+		EdgeBinding edge = new EdgeBinding(sourceVariable,getReification(), predicateVariable, targetVariable, getIsInverseOf(), getIsDereified());	
 		if(predicatePattern==null) {
 			predicatePattern= new PathTupleExpr(reifiedPredicatePattern); //reifiedPredicatePattern;
 		}else{
@@ -748,15 +764,15 @@ public class PredicateElement extends PathElement {
 
 	private PathTupleExpr pathPredicatePatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, Integer pathIteration) {
 		PathTupleExpr predicatePattern = null;
-		if(pathIteration>0) {
+		if(getCardinality(pathIteration)>0) {
 			Variable intermediateSourceVariable = null ;
 			Variable intermediateTargetVariable = null;
 			Variable priorIntermediateTargetVariable = null ;
-			for( int iteration = 1; iteration<=pathIteration;iteration++ ) {
+			for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
 				if( iteration==1) {
 					intermediateSourceVariable = sourceVariable;
 				}
-				if(iteration<pathIteration) {
+				if(iteration<getCardinality(pathIteration)) {
 					
 					 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 					
@@ -764,7 +780,7 @@ public class PredicateElement extends PathElement {
 					priorIntermediateTargetVariable = intermediateTargetVariable;
 					
 				}
-				if( iteration==pathIteration) {
+				if( iteration==getCardinality(pathIteration)) {
 					if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 					intermediateTargetVariable = targetVariable;
 				}
@@ -810,7 +826,7 @@ public class PredicateElement extends PathElement {
 		if (objectFilterElement != null) {
 			intermediatePredicatePattern = (TupleExpr) objectFilterElement.filterExpression( thing,intermediateTargetVariable,null,intermediatePredicatePattern).getTupleExpr();
 		}	
-		Edge edge = new Edge(intermediateSourceVariable, predicateVariable, intermediateTargetVariable, getIsInverseOf());	
+		EdgeBinding edge = new EdgeBinding(intermediateSourceVariable, predicateVariable, intermediateTargetVariable, getIsInverseOf());	
 		
 		if(predicatePattern==null) {
 			predicatePattern = new PathTupleExpr(intermediatePredicatePattern);
@@ -876,12 +892,12 @@ public class PredicateElement extends PathElement {
 	}
 
 	@Override
-	public Path visitPath(Path path) {
-		Edge predicateEdge;
+	public PathBinding visitPath(PathBinding path) {
+		EdgeBinding predicateEdge;
 		if( getIsReified())
-			predicateEdge = new Edge( getSourceVariable(),getReification(), getPredicateVariable(), getTargetVariable(),getIsInverseOf(),getIsDereified());
+			predicateEdge = new EdgeBinding( getSourceVariable(),getReification(), getPredicateVariable(), getTargetVariable(),getIsInverseOf(),getIsDereified());
 		else
-			predicateEdge = new Edge( getSourceVariable(),getPredicateVariable(), getTargetVariable(),getIsInverseOf());
+			predicateEdge = new EdgeBinding( getSourceVariable(),getPredicateVariable(), getTargetVariable(),getIsInverseOf());
 		path.add(predicateEdge);
 		return path;
 	}

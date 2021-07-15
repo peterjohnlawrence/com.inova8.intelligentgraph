@@ -7,13 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.Query.QueryType;
@@ -70,6 +67,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	private static final String TRACEFACT = PATHQL+"traceFact";
 	private static final String GETSCRIPT = PATHQL+"getScript";
 	static final String HASPATH = PATHQL+"hasPath";
+	public static final String Edge =PATHQL+"Edge";
 	public static final String path_Edge =PATHQL+"path.Edge";
 	public static final String edge_Source =PATHQL+"edge.Source";
 	public static final String edge_Predicate =PATHQL+"edge.Predicate";
@@ -85,7 +83,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	
 	/** The prefixes. */
 	private Prefixes prefixes = new Prefixes();
-	private SimpleValueFactory simpleValueFactory;
+	//private SimpleValueFactory simpleValueFactory;
 
 	/**
 	 * Instantiates a new intelligent graph connection.
@@ -96,7 +94,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	public IntelligentGraphConnection(NotifyingSailConnection wrappedCon, IntelligentGraphSail intelligentGraphSail) {
 		super(wrappedCon);
 		this.intelligentGraphSail= intelligentGraphSail;
-		simpleValueFactory= SimpleValueFactory.getInstance();
+	//	simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 	
 	
@@ -105,8 +103,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	@Override
 	public void clear(Resource... contexts) throws SailException {
-		// TODO Auto-generated method stub
-		
 		super.clear(contexts);
 		this.intelligentGraphSail.setContextsAreLazyLoaded(false);
 	}
@@ -131,11 +127,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 
 
-	@Override
-	public void addStatement(Resource subj, URI pred, Value obj, Resource... contexts) throws SailException {
-		// TODO Auto-generated method stub
-		super.addStatement(subj, pred, obj, contexts);
-	}
+//	@Override
+//	public void addStatement(Resource subj, URI pred, Value obj, Resource... contexts) throws SailException {
+//		// TODO Auto-generated method stub
+//		super.addStatement(subj, pred, obj, contexts);
+//	}
 
 
 	@Override

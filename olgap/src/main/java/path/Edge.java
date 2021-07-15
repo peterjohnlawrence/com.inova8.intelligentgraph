@@ -5,8 +5,6 @@ package path;
 
 import org.eclipse.rdf4j.model.IRI;
 
-import pathPatternElement.Variable;
-
 
 public class Edge {
 
@@ -15,37 +13,28 @@ public class Edge {
 		DIRECT, 
 		 INVERSE
 	};
-
-
-	Variable sourceVariable;
-	
-
-	Variable predicateVariable;
-	
-
+	org.eclipse.rdf4j.model.Resource source;
+	org.eclipse.rdf4j.model.Resource predicate;
 	IRI reification;
-	
-
-	Variable targetVariable;
-	
+	org.eclipse.rdf4j.model.Value target;
 	Direction direction;
 	Boolean isDereified;
 
-	public Edge(Variable sourceVariable, Variable predicateVariable, Variable targetVariable, Boolean isInverseOf) {
-		this.sourceVariable = sourceVariable;
-		this.predicateVariable = predicateVariable;
-		this.targetVariable = targetVariable;
+	public Edge(org.eclipse.rdf4j.model.Resource source, org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf) {
+		this.source = source;
+		this.predicate = predicate;
+		this.target = target;
 		if (isInverseOf)
 			direction = Direction.INVERSE;
 		else
 			direction = Direction.DIRECT;
 	}
 
-	public Edge(Variable sourceVariable, IRI reification, Variable predicateVariable, Variable targetVariable, Boolean isInverseOf, Boolean isDereified) {
-		this.sourceVariable = sourceVariable;
-		this.predicateVariable = predicateVariable;
+	public Edge(org.eclipse.rdf4j.model.Resource source, IRI reification, org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
+		this.source = source;
+		this.predicate = predicate;
 		this.reification = reification;
-		this.targetVariable = targetVariable;
+		this.target = target;
 		if (isInverseOf)
 			direction = Direction.INVERSE;
 		else
@@ -53,12 +42,12 @@ public class Edge {
 		this.isDereified=isDereified;
 	}
 
-	public Variable getSourceVariable() {
-		return sourceVariable;
+	public org.eclipse.rdf4j.model.Resource getSource() {
+		return source;
 	}
 
-	public Variable getPredicateVariable() {
-		return predicateVariable;
+	public org.eclipse.rdf4j.model.Resource getPredicate() {
+		return predicate;
 	}
 
 	public IRI getReification() {
@@ -66,8 +55,8 @@ public class Edge {
 	}
 
 
-	public Variable getTargetVariable() {
-		return targetVariable;
+	public org.eclipse.rdf4j.model.Value getTarget() {
+		return target;
 	}
 
 
@@ -96,8 +85,8 @@ public class Edge {
 
 	public String toString() {
 		if(reification!=null)
-			return "[" + sourceVariable.toString() +",<"+ reification.stringValue() +">@"+ predicateVariable.toString() +","+ targetVariable.toString() +"," + direction +"," + isDereified  +"]" ;
+			return "[" + source.toString() +",<"+ reification.stringValue() +">@"+ predicate.toString() +","+ target.toString() +"," + direction +"," + isDereified  +"]" ;
 		else
-			return "[" + sourceVariable.toString() +","+ predicateVariable.toString() +","+ targetVariable.toString() +"," + direction +"]" ;
+			return "[" + source.toString() +","+ predicate.toString() +","+ target.toString() +"," + direction +"]" ;
 	};	
 }

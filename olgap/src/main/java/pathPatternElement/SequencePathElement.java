@@ -4,10 +4,7 @@
 package pathPatternElement;
 
 import org.eclipse.rdf4j.query.algebra.Join;
-import org.eclipse.rdf4j.query.algebra.TupleExpr;
-
-import path.Edge;
-import path.Path;
+import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
@@ -83,9 +80,36 @@ public class SequencePathElement extends PathElement {
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		return pathPatternQuery(thing, sourceVariable, targetVariable, 1);
+		return pathPatternQuery(thing, sourceVariable, targetVariable, 0);
 	}
+	public Boolean hasNextCardinality(Integer iteration) {
+			
+			if (getLeftPathElement() != null) {
+				if (getRightPathElement() != null) {
+					if (getRightPathElement().hasNextCardinality(iteration)) {
+						setCardinality(iteration,getCardinality(iteration-1));
+						return true;
+					} else {
+						if (getLeftPathElement().hasNextCardinality(iteration)) {
+							setCardinality(iteration,getCardinality(iteration-1));
+							return true;
+						} else {
+							 Integer cardinality = getCardinality(iteration-1);
+							 if( cardinality < getMaxCardinality()) {
+								cardinality++;
+								setCardinality(iteration,cardinality);
+								return true;
+							 }else {
+								setCardinality(iteration,getMinCardinality());
+								return false;
+							 }
+						}
+					}
+				}
+			}
+			return false;
 
+	 }
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
 			Integer pathIteration) {
@@ -102,25 +126,25 @@ public class SequencePathElement extends PathElement {
 		Join intermediateJoinPattern = null;
 		PathTupleExpr joinPattern = null;
 
-		if (pathIteration > 0) {
+		if (getCardinality(pathIteration) > 0) {
 			Variable intermediateSourceVariable = null;
 			Variable intermediateVariable = null;
 			Variable intermediateTargetVariable = null;
 			Variable priorIntermediateTargetVariable = null;
-			for (int iteration = 1; iteration <= pathIteration; iteration++) {
+			for (int iteration = 1; iteration <= getCardinality(pathIteration); iteration++) {
 				if (iteration == 1) {
 					intermediateSourceVariable = sourceVariable;
 					intermediateVariable= getLeftPathElement().getTargetVariable();
 					intermediateTargetVariable=targetVariable;
 				}
-				if (iteration < pathIteration) {
+				if (iteration < getCardinality(pathIteration)) {
 					if (iteration > 1) 
 						intermediateSourceVariable = priorIntermediateTargetVariable;
 					intermediateTargetVariable = new Variable(sourceVariable.getName() + "_i" + iteration);
 					intermediateVariable = new Variable(sourceVariable.getName() + "_in" + iteration);
 					priorIntermediateTargetVariable = intermediateTargetVariable;
 				}
-				if (iteration == pathIteration) {
+				if (iteration == getCardinality(pathIteration)) {
 					if (iteration > 1) {
 						intermediateSourceVariable = priorIntermediateTargetVariable;
 						intermediateVariable = new Variable(sourceVariable.getName() + "_in" + iteration);
@@ -128,9 +152,9 @@ public class SequencePathElement extends PathElement {
 					}
 				}
 				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,
-						intermediateVariable, 1);//pathIteration);			
+						intermediateVariable, pathIteration);			
 				PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
-						1);//pathIteration);
+						pathIteration);
 				intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
 				if (joinPattern == null) {
 					joinPattern = new PathTupleExpr(intermediateJoinPattern);
@@ -202,7 +226,7 @@ public class SequencePathElement extends PathElement {
 	 * @return the path
 	 */
 	@Override
-	public Path visitPath(Path path) {
+	public PathBinding visitPath(PathBinding path) {
 		path = getLeftPathElement().visitPath(path);
 		path = getRightPathElement().visitPath(path);
 		return path;

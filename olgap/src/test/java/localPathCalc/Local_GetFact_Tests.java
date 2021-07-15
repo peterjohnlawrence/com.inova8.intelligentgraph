@@ -99,7 +99,7 @@ class Local_GetFact_Tests {
 			while (matchResultsIterator.hasNext()) {
 				MatchFact nextMatch = matchResultsIterator.nextResource();
 				assertEquals(
-						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.452666997909546]",
+						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.4626340866088867]",
 						nextMatch.toString());
 				break;
 			}

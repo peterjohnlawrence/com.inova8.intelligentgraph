@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
-import path.Path;
+import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
@@ -207,7 +207,7 @@ public class ObjectElement extends PathElement{
 	 * @return the path
 	 */
 	@Override
-	public Path visitPath(Path path) {
+	public PathBinding visitPath(PathBinding path) {
 		// TODO Auto-generated method stub
 		return null;
 	}

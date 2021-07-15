@@ -3,7 +3,7 @@
  */
 package pathPatternElement;
 
-import path.Path;
+import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
@@ -31,9 +31,9 @@ public class CardinalityElement extends PathElement {
 	 * @return the string
 	 */
 	public String toString() {
-		String cardinalityElement = "{" + minCardinality;
-		if (maxCardinality != null) {
-			cardinalityElement += "," + maxCardinality;
+		String cardinalityElement = "{" + getMinCardinality();
+		if (getMaxCardinality() != null) {
+			cardinalityElement += "," + getMaxCardinality();
 		} else if (getUnboundedCardinality()) {
 			cardinalityElement += ",*";
 		}
@@ -47,9 +47,9 @@ public class CardinalityElement extends PathElement {
 	 */
 	public String toSPARQL() {
 
-		String cardinalityElement = "{" + minCardinality;
-		if (maxCardinality != null) {
-			cardinalityElement += "," + maxCardinality;
+		String cardinalityElement = "{" + getMinCardinality();
+		if (getMaxCardinality() != null) {
+			cardinalityElement += "," + getMaxCardinality();
 		} else if (getUnboundedCardinality()) {
 			cardinalityElement += ",*";
 		}
@@ -132,7 +132,7 @@ public class CardinalityElement extends PathElement {
 	 * @return the path
 	 */
 	@Override
-	public Path visitPath(Path path) {
+	public PathBinding visitPath(PathBinding path) {
 		// TODO Auto-generated method stub
 		return null;
 	}

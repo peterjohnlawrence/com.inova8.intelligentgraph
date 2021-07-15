@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 
 import intelligentGraph.URNCustomQueryOptionsDecode;
 import path.Path;
+import path.PathBinding;
 import pathPatternElement.PredicateElement;
 import pathQLModel.Resource;
 
@@ -331,9 +332,14 @@ public class Tracer {
 		addTrace(String.format("Returned fact '%s' of %s = %s",toHTML(predicatePattern), addIRI(thing.getSuperValue()), getHTMLValue(nextFact.getValue())));
 		addParagraph();
 	}
-	public void tracePathReturn(Thing thing, String predicatePattern, Path nextPath) {
+	public void tracePathReturn(Thing thing, String predicatePattern, PathBinding nextPath) {
 		if(!tracing)return;
 		addTrace(String.format("Returned path '%s' from %s as %s",toHTML(predicatePattern), addIRI(thing.getSuperValue()), nextPath.toString()));
+		addParagraph();
+	}
+	public void tracePathReturn(Thing thing, String predicatePattern, Path path) {
+		if(!tracing)return;
+		addTrace(String.format("Returned path '%s' from %s as %s",toHTML(predicatePattern), addIRI(thing.getSuperValue()), path.toString()));
 		addParagraph();
 	}
 	public void traceFactReturnValue(Thing thing, String predicatePattern, Value value) {

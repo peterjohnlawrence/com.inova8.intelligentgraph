@@ -94,7 +94,7 @@ class Local_Evaluate_Tests {
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
-						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.452666997909546]",
+						"MatchFact [Fact [Resource[ object=null], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.4626340866088867]",
 						nextMatch.toString());
 				return;
 			}else {

@@ -220,7 +220,7 @@ public class VerbObjectList extends FactFilterElement {
 					break;
 				case IRIREF:
 					verbObjectList += "BIND(<" + objectList.get(0).getIri().stringValue() + "> as " + sourceValue
-							+ ")\n";
+							+ ")\r\n";
 					break;
 				case LITERAL:
 					//	verbObjectList +="FILTER("+sourceValue +  " " + PathConstants.getFilterLookup(filterOperator) + " " + objectList.get(0).toSPARQL(indices,edgeCode)+")\n";	
@@ -239,7 +239,7 @@ public class VerbObjectList extends FactFilterElement {
 
 			default:
 				verbObjectList += "FILTER(" + sourceValue + " " + PathConstants.getFilterLookup(filterOperator) + " "
-						+ objectList.get(0).toSPARQL() + ")\n";
+						+ objectList.get(0).toSPARQL() + ")\r\n";
 				break;
 			}
 			//}else {
@@ -252,7 +252,7 @@ public class VerbObjectList extends FactFilterElement {
 					switch (objectList.get(0).getOperator()) {
 					case PROPERTYLIST:
 						String targetValue = "?n" + getBaseIndex() + "_" + predicate.getExitIndex();
-						verbObjectList += sourceValue + " " + predicate.toString() + " " + targetValue + " .\n";//sourceValue+"_0" + " .\n";        			
+						verbObjectList += sourceValue + " " + predicate.toString() + " " + targetValue + " .\r\n";//sourceValue+"_0" + " .\n";        			
 						verbObjectList += ((FactFilterElement) objectList.get(0)).toSPARQL(targetValue);
 						break;
 					case IRIREF:
