@@ -169,7 +169,7 @@ public class BoundPathElement extends PathElement{
 	 * @return the path
 	 */
 	@Override
-	public PathBinding visitPath(PathBinding path) {
+	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -125,7 +125,7 @@ public class NegationPathElement extends PathElement{
 	 * @return the path
 	 */
 	@Override
-	public PathBinding visitPath(PathBinding path) {
+	public PathBinding visitPathBinding(PathBinding path, Integer pathIteration) {
 		// TODO Auto-generated method stub
 		return null;
 	}

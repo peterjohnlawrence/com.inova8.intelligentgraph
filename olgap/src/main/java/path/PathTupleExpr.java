@@ -10,11 +10,6 @@ public class PathTupleExpr {
 		super();
 		this.tupleExpr = tupleExpr;
 	}
-//	public PathTupleExpr(TupleExpr predicatePattern, Path path) {
-//		super();
-//		this.tupleExpr = tupleExpr;
-//		this.path = path;
-//	}
 	public TupleExpr getTupleExpr() {
 		return tupleExpr;
 	}

@@ -94,7 +94,7 @@ public class FactResults extends ResourceBindingSetResults {
 	public Resource nextResource() throws QueryEvaluationException {
 		BindingSet next = getResourceSet().next();
 		PathBinding path = new PathBinding();
-		path = pathElement.visitPath(path);
+		path = pathElement.visitPathBinding(path,0);
 //		for(Edge edge:path) {
 			
 //TODO

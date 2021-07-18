@@ -12,6 +12,7 @@ import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.IriRefContext;
 import PathPattern.PathPatternParser.PathEltOrInverseContext;
 import PathPattern.PathPatternParser.QueryStringContext;
+import path.PathBindings;
 import pathCalc.Thing;
 import pathPatternElement.IriRefValueElement;
 import pathPatternElement.Iterations;
@@ -90,6 +91,7 @@ public class PathParser {
 		pathElement.setPathPattern(pathPattern);
 		pathElement.indexVisitor(null,0,null);
 		pathElement.setIterations(Iterations.create(pathElement));
+		pathElement.setPathBindings(PathBindings.create(pathElement));
 		return pathElement;
 
 	}

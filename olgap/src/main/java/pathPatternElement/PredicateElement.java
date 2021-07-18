@@ -881,7 +881,7 @@ public class PredicateElement extends PathElement {
 		if(objectFilterElement!=null) objectFilterElement.indexVisitor(filterBaseIndex, 0,edgeCode);
 		
 		if(statementFilterElement!=null) statementFilterElement.indexVisitor(entryIndex, 0,edgeCode);
-		setExitIndex(entryIndex+1) ;
+		setExitIndex(entryIndex+1) ; 
 		
 		
 		if (edgeCode != null && getIsReified() && isDereified)
@@ -892,14 +892,74 @@ public class PredicateElement extends PathElement {
 	}
 
 	@Override
-	public PathBinding visitPath(PathBinding path) {
-		EdgeBinding predicateEdge;
+	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
 		if( getIsReified())
-			predicateEdge = new EdgeBinding( getSourceVariable(),getReification(), getPredicateVariable(), getTargetVariable(),getIsInverseOf(),getIsDereified());
+			pathBinding = visitReifiedPredicatePathBinding( pathBinding,pathIteration );
 		else
-			predicateEdge = new EdgeBinding( getSourceVariable(),getPredicateVariable(), getTargetVariable(),getIsInverseOf());
-		path.add(predicateEdge);
-		return path;
+			pathBinding = visitPredicatePathBinding( pathBinding,pathIteration );
+		return pathBinding;
 	}
-
+	private PathBinding visitReifiedPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
+		EdgeBinding predicateEdge;
+//		predicateEdge = new EdgeBinding( getSourceVariable(),getReification(), getPredicateVariable(), getTargetVariable(),getIsInverseOf(),getIsDereified());
+//		pathBinding.add(predicateEdge);
+		Variable sourceVariable = this.getSourceVariable();
+		Variable targetVariable = this.getTargetVariable();	
+		Variable reificationVariable= this.getReifiedVariable();
+		
+		Variable intermediateSourceVariable = null ;
+		Variable intermediateTargetVariable = null;
+		Variable priorIntermediateTargetVariable = null ;
+		Variable intermediateReificationVariable  = null ;
+		for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
+			if( iteration==1) {
+				intermediateSourceVariable = sourceVariable;
+			}
+			if(iteration<getCardinality(pathIteration)) {	
+				 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+				intermediateTargetVariable = new Variable(targetVariable.getName()+"_i"+iteration);
+				priorIntermediateTargetVariable = intermediateTargetVariable;				
+			}
+			if( iteration==getCardinality(pathIteration)) {
+				if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+				intermediateTargetVariable = targetVariable;
+				intermediateReificationVariable  = reificationVariable;
+			}else {
+				intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
+			}
+			//predicatePattern = pathReifiedPredicatePatternTupleExpr(thing, predicatePattern,intermediateSourceVariable, intermediateTargetVariable, intermediateReificationVariable);
+			predicateEdge = new EdgeBinding( intermediateSourceVariable, this.reification, getPredicateVariable(), intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
+			pathBinding.add(predicateEdge);
+		}
+		return pathBinding;
+	}
+	private PathBinding visitPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
+		EdgeBinding predicateEdge;
+		Variable sourceVariable = this.getSourceVariable();
+		Variable targetVariable = this.getTargetVariable();		
+		
+		Variable intermediateSourceVariable = null ;
+		Variable intermediateTargetVariable = null;
+		Variable priorIntermediateTargetVariable = null ;
+		for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
+			if( iteration==1) {
+				intermediateSourceVariable = sourceVariable;
+			}
+			if(iteration<getCardinality(pathIteration)) {
+				
+				 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+				
+				intermediateTargetVariable = new Variable(targetVariable.getName()+"_i"+iteration);
+				priorIntermediateTargetVariable = intermediateTargetVariable;
+				
+			}
+			if( iteration==getCardinality(pathIteration)) {
+				if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
+				intermediateTargetVariable = targetVariable;
+			}
+			predicateEdge = new EdgeBinding( intermediateSourceVariable,getPredicateVariable(), intermediateTargetVariable,getIsInverseOf());
+			pathBinding.add(predicateEdge);
+		}
+		return pathBinding;
+	}
 }

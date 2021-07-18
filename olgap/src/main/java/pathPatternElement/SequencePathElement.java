@@ -226,10 +226,10 @@ public class SequencePathElement extends PathElement {
 	 * @return the path
 	 */
 	@Override
-	public PathBinding visitPath(PathBinding path) {
-		path = getLeftPathElement().visitPath(path);
-		path = getRightPathElement().visitPath(path);
-		return path;
+	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
+		pathBinding = getLeftPathElement().visitPathBinding(pathBinding,pathIteration);
+		pathBinding = getRightPathElement().visitPathBinding(pathBinding,pathIteration);
+		return pathBinding;
 	}
 
 }

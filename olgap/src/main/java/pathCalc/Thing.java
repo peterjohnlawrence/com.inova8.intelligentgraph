@@ -229,7 +229,7 @@ public class Thing extends Resource {
 	}
 	public final Path getPath(String predicatePattern) throws PathPatternException, RDFParseException, UnsupportedRDFormatException, IOException {
 		logger.debug("getPath{}\n", predicatePattern);
-		ResourceResults pathValues =  getPaths( predicatePattern,null);
+		PathResults pathValues =  getPaths( predicatePattern,null);
 		if (pathValues == null) {
 			this.getEvaluationContext().getTracer().tracePathReturnNull(this, predicatePattern);
 			return new NullPath();

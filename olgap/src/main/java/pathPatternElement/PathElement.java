@@ -6,6 +6,7 @@ package pathPatternElement;
 import java.util.HashMap;
 
 import path.PathBinding;
+import path.PathBindings;
 import path.PathTupleExpr;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
@@ -29,13 +30,12 @@ public abstract class PathElement {
 	private Integer maxCardinality = 1;
 	private HashMap<Integer,Integer> iterationCardinality = new HashMap<Integer,Integer>();
 	private Iterations iterations;
-	//private Integer pathShare = 0;
 	private Integer level;
 
 	private Integer index;
 
 	private EdgeCode edgeCode;
-
+	private PathBindings pathBindings;
 	protected Variable sourceVariable = new Variable();
 
 	private Variable targetSubject = new Variable();
@@ -73,8 +73,8 @@ public abstract class PathElement {
 
 	public abstract String toSPARQL();
 
-	public PathBinding visitPath(PathBinding path) {
-		return path;
+	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
+		return pathBinding;
 	};
 
 	public abstract Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode);
@@ -275,6 +275,15 @@ public abstract class PathElement {
 	public Iterations getIterations() {
 		return this.iterations;
 	}
+	
+	public PathBindings getPathBindings() {
+		return pathBindings;
+	}
+
+	public void setPathBindings(PathBindings pathBindings) {
+		this.pathBindings = pathBindings;
+	}
+
 	public void resetIteration() {
 		setCardinality(0, getMinCardinality());
 		if (getRightPathElement() != null) getRightPathElement().resetIteration();

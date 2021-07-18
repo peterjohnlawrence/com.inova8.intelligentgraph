@@ -31,40 +31,66 @@ import java.io.OutputStream;
 
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
+import pathPatternElement.Iterations;
 import pathPatternElement.PathElement;
+import pathQLRepository.PathQLRepository;
 
 
 public  class IntelligentStatementPaths extends AbstractCloseableIteration< IntelligentStatement, SailException> {
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
 	Thing thing;
 	PathElement pathElement;
+	Iterations sortedIterations;
+	private Integer pathIteration;
 	IntelligentGraphConnection intelligentGraphConnection;
-
+	PathQLRepository source;
 	private SimpleValueFactory simpleValueFactory;
 	private CustomQueryOptions customQueryOptions;
-
+	private Resource[] contexts;
 	private PathTupleExpr pathTupleExpr;
-	private PathBinding path;
 	public IntelligentStatementPaths(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement,PathTupleExpr pathTupleExpr,  IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
 		this.thing=thing;
 		this.pathElement=pathElement;
 		this.pathTupleExpr=pathTupleExpr;
-		this.path=pathTupleExpr.getPath();
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
-
+	public IntelligentStatementPaths( PathQLRepository source, Thing thing,
+			PathElement pathElement,PathTupleExpr pathTupleExpr,  IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
+		this.resultsIterator=null;
+		this.source=source;
+		this.thing=thing;
+		this.pathElement=pathElement;
+		this.sortedIterations = pathElement.getIterations().sortByPathLength();
+		this.pathIteration=0;
+		this.pathTupleExpr=pathTupleExpr;
+		this.intelligentGraphConnection=intelligentGraphConnection;
+		this.customQueryOptions=customQueryOptions;
+		this.contexts = contexts;
+		simpleValueFactory= SimpleValueFactory.getInstance();
+	}
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
-		return resultsIterator.hasNext();
+		boolean hasNext = getResultsIterator().hasNext();
+		if(hasNext) {
+			return true;
+		}else {
+			pathIteration ++;
+			if(pathIteration < this.sortedIterations.size()) {
+				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
+				return getResultsIterator().hasNext();
+			}else {
+				return false;
+			}
+		}	
 	}
 
 	@Override
 	public IntelligentStatement next() throws QueryEvaluationException {
-		BindingSet nextBindingset = resultsIterator.next();
+		BindingSet nextBindingset = getResultsIterator().next();
 		Binding predBinding =nextBindingset.getBinding("n0");
 		Literal obj = pathToLiteral(nextBindingset);
 		if(obj!=null )
@@ -75,14 +101,14 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 
 	@Override
 	public void remove() throws QueryEvaluationException {
-		resultsIterator.remove();	
+		getResultsIterator().remove();	
 	}
 	private Literal pathToLiteral(BindingSet bindingset) {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setNamespace("",IntelligentGraphConnection.PATHQL);
+		PathBinding thisPathBinding = this.pathElement.getPathBindings().get(this.pathIteration);
 		
-		
-		for(EdgeBinding edge: this.path) {
+		for(EdgeBinding edge: thisPathBinding) {
 			ModelBuilder pathModelBuilder = builder.subject("urn://path/"+bindingset.hashCode());
 			String edgeCode = "urn://edge/"+bindingset.hashCode()+"/"+ edge.toString().hashCode();
 			pathModelBuilder.add(IntelligentGraphConnection.path_Edge, edgeCode);
@@ -100,5 +126,12 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		Rio.write(pathModel, pathJSON, RDFFormat.TURTLE);
 		return literal(pathJSON.toString());
 	}
-
+	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
+		if(resultsIterator!=null)
+			return resultsIterator;
+		else {
+			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
+			return resultsIterator;
+		}
+	}
 }

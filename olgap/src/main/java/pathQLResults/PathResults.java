@@ -4,8 +4,10 @@
 package pathQLResults;
 
 import java.io.IOException;
+import java.util.Iterator;
+
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
-import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.common.iterator.CloseableIterationIterator;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.repository.RepositoryException;
@@ -18,25 +20,27 @@ import path.PathBinding;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.PathElement;
-import pathQLModel.Fact;
-import pathQLModel.Resource;
+import pathQLRepository.PathQLRepository;
 
 /**
  * The Class PathResults.
  */
-public class PathResults extends ResourceResults{
-
+public class PathResults implements CloseableIteration<Path, QueryEvaluationException> , Iterable<Path>{//extends ResourceResults{
+	protected CustomQueryOptions customQueryOptions; 
+	protected PathElement pathElement; 
+	protected Thing thing;
+	protected PathQLRepository source;
 	private CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator;
 	private CloseableIteration<Statement, RepositoryException> pathSet;
 	public PathResults(CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator,Thing thing, PathElement pathElement ) {
-		super( thing);
+		this.thing=thing;
 		this.pathElement = pathElement;
 		this.pathIterator=pathIterator;
 	}
 
 
 	public PathResults(CloseableIteration<Statement, RepositoryException> pathSet, Thing thing,	PathElement pathElement, CustomQueryOptions customQueryOptions) {
-		super( thing);
+		this.thing=thing;
 		this.pathElement = pathElement;
 		this.pathSet=pathSet;
 	}
@@ -53,12 +57,6 @@ public class PathResults extends ResourceResults{
 		return null;
 	}
 
-
-	@Override
-	public Resource nextResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 	@Override
@@ -109,23 +107,18 @@ public class PathResults extends ResourceResults{
 	}
 
 
-	@Override
-	public Fact nextFact() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IRI nextReifiedValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	public String toString() {
 		String toString="";
 		while( hasNext()) {
 			toString +=next().toString();
 		}
 		return toString;
+	}
+
+
+	@Override
+	public Iterator<Path> iterator() {
+		return new CloseableIterationIterator<>(this);
 	}
 
 }
