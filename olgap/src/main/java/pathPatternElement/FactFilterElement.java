@@ -116,8 +116,14 @@ public class FactFilterElement extends ObjectElement{
 							filterExpression = new Join(  (TupleExpr)filterExpression,(TupleExpr) verbObjectListExpression  );	
 						else if(verbObjectListExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.Join"))
 							filterExpression = new Join(  (TupleExpr)filterExpression,(TupleExpr) verbObjectListExpression  );	
+						else if(verbObjectListExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.Compare"))
+							filterExpression =  new Filter(  filterExpression,  (ValueExpr) verbObjectListExpression );	
+						else if(verbObjectListExpression.getClass().getName().equals("org.eclipse.rdf4j.query.algebra.Filter")) {
+							TupleExpr arg = ((Filter)verbObjectListExpression).getArg() ;
+							filterExpression =  new Filter(   new Join(   filterExpression, arg),  ((Filter)verbObjectListExpression).getCondition() );	
+						}
 						else
-							filterExpression = new Filter(  (TupleExpr) filterExpression  ,(ValueExpr)  verbObjectListExpression );
+							filterExpression = new Filter(  (TupleExpr) filterExpression  ,  (ValueExpr) verbObjectListExpression );
 				}
 			}	
 		}

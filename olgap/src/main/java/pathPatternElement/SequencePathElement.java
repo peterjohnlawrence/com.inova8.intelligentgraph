@@ -4,6 +4,9 @@
 package pathPatternElement;
 
 import org.eclipse.rdf4j.query.algebra.Join;
+import org.eclipse.rdf4j.query.algebra.TupleExpr;
+
+import path.EdgeBinding;
 import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.Thing;
@@ -108,19 +111,10 @@ public class SequencePathElement extends PathElement {
 				}
 			}
 			return false;
-
 	 }
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
 			Integer pathIteration) {
-		/*			
-				 	TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,pathIteration) ;
-					getRightPathElement().setSourceVariable(getLeftPathElement().getTargetVariable());
-					TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,pathIteration);
-					Join joinPattern = new Join(leftPattern,rightPattern); 
-					return joinPattern;
-		*/
-
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
 		Join intermediateJoinPattern = null;
@@ -157,14 +151,16 @@ public class SequencePathElement extends PathElement {
 						pathIteration);
 				intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
 				if (joinPattern == null) {
-					joinPattern = new PathTupleExpr(intermediateJoinPattern);
-
+					joinPattern = new PathTupleExpr((TupleExpr)intermediateJoinPattern);
+					joinPattern.getPath().addAll( leftPattern.getPath());
+					joinPattern.getPath().addAll( rightPattern.getPath());
 				} else {
 					joinPattern.setTupleExpr(new Join(joinPattern.getTupleExpr(), intermediateJoinPattern));
+					joinPattern.getPath().addAll( leftPattern.getPath());
+					joinPattern.getPath().addAll( rightPattern.getPath());
 				}
-				joinPattern.getPath().addAll(leftPattern.getPath());
-				joinPattern.getPath().addAll(rightPattern.getPath());
 			}
+			//joinPattern.setPath(getPathBindings().get(pathIteration));
 			return joinPattern;
 		} else {
 			return null;
@@ -227,9 +223,49 @@ public class SequencePathElement extends PathElement {
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
-		pathBinding = getLeftPathElement().visitPathBinding(pathBinding,pathIteration);
-		pathBinding = getRightPathElement().visitPathBinding(pathBinding,pathIteration);
+	//	for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
+			pathBinding = getLeftPathElement().visitPathBinding(pathBinding,pathIteration);
+			pathBinding = getRightPathElement().visitPathBinding(pathBinding,pathIteration);
+	//	}
+		
 		return pathBinding;
+		
+		
+//		EdgeBinding predicateEdge;
+//		Variable sourceVariable = this.getSourceVariable();
+//		Variable targetVariable = this.getTargetVariable();			
+//		Variable intermediateSourceVariable = null ;
+//		Variable intermediateVariable = null;
+//		Variable intermediateTargetVariable = null;
+//		Variable priorIntermediateTargetVariable = null ;
+//		for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
+//			if( iteration==1) {
+//				intermediateSourceVariable = sourceVariable;
+//				intermediateVariable= getLeftPathElement().getTargetVariable();
+//				intermediateTargetVariable=targetVariable;
+//			}
+//			if(iteration<getCardinality(pathIteration)) {
+//				if (iteration > 1) 
+//					intermediateSourceVariable = priorIntermediateTargetVariable;
+//				intermediateTargetVariable = new Variable(sourceVariable.getName() + "_i" + iteration);
+//				intermediateVariable = new Variable(sourceVariable.getName() + "_in" + iteration);
+//				priorIntermediateTargetVariable = intermediateTargetVariable;
+//				
+//			}
+//			if( iteration==getCardinality(pathIteration)) {
+//				if (iteration > 1) {
+//					intermediateSourceVariable = priorIntermediateTargetVariable;
+//					intermediateVariable = new Variable(sourceVariable.getName() + "_in" + iteration);
+//					intermediateTargetVariable = targetVariable;
+//				}
+//			}
+//			pathBinding = getLeftPathElement().visitPathBinding(pathBinding,iteration);
+//			pathBinding = getRightPathElement().visitPathBinding(pathBinding,iteration);			
+////			predicateEdge = new EdgeBinding( intermediateSourceVariable,getPredicateVariable(), intermediateTargetVariable,getIsInverseOf());
+////			pathBinding.add(predicateEdge);
+//		}
+//		return pathBinding;
+		
 	}
 
 }

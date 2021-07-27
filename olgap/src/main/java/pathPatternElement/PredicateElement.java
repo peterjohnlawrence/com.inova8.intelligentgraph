@@ -11,6 +11,7 @@ import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
 import path.EdgeBinding;
 import path.PathBinding;
+import path.PathBindings;
 import path.PathTupleExpr;
 import pathCalc.Thing;
 
@@ -602,6 +603,7 @@ public class PredicateElement extends PathElement {
 				}
 				predicatePattern = pathReifiedPredicatePatternTupleExpr(thing, predicatePattern,intermediateSourceVariable, intermediateTargetVariable, intermediateReificationVariable);
 			}
+			//predicatePattern.getPath().addAll(getPathBindings().get(pathIteration));
 			return predicatePattern;
 		}else {
 			return null;
@@ -754,7 +756,7 @@ public class PredicateElement extends PathElement {
 		}
 		EdgeBinding edge = new EdgeBinding(sourceVariable,getReification(), predicateVariable, targetVariable, getIsInverseOf(), getIsDereified());	
 		if(predicatePattern==null) {
-			predicatePattern= new PathTupleExpr(reifiedPredicatePattern); //reifiedPredicatePattern;
+			predicatePattern= new PathTupleExpr(reifiedPredicatePattern); 
 		}else{
 			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), reifiedPredicatePattern));
 		}
@@ -787,6 +789,7 @@ public class PredicateElement extends PathElement {
 				predicatePattern = pathPredicatePatternTupleExpr(thing, predicatePattern, intermediateSourceVariable,
 						intermediateTargetVariable);
 			}
+		//	predicatePattern.setPath(getPathBindings().get(pathIteration));
 			return predicatePattern;
 		}else {
 			return null;
@@ -901,8 +904,6 @@ public class PredicateElement extends PathElement {
 	}
 	private PathBinding visitReifiedPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
 		EdgeBinding predicateEdge;
-//		predicateEdge = new EdgeBinding( getSourceVariable(),getReification(), getPredicateVariable(), getTargetVariable(),getIsInverseOf(),getIsDereified());
-//		pathBinding.add(predicateEdge);
 		Variable sourceVariable = this.getSourceVariable();
 		Variable targetVariable = this.getTargetVariable();	
 		Variable reificationVariable= this.getReifiedVariable();
@@ -927,7 +928,6 @@ public class PredicateElement extends PathElement {
 			}else {
 				intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
 			}
-			//predicatePattern = pathReifiedPredicatePatternTupleExpr(thing, predicatePattern,intermediateSourceVariable, intermediateTargetVariable, intermediateReificationVariable);
 			predicateEdge = new EdgeBinding( intermediateSourceVariable, this.reification, getPredicateVariable(), intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
 			pathBinding.add(predicateEdge);
 		}

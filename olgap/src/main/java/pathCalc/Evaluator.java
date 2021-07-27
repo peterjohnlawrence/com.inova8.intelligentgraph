@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Properties;
 import org.python.core.Options;
 
+import javax.script.Bindings;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
@@ -118,7 +120,11 @@ public class Evaluator {
 					for (String engineName : engineFactory.getNames()) {
 						ScriptEngine engine = scriptEngineManager.getEngineByName(engineName);
 						if (engine != null) {
-							//getScriptEngines().put(engineName, engine);
+							Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+							bindings.put("polyglot.js.allowAllAccess", true);
+							bindings.put("polyglot.js.allowHostAccess", true);
+							bindings.put("polyglot.js.nashorn-compat", true);
+							bindings.put("polyglot.js.allowHostClassLookup", true);
 							scriptEngines.put(iri(SCRIPTNAMESPACE + engineName), engine);
 							engineNames = engineNames + engineName + ";";
 						} else {

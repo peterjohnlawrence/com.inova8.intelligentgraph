@@ -18,6 +18,7 @@ import javax.script.ScriptException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -53,6 +54,7 @@ import pathCalc.Evaluator;
 import pathCalc.Prefixes;
 import pathCalc.Thing;
 import pathCalc.Trace;
+import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
 import pathQLResults.ResourceStatementResults;
 
@@ -653,8 +655,9 @@ public class PathQLRepository {
 		return Thing.create(this, iri, null);
 	}
 
-	public Thing getThing(String iri) {
-		return getThing(iri(iri));
+	public Thing getThing(String iri) throws RecognitionException, PathPatternException {
+		IRI thingIri = PathParser.parseIriRef(this,iri).getIri();
+		return getThing(thingIri);
 	}
 
 	public Thing getThing(IRI iri, CustomQueryOptions customQueryOptions) {
@@ -674,18 +677,13 @@ public class PathQLRepository {
 				cacheConnection.add((Model) result, cacheContext);
 				thing.getEvaluationContext().getTracer().traceResultsCached(this.getCacheService(),
 						cacheContext.stringValue());
-				//				thing.addTrace(String.format("Results cached to service %s in graph %s",
-				//						addService(this.getCacheService()), addService(cacheContext.stringValue())));
 			} catch (Exception e) {
 				logger.error("Failed to write results to cache  {} with context \n {} with exception {}",
 						result.toString(), cacheContext, e);
 				thing.getEvaluationContext().getTracer().traceResultsCachedError(this.getCacheService());
-				//thing.addTrace(String.format("Results NOT cached to service:%s",
-				//		addService(this.getCacheService())));
 			}
 		} else {
 			thing.getEvaluationContext().getTracer().traceResultsCachedNoService();
-			//	thing.addTrace("No service to cached results");
 		}
 	}
 

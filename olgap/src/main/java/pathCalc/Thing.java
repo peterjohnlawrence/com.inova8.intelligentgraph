@@ -387,15 +387,24 @@ public class Thing extends Resource {
 						
 						CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
 						SimpleBindings scriptBindings = new SimpleBindings();
-					//	scriptBindings.put("$tripleSource", getSource().getTripleSource());
+						Object _result = null;
+						scriptBindings.put("_result", _result);
+						scriptBindings.put("_this", this);
 						scriptBindings.put("$this", this);
-					//	scriptBindings.put("$property",		Thing.create(getSource(), predicate, this.getEvaluationContext()));
-						scriptBindings.put("$customQueryOptions",customQueryOptions);// getCustomQueryOptions());
-					//	scriptBindings.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
+
+						scriptBindings.put("$customQueryOptions",customQueryOptions);
+						//	scriptBindings.put("$property",		Thing.create(getSource(), predicate, this.getEvaluationContext()));
+					    //	scriptBindings.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
+						//	scriptBindings.put("$tripleSource", getSource().getTripleSource());
+
 						Resource result;
 						try {
 							pushStack(stackKey);
 							scriptResult = compiledScriptCode.eval(scriptBindings);
+							if(scriptResult==null) {
+								//Could be Python which will not return a result by default
+								scriptResult=scriptBindings.get("_result");
+							}
 							result = returnResult(scriptResult, cacheContextIRI);
 						}
 						finally {

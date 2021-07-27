@@ -113,12 +113,24 @@ class PathPatternPathTests {
 	@Order(5)
 	void test_5()  throws RecognitionException, PathPatternException{
 		PathElement element = PathParser.parsePathPattern(thing,":connectedTo{1,3}");
-		assertEquals ("{0=[n0,http://default/connectedTo,n1,DIRECT]\r\n"
-				+ ", 1=[n0,http://default/connectedTo,n1_i1,DIRECT]\r\n"
-				+ "[n1_i1,http://default/connectedTo,n1,DIRECT]\r\n"
-				+ ", 2=[n0,http://default/connectedTo,n1_i1,DIRECT]\r\n"
+		PathBinding pathBinding = new PathBinding();
+		pathBinding = element.visitPathBinding(pathBinding,2);
+		assertEquals ("[n0,http://default/connectedTo,n1_i1,DIRECT]\r\n"
 				+ "[n1_i1,http://default/connectedTo,n1_i2,DIRECT]\r\n"
 				+ "[n1_i2,http://default/connectedTo,n1,DIRECT]\r\n"
-				+ "}" , element.getPathBindings().toString());
+				+ "" , pathBinding.toString());
 	}
+//	@Test
+//	@Order(6)
+//	//Test no longer valid as pathBindings created on creation of PathTupleExpr
+//	void test_6()  throws RecognitionException, PathPatternException{
+//		PathElement element = PathParser.parsePathPattern(thing,":connectedTo{1,3}");
+//		assertEquals ("{0=[n0,http://default/connectedTo,n1,DIRECT]\r\n"
+//				+ ", 1=[n0,http://default/connectedTo,n1_i1,DIRECT]\r\n"
+//				+ "[n1_i1,http://default/connectedTo,n1,DIRECT]\r\n"
+//				+ ", 2=[n0,http://default/connectedTo,n1_i1,DIRECT]\r\n"
+//				+ "[n1_i1,http://default/connectedTo,n1_i2,DIRECT]\r\n"
+//				+ "[n1_i2,http://default/connectedTo,n1,DIRECT]\r\n"
+//				+ "}" , element.getPathBindings().toString());
+//	}
 }

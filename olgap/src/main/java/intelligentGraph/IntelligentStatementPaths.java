@@ -49,24 +49,24 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	private Resource[] contexts;
 	private PathTupleExpr pathTupleExpr;
 	public IntelligentStatementPaths(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
-			PathElement pathElement,PathTupleExpr pathTupleExpr,  IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
+			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
 		this.thing=thing;
 		this.pathElement=pathElement;
-		this.pathTupleExpr=pathTupleExpr;
+	//	this.pathTupleExpr=pathTupleExpr;
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 	public IntelligentStatementPaths( PathQLRepository source, Thing thing,
-			PathElement pathElement,PathTupleExpr pathTupleExpr,  IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
+			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=null;
 		this.source=source;
 		this.thing=thing;
 		this.pathElement=pathElement;
 		this.sortedIterations = pathElement.getIterations().sortByPathLength();
 		this.pathIteration=0;
-		this.pathTupleExpr=pathTupleExpr;
+		//this.pathTupleExpr=pathTupleExpr;
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		this.contexts = contexts;
@@ -80,7 +80,8 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		}else {
 			pathIteration ++;
 			if(pathIteration < this.sortedIterations.size()) {
-				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
+				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration);
+				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr,contexts);
 				return getResultsIterator().hasNext();
 			}else {
 				return false;
@@ -106,7 +107,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	private Literal pathToLiteral(BindingSet bindingset) {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setNamespace("",IntelligentGraphConnection.PATHQL);
-		PathBinding thisPathBinding = this.pathElement.getPathBindings().get(this.pathIteration);
+		PathBinding thisPathBinding =pathTupleExpr.getPath();
 		
 		for(EdgeBinding edge: thisPathBinding) {
 			ModelBuilder pathModelBuilder = builder.subject("urn://path/"+bindingset.hashCode());
@@ -130,7 +131,8 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		if(resultsIterator!=null)
 			return resultsIterator;
 		else {
-			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
+			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration);
+			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
 			return resultsIterator;
 		}
 	}

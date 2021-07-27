@@ -74,9 +74,7 @@ public class PathParser {
 		PathPatternParser parser = new PathPatternParser(tokens);
 		parser.removeErrorListeners(); 
 		parser.addErrorListener(errorListener); 
-		//PathPatternContext pathPatternTree = parser.pathPattern();
 		QueryStringContext queryStringTree = parser.queryString();
-		//PathElement pathElement = pathPatternVisitor.visit(pathPatternTree);
 		PathElement pathElement = pathPatternVisitor.visit(queryStringTree);
 
 		if( errorListener.toString()!=null) {
@@ -91,7 +89,7 @@ public class PathParser {
 		pathElement.setPathPattern(pathPattern);
 		pathElement.indexVisitor(null,0,null);
 		pathElement.setIterations(Iterations.create(pathElement));
-		pathElement.setPathBindings(PathBindings.create(pathElement));
+	//	pathElement.setPathBindings(PathBindings.create(pathElement));
 		return pathElement;
 
 	}

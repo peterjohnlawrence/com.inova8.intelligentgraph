@@ -153,7 +153,10 @@ public class Query {
 		}
 		return aResult.toString();
 	}
-
+	public static String parseSPARQL(RepositoryConnection conn, String queryString) {
+		TupleQuery query = conn.prepareTupleQuery(queryString);
+		return query.toString();
+	}
 	/**
 	 * Run CONSTRUCT.
 	 *

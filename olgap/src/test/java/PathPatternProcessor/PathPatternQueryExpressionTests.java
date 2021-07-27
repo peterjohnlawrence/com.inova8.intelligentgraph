@@ -22,7 +22,9 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.PathPatternContext;
+import path.PathBindings;
 import pathCalc.Thing;
+import pathPatternElement.Iterations;
 import pathPatternElement.PathElement;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathErrorListener;
@@ -58,7 +60,7 @@ class PathPatternQueryExpressionTests {
 		source.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
 		source.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
 		source.getReifications().setReificationsAreLazyLoaded(true);
-		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
+		source.prefix("http://default/").prefix("local","http://local/").prefix("rdf","http://rdf/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 		//Dummy
 		thing = source.getThing( "http://",null);
 		indices.add(0, 0);
@@ -88,6 +90,8 @@ class PathPatternQueryExpressionTests {
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);
 		PathElement element = pathPatternVisitor.visit(pathPatternTree);
 		element.indexVisitor(null, 0,null);
+		element.setIterations(Iterations.create(element));
+		element.setPathBindings(PathBindings.create(element));
 		return element;
 	}	
 
@@ -112,7 +116,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=n2)\r\n"
 				+ "      Variable (name=p2_3, value=http://default/parent3)\r\n"
 				+ "      Variable (name=n3)\r\n"
-				+ "" , element.pathPatternQuery(thing,null,null).toString());
+				+ "" , element.pathPatternQuery(thing).toString());
 	}
 
 
@@ -158,7 +162,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=p2_3, value=http://default/parent3)\r\n"
 				+ "      Variable (name=n3)\r\n"
 				+ ""
-				 , element.pathPatternQuery(thing,null,null).toString());
+				 , element.pathPatternQuery(thing).toString());
 	}
 
 	@Test
@@ -197,7 +201,7 @@ class PathPatternQueryExpressionTests {
 				+ "         Variable (name=n1)\r\n"
 				+ "         Variable (name=isSubjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
 				+ "         Variable (name=r1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -214,7 +218,7 @@ class PathPatternQueryExpressionTests {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1, value=http://local#volumeFlow)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -236,7 +240,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -257,7 +261,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=n0)\r\n"
 				+ "      Variable (name=p0_1, value=http://default/volumeFlow)\r\n"
 				+ "      Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -294,7 +298,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=r1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/lat)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -341,7 +345,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=n4)\r\n"
 				+ "      Variable (name=p4_5, value=http://default/right)\r\n"
 				+ "      Variable (name=n5)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -367,7 +371,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=n1, value=\"36\")\r\n"
 				+ "      Variable (name=p1_0_1, value=http://rdfs/label)\r\n"
 				+ "      Variable (name=n1_1, value=\"Calc2Graph1\")\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -409,7 +413,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=r1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/lat)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -446,7 +450,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=r1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/long)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -478,7 +482,7 @@ class PathPatternQueryExpressionTests {
 				+ "      Variable (name=r1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/lat)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -517,7 +521,7 @@ class PathPatternQueryExpressionTests {
 					+ "      Variable (name=rnull)\r\n"
 					+ "      Variable (name=objectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 					+ "      Variable (name=rnull, value=http://id/Calc2Graph2)\r\n"
-					+ "" ,element.pathPatternQuery(thing,null,null).toString());
+					+ "" ,element.pathPatternQuery(thing).toString());
 		}catch(Exception e){
 			Query.assertEqualsWOSpaces ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
 		}
@@ -564,7 +568,7 @@ class PathPatternQueryExpressionTests {
 					+ "         Variable (name=r1)\r\n"
 					+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 					+ "         Variable (name=r1, value=http://id/Calc2Graph2)\r\n"
-					+ "" ,element.pathPatternQuery(thing,null,null).toString());
+					+ "" ,element.pathPatternQuery(thing).toString());
 		}catch(Exception e){
 			fail();
 		}
@@ -590,7 +594,7 @@ void test_14() {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -615,7 +619,7 @@ void test_15() {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -640,7 +644,7 @@ void test_16() {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -671,7 +675,7 @@ void test_17() {
 				+ "      Variable (name=n2)\r\n"
 				+ "      Variable (name=p2_3, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n3)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -692,7 +696,7 @@ void test_18() {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -722,7 +726,7 @@ void test_19() {
 				+ "      Variable (name=n2)\r\n"
 				+ "      Variable (name=p2_3)\r\n"
 				+ "      Variable (name=n3)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -753,7 +757,7 @@ void test_20() {
 				+ "      Variable (name=n2)\r\n"
 				+ "      Variable (name=p2_3, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n3)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -779,7 +783,7 @@ void test_21() {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -805,7 +809,7 @@ void test_22() {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_2)\r\n"
 				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -836,7 +840,7 @@ void test_23() {
 				+ "         Variable (name=n1)\r\n"
 				+ "         Variable (name=p1_2, value=http://default/volumeFlow)\r\n"
 				+ "         Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -872,7 +876,7 @@ void test_24() {
 				+ "         Variable (name=n1)\r\n"
 				+ "         Variable (name=p1_2, value=http://default/density)\r\n"
 				+ "         Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -913,7 +917,7 @@ void test_25() {
 				+ "            Variable (name=n1)\r\n"
 				+ "            Variable (name=p1_2)\r\n"
 				+ "            Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -954,7 +958,7 @@ void test_26() {
 				+ "            Variable (name=n1)\r\n"
 				+ "            Variable (name=p1_2, value=http://default/density)\r\n"
 				+ "            Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -1004,7 +1008,7 @@ void test_27() {
 				+ "            Variable (name=n1)\r\n"
 				+ "            Variable (name=p1_2, value=http://default/density)\r\n"
 				+ "            Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -1055,7 +1059,7 @@ void test_28() {
 				+ "      Variable (name=n0)\r\n"
 				+ "      Variable (name=p0_1, value=http://default/density)\r\n"
 				+ "      Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
@@ -1077,7 +1081,7 @@ void test_29() {
 				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "   Variable (name=n1)\r\n"
 				+ "" 
-				,element.pathPatternQuery(thing,null,null).toString());
+				,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("BIND(<http://default/Unit1> as ?n0)\n"	+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -1099,7 +1103,7 @@ void test_30() {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
@@ -1122,7 +1126,7 @@ void test_31() {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -1144,7 +1148,7 @@ void test_32() {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		fail();
@@ -1166,7 +1170,7 @@ void test_33() {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
@@ -1189,15 +1193,13 @@ void test_34() {
 				+ "   Variable (name=n0)\r\n"
 				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
 				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
 	}
 }
 
-/**
- * Test 35.
- */
+
 @Test 
 @Order(35)
 void test_35() {
@@ -1215,9 +1217,113 @@ void test_35() {
 				+ "      Variable (name=n1)\r\n"
 				+ "      Variable (name=p1_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
 				+ "      Variable (name=n1_1, value=http://default/BatteryLimit)\r\n"
-				+ "" ,element.pathPatternQuery(thing,null,null).toString());
+				+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
 		fail();
+	}
+}
+@Test 
+@Order(36)
+void test_36() {
+	try {
+
+		PathElement element = PathParser.parsePathPattern(thing, "rdf:type[ lt '1.7' ]");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				 ("Filter\r\n"
+				 		+ "   Compare (<)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      ValueConstant (value=\"1.7\")\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "      Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
+	}catch(Exception e){
+		assertEquals("",e.getMessage());
+	}
+}
+@Test 
+@Order(37)
+void test_37() {
+	try {
+
+		PathElement element = PathParser.parsePathPattern(thing, "rdf:type[:hasHeight  [ lt '1.7' ]]/:hasBMI");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				 ("Join\r\n"
+				 		+ "   Filter\r\n"
+				 		+ "      Compare (<)\r\n"
+				 		+ "         Variable (name=n1_1)\r\n"
+				 		+ "         ValueConstant (value=\"1.7\")\r\n"
+				 		+ "      Join\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=n0)\r\n"
+				 		+ "            Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "            Variable (name=p1_0_1, value=http://default/hasHeight)\r\n"
+				 		+ "            Variable (name=n1_1)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p1_2, value=http://default/hasBMI)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
+	}catch(Exception e){
+		assertEquals("",e.getMessage());
+	}
+}
+@Test 
+@Order(38)
+void test_38() {
+	try {
+
+		PathElement element = PathParser.parsePathPattern(thing, "^rdf:type[ lt '1.7' ]");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				 ("Filter\r\n"
+				 		+ "   Compare (<)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      ValueConstant (value=\"1.7\")\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
+	}catch(Exception e){
+		assertEquals("",e.getMessage());
+	}
+}
+@Test 
+@Order(39)
+void test_39() {
+	try {
+
+		PathElement element = PathParser.parsePathPattern(thing, "^rdf:type[:hasHeight  [ lt '1.7' ]]/:hasBMI");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				 ("Join\r\n"
+				 		+ "   Filter\r\n"
+				 		+ "      Compare (<)\r\n"
+				 		+ "         Variable (name=n0_1)\r\n"
+				 		+ "         ValueConstant (value=\"1.7\")\r\n"
+				 		+ "      Join\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "            Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "            Variable (name=n0)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "            Variable (name=p0_0_1, value=http://default/hasHeight)\r\n"
+				 		+ "            Variable (name=n0_1)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p1_2, value=http://default/hasBMI)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
+	}catch(Exception e){
+		assertEquals("",e.getMessage());
 	}
 }
 }

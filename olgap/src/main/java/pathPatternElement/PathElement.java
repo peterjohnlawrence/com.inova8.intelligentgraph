@@ -76,12 +76,17 @@ public abstract class PathElement {
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
 		return pathBinding;
 	};
-
+	public  PathTupleExpr pathPatternQuery(Thing thing) {
+		return pathPatternQuery(thing,null,null);
+	};
+	public  PathTupleExpr pathPatternQuery(Thing thing, Integer pathIteration) {
+		return pathPatternQuery(thing,null,null,pathIteration);
+	};
 	public abstract Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode);
 
-	public abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable);
+	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable);
 
-	public abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
 			Integer pathIteration);
 
 	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
@@ -282,6 +287,8 @@ public abstract class PathElement {
 
 	public void setPathBindings(PathBindings pathBindings) {
 		this.pathBindings = pathBindings;
+		if (getRightPathElement() != null) getRightPathElement().setPathBindings(pathBindings);
+		if (getLeftPathElement() != null) getLeftPathElement().setPathBindings(pathBindings);	
 	}
 
 	public void resetIteration() {
