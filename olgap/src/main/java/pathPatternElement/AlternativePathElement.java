@@ -8,6 +8,7 @@ import org.eclipse.rdf4j.query.algebra.Union;
 
 import path.PathBinding;
 import path.PathTupleExpr;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -59,16 +60,16 @@ public class AlternativePathElement extends PathElement{
 
 
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		return pathPatternQuery(thing,sourceVariable,targetVariable,1) ;
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(thing,sourceVariable,targetVariable,0,customQueryOptions) ;
 	}
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
-			Integer pathIteration) {
-		TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable).getTupleExpr() ;
+			Integer pathIteration, CustomQueryOptions customQueryOptions) {
+		TupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,customQueryOptions).getTupleExpr() ;
 		getRightPathElement().setSourceVariable(getLeftPathElement().getSourceVariable());
 		getRightPathElement().setTargetVariable(getLeftPathElement().getTargetVariable());
-		TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable).getTupleExpr();
+		TupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,customQueryOptions).getTupleExpr();
 	//	Union unionPattern =new TupleExprPath( new Union(leftPattern,rightPattern)); 
 		return new PathTupleExpr( new Union(leftPattern,rightPattern));
 	}	

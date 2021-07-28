@@ -4,6 +4,7 @@
 package tutorialExample;
 
 import static org.junit.Assert.fail;
+import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import pathQLResults.FactResults;
 import pathQLResults.PathQLResults;
 import pathQLResults.ResourceResults;
 import utilities.Query;
-
+import org.eclipse.rdf4j.model.Literal;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example2_Tests {
 
@@ -40,6 +41,7 @@ class Example2_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example2/");
+		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		source = PathQLRepository.create(workingRep);
@@ -130,9 +132,9 @@ class Example2_Tests {
 	void example2_6() {
 
 		try {
-			Thing peter = source.getThing(":Person"); 
-			Double bmi = peter.getFacts("^rdf:type[:hasHeight [ ge '1.9' ]]/:hasBMI").average();
-			assertEquals("21.453287197231838", bmi);
+			Thing person = source.getThing(":Person"); 
+			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge '1.9'^^xsd:double ]]/:hasBMI").average();
+			assertEquals("17.197368421052634", bmi.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -143,9 +145,54 @@ class Example2_Tests {
 	void example2_7() {
 
 		try {
-			Thing peter = source.getThing(":Person"); 
-			Resource bmi = peter.getFact(":averageTallBMI");
-			assertEquals("21.453287197231838", bmi.stringValue());
+			Thing person = source.getThing(":Person"); 
+			Resource bmi = person.getFact(":averageTallBMI");
+			assertEquals("17.197368421052634", bmi.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(8)
+	void example2_8() {
+
+		try {
+			Thing person = source.getThing(":Person"); 
+			ResourceResults persons = person.getFacts("^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]");
+			ArrayList<String> personValues = new ArrayList<String>();
+			for(Resource person1:persons) {
+				personValues.add(person1.getValue().stringValue());
+			}
+			assertEquals("[http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/Peter]", personValues.toString());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(9)
+	void example2_9() {
+
+		try {
+			Thing person = source.getThing(":Person"); 
+			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]/:hasBMI").average();
+			assertEquals("19.885870106938924", bmi.toString());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(10)
+	void example2_10() {
+
+		try {
+			Thing person = source.getThing(":Person"); 
+			Literal minHeight = literal(1.7);
+			Literal maxHeight = literal(1.8);
+			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge %1  ; le %2  ]]/:hasBMI",minHeight,maxHeight).average();
+			assertEquals("19.885870106938924", bmi.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

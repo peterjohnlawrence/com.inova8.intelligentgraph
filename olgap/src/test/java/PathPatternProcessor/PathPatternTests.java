@@ -512,4 +512,15 @@ void test_27() {
 		fail();
 	}
 }
+@Test 
+@Order(28)
+void test_28() {
+	try {
+		
+		PathElement element = PathParser.parsePathPattern(thing, "^:type[:hasHeight [gt %1; lt %2]]/:bmi");
+		assertEquals ("^<http://default/type>[<http://default/hasHeight> [gt %1 ;lt %2 ] ] / <http://default/bmi>" , element.toString());
+	}catch(Exception e){
+		fail();
+	}
+}
 }

@@ -108,12 +108,12 @@ class Local_AddGetDeleteFact_Test {
 			facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
 			factsinrange = facts.count();
 			assertEquals(1, factsinrange);
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			Resource averageSales = myCountry.getFact(":averageSales");
 			assertEquals(2.3333333333333335, averageSales.doubleValue());
 			Thing country3= myCountry.getThing(":Country3");
-			String averageSalesScript3 = "totalSales=0; count=0; myCountry=$this.getThing(\":Country2\"); for(sales in myCountry.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript3 = "totalSales=0; count=0; myCountry=_this.getThing(\":Country2\"); for(sales in myCountry.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			country3.addFact(":averageSales", averageSalesScript3, Evaluator.GROOVY) ;
 			Resource averageSales3 = myCountry.getFact(":averageSales");
 			assertEquals(2.3333333333333335, averageSales3.doubleValue());

@@ -67,12 +67,12 @@ id:BatteryLimit1
   def:lat "<http://inova8.com/calc2graph/id/calculateLatitude>"^^script:groovy ;
   def:long "<http://inova8.com/calc2graph/id/calculateLongitude>"^^script:groovy ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
-  def:testProperty1 " $this.getFact(\":testProperty2\").doubleValue()"^^script:groovy ;
-  def:testProperty2 " $this.getFact(\":testProperty3\").doubleValue()"^^script:groovy ;
-  def:testProperty3 "$this.getFact(\"<http://inova8.com/calc2graph/def/testProperty2>\").doubleValue()"^^script:groovy ;
-  def:testProperty4 "$this.getSignal(\"<SEEQ://host.docker.internal:34216/api/signals/4BE33085-0C32-41B4-A160-FA5A79B97581>\").doubleValue()"^^script:groovy ;
-  def:testProperty5 "$this.getSignal(\"<http://inova8.com/calc2graph/id/Signal_1>\").doubleValue()"^^script:groovy ;
-  def:testProperty6 "$customQueryOptions.get(\"time\");"^^script:groovy ;
+  def:testProperty1 " _this.getFact(\":testProperty2\").doubleValue()"^^script:groovy ;
+  def:testProperty2 " _this.getFact(\":testProperty3\").doubleValue()"^^script:groovy ;
+  def:testProperty3 "_this.getFact(\"<http://inova8.com/calc2graph/def/testProperty2>\").doubleValue()"^^script:groovy ;
+  def:testProperty4 "_this.getSignal(\"<SEEQ://host.docker.internal:34216/api/signals/4BE33085-0C32-41B4-A160-FA5A79B97581>\").doubleValue()"^^script:groovy ;
+  def:testProperty5 "_this.getSignal(\"<http://inova8.com/calc2graph/id/Signal_1>\").doubleValue()"^^script:groovy ;
+  def:testProperty6 "_customQueryOptions.get(\"time\");"^^script:groovy ;
   def:volumeFlow "59;"^^script:javascript ;
   rdfs:label "BatteryLimit1" ;
 .
@@ -83,8 +83,8 @@ id:BatteryLimit2
   def:long 600 ;
   def:massFlow "<http://inova8.com/calc2graph/id/calculateMassFlow>"^^script:groovy ;
   def:massYield "<http://inova8.com/calc2graph/id/calculateMassYield>"^^script:javascript ;
-  def:testProperty1 "return $this.getThing(\"id:BatteryLimit2\").getFact(\":Attribute@:density\").doubleValue();"^^script:groovy ;
-  def:testProperty2 "return $this.getThing(\"<http://inova8.com/calc2graph/id/BatteryLimit2>\").getFact(\"<http://inova8.com/calc2graph/def/Attribute>@<http://inova8.com/calc2graph/def/density>\").doubleValue();"^^script:groovy ;
+  def:testProperty1 "return _this.getThing(\"id:BatteryLimit2\").getFact(\":Attribute@:density\").doubleValue();"^^script:groovy ;
+  def:testProperty2 "return _this.getThing(\"<http://inova8.com/calc2graph/id/BatteryLimit2>\").getFact(\"<http://inova8.com/calc2graph/def/Attribute>@<http://inova8.com/calc2graph/def/density>\").doubleValue();"^^script:groovy ;
   def:volumeFlow "40;"^^script:javascript ;
   rdfs:label "BatteryLimit2" ;
 .
@@ -573,11 +573,11 @@ id:Signal_3
 id:Unit1
   a def:Unit ;
   def:batteryLimits """var modelBuilder = $builder;
-modelBuilder = modelBuilder.setNamespace(\"id\",\"http://inova8.com/calc2graph/id/\").subject($this.superValue.toString());
-for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>\")){
+modelBuilder = modelBuilder.setNamespace(\"id\",\"http://inova8.com/calc2graph/id/\").subject(_this.superValue.toString());
+for(batterylimit in _this.getFacts(\"<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>\")){
     modelBuilder.add(\"id:hasBatteryLimit\",batterylimit.getValue());
 }; 
-for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasProductBatteryLimit>\")){
+for(batterylimit in _this.getFacts(\"<http://inova8.com/calc2graph/def/hasProductBatteryLimit>\")){
     modelBuilder.add(\"id:hasBatteryLimit\",batterylimit.getValue());
 }; 
 return modelBuilder.build();"""^^script:groovy ;
@@ -585,21 +585,21 @@ return modelBuilder.build();"""^^script:groovy ;
   def:hasProductBatteryLimit id:BatteryLimit2 ;
   def:hasProductBatteryLimit id:BatteryLimit3 ;
   def:massFlowBalance """var massFlowBalance=0.0; 
-for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>\")){
+for(batterylimit in _this.getFacts(\"<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>\")){
 	massFlowBalance += batterylimit.getFact(\"<http://inova8.com/calc2graph/def/massFlow>\").doubleValue()
 }; 
-for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasProductBatteryLimit>\")){
+for(batterylimit in _this.getFacts(\"<http://inova8.com/calc2graph/def/hasProductBatteryLimit>\")){
 	massFlowBalance -= batterylimit.getFact(\"<http://inova8.com/calc2graph/def/massFlow>\").doubleValue()
 }; 
 massFlowBalance;"""^^script:groovy ;
   def:massThroughput """var massThroughput=0.0; 
-for(batterylimit in $this.getFacts(\":hasProductBatteryLimit\")){
+for(batterylimit in _this.getFacts(\":hasProductBatteryLimit\")){
 	massThroughput += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massThroughput;"""^^script:groovy ;
   def:maximumMassFlow """var maximumMassFlow=0.0; 
 var maximumMassFlowBatteryLimit;
-for(batterylimit in $this.getFacts(\"<http://inova8.com/calc2graph/def/hasProductBatteryLimit>\")){
+for(batterylimit in _this.getFacts(\"<http://inova8.com/calc2graph/def/hasProductBatteryLimit>\")){
 	massFlow = batterylimit.getFact(\"<http://inova8.com/calc2graph/def/massFlow>\").doubleValue();
 	if(massFlow > maximumMassFlow){
 		maximumMassFlow = massFlow;
@@ -612,15 +612,15 @@ return maximumMassFlowBatteryLimit;"""^^script:groovy ;
 id:Unit2
   a def:Unit ;
   def:massFlowBalance """var massFlowBalance=0.0; 
-for(batterylimit in $this.getFacts(\":Parthood@:hasFeedBatteryLimit\")){
+for(batterylimit in _this.getFacts(\":Parthood@:hasFeedBatteryLimit\")){
 	massFlowBalance += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
-for(batterylimit in $this.getFacts(\":Parthood@:hasProductBatteryLimit\")){
+for(batterylimit in _this.getFacts(\":Parthood@:hasProductBatteryLimit\")){
 	massFlowBalance -= batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massFlowBalance;"""^^script:groovy ;
   def:massThroughput """var massThroughput=0.0; 
-for(batterylimit in $this.getFacts(\":Parthood@:hasProductBatteryLimit\")){
+for(batterylimit in _this.getFacts(\":Parthood@:hasProductBatteryLimit\")){
 	massThroughput += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massThroughput;"""^^script:groovy ;
@@ -650,15 +650,15 @@ id:Unit2-product-BL3
 id:Unit3
   a def:Unit ;
   def:massFlowBalance """var massFlowBalance=0.0; 
-for(batterylimit in $this.getFacts(\"^:Parthood@:feedTo\")){
+for(batterylimit in _this.getFacts(\"^:Parthood@:feedTo\")){
 	massFlowBalance += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
-for(batterylimit in $this.getFacts(\"^:Parthood@:productFrom\")){
+for(batterylimit in _this.getFacts(\"^:Parthood@:productFrom\")){
 	massFlowBalance -= batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massFlowBalance;"""^^script:groovy ;
   def:massThroughput """var massThroughput=0.0; 
-for(batterylimit in $this.getFacts(\"^:Parthood@:feedTo\")){
+for(batterylimit in _this.getFacts(\"^:Parthood@:feedTo\")){
 	massThroughput += batterylimit.getFact(\":massFlow\").doubleValue()
 }; 
 massThroughput;"""^^script:groovy ;
@@ -666,29 +666,29 @@ massThroughput;"""^^script:groovy ;
 .
 id:calculateLatitude
   a script:Script ;
-  script:scriptCode "return $this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();"^^script:groovy ;
+  script:scriptCode "return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();"^^script:groovy ;
   rdfs:label "calculateLatitude" ;
 .
 id:calculateLongitude
   a script:Script ;
-  script:scriptCode "return $this.getFact(\":Location@:appearsOn[ eq id:Calc2Graph1]#/:long\");"^^script:groovy ;
+  script:scriptCode "return _this.getFact(\":Location@:appearsOn[ eq id:Calc2Graph1]#/:long\");"^^script:groovy ;
   rdfs:label "calculateLongitude" ;
 .
 id:calculateMassFlow
   a script:Script ;
-  script:scriptCode """var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  
+  script:scriptCode """var result= _this.getFact(\":volumeFlow\").floatValue()* _this.getFact(\":Attribute@:density\").floatValue();  
 result;"""^^script:groovy ;
   rdfs:label "calculate mass flow" ;
   rdfs:range xsd:float ;
 .
 id:calculateMassYield
   a script:Script ;
-  script:scriptCode "return  $this.getFact(\":massFlow\").floatValue()/$this.getFact(\"^:hasProductBatteryLimit/:massThroughput\").doubleValue();"^^script:groovy ;
+  script:scriptCode "return  _this.getFact(\":massFlow\").floatValue()/_this.getFact(\"^:hasProductBatteryLimit/:massThroughput\").doubleValue();"^^script:groovy ;
   rdfs:label "calculate mass yield" ;
 .
 id:deduceDensity
   a script:Script ;
-  script:scriptCode """var result= $this.getFact(\":density\").floatValue();  
+  script:scriptCode """var result= _this.getFact(\":density\").floatValue();  
 result;"""^^script:groovy ;
   rdfs:label "deduce density" ;
 .

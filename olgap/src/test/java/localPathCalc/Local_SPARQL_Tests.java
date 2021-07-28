@@ -123,7 +123,7 @@ class Local_SPARQL_Tests {
 		
 		try {
 			Thing myCountry= addGraph2();
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
+			String averageSalesScript = "return _this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o \n"
 					+ "FROM <http://inova8.com/calc2graph/testGraph2>\n"
@@ -152,7 +152,7 @@ class Local_SPARQL_Tests {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			Thing myCountry= addGraph2();
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
+			String averageSalesScript = "return _this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o \n"
 					+ "FROM <http://inova8.com/calc2graph/testGraph2>\n"
@@ -176,7 +176,7 @@ class Local_SPARQL_Tests {
 
 		try {
 			Thing myCountry=addGraph3();
-			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
+			String totalSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
@@ -212,7 +212,7 @@ class Local_SPARQL_Tests {
 			myCountry.addFact(":sales", "300");
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
-			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
+			String totalSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"
@@ -243,7 +243,7 @@ class Local_SPARQL_Tests {
 
 		try {
 			Thing myCountry=addGraph4();
-			String averageSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
+			String averageSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 			conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
@@ -273,7 +273,7 @@ class Local_SPARQL_Tests {
 
 		try {
 			Thing myCountry = addGraph4();
-			String averageSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
+			String averageSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> CONSTRUCT{\r\n"
 					+ "  ?s  :averageSales  ?o.\r\n"

@@ -1,0 +1,174 @@
+# baseURI: http://inova8.com/intelligentgraph/example3/
+# prefix: example3
+
+@prefix : <http://inova8.com/intelligentgraph/example3/> .
+@prefix example3: <http://inova8.com/intelligentgraph/example3/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+example3:
+  a owl:Ontology ;
+.
+example3:Another1
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.9 ;
+  example3:hasLocation example3:Tideswell ;
+  example3:hasWeight 72 ;
+.
+example3:Another10
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.9 ;
+  example3:hasLocation example3:Tideswell ;
+  example3:hasWeight 61 ;
+.
+example3:Another11
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.5 ;
+  example3:hasLocation example3:Tideswell ;
+  example3:hasWeight 61 ;
+.
+example3:Another12
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.8 ;
+  example3:hasLocation example3:Tideswell ;
+  example3:hasWeight 75 ;
+.
+example3:Another2
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.7 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 65 ;
+.
+example3:Another3
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 2 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 59 ;
+.
+example3:Another4
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.8 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 47 ;
+.
+example3:Another5
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.5 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 70 ;
+.
+example3:Another6
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.5 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 56 ;
+.
+example3:Another7
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.7 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 63 ;
+.
+example3:Another8
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.6 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 66 ;
+.
+example3:Another9
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.7 ;
+  example3:hasLocation example3:Maidstone ;
+  example3:hasWeight 46 ;
+.
+example3:BMI
+  a example3:Script ;
+  script:scriptCode "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
+  rdfs:label "BMI" ;
+.
+example3:Location
+  a owl:Class ;
+  rdfs:label "Location" ;
+.
+example3:LocationAverageBMI
+  a example3:Script ;
+  script:scriptCode "double locationAverageBMI = _this.getFacts('^:hasLocation/:hasBMI')average()"^^script:groovy ;
+  rdfs:label "Location Average BMI" ;
+.
+example3:Maidstone
+  a example3:Location ;
+  example3:averageBMI "<:LocationAverageBMI>"^^script:groovy ;
+  rdfs:label "Maidstone" ;
+.
+example3:Person
+  a owl:Class ;
+  example3:averageBMI "_this.getFacts('^rdf:type/:hasBMI').average()"^^script:groovy ;
+  rdfs:label "Person" ;
+.
+example3:Peter
+  a example3:Person ;
+  example3:hasBMI "<:BMI>"^^script:groovy ;
+  example3:hasHeight 1.7 ;
+  example3:hasLocation example3:Tideswell ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
+  example3:hasWeight "62"^^xsd:decimal ;
+.
+example3:RelativeBMI
+  a example3:Script ;
+  script:scriptCode "double averageBMI = _this.getFact('rdf:type/:averageBMI').doubleValue(); _this.getFact(':hasBMI').doubleValue()/averageBMI;"^^script:groovy ;
+  rdfs:label "BMI" ;
+.
+example3:Script
+  a owl:Class ;
+.
+example3:Tideswell
+  a example3:Location ;
+  example3:averageBMI "<:LocationAverageBMI>"^^script:groovy ;
+  rdfs:label "Tideswell" ;
+.
+example3:averageBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain rdfs:Class ;
+  rdfs:label "average BMI" ;
+.
+example3:hasBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain example3:Person ;
+  rdfs:label "has BMI" ;
+.
+example3:hasHeight
+  a owl:DatatypeProperty ;
+  rdfs:domain example3:Person ;
+  rdfs:label "has height" ;
+.
+example3:hasLocation
+  a owl:ObjectProperty ;
+  rdfs:domain example3:Person ;
+  rdfs:label "has location" ;
+  rdfs:range example3:Location ;
+.
+example3:hasRelativeBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain example3:Person ;
+  rdfs:label "has relative BMI" ;
+.
+example3:hasWeight
+  a owl:DatatypeProperty ;
+  rdfs:domain example3:Person ;
+  rdfs:label "has weight" ;
+.

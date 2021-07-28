@@ -80,7 +80,8 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		}else {
 			pathIteration ++;
 			if(pathIteration < this.sortedIterations.size()) {
-				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration);
+				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr,contexts);
 				return getResultsIterator().hasNext();
 			}else {
@@ -131,7 +132,8 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		if(resultsIterator!=null)
 			return resultsIterator;
 		else {
-			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration);
+			CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
 			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
 			return resultsIterator;
 		}

@@ -294,8 +294,15 @@ public class Thing extends Resource {
 		}
 	}
 
-	public final ResourceResults getFacts(String predicatePattern) throws PathPatternException {
-		return getFacts(predicatePattern,null);
+	public final ResourceResults getFacts(String predicatePattern, Literal... bindValues ) throws PathPatternException {
+		CustomQueryOptions customQueryOptions = null;
+		if(bindValues.length>0) {  
+			customQueryOptions= new CustomQueryOptions();	
+			for(Integer bindIndex =1; bindIndex <=bindValues.length; bindIndex++) {
+				customQueryOptions.add(bindIndex.toString(), bindValues[bindIndex-1]);
+			}
+		}
+		return getFacts(predicatePattern,customQueryOptions);
 	}
 
 	public Resource getSignal(String signal) {
@@ -390,9 +397,9 @@ public class Thing extends Resource {
 						Object _result = null;
 						scriptBindings.put("_result", _result);
 						scriptBindings.put("_this", this);
-						scriptBindings.put("$this", this);
+						//scriptBindings.put("$this", this);
 
-						scriptBindings.put("$customQueryOptions",customQueryOptions);
+						scriptBindings.put("_customQueryOptions",customQueryOptions);
 						//	scriptBindings.put("$property",		Thing.create(getSource(), predicate, this.getEvaluationContext()));
 					    //	scriptBindings.put("$builder", (new ModelBuilder()).namedGraph(cacheContextIRI));
 						//	scriptBindings.put("$tripleSource", getSource().getTripleSource());
@@ -820,51 +827,6 @@ public class Thing extends Resource {
 		return create(this.getSource(), thingIri,this.getEvaluationContext());
 	}
 
-//	@Deprecated
-//	public final Resource getFact(PredicateElement predicateElement) {
-//		String key = getFactKey(predicateElement);
-//		getEvaluationContext().getTracer().traceSeeking(this,predicateElement,getCustomQueryOptions());
-//		//addTrace(String.format("Seeking value %s of %s using customQueryOptions {}",
-//		//		addIRI(predicateElement.getPredicate()), addIRI(getSuperValue()), getCustomQueryOptions()));
-//		if (notTracing() && getCachedResources().containsKey(key)) {
-//			Resource result = getCachedResources().get(key);
-//			getEvaluationContext().getTracer().traceRetrieved(this,predicateElement, result);
-//			//addTrace(String.format("Retrieved cache %s of %s = %s", predicateElement.toString(),
-//			//		addIRI(getSuperValue()), getHTMLValue(result.getValue())));
-//			return result;
-//		} else {
-//			return retrieveFact(predicateElement.getPredicate(), key);
-//		}
-//	}
 
-//	@Deprecated
-//	private Resource retrieveFact(IRI predicate, String key) throws QueryEvaluationException {
-//		CloseableIteration<? extends Statement, QueryEvaluationException> objectStatements = getSource()
-//				.getTripleSource().getStatements((IRI) getSuperValue(), predicate, null);
-//		Resource returnResult = null;
-//		while (objectStatements.hasNext()) {
-//			Statement objectStatement = objectStatements.next();
-//			Value objectValue = objectStatement.getObject();
-//			returnResult = processFactObjectValue(predicate, objectValue,this.getCustomQueryOptions());
-//		}
-//		if (returnResult != null)
-//			return returnResult;
-//		getEvaluationContext().getTracer().traceNoPredicate(this,predicate);
-//		//addTrace(String.format("Error: No predicate %s found for subject %s", addIRI(predicate),
-//		//		addThisIRI()));
-//		// It could be there are reified attributes associated with scripts or signals
-//		Resource reifiedValue = getReifiedValue(getSource().createIRI(Evaluator.RDF_STATEMENT), predicate);
-//		if (reifiedValue != null) {
-//			return reifiedValue;//source.valueFactory(getTracer(), reifiedValue, getStack(),this.customQueryOptions,this.prefixes);
-//		}
-//		decrementTraceLevel();
-//		return new pathQLModel.Literal(null);
-//	}
-
-//	@Deprecated
-//	private Resource getReifiedValue(IRI createIRI, IRI predicate) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
 }

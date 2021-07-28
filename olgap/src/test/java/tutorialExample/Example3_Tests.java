@@ -40,6 +40,7 @@ class Example3_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example3/");
+		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		source = PathQLRepository.create(workingRep);
@@ -54,14 +55,52 @@ class Example3_Tests {
 	void example3_1() {
 
 		try {
-			Thing peter = source.getThing(":Tideswell"); 
-			Resource bmi = peter.getFact(":averageBMI");
-			assertEquals("21.453287197231838", bmi.stringValue());
+			Thing tideswell = source.getThing(":Tideswell"); 
+			Resource bmi = tideswell.getFact(":averageBMI");
+			assertEquals("21.7109303439298", bmi.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
 	}
+	@Test
+	@Order(2)
+	void example3_2() {
 
+		try {
+			try {
+				Thing tideswell = source.getThing(":Tideswell"); 
+				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt '1.9'^^xsd:double ]]/:hasBMI").average();
+				assertEquals("23.904182152163695", bmi.toString());
+			} catch (Exception e) {
+				fail();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(3)
+	void example3_3() {
+
+		try {
+			try {
+				Thing tideswell = source.getThing(":Tideswell"); 
+//				maxheight =literal("1.9",xsd:double);
+//				minheight = literal(1.4);
+//				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt %1 ;gt %2 ]]/:hasBMI",maxheight, minheight,location).average();
+				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt '1.9'^^xsd:double ]]/:hasBMI").average();
+				assertEquals("23.904182152163695", bmi.toString());
+			} catch (Exception e) {
+				fail();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
 
 }

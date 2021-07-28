@@ -112,7 +112,7 @@ void test_2() {
 		Iterations iterations = Iterations.create(element);
 		assertEquals ("{0=1, 1=2, 2=3, 3=4, 4=5, 5=6, 6=7, 7=8}",iterations.toString());
 		Iterations sortedIterations = iterations.sortByPathLength();
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,2);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,2,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -145,7 +145,7 @@ void test_3() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, ":Attribute@:density{1, 42}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,0);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,0,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -191,7 +191,7 @@ void test_4() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, ":Attribute@:density{1, 42}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		 ("Join\r\n"
@@ -269,7 +269,7 @@ void test_5() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,0);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,0,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -296,7 +296,7 @@ void test_5() {
 void test_6() {
 	try {
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -337,7 +337,7 @@ void test_7() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -383,7 +383,7 @@ void test_8() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
 		//Query.assertEqualsWOSpaces
 		assertEquals
 		("Join\r\n"
@@ -430,7 +430,7 @@ void test_9() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -476,7 +476,7 @@ void test_10() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"

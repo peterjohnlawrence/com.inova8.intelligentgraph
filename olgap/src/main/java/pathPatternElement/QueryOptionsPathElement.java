@@ -1,6 +1,7 @@
 package pathPatternElement;
 
 import path.PathTupleExpr;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -35,7 +36,7 @@ public class QueryOptionsPathElement extends PathElement{
 	}
 
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 
@@ -50,8 +51,7 @@ public class QueryOptionsPathElement extends PathElement{
 
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
-			Integer pathIteration) {
-		// TODO Auto-generated method stub
+			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 

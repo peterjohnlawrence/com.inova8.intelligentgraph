@@ -376,6 +376,18 @@ public class PathPatternBaseListener implements PathPatternListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRdfLiteral(PathPatternParser.RdfLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRdfLiteral(PathPatternParser.RdfLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterOperator(PathPatternParser.OperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}

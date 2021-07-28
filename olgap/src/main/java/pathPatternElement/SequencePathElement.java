@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import path.EdgeBinding;
 import path.PathBinding;
 import path.PathTupleExpr;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -82,8 +83,8 @@ public class SequencePathElement extends PathElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		return pathPatternQuery(thing, sourceVariable, targetVariable, 0);
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(thing, sourceVariable, targetVariable, 0,customQueryOptions);
 	}
 	public Boolean hasNextCardinality(Integer iteration) {
 			
@@ -114,7 +115,7 @@ public class SequencePathElement extends PathElement {
 	 }
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
-			Integer pathIteration) {
+			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
 		Join intermediateJoinPattern = null;
@@ -146,9 +147,9 @@ public class SequencePathElement extends PathElement {
 					}
 				}
 				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,
-						intermediateVariable, pathIteration);			
+						intermediateVariable, pathIteration,customQueryOptions);			
 				PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
-						pathIteration);
+						pathIteration,customQueryOptions);
 				intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
 				if (joinPattern == null) {
 					joinPattern = new PathTupleExpr((TupleExpr)intermediateJoinPattern);

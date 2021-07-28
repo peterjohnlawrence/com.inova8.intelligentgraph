@@ -1,0 +1,33 @@
+# baseURI: http://inova8.com/intelligentgraph/example1/
+# prefix: example1
+
+@prefix : <http://inova8.com/intelligentgraph/example1/> .
+@prefix example1: <http://inova8.com/intelligentgraph/example1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+example1:
+  a owl:Ontology ;
+.
+example1:Person
+  a owl:Class ;
+  rdfs:label "Person" ;
+.
+example1:Peter
+  a example1:Person ;
+  example1:hasBMI "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
+  example1:hasHeight 1.7 ;
+  example1:hasWeight "62"^^xsd:decimal ;
+.
+example1:hasBMI
+  a owl:DatatypeProperty ;
+.
+example1:hasHeight
+  a owl:DatatypeProperty ;
+.
+example1:hasWeight
+  a owl:DatatypeProperty ;
+.

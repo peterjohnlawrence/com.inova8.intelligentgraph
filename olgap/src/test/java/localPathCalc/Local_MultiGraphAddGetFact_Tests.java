@@ -163,7 +163,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
@@ -193,7 +193,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
@@ -203,7 +203,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			//Query.assertEqualsWOSpaces
 			assertEquals
 			("<ol style='list-style-type:none;'><li>Getting facts  ':averageSales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a></li></li><li>...using options: [name=&quot;Peter&quot;&amp;time=&quot;42&quot;^^&lt;http://www.w3.org/2001/XMLSchema#int&gt;]</li></li><li>...within contexts: [file://src/test/resources/calc2graph.def.ttl, http://inova8.com/calc2graph/testGraph2]</li></li><ol style='list-style-type:none;'><li>Evaluating predicate <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a>, by invoking <b>groovy</b> script\n"
-					+ "</li></li><li><div  style='border: 1px solid black;'> <pre><code >totalSales=0; count=0;for(sales in $this.getFacts(&quot;&lt;http://inova8.com/calc2graph/def/sales&gt;&quot;)){totalSales += &nbsp;sales.doubleValue();count++}; return totalSales/count;</code></pre></div></li><ol style='list-style-type:none;'><li>Getting facts '&lt;http://inova8.com/calc2graph/def/sales&gt;' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> </li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 1</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 2</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 4</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 5</li></li></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> =  3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li></ol><li>Calculated <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><li>Retrieved cached value <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><li>Returned fact 'http://inova8.com/calc2graph/def/averageSales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><p></ol>", 
+					+ "</li></li><li><div  style='border: 1px solid black;'> <pre><code >totalSales=0; count=0;for(sales in _this.getFacts(&quot;&lt;http://inova8.com/calc2graph/def/sales&gt;&quot;)){totalSales += &nbsp;sales.doubleValue();count++}; return totalSales/count;</code></pre></div></li><ol style='list-style-type:none;'><li>Getting facts '&lt;http://inova8.com/calc2graph/def/sales&gt;' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> </li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 1</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 2</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 4</li></li><li>Returned fact 'http://inova8.com/calc2graph/def/sales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 5</li></li></ol><li>Evaluated <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> =  3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li></ol><li>Calculated <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><li>Retrieved cached value <a href='http://inova8.com/calc2graph/def/averageSales' target='_blank'>averageSales</a> of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><li>Returned fact 'http://inova8.com/calc2graph/def/averageSales' of <a href='http://inova8.com/calc2graph/def/Country' target='_blank'>Country</a> = 3.0^^<a href='http://www.w3.org/2001/XMLSchema#double' target='_blank'>double</a></li></li><p></ol>", 
 					averageCountrySalesTrace.asHTML());
 			
 		} catch (Exception e) {
@@ -225,7 +225,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "30");
 			myCountry.addFact(":sales", "40");
 			myCountry.addFact(":sales", "50");
-			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
+			String totalSalesScript = "return _this.getFacts(\":sales\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
@@ -254,7 +254,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "300");
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
+			String averageSalesScript = "return _this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;

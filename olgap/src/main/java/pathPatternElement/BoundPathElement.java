@@ -7,6 +7,7 @@ import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
 import path.PathBinding;
 import path.PathTupleExpr;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -82,13 +83,13 @@ public class BoundPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		return pathPatternQuery(thing,  sourceVariable,  targetVariable,1);
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(thing,  sourceVariable,  targetVariable,0,customQueryOptions);
 	}
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
-			Integer pathIteration) {
-		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable);
+			Integer pathIteration, CustomQueryOptions customQueryOptions) {
+		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,customQueryOptions);
 		return rightPattern;
 	}
 	/**

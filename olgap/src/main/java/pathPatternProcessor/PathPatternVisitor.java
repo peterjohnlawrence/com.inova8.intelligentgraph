@@ -37,6 +37,7 @@ import PathPattern.PathPatternParser.QnameContext;
 import PathPattern.PathPatternParser.QueryOptionContext;
 import PathPattern.PathPatternParser.QueryOptionsContext;
 import PathPattern.PathPatternParser.QueryStringContext;
+import PathPattern.PathPatternParser.RdfLiteralContext;
 import PathPattern.PathPatternParser.RdfTypeContext;
 import PathPattern.PathPatternParser.ReifiedPredicateContext;
 import PathPattern.PathPatternParser.TypeContext;
@@ -45,6 +46,7 @@ import PathPattern.PathPatternParser.VerbObjectListContext;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternElement.AlternativePathElement;
+import pathPatternElement.BindVariableElement;
 import pathPatternElement.BoundPathElement;
 import pathPatternElement.FactFilterElement;
 import pathPatternElement.CardinalityElement;
@@ -464,11 +466,43 @@ public PathPatternVisitor(Thing thing) {
 
 	@Override
 	public LiteralValueElement visitLiteral(LiteralContext ctx) {
-		//literal : LITERAL ;
+		//literal : rdfLiteral | BINDVARIABLE ;
+		if(ctx.rdfLiteral()!=null) {
+			return visitRdfLiteral(ctx.rdfLiteral());
+		}else if(ctx.BINDVARIABLE()!=null ) {
+			String bindVariableIndex = ctx.BINDVARIABLE().getText().substring(1);
+			BindVariableElement bindVariableElement = new BindVariableElement(getSource());
+			bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
+			return bindVariableElement;
+		}
+		return null;
+	}
+
+	@Override
+	public LiteralValueElement visitRdfLiteral(RdfLiteralContext ctx) {
+		//rdfLiteral: (DQLITERAL | SQLITERAL) ('^^' (IRI_REF |  qname) )? ;
 		LiteralValueElement literalElement = new LiteralValueElement(getSource());
-		String literalValue = ctx.getText();
+		String literalValue = null;
+		if(ctx.DQLITERAL()==null) {
+			literalValue = ctx.SQLITERAL().getText() ;
+		}else {
+			literalValue = ctx.DQLITERAL().getText() ;
+		}
 		literalValue =  literalValue.substring(1, literalValue.length() - 1); 
-		literalElement.setLiteral(literal(literalValue));
+		IRI datatypeIRI = null ;
+		if(ctx.IRI_REF() ==null) {
+			if(ctx.qname() ==null ) {
+				literalElement.setLiteral(literal(literalValue));
+			}else {
+				IriRefValueElement qnameElement = visitQname(ctx.qname());
+				datatypeIRI = qnameElement.getIri();
+				literalElement.setLiteral(literal(literalValue, datatypeIRI));
+			}
+		}else {
+			String datatypeIRIString = ctx.IRI_REF().getText();
+			literalElement.setLiteral(literal(literalValue, datatypeIRIString));
+		}
+		//literalElement.setLiteral(literal(literalValue));
 		return literalElement;
 	}
 

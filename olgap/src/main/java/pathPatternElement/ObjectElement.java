@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import path.PathBinding;
 import path.PathTupleExpr;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -61,7 +62,7 @@ public class ObjectElement extends PathElement{
 	 *
 	 * @return the literal
 	 */
-	public Literal getLiteral() {
+	public Literal getLiteral(CustomQueryOptions customQueryOptions) {
 		return literal;
 	}
 	
@@ -148,13 +149,12 @@ public class ObjectElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
-			Integer pathIteration) {
-		// TODO Auto-generated method stub
+			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 	/**

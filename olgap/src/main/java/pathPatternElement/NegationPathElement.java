@@ -5,6 +5,7 @@ package pathPatternElement;
 
 import path.PathBinding;
 import path.PathTupleExpr;
+import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;
 import pathPatternProcessor.PathConstants;
 import pathPatternProcessor.PathConstants.EdgeCode;
@@ -69,14 +70,12 @@ public class NegationPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
-		// TODO Auto-generated method stub
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 	@Override
 	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
-			Integer pathIteration) {
-		// TODO Auto-generated method stub
+			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 	/**
@@ -86,7 +85,6 @@ public class NegationPathElement extends PathElement{
 	 */
 	@Override
 	public Boolean getIsNegated() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

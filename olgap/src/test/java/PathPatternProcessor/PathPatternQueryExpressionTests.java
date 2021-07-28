@@ -520,7 +520,7 @@ class PathPatternQueryExpressionTests {
 					+ "   StatementPattern\r\n"
 					+ "      Variable (name=rnull)\r\n"
 					+ "      Variable (name=objectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-					+ "      Variable (name=rnull, value=http://id/Calc2Graph2)\r\n"
+					+ "      Variable (name=nnull, value=http://id/Calc2Graph2)\r\n"
 					+ "" ,element.pathPatternQuery(thing).toString());
 		}catch(Exception e){
 			Query.assertEqualsWOSpaces ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
@@ -567,7 +567,7 @@ class PathPatternQueryExpressionTests {
 					+ "      StatementPattern\r\n"
 					+ "         Variable (name=r1)\r\n"
 					+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-					+ "         Variable (name=r1, value=http://id/Calc2Graph2)\r\n"
+					+ "         Variable (name=n1, value=http://id/Calc2Graph2)\r\n"
 					+ "" ,element.pathPatternQuery(thing).toString());
 		}catch(Exception e){
 			fail();

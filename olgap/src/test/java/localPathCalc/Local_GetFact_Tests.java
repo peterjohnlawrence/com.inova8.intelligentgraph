@@ -116,8 +116,8 @@ class Local_GetFact_Tests {
 	@Order(1)
 	void test_1() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.getFact("<http://inova8.com/calc2graph/def/testProperty1>");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			_this.getFact("<http://inova8.com/calc2graph/def/testProperty1>");
 		} catch (Exception e) {
 			assertEquals("javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.ScriptFailedException: javax.script.ScriptException: Exceptions.CircularReferenceException: Circular reference encountered when evaluating <http://inova8.com/calc2graph/def/testProperty2> of <http://inova8.com/calc2graph/id/BatteryLimit1>.\r\n"
 					+ "[<http://inova8.com/calc2graph/def/testProperty2> <http://inova8.com/calc2graph/id/BatteryLimit1>; queryOptions=\r\n"
@@ -134,8 +134,8 @@ class Local_GetFact_Tests {
 	@Order(2)
 	void test_2() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
-			Resource result = $this.getFact(":volumeFlow");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Resource result = _this.getFact(":volumeFlow");
 			assertEquals("40", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -149,8 +149,8 @@ class Local_GetFact_Tests {
 	@Order(21)
 	void test_2_1() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
-			Resource result = $this.getFact(":hasFeedBatteryLimit/:volumeFlow");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			Resource result = _this.getFact(":hasFeedBatteryLimit/:volumeFlow");
 			assertEquals("59", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -163,8 +163,8 @@ class Local_GetFact_Tests {
 	@Order(22)
 	void test_2_2() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":long");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":long");
 			assertEquals("501", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -180,12 +180,12 @@ class Local_GetFact_Tests {
 	void test_3() {
 
 		try {
-			Thing $this = Thing.create(source, iri("http://inova8.com/calc2graph/id/Unit1"), 	null);
+			Thing _this = Thing.create(source, iri("http://inova8.com/calc2graph/id/Unit1"), 	null);
 			Double fact = 0.0;
-			for (Resource batterylimit : $this.getFacts(":hasProductBatteryLimit")) {
+			for (Resource batterylimit : _this.getFacts(":hasProductBatteryLimit")) {
 				fact += batterylimit.getFact(":massFlow").doubleValue();
 			}
-			ResourceResults batterylimits = $this.getFacts(":hasProductBatteryLimit");
+			ResourceResults batterylimits = _this.getFacts(":hasProductBatteryLimit");
 			Resource batterylimit;
 			while (batterylimits.hasNext()) {
 				batterylimit = batterylimits.next();
@@ -207,8 +207,8 @@ class Local_GetFact_Tests {
 	void test_4() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
-			Resource result = $this.getFact(":massThroughput");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			Resource result = _this.getFact(":massThroughput");
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -226,8 +226,8 @@ class Local_GetFact_Tests {
 	void test_5() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact("def:Attribute@def:density");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact("def:Attribute@def:density");
 			if (result != null)
 				assertEquals(".42", result.stringValue());
 			else
@@ -246,8 +246,8 @@ class Local_GetFact_Tests {
 	void test_6() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null);
-			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massFlow>");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit3"), null);
+			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massFlow>");
 			assertEquals("10.0", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -263,8 +263,8 @@ class Local_GetFact_Tests {
 	void test_7() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
-			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massThroughput>");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
+			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massThroughput>");
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -280,8 +280,8 @@ class Local_GetFact_Tests {
 	void test_8() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
-			Resource result = $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Resource result = _this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput");
 
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
@@ -297,9 +297,9 @@ class Local_GetFact_Tests {
 	@Order(9)
 	void test_9() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
-			Float result = $this.getFact(":massFlow").floatValue()
-					/ $this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput").floatValue();
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Float result = _this.getFact(":massFlow").floatValue()
+					/ _this.getFact("^:hasProductBatteryLimit").getFact(":massThroughput").floatValue();
 
 			assertEquals("0.7368421", result.toString());
 		} catch (Exception e) {
@@ -315,8 +315,8 @@ class Local_GetFact_Tests {
 	@Order(10)
 	void test_10() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
-			Float result = $this.getFact("^:hasProductBatteryLimit/:massThroughput").floatValue();
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"), null);
+			Float result = _this.getFact("^:hasProductBatteryLimit/:massThroughput").floatValue();
 
 			assertEquals("38.0", result.toString());
 		} catch (Exception e) {
@@ -332,8 +332,8 @@ class Local_GetFact_Tests {
 	@Order(11)
 	void test_11() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":lat");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":lat");
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
@@ -350,8 +350,8 @@ class Local_GetFact_Tests {
 	void test_12() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
@@ -368,8 +368,8 @@ class Local_GetFact_Tests {
 	void test_13() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#").getFact(":lat");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn[eq id:Calc2Graph1]#").getFact(":lat");
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
@@ -386,8 +386,8 @@ class Local_GetFact_Tests {
 	void test_14() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn[eq id:Calc2Graph2]#"); //""
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn[eq id:Calc2Graph2]#"); //""
 
 			if (result != null)
 				assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
@@ -405,8 +405,8 @@ class Local_GetFact_Tests {
 	@Order(15)
 	void test_15() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/long>");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/long>");
 
 			assertEquals("501", result.stringValue());
 		} catch (Exception e) {
@@ -423,8 +423,8 @@ class Local_GetFact_Tests {
 	void test_16() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]#");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
+			Resource result = _this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]#");
 
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL2", result.stringValue());
 		} catch (Exception e) {
@@ -441,8 +441,8 @@ class Local_GetFact_Tests {
 	void test_17() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
+			Resource result = _this.getFact("^:Location@:appearsOn[eq id:BatteryLimit2]");
 
 			assertEquals("http://inova8.com/calc2graph/id/BatteryLimit2", result.stringValue());
 		} catch (Exception e) {
@@ -459,8 +459,8 @@ class Local_GetFact_Tests {
 	void test_18() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
-			Resource result = $this.getFact("^:Location@:appearsOn[eq id:BatteryLimit1]#/:lat");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Calc2Graph1"), null);
+			Resource result = _this.getFact("^:Location@:appearsOn[eq id:BatteryLimit1]#/:lat");
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
@@ -477,8 +477,8 @@ class Local_GetFact_Tests {
 	void test_19() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn[ rdfs:label 'Calc2Graph2']#");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn[ rdfs:label 'Calc2Graph2']#");
 
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
 		} catch (Exception e) {
@@ -495,8 +495,8 @@ class Local_GetFact_Tests {
 	void test_20() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#/:lat");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn[eq [ rdfs:label 'Calc2Graph2']]#/:lat");
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
@@ -513,8 +513,8 @@ class Local_GetFact_Tests {
 	void test_21() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph1 ]/:long");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph1 ]/:long");
 
 			assertEquals("501", result.stringValue());
 		} catch (Exception e) {
@@ -531,8 +531,8 @@ class Local_GetFact_Tests {
 	void test_22() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]/:long");
 
 			assertEquals("502", result.stringValue());
 		} catch (Exception e) {
@@ -549,8 +549,8 @@ class Local_GetFact_Tests {
 	void test_23() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Resource result = $this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			Resource result = _this.getFact(":Location@:appearsOn#[:location.Map  id:Calc2Graph2 ]");
 
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
 		} catch (Exception e) {
@@ -567,8 +567,8 @@ class Local_GetFact_Tests {
 	void test_24() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
-			Resource result = $this.getFact(":massThroughput");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
+			Resource result = _this.getFact(":massThroughput");
 
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
@@ -585,9 +585,9 @@ class Local_GetFact_Tests {
 	void test_25() {
 
 		try {
-			String averageSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
-			Resource result = $this.getFact(":massThroughput");
+			String averageSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
+			Resource result = _this.getFact(":massThroughput");
 
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
@@ -604,8 +604,8 @@ class Local_GetFact_Tests {
 	void test_26() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit3"), null);
-			Resource result = $this.getFact(":massThroughput");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit3"), null);
+			Resource result = _this.getFact(":massThroughput");
 
 			assertEquals("24.77999922633171", result.stringValue());
 		} catch (Exception e) {
@@ -622,8 +622,8 @@ class Local_GetFact_Tests {
 	void test_27() {
 
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit3"), null);
-			Resource result = $this.getFact(":massFlowBalance");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit3"), null);
+			Resource result = _this.getFact(":massFlowBalance");
 
 			assertEquals("-13.220000296831131", result.stringValue());
 		} catch (Exception e) {
@@ -639,8 +639,8 @@ class Local_GetFact_Tests {
 	@Order(28)
 	void test_28() {
 		try {
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			ResourceResults results = $this.getFacts("(:Attribute@:density  |:density)");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			ResourceResults results = _this.getFacts("(:Attribute@:density  |:density)");
 			for (Resource result : results) {
 				assertEquals(".42", result.stringValue());
 			}
@@ -658,8 +658,8 @@ class Local_GetFact_Tests {
 		try {
 			source.addGraph("http://inova8.com/calc2graph/testGraph");
 			
-			Thing $this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			ResourceResults results = $this.getFacts("(:Attribute@:density  |:density)");
+			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+			ResourceResults results = _this.getFacts("(:Attribute@:density  |:density)");
 			for (Resource result : results) {
 				assertEquals(".42", result.stringValue());
 			}
@@ -678,8 +678,8 @@ class Local_GetFact_Tests {
 		try {
 			source = PathQLRepository.create(workingRep);
 
-			Thing $this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit3"),null);
-			Resource result = $this.getFact("<http://inova8.com/calc2graph/def/massYield>");
+			Thing _this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit3"),null);
+			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massYield>");
 			assertEquals("0.26315789803903855", result.stringValue());
 		} catch (Exception e) {
 			fail();
@@ -698,7 +698,7 @@ class Local_GetFact_Tests {
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":time", "$customQueryOptions.get(\"time\") ;", Evaluator.GROOVY);
+			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", Evaluator.GROOVY);
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
 			customQueryOptions.add("name","Peter");

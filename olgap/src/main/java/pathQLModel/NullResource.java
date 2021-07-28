@@ -3,6 +3,8 @@
  */
 package pathQLModel;
 
+import org.eclipse.rdf4j.model.Literal;
+
 import pathPatternElement.PredicateElement;
 import pathPatternProcessor.PathPatternException;
 import pathQLResults.ResourceResults;
@@ -40,7 +42,7 @@ public Resource getFact(String predicatePattern) throws PathPatternException {
  * @throws PathPatternException the path pattern exception
  */
 @Override
-public ResourceResults getFacts(String predicatePattern) throws PathPatternException {
+public ResourceResults getFacts(String predicatePattern,Literal... bindValues) throws PathPatternException {
 	// TODO Auto-generated method stub
 	return null;
 }

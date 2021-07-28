@@ -198,6 +198,12 @@ public interface PathPatternVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral(PathPatternParser.LiteralContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PathPatternParser#rdfLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRdfLiteral(PathPatternParser.RdfLiteralContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PathPatternParser#operator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

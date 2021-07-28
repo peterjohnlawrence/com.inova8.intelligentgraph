@@ -273,61 +273,23 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	 * @param stackKey the stack key
 	 */
 	public void pushStack(String stackKey) {
-//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
 			evaluationContext.getStack().push(stackKey);
-//		}
 	}
-	
-	/**
-	 * Pop stack.
-	 */
+
 	public void popStack() {
-//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
 			evaluationContext.getStack().pop();
-//		}
 	}
-	/**
-	 * Gets the fact.
-	 *
-	 * @param predicatePattern the predicate pattern
-	 * @return the fact
-	 * @throws PathPatternException the path pattern exception
-	 */
+
 	public abstract  Resource getFact(String predicatePattern) throws PathPatternException ;
 
-	/**
-	 * Gets the facts.
-	 *
-	 * @param predicatePattern the predicate pattern
-	 * @return the facts
-	 * @throws PathPatternException the path pattern exception
-	 */
-	public abstract  ResourceResults getFacts(String predicatePattern) throws PathPatternException ;
+	public abstract  ResourceResults getFacts(String predicatePattern, org.eclipse.rdf4j.model.Literal...bindValues ) throws PathPatternException ;
 	
-	/**
-	 * Gets the facts.
-	 *
-	 * @param path the path
-	 * @return the facts
-	 */
 	public abstract ResourceResults getFacts( PredicateElement path) ;
-
-/**
- * Gets the signal.
- *
- * @param signal the signal
- * @return the signal
- */
 
 	public pathQLModel.Resource getSignal(String signal) {
 		return null;
 	}
 	
-	/**
-	 * Gets the label.
-	 *
-	 * @return the label
-	 */
 	String getLabel() {
 		if (getValue() != null)
 			return getValue().stringValue();
@@ -335,20 +297,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return null;
 	}
 
-	/**
-	 * String value.
-	 *
-	 * @return the string
-	 */
 	public String stringValue() {
 		return getLabel();
 	}
 
-	/**
-	 * Boolean value.
-	 *
-	 * @return the boolean
-	 */
 	public Boolean booleanValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseBoolean(getLabel());
@@ -356,11 +308,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Boolean) null;
 	}
 
-	/**
-	 * Byte value.
-	 *
-	 * @return the byte
-	 */
 	public Byte byteValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseByte(getLabel());
@@ -368,11 +315,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Byte) null;
 	}
 
-	/**
-	 * Short value.
-	 *
-	 * @return the short
-	 */
 	public Short shortValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseShort(getLabel());
@@ -380,11 +322,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Short) null;
 	}
 
-	/**
-	 * Integer value.
-	 *
-	 * @return the integer
-	 */
 	public Integer integerValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseInt(getLabel());
@@ -392,11 +329,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Integer) null;
 	}
 
-	/**
-	 * Long value.
-	 *
-	 * @return the long
-	 */
 	public Long longValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseLong(getLabel());
@@ -404,11 +336,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Long) null;
 	}
 
-	/**
-	 * Float value.
-	 *
-	 * @return the float
-	 */
 	public Float floatValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseFloat(getLabel());
@@ -416,11 +343,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Float) null;
 	}
 
-	/**
-	 * Double value.
-	 *
-	 * @return the double
-	 */
 	public Double doubleValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseDouble(getLabel());
@@ -428,11 +350,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (Double) null;
 	}
 
-	/**
-	 * Big integer value.
-	 *
-	 * @return the big integer
-	 */
 	public BigInteger bigIntegerValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseInteger(getLabel());
@@ -440,11 +357,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (BigInteger) null;
 	}
 
-	/**
-	 * Decimal value.
-	 *
-	 * @return the big decimal
-	 */
 	public BigDecimal decimalValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseDecimal(getLabel());
@@ -452,11 +364,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (BigDecimal) null;
 	}
 
-	/**
-	 * Calendar value.
-	 *
-	 * @return the XML gregorian calendar
-	 */
 	public XMLGregorianCalendar calendarValue() {
 		if (getLabel() != null)
 			return XMLDatatypeUtil.parseCalendar(getLabel());
@@ -464,12 +371,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (XMLGregorianCalendar) null;
 	}
 
-	/**
-	 * Convert Q name.
-	 *
-	 * @param predicateIRI the predicate IRI
-	 * @return the iri
-	 */
 	
 	@Deprecated
 	public IRI convertQName(String predicateIRI) {
@@ -494,24 +395,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 		return predicate;
 	}
 	
-	/**
-	 * Gets the namespace.
-	 *
-	 * @param namespaceString the namespace string
-	 * @return the namespace
-	 */
 	@Deprecated
 	private IRI getNamespace(String namespaceString) {
 		IRI namespace = getPrefixes().get(namespaceString);
 		return namespace;
 	}
 
-	
-	/**
-	 * Gets the prefixes.
-	 *
-	 * @return the prefixes
-	 */
 	@Deprecated
 	public ConcurrentHashMap<String, IRI> getPrefixes() {
 		if(this.getEvaluationContext()!=null )
@@ -521,66 +410,24 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	}
 	
 
-	
-	/**
-	 * Gets the super value.
-	 *
-	 * @return the super value
-	 */
 	public Value getSuperValue() {
 		return superValue;
 	}
 	
-	/**
-	 * Sets the super value.
-	 *
-	 * @param superValue the new super value
-	 */
 	public void setSuperValue(Value superValue) {
 		this.superValue = superValue;
 	}
 	
-	/**
-	 * Sets the source.
-	 *
-	 * @param source the new source
-	 */
 	public void setSource(PathQLRepository source) {
 		this.source = source;
 	}
 	
-	/**
-	 * Gets the subject.
-	 *
-	 * @return the subject
-	 */
 	public abstract Resource getSubject();
 	
-	/**
-	 * Gets the predicate.
-	 *
-	 * @return the predicate
-	 */
 	public abstract Resource getPredicate();
 	
-	/**
-	 * Gets the snippet.
-	 *
-	 * @return the snippet
-	 */
 	public abstract Object getSnippet();
 	
-	/**
-	 * Gets the score.
-	 *
-	 * @return the score
-	 */
 	public abstract Object getScore();
 	
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
-//	public abstract URI getId();
 }

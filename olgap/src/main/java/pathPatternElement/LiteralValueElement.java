@@ -5,6 +5,7 @@ package pathPatternElement;
 
 import org.eclipse.rdf4j.model.Literal;
 
+import pathCalc.CustomQueryOptions;
 import pathPatternProcessor.PathConstants;
 import pathQLRepository.PathQLRepository;
 
@@ -13,65 +14,35 @@ import pathQLRepository.PathQLRepository;
  */
 public class LiteralValueElement extends ObjectElement {
 	
-	/** The literal. */
 	Literal literal;
-	
-	/**
-	 * Instantiates a new literal value element.
-	 *
-	 * @param source the source
-	 */
+
+
 	public LiteralValueElement(PathQLRepository source) {
 		super(source);
 		operator =PathConstants.Operator.LITERAL;
 	}
-
-
-	/**
-	 * Gets the literal.
-	 *
-	 * @return the literal
-	 */
 	public Literal getLiteral() {
 		return literal;
 	}
-
-	/**
-	 * Sets the literal.
-	 *
-	 * @param literal the new literal
-	 */
+	public Literal getLiteral(CustomQueryOptions customQueryOptions) {
+		return literal;
+	}
 	public void setLiteral(Literal literal) {
 		this.literal = literal;
 	}
 	
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
 	public String toString() {
-		return literal.stringValue();
+		return getLiteral().stringValue();
 	}
 	
-	/**
-	 * To SPARQL.
-	 *
-	 * @return the string
-	 */
 	public String toSPARQL() {
 
-		return  "'"+  literal.stringValue() + "'" ;
+		return  "'"+  getLiteral().stringValue() + "'" ;
 	}
 	
-	/**
-	 * To HTML.
-	 *
-	 * @return the string
-	 */
 	@Override
 	public String toHTML() {
 
-		return literal.stringValue();
+		return getLiteral().stringValue();
 	}
 }

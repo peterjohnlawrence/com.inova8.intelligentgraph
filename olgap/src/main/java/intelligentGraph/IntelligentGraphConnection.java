@@ -297,19 +297,13 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		return getThingPaths(source, thing,pathElement, contexts );
 	}
 	private CloseableIteration<? extends IntelligentStatement, SailException> getThingFacts(PathQLRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
-		//CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,pathElement, contexts);
-		//return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement,this,customQueryOptions,contexts);
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) 
 				new IntelligentStatementResults(source,thing, pathElement,this,customQueryOptions,contexts);
 	}
 	
 	
 	private CloseableIteration<? extends IntelligentStatement, SailException> getThingPaths(PathQLRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
-		//PathTupleExpr pathTupleExpr = pathElement.pathPatternQuery(thing);
-		//CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,	pathElement, pathTupleExpr, contexts);
-		//return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementPaths( resultsIterator,thing, pathElement, pathTupleExpr, this,customQueryOptions,contexts);
-		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementPaths( source,thing, pathElement,  this,customQueryOptions,contexts);
-		
+		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementPaths( source,thing, pathElement,  this,customQueryOptions,contexts);	
 	}
 
 	private String toPathQLString(Value pathQLValue) {
@@ -350,21 +344,25 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(PathQLRepository source,Thing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-		TupleExpr pathElementPattern = pathTupleExpr.getTupleExpr();
+		CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+//		pathElement.setCustomQueryOptions(customQueryOptions);
+		TupleExpr tupleExpr = pathTupleExpr.getTupleExpr();
 		SimpleDataset dataset = prepareDataset(pathElement, contexts);
 		BindingSet bindings = new QueryBindingSet();
 		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(),dataset, null);
-		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(pathElementPattern,bindings);
+		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(tupleExpr,bindings);
 		return resultsIterator;
 	}
 
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(PathQLRepository source,Thing thing, PathElement pathElement, Integer pathIteration, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-		TupleExpr pathElementPattern = pathElement.pathPatternQuery(thing,pathIteration).getTupleExpr();
+		CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+//		pathElement.setCustomQueryOptions(customQueryOptions);
+		TupleExpr tupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions).getTupleExpr();
 		SimpleDataset dataset = prepareDataset(pathElement, contexts);
 		BindingSet bindings = new QueryBindingSet();
 		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(),dataset, null);
-		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(pathElementPattern,bindings);
+		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(tupleExpr,bindings);
 		return resultsIterator;
 	}
 

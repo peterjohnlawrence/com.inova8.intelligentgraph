@@ -44,7 +44,7 @@ public class Literal extends Resource {
 	 * @throws PathPatternException the path pattern exception
 	 */
 	@Override
-	public ResourceResults getFacts(String predicatePattern) throws PathPatternException {
+	public ResourceResults getFacts(String predicatePattern,org.eclipse.rdf4j.model.Literal... bindValues) throws PathPatternException {
 		// TODO Auto-generated method stub
 		return null;
 	}

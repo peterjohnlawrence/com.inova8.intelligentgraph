@@ -55,7 +55,6 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
-
 		this.thing=thing;
 		this.pathElement=pathElement;
 		this.intelligentGraphConnection=intelligentGraphConnection;

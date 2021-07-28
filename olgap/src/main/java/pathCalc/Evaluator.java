@@ -101,6 +101,10 @@ public class Evaluator {
 	/** The Constant CACHE_DATE_TIME. */
 	public static final String CACHE_DATE_TIME = "cacheDateTime";
 	
+	public static final String THIS ="_this";
+	public static final String PROPERTY ="_property";	
+	public static final String CUSTOMQUERYOPTIONS ="_customQueryOptions";	
+	public static final String BINDVARIABLEPREFIX ="%";	
 	/** The Constant ISPRIVATE. */
 	public static final String ISPRIVATE = "isPrivate";
 	static {

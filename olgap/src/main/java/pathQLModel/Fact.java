@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import pathCalc.Thing;
@@ -123,25 +124,11 @@ public class Fact extends Resource {
 		return null;
 	}
 	
-	/**
-	 * Gets the facts.
-	 *
-	 * @param predicatePattern the predicate pattern
-	 * @return the facts
-	 * @throws PathPatternException the path pattern exception
-	 */
 	@Override
-	public ResourceResults getFacts(String predicatePattern) throws PathPatternException {
-		// TODO Auto-generated method stub
+	public ResourceResults getFacts(String predicatePattern, Literal... bindValues ) throws PathPatternException {
 		return null;
 	}
 	
-	/**
-	 * Gets the facts.
-	 *
-	 * @param path the path
-	 * @return the facts
-	 */
 	@Override
 	public ResourceResults getFacts(PredicateElement path) {
 		// TODO Auto-generated method stub
@@ -169,4 +156,5 @@ public class Fact extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

@@ -1,0 +1,138 @@
+# baseURI: http://inova8.com/intelligentgraph/example2/
+# prefix: example2
+
+@prefix : <http://inova8.com/intelligentgraph/example2/> .
+@prefix example2: <http://inova8.com/intelligentgraph/example2/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+example2:
+  a owl:Ontology ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+example2:Another1
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.9 ;
+  example2:hasWeight 72 ;
+.
+example2:Another10
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.9 ;
+  example2:hasWeight 61 ;
+.
+example2:Another11
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.5 ;
+  example2:hasWeight 61 ;
+.
+example2:Another12
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.8 ;
+  example2:hasWeight 75 ;
+.
+example2:Another2
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.7 ;
+  example2:hasWeight 65 ;
+.
+example2:Another3
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 2 ;
+  example2:hasWeight 59 ;
+.
+example2:Another4
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.8 ;
+  example2:hasWeight 47 ;
+.
+example2:Another5
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.5 ;
+  example2:hasWeight 70 ;
+.
+example2:Another6
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.5 ;
+  example2:hasWeight 56 ;
+.
+example2:Another7
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.7 ;
+  example2:hasWeight 63 ;
+.
+example2:Another8
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.6 ;
+  example2:hasWeight 66 ;
+.
+example2:Another9
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.7 ;
+  example2:hasWeight 46 ;
+.
+example2:BMI
+  a example2:Script ;
+  script:scriptCode "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
+  rdfs:label "BMI" ;
+.
+example2:Person
+  a owl:Class ;
+  example2:averageBMI "_this.getFacts('^rdf:type/:hasBMI').average()"^^script:groovy ;
+  example2:averageTallBMI "_this.getFacts('^rdf:type[:hasHeight [ge \\'1.9\\'^^xsd:double] ]/:hasBMI').average()"^^script:groovy ;
+  rdfs:label "Person" ;
+.
+example2:Peter
+  a example2:Person ;
+  example2:hasBMI "<:BMI>"^^script:groovy ;
+  example2:hasHeight 1.7 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
+  example2:hasWeight 62 ;
+.
+example2:RelativeBMI
+  a example2:Script ;
+  script:scriptCode "double averageBMI = _this.getFact('rdf:type/:averageBMI').doubleValue(); _this.getFact(':hasBMI').doubleValue()/averageBMI;"^^script:groovy ;
+  rdfs:label "BMI" ;
+.
+example2:Script
+  a owl:Class ;
+.
+example2:averageBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain rdfs:Class ;
+  rdfs:label "average BMI" ;
+.
+example2:hasBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain example2:Person ;
+  rdfs:label "has BMI" ;
+.
+example2:hasHeight
+  a owl:DatatypeProperty ;
+  rdfs:domain example2:Person ;
+  rdfs:label "has height" ;
+.
+example2:hasRelativeBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain example2:Person ;
+  rdfs:label "has relative BMI" ;
+.
+example2:hasWeight
+  a owl:DatatypeProperty ;
+  rdfs:domain example2:Person ;
+  rdfs:label "has weight" ;
+.
