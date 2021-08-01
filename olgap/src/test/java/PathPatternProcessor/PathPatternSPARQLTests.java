@@ -711,9 +711,7 @@ void test_33() {
 	}
 }
 
-/**
- * Test 34.
- */
+
 @Test 
 @Order(34)
 void test_34() {
@@ -727,9 +725,7 @@ void test_34() {
 	}
 }
 
-/**
- * Test 35.
- */
+
 @Test 
 @Order(35)
 void test_35() {
@@ -738,6 +734,21 @@ void test_35() {
 		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit[a  :BatteryLimit]");
 		assertEquals ("?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/BatteryLimit> .\r\n"
+				+ "" , element.toSPARQL());
+	}catch(Exception e){
+		fail();
+	}
+}
+@Test 
+@Order(36)
+void test_36() {
+	try {
+
+		PathElement element = PathParser.parsePathPattern(thing, "^:type[:hasLocation :Tideswell  ; :hasGender :Male ]/:hasBMI");
+		assertEquals ("?n1 <http://default/type> ?n0 .\r\n"
+				+ "?n1 <http://default/hasLocation> <http://default/Tideswell> .\r\n"
+				+ "?n1 <http://default/hasGender> <http://default/Male> .\r\n"
+				+ "?n1 <http://default/hasBMI> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
 		fail();

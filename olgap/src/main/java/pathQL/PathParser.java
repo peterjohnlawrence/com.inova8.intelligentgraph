@@ -12,7 +12,6 @@ import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.IriRefContext;
 import PathPattern.PathPatternParser.PathEltOrInverseContext;
 import PathPattern.PathPatternParser.QueryStringContext;
-import path.PathBindings;
 import pathCalc.Thing;
 import pathPatternElement.IriRefValueElement;
 import pathPatternElement.Iterations;

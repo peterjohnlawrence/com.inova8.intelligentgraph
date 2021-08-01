@@ -37,7 +37,6 @@ import PathPattern.PathPatternParser.QnameContext;
 import PathPattern.PathPatternParser.QueryOptionContext;
 import PathPattern.PathPatternParser.QueryOptionsContext;
 import PathPattern.PathPatternParser.QueryStringContext;
-import PathPattern.PathPatternParser.RdfLiteralContext;
 import PathPattern.PathPatternParser.RdfTypeContext;
 import PathPattern.PathPatternParser.ReifiedPredicateContext;
 import PathPattern.PathPatternParser.TypeContext;
@@ -404,7 +403,7 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public ObjectListValueElement visitObjectList(ObjectListContext ctx) {
 		// objectList : object ( ',' object )*;
-		// object : iriRef  | literal | blankNodePropertyListPath ;
+		// object : iriRef  | literal | factFilterPattern | BINDVARIABLE  ;
 		ArrayList<ObjectElement> objectList = new ArrayList<ObjectElement>();
 		for( ObjectContext objectContext: ctx.object()) {
 			if(objectContext.iriRef()!=null) {
@@ -413,7 +412,12 @@ public PathPatternVisitor(Thing thing) {
 				objectList.add((ObjectElement) visit(objectContext.literal()));
 			}else if(objectContext.factFilterPattern()!=null) {	
 				objectList.add((ObjectElement) visit(objectContext.factFilterPattern()));
-			}		
+			}else if (objectContext.BINDVARIABLE() != null) {
+				String bindVariableIndex = objectContext.BINDVARIABLE().getText().substring(1);
+				BindVariableElement bindVariableElement = new BindVariableElement(getSource());
+				bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
+				objectList.add((ObjectElement) bindVariableElement);
+			}	
 		}
 		ObjectListValueElement objectListElement = new ObjectListValueElement(getSource());
 		objectListElement.setObjectList(objectList);
@@ -421,8 +425,8 @@ public PathPatternVisitor(Thing thing) {
 	}
 
 	@Override
-	public ValueElement visitObject(ObjectContext ctx) {
-		// object : iriRef  | literal | blankNodePropertyListPath ;
+	public PathElement visitObject(ObjectContext ctx) {
+		// object : iriRef  | literal | blankNodePropertyListPath | BIBNDVARIABLE;
 		//ValueElement objectElement = null ;
 		if (ctx.iriRef() != null) {
 			return (ValueElement) visit(ctx.iriRef()) ;
@@ -430,6 +434,11 @@ public PathPatternVisitor(Thing thing) {
 			return (ValueElement) visit(ctx.literal());//objectElement;
 		} else if (ctx.factFilterPattern() != null) {
 			return (ValueElement) visit(ctx.factFilterPattern());
+		}else if (ctx.BINDVARIABLE() != null) {
+			String bindVariableIndex = ctx.BINDVARIABLE().getText().substring(1);
+			BindVariableElement bindVariableElement = new BindVariableElement(getSource());
+			bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
+			return bindVariableElement;
 		}
 		return null;
 	}
@@ -464,22 +473,22 @@ public PathPatternVisitor(Thing thing) {
 		}
 	}
 
-	@Override
-	public LiteralValueElement visitLiteral(LiteralContext ctx) {
-		//literal : rdfLiteral | BINDVARIABLE ;
-		if(ctx.rdfLiteral()!=null) {
-			return visitRdfLiteral(ctx.rdfLiteral());
-		}else if(ctx.BINDVARIABLE()!=null ) {
-			String bindVariableIndex = ctx.BINDVARIABLE().getText().substring(1);
-			BindVariableElement bindVariableElement = new BindVariableElement(getSource());
-			bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
-			return bindVariableElement;
-		}
-		return null;
-	}
+//	@Override
+//	public LiteralValueElement visitLiteral(LiteralContext ctx) {
+//		//literal : rdfLiteral | BINDVARIABLE ;
+//		if(ctx.rdfLiteral()!=null) {
+//			return visitRdfLiteral(ctx.rdfLiteral());
+//		}else if(ctx.BINDVARIABLE()!=null ) {
+//			String bindVariableIndex = ctx.BINDVARIABLE().getText().substring(1);
+//			BindVariableElement bindVariableElement = new BindVariableElement(getSource());
+//			bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
+//			return bindVariableElement;
+//		}
+//		return null;
+//	}
 
 	@Override
-	public LiteralValueElement visitRdfLiteral(RdfLiteralContext ctx) {
+	public LiteralValueElement visitLiteral(LiteralContext ctx) {
 		//rdfLiteral: (DQLITERAL | SQLITERAL) ('^^' (IRI_REF |  qname) )? ;
 		LiteralValueElement literalElement = new LiteralValueElement(getSource());
 		String literalValue = null;

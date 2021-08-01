@@ -20,7 +20,7 @@ import pathQLRepository.PathQLRepository;
 import utilities.Query;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Example1_Tests {
+class ExampleLanguageTest_Tests {
 
 	private static PathQLRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
@@ -28,11 +28,11 @@ class Example1_Tests {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
-		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Example1_Tests/");
-		Query.addFile(workingRep, "src/test/resources/example1.ttl");
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/ExampleLanguageTest_Tests/");
+		Query.addFile(workingRep, "src/test/resources/ExampleLanguageTest.ttl");
 		
 		RepositoryConnection conn = workingRep.getConnection();
-		conn.setNamespace("", "http://inova8.com/intelligentgraph/example1/");
+		conn.setNamespace("", "http://inova8.com/intelligentgraph/exampleLanguageTest/");
 		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		source = PathQLRepository.create(workingRep);
@@ -55,5 +55,43 @@ class Example1_Tests {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	@Order(2)
+	void example1_2() {
 
+		try {
+			Thing peter = source.getThing(":Peter");
+			Resource bmi = peter.getFact(":hasBMIjs");
+			assertEquals("21.453287197231838", bmi.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(3)
+	void example1_3() {
+
+		try {
+			Thing peter = source.getThing(":Peter");
+			Resource bmi = peter.getFact(":hasBMIpytest");
+			assertEquals("21.453287197231838", bmi.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(4)
+	void example1_4() {
+
+		try {
+			Thing peter = source.getThing(":Peter");
+			Resource bmi = peter.getFact(":hasBMIpy");
+			assertEquals("21.453287197231838", bmi.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
 }

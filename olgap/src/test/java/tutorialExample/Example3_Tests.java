@@ -3,11 +3,11 @@
  */
 package tutorialExample;
 
+import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,13 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import pathCalc.Thing;
-import pathQL.PathQL;
 import pathQLModel.Resource;
-import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
-import pathQLResults.ResourceResults;
 import utilities.Query;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -88,10 +83,8 @@ class Example3_Tests {
 		try {
 			try {
 				Thing tideswell = source.getThing(":Tideswell"); 
-//				maxheight =literal("1.9",xsd:double);
-//				minheight = literal(1.4);
-//				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt %1 ;gt %2 ]]/:hasBMI",maxheight, minheight,location).average();
-				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt '1.9'^^xsd:double ]]/:hasBMI").average();
+				Literal maxHeight = literal(1.9);
+				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt  %1 ]]/:hasBMI",maxHeight).average();
 				assertEquals("23.904182152163695", bmi.toString());
 			} catch (Exception e) {
 				fail();
@@ -102,5 +95,16 @@ class Example3_Tests {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	@Order(4)
+	void example3_4() {
 
+		try {
+			Resource bmi = source.getThing(":Maidstone").getFact(":averageBMI");
+			assertEquals("21.405629412031697", bmi.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
 }

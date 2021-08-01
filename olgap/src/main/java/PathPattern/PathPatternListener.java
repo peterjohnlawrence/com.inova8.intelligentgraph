@@ -322,16 +322,6 @@ public interface PathPatternListener extends ParseTreeListener {
 	 */
 	void exitLiteral(PathPatternParser.LiteralContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PathPatternParser#rdfLiteral}.
-	 * @param ctx the parse tree
-	 */
-	void enterRdfLiteral(PathPatternParser.RdfLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PathPatternParser#rdfLiteral}.
-	 * @param ctx the parse tree
-	 */
-	void exitRdfLiteral(PathPatternParser.RdfLiteralContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PathPatternParser#operator}.
 	 * @param ctx the parse tree
 	 */

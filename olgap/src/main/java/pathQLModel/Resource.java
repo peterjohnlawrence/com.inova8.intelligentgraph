@@ -29,37 +29,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
- /**
-  * The Class Resource.
-  */
- public  abstract class Resource {
-	
-	/** The super value. */
-	private Value superValue;
-	
-	/** The logger. */
-	protected final Logger logger = LoggerFactory.getLogger(Resource.class);
-	
-	/** The evaluation context. */
-	protected EvaluationContext evaluationContext;	
-	
-	/** The prefixes. */
-	protected ConcurrentHashMap<String,IRI> prefixes = new ConcurrentHashMap<String,IRI>();
-	
-	/** The source. */
-	private  PathQLRepository source;
-	
+public abstract class Resource implements Value {
 
-	
-	/**
-	 * Creates the.
-	 *
-	 * @param source the source
-	 * @param value the value
-	 * @param evaluationContext the evaluation context
-	 * @return the resource
-	 */
-	public static Resource create(PathQLRepository source, Value value,EvaluationContext evaluationContext) {
+	private static final long serialVersionUID = 1L;
+
+	private Value superValue;
+
+	protected final Logger logger = LoggerFactory.getLogger(Resource.class);
+
+	protected EvaluationContext evaluationContext;
+
+	protected ConcurrentHashMap<String, IRI> prefixes = new ConcurrentHashMap<String, IRI>();
+
+	private PathQLRepository source;
+
+	public static Resource create(PathQLRepository source, Value value, EvaluationContext evaluationContext) {
 		switch (value.getClass().getSimpleName()) {
 		case "SimpleLiteral":
 		case "BooleanLiteral":
@@ -77,98 +61,69 @@ import javax.xml.datatype.XMLGregorianCalendar;
 		case "NumericLiteral":
 			return new Literal(value);
 		default:
-			return Thing.create(source,(IRI) value, evaluationContext);
+			return Thing.create(source, (IRI) value, evaluationContext);
 		}
-		
+
 	}
-	/**
-	 * Instantiates a new resource.
-	 *
-	 * @param value the value
-	 */
+
 	protected Resource(Value value) {
 		super();
 		this.superValue = value;
 	}
-	
-	/**
-	 * Instantiates a new resource.
-	 *
-	 * @param value the value
-	 * @param evaluationContext the evaluation context
-	 */
-	protected Resource(Value value,EvaluationContext evaluationContext) {
+
+	protected Resource(Value value, EvaluationContext evaluationContext) {
 		super();
 		this.superValue = value;
-		if (evaluationContext!=null)
+		if (evaluationContext != null)
 			this.evaluationContext = evaluationContext;
-	}	
+	}
+
 	public Resource(Value value, CustomQueryOptions customQueryOptions) {
 		super();
 		this.superValue = value;
-		evaluationContext=new EvaluationContext(customQueryOptions);
+		evaluationContext = new EvaluationContext(customQueryOptions);
 	}
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
+
 	@Override
 	public String toString() {
-		if(getValue()!=null)
+		if (getValue() != null)
 			return getValue().toString();
 		else
 			return null;
 	}
-	
-	/**
-	 * Gets the evaluation context.
-	 *
-	 * @return the evaluation context
-	 */
+
 	public EvaluationContext getEvaluationContext() {
 		return evaluationContext;
 	}
-	/**
-	 * Gets the source.
-	 *
-	 * @return the source
-	 */
+
 	public PathQLRepository getSource() {
 		return source;
 	}
-	/**
-	 * Gets the custom query options.
-	 *
-	 * @return the custom query options
-	 */
+
 	@Deprecated
-	public  CustomQueryOptions getCustomQueryOptions() {
-		if (evaluationContext!=null)
+	public CustomQueryOptions getCustomQueryOptions() {
+		if (evaluationContext != null)
 			return evaluationContext.getCustomQueryOptions();
 		else
 			return null;
 	}
-	
+
 	@Deprecated
 	public Tracer getTracer() {
-		if (evaluationContext!=null)
+		if (evaluationContext != null)
 			return evaluationContext.getTracer();
 		else
 			return null;
 	}
 
-
 	public void setTracer(Tracer tracer) {
-		if (evaluationContext!=null)
-			 evaluationContext.setTracer(tracer);
+		if (evaluationContext != null)
+			evaluationContext.setTracer(tracer);
 	}
-
 
 	public Value getValue() {
 		return getSuperValue();
 	}
-
 
 	public String getHTMLValue() {
 		switch (getValue().getClass().getSimpleName()) {
@@ -191,6 +146,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			}
 		}
 	}
+
 	@Deprecated
 	public String getHTMLValue(Value objectValue) {
 		switch (objectValue.getClass().getSimpleName()) {
@@ -209,31 +165,30 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			}
 		}
 	}
-	
+
 	@Deprecated
 	public boolean notTracing() {
-		if (evaluationContext!=null && evaluationContext.getTracer()!= null)
+		if (evaluationContext != null && evaluationContext.getTracer() != null)
 			return !evaluationContext.isTracing();
 		else
 			return true;
 	}
 
-
-@Deprecated
+	@Deprecated
 	public void decrementTraceLevel() {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
+		if (evaluationContext != null && evaluationContext.getTracer() != null)
 			evaluationContext.getTracer().decrementLevel();
 	}
 
-@Deprecated
+	@Deprecated
 	public void incrementTraceLevel() {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
+		if (evaluationContext != null && evaluationContext.getTracer() != null)
 			evaluationContext.getTracer().incrementLevel();
 	}
 
-@Deprecated
+	@Deprecated
 	protected String indentScriptForTrace(String script) {
-		if (evaluationContext!=null && evaluationContext.getTracer() != null)
+		if (evaluationContext != null && evaluationContext.getTracer() != null)
 			return evaluationContext.getTracer().indentScriptForTrace(script);
 		else
 			return null;
@@ -245,51 +200,53 @@ import javax.xml.datatype.XMLGregorianCalendar;
 	 * @return the stack
 	 */
 	public EvaluationStack getStack() {
-		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+		if (evaluationContext != null && evaluationContext.getStack() != null) {
 			return evaluationContext.getStack();
-		}else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Search stack.
 	 *
-	 * @param stackKey the stack key
+	 * @param stackKey
+	 *            the stack key
 	 * @return true, if successful
 	 */
 	public boolean searchStack(String stackKey) {
-//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
-//		if(evaluationContext.getStack().size()>10 ) return true;
+		//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
+		//		if(evaluationContext.getStack().size()>10 ) return true;
 		return evaluationContext.getStack().contains(stackKey);
-//		}else {
-//			return true;
-//		}
+		//		}else {
+		//			return true;
+		//		}
 	}
-	
+
 	/**
 	 * Push stack.
 	 *
-	 * @param stackKey the stack key
+	 * @param stackKey
+	 *            the stack key
 	 */
 	public void pushStack(String stackKey) {
-			evaluationContext.getStack().push(stackKey);
+		evaluationContext.getStack().push(stackKey);
 	}
 
 	public void popStack() {
-			evaluationContext.getStack().pop();
+		evaluationContext.getStack().pop();
 	}
 
-	public abstract  Resource getFact(String predicatePattern) throws PathPatternException ;
+	public abstract Resource getFact(String predicatePattern) throws PathPatternException;
 
-	public abstract  ResourceResults getFacts(String predicatePattern, org.eclipse.rdf4j.model.Literal...bindValues ) throws PathPatternException ;
-	
-	public abstract ResourceResults getFacts( PredicateElement path) ;
+	public abstract ResourceResults getFacts(String predicatePattern, Value... bindValues) throws PathPatternException;
+
+	public abstract ResourceResults getFacts(PredicateElement path);
 
 	public pathQLModel.Resource getSignal(String signal) {
 		return null;
 	}
-	
+
 	String getLabel() {
 		if (getValue() != null)
 			return getValue().stringValue();
@@ -371,30 +328,28 @@ import javax.xml.datatype.XMLGregorianCalendar;
 			return (XMLGregorianCalendar) null;
 	}
 
-	
 	@Deprecated
 	public IRI convertQName(String predicateIRI) {
-		predicateIRI=PathQLRepository.trimIRIString( predicateIRI);
+		predicateIRI = PathQLRepository.trimIRIString(predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":");
 		IRI predicate = null;
-		if(predicateIRIParts[0].equals("a")) {
-				predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-			}
-		else if(predicateIRIParts[0].equals("http")||predicateIRIParts[0].equals("urn")) {
+		if (predicateIRIParts[0].equals("a")) {
+			predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+		} else if (predicateIRIParts[0].equals("http") || predicateIRIParts[0].equals("urn")) {
 			predicate = iri(predicateIRI);
-		}else {
+		} else {
 			IRI namespace = getNamespace(predicateIRIParts[0]);
-			if(namespace==null) {		
+			if (namespace == null) {
 				logger.error(String.format("Error identifying namespace of qName %s", predicateIRI));
 				this.getEvaluationContext().getTracer().traceQNameError(predicateIRI);
-			//	addTrace(message);
-			}else {
+				//	addTrace(message);
+			} else {
 				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
 			}
 		}
 		return predicate;
 	}
-	
+
 	@Deprecated
 	private IRI getNamespace(String namespaceString) {
 		IRI namespace = getPrefixes().get(namespaceString);
@@ -403,31 +358,30 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 	@Deprecated
 	public ConcurrentHashMap<String, IRI> getPrefixes() {
-		if(this.getEvaluationContext()!=null )
+		if (this.getEvaluationContext() != null)
 			return this.getEvaluationContext().getPrefixes();
 		else
 			return null;
 	}
-	
 
 	public Value getSuperValue() {
 		return superValue;
 	}
-	
+
 	public void setSuperValue(Value superValue) {
 		this.superValue = superValue;
 	}
-	
+
 	public void setSource(PathQLRepository source) {
 		this.source = source;
 	}
-	
+
 	public abstract Resource getSubject();
-	
+
 	public abstract Resource getPredicate();
-	
+
 	public abstract Object getSnippet();
-	
+
 	public abstract Object getScore();
-	
+
 }

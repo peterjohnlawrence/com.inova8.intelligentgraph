@@ -421,12 +421,6 @@ public class PathQLRepository {
 		}
 	}
 
-	/**
-	 * Clear cache.
-	 *
-	 * @param args
-	 *            the args
-	 */
 	public void clearCache(Value... args) {
 
 		if (this.getRepository() != null) {
@@ -469,13 +463,7 @@ public class PathQLRepository {
 
 	}
 
-	/**
-	 * Gets the before.
-	 *
-	 * @param customQueryOptions
-	 *            the custom query options
-	 * @return the before
-	 */
+
 	private String getBefore(ConcurrentHashMap<String, pathQLModel.Resource> customQueryOptions) {
 		if (customQueryOptions != null && customQueryOptions.containsKey("before")) {
 			pathQLModel.Resource beforeDateTime = customQueryOptions.get("before");
@@ -484,22 +472,11 @@ public class PathQLRepository {
 		return null;
 	}
 
-	/**
-	 * Adds the service.
-	 *
-	 * @param service
-	 *            the service
-	 * @return the string
-	 */
+	@SuppressWarnings("unused")
 	private String addService(String service) {
 		return "<a href='" + service + "' target='_blank'>" + service + "</a>";
 	}
 
-	/**
-	 * Connected.
-	 *
-	 * @return true, if successful
-	 */
 	private boolean connected() {
 		if (cacheConnection != null && cacheConnection.isActive()) {
 			return true;

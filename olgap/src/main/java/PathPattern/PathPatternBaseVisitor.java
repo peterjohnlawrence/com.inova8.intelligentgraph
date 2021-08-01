@@ -227,13 +227,6 @@ public class PathPatternBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitRdfLiteral(PathPatternParser.RdfLiteralContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitOperator(PathPatternParser.OperatorContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

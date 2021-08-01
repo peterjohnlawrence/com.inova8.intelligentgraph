@@ -17,6 +17,7 @@ example3:Another1
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.9 ;
   example3:hasLocation example3:Tideswell ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 72 ;
 .
 example3:Another10
@@ -24,6 +25,7 @@ example3:Another10
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.9 ;
   example3:hasLocation example3:Tideswell ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 61 ;
 .
 example3:Another11
@@ -31,6 +33,7 @@ example3:Another11
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.5 ;
   example3:hasLocation example3:Tideswell ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 61 ;
 .
 example3:Another12
@@ -38,6 +41,7 @@ example3:Another12
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.8 ;
   example3:hasLocation example3:Tideswell ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 75 ;
 .
 example3:Another2
@@ -45,6 +49,7 @@ example3:Another2
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.7 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 65 ;
 .
 example3:Another3
@@ -52,6 +57,7 @@ example3:Another3
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 2 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 59 ;
 .
 example3:Another4
@@ -59,6 +65,7 @@ example3:Another4
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.8 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 47 ;
 .
 example3:Another5
@@ -66,6 +73,7 @@ example3:Another5
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.5 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 70 ;
 .
 example3:Another6
@@ -73,6 +81,7 @@ example3:Another6
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.5 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 56 ;
 .
 example3:Another7
@@ -80,6 +89,7 @@ example3:Another7
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.7 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 63 ;
 .
 example3:Another8
@@ -87,6 +97,7 @@ example3:Another8
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.6 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 66 ;
 .
 example3:Another9
@@ -94,6 +105,7 @@ example3:Another9
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.7 ;
   example3:hasLocation example3:Maidstone ;
+  example3:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example3:hasWeight 46 ;
 .
 example3:BMI
@@ -107,7 +119,7 @@ example3:Location
 .
 example3:LocationAverageBMI
   a example3:Script ;
-  script:scriptCode "double locationAverageBMI = _this.getFacts('^:hasLocation/:hasBMI')average()"^^script:groovy ;
+  script:scriptCode "_this.getFacts('^:hasLocation/:hasBMI')average()"^^script:groovy ;
   rdfs:label "Location Average BMI" ;
 .
 example3:Maidstone

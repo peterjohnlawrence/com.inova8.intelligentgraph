@@ -6,6 +6,9 @@ package tutorialExample;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,12 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import pathCalc.Thing;
-import pathQL.PathQL;
 import pathQLModel.Resource;
-import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
+import pathQLResults.ResourceResults;
 import utilities.Query;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -48,12 +48,17 @@ class Example4_Tests {
 	}
 	@Test
 	@Order(1)
-	void example1_1() {
+	void example4_1() {
 
 		try {
-			Thing peter = source.getThing(":Peter");
-			Resource bmi = peter.getFact(":hasBMI");
-			assertEquals("21.453287197231838", bmi.stringValue());
+			Thing person = source.getThing(":Person"); 
+			ResourceResults persons = person.getFacts("^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]");
+			//ResourceResults persons = person.getFacts("^rdf:type[:hasLocation :Tideswell ]");
+			ArrayList<String> personValues = new ArrayList<String>();
+			for(Resource person1:persons) {
+				personValues.add(person1.getValue().stringValue());
+			}
+			assertEquals("[http://inova8.com/intelligentgraph/example4/Another1, http://inova8.com/intelligentgraph/example4/Another11, http://inova8.com/intelligentgraph/example4/Peter]", personValues.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -61,12 +66,11 @@ class Example4_Tests {
 	}
 	@Test
 	@Order(2)
-	void example1_2() {
+	void example4_2() {
 
 		try {
-			Thing peter = source.getThing(":Peter");
-			Resource bmi = peter.getFact(":hasBMIjs");
-			assertEquals("21.453287197231838", bmi.stringValue());
+			Double bmi = source.getThing(":Person").getFacts("^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]/:hasBMI").average();
+			assertEquals("22.83633221543103", bmi.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -74,25 +78,15 @@ class Example4_Tests {
 	}
 	@Test
 	@Order(3)
-	void example1_3() {
+	void example4_3() {
 
 		try {
-			Thing peter = source.getThing(":Peter");
-			Resource bmi = peter.getFact(":hasBMIpytest");
-			assertEquals("21.453287197231838", bmi.stringValue());
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
-	@Test
-	@Order(4)
-	void example1_4() {
-
-		try {
-			Thing peter = source.getThing(":Peter");
-			Resource bmi = peter.getFact(":hasBMIpy");
-			assertEquals("21.453287197231838", bmi.stringValue());
+			Thing person = source.getThing(":Person"); 
+			Thing male_Tideswell = source.getThing(":Male_Tideswell");
+			Value gender = male_Tideswell.getFact(":hasGender");
+			Value location = male_Tideswell.getFact(":hasLocation");
+			Double bmi = person.getFacts("^rdf:type[:hasLocation %2 ; :hasGender %1 ]/:hasBMI",gender,location).average();
+			assertEquals("22.83633221543103", bmi.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

@@ -83,18 +83,24 @@ public class URNCustomQueryOptionsDecode {
 			String[] valueParts = value.split("\\^\\^");
 			Pair<String,Value> pair;
 			String valueString = valueParts[0];
-			if(valueString.startsWith("'")||valueString.startsWith("\""))
+			if(valueString.startsWith("<")) {
 				valueString=valueString.substring(1,valueString.length()-1);
-			if (valueParts.length == 2) {
-				IRI qname = convertQName(valueParts[1],prefixes);
-				Literal typedLiteral = Values.literal(Values.getValueFactory(), valueString, qname);
-				pair = new Pair<String,Value>(keyValue.get(0),  typedLiteral);
+				pair = new Pair<String,Value>(keyValue.get(0),  iri(valueString));
+				return pair;
 			} else {
-				Literal literal = literal(valueString);
-				pair = new Pair<String,Value>(keyValue.get(0),  literal);
+				if(valueString.startsWith("'")||valueString.startsWith("\""))
+					valueString=valueString.substring(1,valueString.length()-1);
+				if (valueParts.length == 2) {
+					IRI qname = convertQName(valueParts[1],prefixes);
+					Literal typedLiteral = Values.literal(Values.getValueFactory(), valueString, qname);
+					pair = new Pair<String,Value>(keyValue.get(0),  typedLiteral);
+				} else {
+					Literal literal = literal(valueString);
+					pair = new Pair<String,Value>(keyValue.get(0),  literal);
+				}
+	
+				return pair;
 			}
-
-			return pair;
 		} else {
 			return new Pair<String,Value>(keyValue.get(0), null);
 		}

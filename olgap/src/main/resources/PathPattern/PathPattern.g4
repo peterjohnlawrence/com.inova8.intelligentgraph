@@ -94,11 +94,12 @@ propertyListNotEmpty :   	verbObjectList ( ';' ( verbObjectList )? )* ;
 verbObjectList : verb objectList;
 verb : operator | pathEltOrInverse ;
 objectList : object ( ',' object )*;
-object : iriRef  | literal | factFilterPattern ;
+object : iriRef  | literal | factFilterPattern | BINDVARIABLE ;
 
 qname : PNAME_NS PN_LOCAL; 
 pname_ns : PNAME_NS ;   
-literal : DQLITERAL | SQLITERAL ;
+literal : (DQLITERAL | SQLITERAL) ('^^' (IRI_REF |  qname) )? ;  
+
 operator : OPERATOR ;
 rdfType : RDFTYPE ;
 
@@ -108,6 +109,7 @@ rdfType : RDFTYPE ;
 
 //fragment  
 INTEGER : DIGIT+ ; 
+BINDVARIABLE : '%' DIGIT+ ;
 
 fragment
 DIGIT

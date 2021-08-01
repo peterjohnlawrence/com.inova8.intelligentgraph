@@ -18,12 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import pathCalc.Thing;
-import pathQL.PathQL;
 import pathQLModel.Resource;
-import pathQLRepository.Graph;
 import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
 import pathQLResults.ResourceResults;
 import utilities.Query;
 import org.eclipse.rdf4j.model.Literal;
@@ -193,6 +189,19 @@ class Example2_Tests {
 			Literal maxHeight = literal(1.8);
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge %1  ; le %2  ]]/:hasBMI",minHeight,maxHeight).average();
 			assertEquals("19.885870106938924", bmi.toString());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(11)
+	void example2_11() {
+
+		try {
+			Thing person = source.getThing(":Person"); 
+			Resource bmi = person.getFact(":average1.7-1.8BMI");
+			assertEquals("19.885870106938924", bmi.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

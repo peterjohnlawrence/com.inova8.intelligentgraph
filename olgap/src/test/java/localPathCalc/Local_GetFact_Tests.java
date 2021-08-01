@@ -27,25 +27,15 @@ import pathQLResults.MatchResults;
 import pathQLResults.ResourceResults;
 import utilities.Query;
 
-/**
- * The Class ThingTests.
- */
 @SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetFact_Tests {
-	
 
-	
-	/** The source. */
 	private static PathQLRepository source;
 	
 
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
-	/**
-	 * Sets the up before class.
-	 *
-	 * @throws Exception the exception
-	 */
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_GetFact_Tests/");
@@ -64,31 +54,17 @@ class Local_GetFact_Tests {
 	static void closeClass() throws Exception {
 		//conn.close();
 	}	
-	/**
-	 * Removes the white spaces.
-	 *
-	 * @param input the input
-	 * @return the string
-	 */
+
 	String removeWhiteSpaces(String input) {
 	    return input.replaceAll("\\s+", "");
 	    //return input;
 	}
 	
-	/**
-	 * Assert equals WO spaces.
-	 *
-	 * @param actual the actual
-	 * @param expected the expected
-	 */
+
 	void assertEqualsWOSpaces(String actual, String expected){
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
 
-
-	/**
-	 * Match 1.
-	 */
 	@Test
 	@Order(1)
 	void match_1() {
@@ -109,9 +85,7 @@ class Local_GetFact_Tests {
 		}
 	}
 
-	/**
-	 * Test 1.
-	 */
+
 	@Test
 	@Order(1)
 	void test_1() {
@@ -127,9 +101,6 @@ class Local_GetFact_Tests {
 		}
 	}
 
-	/**
-	 * Test 2.
-	 */
 	@Test
 	@Order(2)
 	void test_2() {

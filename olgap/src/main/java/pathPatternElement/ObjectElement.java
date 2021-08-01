@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Value;
+
 import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.CustomQueryOptions;
@@ -44,7 +46,7 @@ public class ObjectElement extends PathElement{
 	 *
 	 * @return the iri
 	 */
-	public IRI getIri() {
+	public IRI getIri(CustomQueryOptions customQueryOptions) {
 		return iri;
 	}
 	
@@ -65,7 +67,9 @@ public class ObjectElement extends PathElement{
 	public Literal getLiteral(CustomQueryOptions customQueryOptions) {
 		return literal;
 	}
-	
+	public Value getValue(CustomQueryOptions customQueryOptions) {
+		return literal;
+	}	
 	/**
 	 * Sets the literal.
 	 *

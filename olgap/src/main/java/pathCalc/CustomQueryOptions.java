@@ -84,6 +84,10 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			case "NumericLiteral":
 				this.put(key,new Literal((Value) value));
 				break;
+			case "SimpleIRI":
+			case "NativeIRI":
+				this.put(key,new Thing((Value)value));
+				break;
 			default:
 				put(key,new Literal(literal(value)));
 			}
@@ -154,7 +158,11 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 				first=false;
 			try {
 				if(queryOption.getValue().toString()!=null )
-					queryOptionsString+=queryOption.getKey()+"="+ URLEncoder.encode(queryOption.getValue().toString(), StandardCharsets.UTF_8.toString());
+					if(queryOption.getValue().getSuperValue().isResource()) {
+						queryOptionsString+=queryOption.getKey()+"="+ URLEncoder.encode("<" + queryOption.getValue().toString()+">", StandardCharsets.UTF_8.toString());
+					}else {
+						queryOptionsString+=queryOption.getKey()+"="+ URLEncoder.encode(queryOption.getValue().toString(), StandardCharsets.UTF_8.toString());
+					}
 				else
 					queryOptionsString+=queryOption.getKey()+"=";
 			} catch (UnsupportedEncodingException e) {

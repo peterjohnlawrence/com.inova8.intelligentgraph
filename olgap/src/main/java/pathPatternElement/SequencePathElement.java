@@ -6,7 +6,6 @@ package pathPatternElement;
 import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
-import path.EdgeBinding;
 import path.PathBinding;
 import path.PathTupleExpr;
 import pathCalc.CustomQueryOptions;

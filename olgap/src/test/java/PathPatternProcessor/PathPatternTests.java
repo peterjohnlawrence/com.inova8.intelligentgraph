@@ -523,4 +523,16 @@ void test_28() {
 		fail();
 	}
 }
+@Test 
+@Order(29)
+void test_29() {
+	try {
+		
+		PathElement element = PathParser.parsePathPattern(thing, "^:type[:hasLocation :Tideswell  ; :hasGender :Male ]/:hasBMI");
+		assertEquals ("^<http://default/type>[<http://default/hasLocation> <http://default/Tideswell> ;<http://default/hasGender> <http://default/Male> ] / <http://default/hasBMI>" , element.toString());
+	}catch(Exception e){
+		fail();
+	}
+}
+
 }

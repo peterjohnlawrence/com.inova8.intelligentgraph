@@ -17,72 +17,84 @@ example2:Another1
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.9 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 72 ;
 .
 example2:Another10
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.9 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 61 ;
 .
 example2:Another11
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.5 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 61 ;
 .
 example2:Another12
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.8 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 75 ;
 .
 example2:Another2
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.7 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 65 ;
 .
 example2:Another3
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 2 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 59 ;
 .
 example2:Another4
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.8 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 47 ;
 .
 example2:Another5
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.5 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 70 ;
 .
 example2:Another6
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.5 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 56 ;
 .
 example2:Another7
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.7 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 63 ;
 .
 example2:Another8
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.6 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 66 ;
 .
 example2:Another9
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.7 ;
+  example2:hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
   example2:hasWeight 46 ;
 .
 example2:BMI
@@ -92,6 +104,7 @@ example2:BMI
 .
 example2:Person
   a owl:Class ;
+  <http://inova8.com/intelligentgraph/example2/average1.7-1.8BMI> "_this.getFacts(\"^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]/:hasBMI\").average()"^^script:groovy ;
   example2:averageBMI "_this.getFacts('^rdf:type/:hasBMI').average()"^^script:groovy ;
   example2:averageTallBMI "_this.getFacts('^rdf:type[:hasHeight [ge \\'1.9\\'^^xsd:double] ]/:hasBMI').average()"^^script:groovy ;
   rdfs:label "Person" ;
@@ -110,6 +123,11 @@ example2:RelativeBMI
 .
 example2:Script
   a owl:Class ;
+.
+<http://inova8.com/intelligentgraph/example2/average1.7-1.8BMI>
+  a owl:DatatypeProperty ;
+  rdfs:domain rdfs:Class ;
+  rdfs:label "average1.7-1.8BMI" ;
 .
 example2:averageBMI
   a owl:DatatypeProperty ;
@@ -135,4 +153,7 @@ example2:hasWeight
   a owl:DatatypeProperty ;
   rdfs:domain example2:Person ;
   rdfs:label "has weight" ;
+.
+<http://inova8.com/intelligentgraph/example3/Person>
+  <http://inova8.com/intelligentgraph/example2/average1.7-1.8BMI> "_this.getFacts('^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]/:hasBMI').average()"^^script:groovy ;
 .

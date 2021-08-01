@@ -11,7 +11,6 @@ import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
 import path.EdgeBinding;
 import path.PathBinding;
-import path.PathBindings;
 import path.PathTupleExpr;
 import pathCalc.CustomQueryOptions;
 import pathCalc.Thing;

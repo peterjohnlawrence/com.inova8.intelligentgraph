@@ -60,6 +60,7 @@ import pathQLResults.ResourceStatementResults;
 
 public class Thing extends Resource {
 
+	private static final long serialVersionUID = 1L;
 	@Deprecated
 	private static final String NULLVALUERETURNED_EXCEPTION = "NullValueReturned";
 	@Deprecated
@@ -76,17 +77,9 @@ public class Thing extends Resource {
 	private HashMap<String, Resource> cachedResources;
 	private  IRI graphName;
 	boolean remoteHostProcessing = true;
-	/**
-	 * Creates the.
-	 *
-	 * @param source
-	 *            the source
-	 * @param superValue
-	 *            the super value
-	 * @param evaluationContext
-	 *            the evaluation context
-	 * @return the thing
-	 */
+	protected Thing(org.eclipse.rdf4j.model.Value superValue) {
+		super(superValue);
+	}
 	public static Thing create(PathQLRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		return Thing.create( source,  null, superValue,	 evaluationContext);
@@ -137,7 +130,10 @@ public class Thing extends Resource {
 		super(superValue, evaluationContext);
 		this.setSource(source);
 	}
-
+	@Override
+	public 	boolean isIRI(){
+		return true;
+	}
 	public IRI getGraphName() {
 		return graphName;
 	}
@@ -294,12 +290,18 @@ public class Thing extends Resource {
 		}
 	}
 
-	public final ResourceResults getFacts(String predicatePattern, Literal... bindValues ) throws PathPatternException {
+	public final ResourceResults getFacts(String predicatePattern, Value... bindValues ) throws PathPatternException {
 		CustomQueryOptions customQueryOptions = null;
 		if(bindValues.length>0) {  
 			customQueryOptions= new CustomQueryOptions();	
 			for(Integer bindIndex =1; bindIndex <=bindValues.length; bindIndex++) {
-				customQueryOptions.add(bindIndex.toString(), bindValues[bindIndex-1]);
+				Value bindValue = bindValues[bindIndex-1];
+				if(bindValue.isLiteral())
+					customQueryOptions.add(bindIndex.toString(), bindValue);
+				else if(bindValue.isIRI())
+					customQueryOptions.add(bindIndex.toString(), ((Thing)bindValue).getIRI());
+				else
+					customQueryOptions.add(bindIndex.toString(), bindValue);	
 			}
 		}
 		return getFacts(predicatePattern,customQueryOptions);

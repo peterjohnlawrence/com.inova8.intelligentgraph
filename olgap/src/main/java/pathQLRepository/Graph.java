@@ -13,34 +13,23 @@ import pathCalc.Thing;
 import pathPatternProcessor.PathPatternException;
 import pathQL.PathParser;
 
-/**
- * The Class Graph.
- */
+
 public class Graph {
 	public static final IRI DEFAULTGRAPH = iri("http://default");
- /** The source. */
+
  PathQLRepository source;
  
- /** The graph name. */
+
  IRI graphName;
  Boolean isPrivate=true;
-/**
- * Instantiates a new graph.
- *
- * @param source the source
- * @param graphName the graph name
- */
+
 public Graph(PathQLRepository source, IRI graphName) {
 	super();
 	this.source = source;
 	this.graphName = graphName;
 }
 
-/**
- * Gets the graph name.
- *
- * @return the graph name
- */
+
 public IRI getGraphName() {
 	return graphName;
 }
@@ -71,12 +60,6 @@ public Thing getThing(String thing) throws RecognitionException, PathPatternExce
 		return getThing(thingIri, customQueryOptions);
 	}
 
-
-/**
- * Close graph.
- *
- * @return the boolean
- */
 public Boolean closeGraph() {
 	return source.getPublicContexts().remove(graphName);
 }
