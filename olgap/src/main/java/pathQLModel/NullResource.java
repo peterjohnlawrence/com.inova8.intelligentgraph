@@ -18,7 +18,7 @@ public class NullResource extends Resource {
 	}
 
 	@Override
-	public Resource getFact(String predicatePattern) throws PathPatternException {
+	public Resource getFact(String predicatePattern, Value... bindValues) throws PathPatternException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -11,7 +11,6 @@
 
 example2:
   a owl:Ontology ;
-  owl:versionInfo "Created with TopBraid Composer" ;
 .
 example2:Another1
   a example2:Person ;
@@ -109,7 +108,7 @@ example2:Person
   example2:averageTallBMI "_this.getFacts('^rdf:type[:hasHeight [ge \\'1.9\\'^^xsd:double] ]/:hasBMI').average()"^^script:groovy ;
   rdfs:label "Person" ;
 .
-example2:Peter
+example2:aPerson
   a example2:Person ;
   example2:hasBMI "<:BMI>"^^script:groovy ;
   example2:hasHeight 1.7 ;

@@ -1326,12 +1326,39 @@ void test_39() {
 		assertEquals("",e.getMessage());
 	}
 }
-@Test 
+@Test
 @Order(40)
 void test_40() {
 	try {
 
 		PathElement element = PathParser.parsePathPattern(thing, "^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				 ("Join\r\n"
+				 		+ "   Join\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "         Variable (name=n0)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p0_0_1, value=http://default/hasLocation)\r\n"
+				 		+ "         Variable (name=n0_1, value=http://default/Tideswell)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p0_0_1, value=http://default/hasGender)\r\n"
+				 		+ "      Variable (name=n0_1, value=http://default/Male)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
+	}catch(Exception e){
+		assertEquals("",e.getMessage());
+	}
+}
+@Test
+@Order(41)
+void test_41() {
+	try {
+
+		PathElement element = PathParser.parsePathPattern(thing, "^:measurementOf[:hasOrdinal  %1]/:hasBMI");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"

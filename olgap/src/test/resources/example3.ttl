@@ -132,7 +132,7 @@ example3:Person
   example3:averageBMI "_this.getFacts('^rdf:type/:hasBMI').average()"^^script:groovy ;
   rdfs:label "Person" ;
 .
-example3:Peter
+example3:aPerson
   a example3:Person ;
   example3:hasBMI "<:BMI>"^^script:groovy ;
   example3:hasHeight 1.7 ;

@@ -16,7 +16,7 @@ example1:Person
   a owl:Class ;
   rdfs:label "Person" ;
 .
-example1:Peter
+example1:aPerson
   a example1:Person ;
   example1:hasBMI "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
   example1:hasHeight 1.7 ;

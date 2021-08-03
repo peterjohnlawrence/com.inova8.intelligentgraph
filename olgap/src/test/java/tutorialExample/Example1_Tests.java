@@ -3,8 +3,11 @@
  */
 package tutorialExample;
 
+import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
@@ -15,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import pathCalc.Thing;
+import pathCalc.Trace;
 import pathQLModel.Resource;
 import pathQLRepository.PathQLRepository;
 import utilities.Query;
@@ -47,9 +51,39 @@ class Example1_Tests {
 	void example1_1() {
 
 		try {
-			Thing peter = source.getThing(":Peter");
-			Resource bmi = peter.getFact(":hasBMI");
+			Thing aPerson = source.getThing(":aPerson");
+			Resource bmi = aPerson.getFact(":hasBMI");
 			assertEquals("21.453287197231838", bmi.stringValue());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(2)
+	void example1_2() {
+
+		try {
+			Thing aPerson = source.getThing(":aPerson");
+
+			Trace trace = aPerson.traceFact(":hasBMI");
+			assertEquals("   1. Getting facts ':hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
+					+ "   2. ...within contexts: [http://default, file://src/test/resources/example1.ttl]\n"
+					+ "         1. Evaluating predicate hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> , by invoking groovy script\n"
+					+ "         2. double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)\n"
+					+ "\n"
+					+ "               1. Getting facts ':hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
+					+ "               2. Returned fact 'http://inova8.com/intelligentgraph/example1/hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 1.7\n"
+					+ "               3. Returned fact ':hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 1.7^^decimal <http://www.w3.org/2001/XMLSchema#decimal>\n"
+					+ "\n"
+					+ "               4. Getting facts ':hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
+					+ "               5. Returned fact 'http://inova8.com/intelligentgraph/example1/hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 62\n"
+					+ "               6. Returned fact ':hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 62^^decimal <http://www.w3.org/2001/XMLSchema#decimal>\n"
+					+ "\n"
+					+ "         3. Evaluated hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
+					+ "   3. Calculated hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
+					+ "   4. Retrieved cached value hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
+					+ "   5. Returned fact 'http://inova8.com/intelligentgraph/example1/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", trace.asText());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

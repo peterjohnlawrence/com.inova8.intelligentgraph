@@ -58,7 +58,7 @@ class Example4_Tests {
 			for(Resource person1:persons) {
 				personValues.add(person1.getValue().stringValue());
 			}
-			assertEquals("[http://inova8.com/intelligentgraph/example4/Another1, http://inova8.com/intelligentgraph/example4/Another11, http://inova8.com/intelligentgraph/example4/Peter]", personValues.toString());
+			assertEquals("[http://inova8.com/intelligentgraph/example4/Another1, http://inova8.com/intelligentgraph/example4/Another11, http://inova8.com/intelligentgraph/example4/aPerson]", personValues.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -86,6 +86,21 @@ class Example4_Tests {
 			Value gender = male_Tideswell.getFact(":hasGender");
 			Value location = male_Tideswell.getFact(":hasLocation");
 			Double bmi = person.getFacts("^rdf:type[:hasLocation %2 ; :hasGender %1 ]/:hasBMI",gender,location).average();
+			assertEquals("22.83633221543103", bmi.toString());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(3)
+	void example4_4() {
+
+		try {
+
+			Thing male_Tideswell = source.getThing(":Male_Tideswell");
+
+			Double bmi = male_Tideswell.getFact(":averageBMI").doubleValue();
 			assertEquals("22.83633221543103", bmi.toString());
 		} catch (Exception e) {
 			fail();

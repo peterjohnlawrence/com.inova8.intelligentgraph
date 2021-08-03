@@ -53,6 +53,22 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			return customQueryOptions;
 		}
 	}
+	static public CustomQueryOptions create(Value... bindValues) {
+		if(bindValues.length>0) {  
+			CustomQueryOptions customQueryOptions = new CustomQueryOptions();	
+			for(Integer bindIndex =1; bindIndex <=bindValues.length; bindIndex++) {
+				Value bindValue = bindValues[bindIndex-1];
+				if(bindValue.isLiteral())
+					customQueryOptions.add(bindIndex.toString(), bindValue);
+				else if(bindValue.isIRI())
+					customQueryOptions.add(bindIndex.toString(), ((Thing)bindValue).getIRI());
+				else
+					customQueryOptions.add(bindIndex.toString(), bindValue);	
+			}
+			return customQueryOptions;
+		}else
+			return null;		
+	}
 	public CustomQueryOptions(int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
 		// TODO Auto-generated constructor stub
@@ -82,6 +98,7 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			case "NumericMemLiteral":
 			case "NativeLiteral":
 			case "NumericLiteral":
+			case "TemporalAccessorLiteral":
 				this.put(key,new Literal((Value) value));
 				break;
 			case "SimpleIRI":

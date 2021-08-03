@@ -534,5 +534,17 @@ void test_29() {
 		fail();
 	}
 }
+@Test
+@Order(30)
+void test_30() {
+	try {
 
+		PathElement element = PathParser.parsePathPattern(thing, "^:measurementOf[:hasOrdinal  %1]/:hasBMI");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				 ("^<http://default/measurementOf>[<http://default/hasOrdinal> %1 ] / <http://default/hasBMI>" ,element.toString());
+	}catch(Exception e){
+		assertEquals("",e.getMessage());
+	}
+}
 }

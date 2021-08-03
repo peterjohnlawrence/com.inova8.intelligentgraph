@@ -176,11 +176,10 @@ public class Thing extends Resource {
 			return new NullResource();
 		}		
 	}
-
-	public final Resource getFact(String predicatePattern) throws PathPatternException {
+	public final Resource getFact(String predicatePattern, Value...bindValues ) throws PathPatternException  {
 		logger.debug("getFact{}\n", predicatePattern);
 		//this.getEvaluationContext().getTracer().traceFact(this, predicatePattern);
-		ResourceResults factValues =  getFacts( predicatePattern);
+		ResourceResults factValues =  getFacts( predicatePattern,bindValues);
 		if (factValues == null) {
 			this.getEvaluationContext().getTracer().traceFactReturnNull(this, predicatePattern);
 			return new NullResource();
@@ -192,9 +191,12 @@ public class Thing extends Resource {
 			this.getEvaluationContext().getTracer().traceFactEmpty(this, predicatePattern);
 			factValues.close();
 			return new NullResource();
-		}
+		}	
 	}
 
+	public final ResourceResults getFacts(String predicatePattern, Value... bindValues ) throws PathPatternException {
+		return getFacts(predicatePattern,CustomQueryOptions.create(bindValues));
+	}
 	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
 		//This could be configured to process locally in a client or remotely in the server. Not sure both are required.
 		boolean remoteHostProcessing = true;
@@ -290,22 +292,7 @@ public class Thing extends Resource {
 		}
 	}
 
-	public final ResourceResults getFacts(String predicatePattern, Value... bindValues ) throws PathPatternException {
-		CustomQueryOptions customQueryOptions = null;
-		if(bindValues.length>0) {  
-			customQueryOptions= new CustomQueryOptions();	
-			for(Integer bindIndex =1; bindIndex <=bindValues.length; bindIndex++) {
-				Value bindValue = bindValues[bindIndex-1];
-				if(bindValue.isLiteral())
-					customQueryOptions.add(bindIndex.toString(), bindValue);
-				else if(bindValue.isIRI())
-					customQueryOptions.add(bindIndex.toString(), ((Thing)bindValue).getIRI());
-				else
-					customQueryOptions.add(bindIndex.toString(), bindValue);	
-			}
-		}
-		return getFacts(predicatePattern,customQueryOptions);
-	}
+
 
 	public Resource getSignal(String signal) {
 		getEvaluationContext().getTracer().incrementLevel();
@@ -494,7 +481,7 @@ public class Thing extends Resource {
 					getEvaluationContext().getTracer().traceRetrievedCache(this,predicate, resultValue);
 					returnResult = Resource.create(getSource(), resultValue, evaluationContext);
 				} else {
-					Resource result = this.handleScript(literalValue, predicate,customQueryOptions,contexts);//getFact(predicate, literalValue);
+					Resource result = this.handleScript(literalValue, predicate,customQueryOptions,contexts);
 					if (result != null) {
 						//TODO validate caching
 						factCache.addFact(this.getIRI(), predicate,result.getSuperValue() ,customQueryOptionsContext);
@@ -548,6 +535,12 @@ public class Thing extends Resource {
 							this.getEvaluationContext());
 				case "string": 
 					return Resource.create(getSource(), literal(content.stringValue()), this.getEvaluationContext());
+				case "time": 
+					return Resource.create(getSource(), literal(content), this.getEvaluationContext());
+				case "date": 
+					return Resource.create(getSource(), literal(content), this.getEvaluationContext());
+				case "dateTime": 
+					return Resource.create(getSource(), literal(content), this.getEvaluationContext());
 				default:
 					logger.error("No literal handler found for result {} of class {}", result.toString(),
 							((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName());
@@ -628,22 +621,13 @@ public class Thing extends Resource {
 			results.close();
 			return new Trace("results");
 		}else {
-//			if (this.getEvaluationContext() == null) {
-//				this.evaluationContext = new EvaluationContext();
-//			}
-//			supersedeCustomQueryOptions(customQueryOptions);
-//			this.getEvaluationContext().setTracing(true);
-//			ResourceResults factValues = PathQL.evaluate(this, predicatePattern,customQueryOptions);
-//			if (factValues.hasNext()) {
-//				factValues.next();
-//			}
-//			return new Trace(this.getEvaluationContext().getTrace());
+
 		}
 		return null;
 	}
 
-	public Trace traceFact(String predicatePattern) throws PathPatternException {
-		return traceFact(predicatePattern, null);
+	public Trace traceFact(String predicatePattern, Value...  bindValues) throws PathPatternException {
+		return traceFact(predicatePattern, CustomQueryOptions.create(bindValues));
 	}
 
 	public void deleteFacts(String predicatePattern) throws Exception {		

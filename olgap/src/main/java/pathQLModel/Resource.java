@@ -237,7 +237,7 @@ public abstract class Resource implements Value {
 		evaluationContext.getStack().pop();
 	}
 
-	public abstract Resource getFact(String predicatePattern) throws PathPatternException;
+	public abstract Resource getFact(String predicatePattern, Value... bindValues) throws PathPatternException;
 
 	public abstract ResourceResults getFacts(String predicatePattern, Value... bindValues) throws PathPatternException;
 

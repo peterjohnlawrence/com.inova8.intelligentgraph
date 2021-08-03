@@ -52,8 +52,8 @@ class Example2_Tests {
 	void example2_1() {
 
 		try {
-			Thing peter = source.getThing(":Peter");
-			Resource bmi = peter.getFact(":hasBMI");
+			Thing aPerson = source.getThing(":aPerson");
+			Resource bmi = aPerson.getFact(":hasBMI");
 			assertEquals("21.453287197231838", bmi.stringValue());
 			Thing another1 = source.getThing(":Another1");
 			Resource another1bmi = another1.getFact(":hasBMI");
@@ -74,7 +74,7 @@ class Example2_Tests {
 			 for(Resource person:persons) {
 				 personValues.add(person.getValue().stringValue());
 			 }
-			assertEquals("[http://inova8.com/intelligentgraph/example2/Another1, http://inova8.com/intelligentgraph/example2/Another10, http://inova8.com/intelligentgraph/example2/Another11, http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another3, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another5, http://inova8.com/intelligentgraph/example2/Another6, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another8, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/Peter]", personValues.toString());
+			assertEquals("[http://inova8.com/intelligentgraph/example2/Another1, http://inova8.com/intelligentgraph/example2/Another10, http://inova8.com/intelligentgraph/example2/Another11, http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another3, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another5, http://inova8.com/intelligentgraph/example2/Another6, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another8, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/aPerson]", personValues.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -115,7 +115,7 @@ class Example2_Tests {
 	void example2_5() {
 
 		try {
-			Thing person = source.getThing(":Peter");
+			Thing person = source.getThing(":aPerson");
 			Resource relativeBMI = person.getFact(":hasRelativeBMI");
 			assertEquals("0.9967585615925397", relativeBMI.stringValue());
 		} catch (Exception e) {
@@ -160,7 +160,7 @@ class Example2_Tests {
 			for(Resource person1:persons) {
 				personValues.add(person1.getValue().stringValue());
 			}
-			assertEquals("[http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/Peter]", personValues.toString());
+			assertEquals("[http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/aPerson]", personValues.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
