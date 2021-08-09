@@ -185,6 +185,8 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public void setContextsAreLazyLoaded(Boolean contextsAreLazyLoaded) {
 		this.contextsAreLazyLoaded = contextsAreLazyLoaded;
 	}
-
+	public void setPrefixesAreLazyLoaded(Boolean prefixesAreLazyLoaded) {
+		this.prefixesAreLazyLoaded = prefixesAreLazyLoaded;
+	}
 	
 }

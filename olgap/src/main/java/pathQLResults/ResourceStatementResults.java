@@ -97,7 +97,7 @@ public class ResourceStatementResults extends ResourceResults {
 	public Resource next() throws QueryEvaluationException {
 		if (statementSet != null) {
 			Statement next = getStatementSet().next();
-			thing.getEvaluationContext().getTracer().traceFactReturnStatement(thing,next.getPredicate(), next.getObject());
+			thing.getEvaluationContext().getTracer().traceFactNext(thing,next.getPredicate(), next.getObject());
 			return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
 		}
 		if (localStatementIterator != null) {

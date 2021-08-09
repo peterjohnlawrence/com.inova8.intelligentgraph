@@ -42,8 +42,11 @@ public class IntelligentStatement extends ContextStatement {
 					 pathQLModel.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
 					 return fact.getSuperValue();
 				 }catch (Exception e) {
-					 String exceptionMessage = e.getMessage();
-					 if (exceptionMessage==null) exceptionMessage="Exception w/o message";
+					 String exceptionMessage = "";
+					 for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
+						exceptionMessage +=  t.getMessage()+"\n";
+					 }					 
+					 if (exceptionMessage=="") exceptionMessage="Exception w/o message";
 					 return  literal(exceptionMessage);
 				 }
 			}else {

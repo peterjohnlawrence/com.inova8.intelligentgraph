@@ -53,18 +53,7 @@ public class PathQL {
 		}
 	}
 	
-	/**
-	 * Evaluate.
-	 *
-	 * @param thing the thing
-	 * @param pathQL the path QL
-	 * @return the path QL results. resource results
-	 * @throws PathPatternException the path pattern exception
-	 */
-	public  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL) throws PathPatternException{
-		return evaluate( thing,  pathQL,null);
-	}
-	public  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL,CustomQueryOptions customQueryOptions) throws PathPatternException {
+	private  static pathQLResults.ResourceResults  evaluate(Thing thing, String pathQL,CustomQueryOptions customQueryOptions) throws PathPatternException {
 		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
 		if(pathElement!=null ) {
 			CustomQueryOptions pathCustomQueryOptions = pathElement.getCustomQueryOptions();
@@ -120,9 +109,7 @@ public class PathQL {
 		}
 		return boundResultsIterator;
 	}
-	public static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement){
-		return evaluate( thing,  pathElement,null);
-	}
+
 	/**
 	 * Evaluate.
 	 *
@@ -130,7 +117,7 @@ public class PathQL {
 	 * @param pathElement the path element
 	 * @return the path QL results. resource results
 	 */
-	public static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement,CustomQueryOptions customQueryOptions) {
+	private static pathQLResults.ResourceResults  evaluate(Thing thing, PathElement pathElement,CustomQueryOptions customQueryOptions) {
 		SimpleDataset dataset = thing.getDataset(customQueryOptions);
 		
 		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(thing.getSource().getTripleSource(),dataset, null);

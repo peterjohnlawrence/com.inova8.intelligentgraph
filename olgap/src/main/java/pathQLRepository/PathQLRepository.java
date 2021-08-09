@@ -67,6 +67,7 @@ public class PathQLRepository {
 	private static final String FAILEDTOADDGRAPH_EXCEPTION = "Failed To Add Graph";
 	private static final String FAILEDTOOPENGRAPH_EXCEPTION = "Failed To Open Graph";
 	private static final String FAILEDTOREMOVEGRAPH_EXCEPTION = "Failed To Remove Graph";
+	private static final String FAILEDTOADDNAMESPACE_EXCEPTION = "Failed To Add Namespace";
 	private static final String FAILEDTOCLOSEGRAPH_EXCEPTION = "Failed To Close Graph";
 	private org.eclipse.rdf4j.repository.Repository cacheRep;
 	private String cacheService;
@@ -94,7 +95,7 @@ public class PathQLRepository {
 	IntelligentGraphSail sail;
 	private IntelligentGraphConnection intelligentGraphConnection;
 	private static HashMap<Integer, PathQLRepository> pathQLRepositories = new HashMap<Integer, PathQLRepository>();
-
+	private  Boolean prefixesAreLazyLoaded=false;
 	public static PathQLRepository create(org.eclipse.rdf4j.repository.Repository repository, Resource... contexts) {
 		Integer key = repository.hashCode();
 		if (pathQLRepositories.containsKey(key)) {
@@ -336,30 +337,6 @@ public class PathQLRepository {
 			}
 		}
 		return customQueryOptions;
-		//		if (customQueryOptionsArray.length == 0) {
-		//			return null;
-		//		} else if (customQueryOptionsArray.length % 2 != 0) {
-		//			logger.error("Must have matching args tag/value pairs '{}'",
-		//					customQueryOptionsArray.length);
-		//			return null;
-		//		} else {
-		//			CustomQueryOptions customQueryOptions = new CustomQueryOptions();
-		//			for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < customQueryOptionsArray.length; customQueryOptionsArrayIndex += 2) {
-		//				String customQueryOptionParameter = customQueryOptionsArray[customQueryOptionsArrayIndex].stringValue();
-		//				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
-		//				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
-		//					customQueryOptions.put(customQueryOptionParameter,
-		//							pathQLModel.Resource.create(this, literal(customQueryOptionValue), null));
-		//				if (customQueryOptionParameter.equals("service")) {
-		//					String service = customQueryOptionValue;
-		//					if (customQueryOptionValue.indexOf('?') > 0) {
-		//						service = customQueryOptionValue.substring(0, customQueryOptionValue.indexOf('?'));
-		//					}
-		//					setCacheService(service);
-		//				}
-		//			}
-		//			return customQueryOptions;
-		//		}
 	}
 
 	/**
@@ -432,10 +409,6 @@ public class PathQLRepository {
 			while (statementIterator.hasNext())
 				statement = statementIterator.next();
 		}
-
-		//	factCache.clear();
-		//	compiledScripts.clear();
-		//	seeqSources.clear();
 	}
 
 	@SuppressWarnings("unused")
@@ -503,6 +476,12 @@ public class PathQLRepository {
 	}
 
 	public Prefixes getPrefixes() {
+		if(!prefixesAreLazyLoaded) {
+			if(intelligentGraphConnection!=null)
+				initializePrefixes(intelligentGraphConnection);
+			else if(contextAwareConnection!=null)
+				initializePrefixes(contextAwareConnection);
+		}
 		return prefixes;
 	}
 
@@ -517,8 +496,6 @@ public class PathQLRepository {
 
 	private void initializePrefixes(ContextAwareConnection connection)
 			throws RepositoryException, IllegalArgumentException {
-
-		//ContextAwareConnection connection = this.getContextAwareConnection();
 		RepositoryResult<Namespace> namespaces = connection.getNamespaces();
 		while (namespaces.hasNext()) {
 			Namespace namespace = namespaces.next();
@@ -531,12 +508,13 @@ public class PathQLRepository {
 		org.eclipse.rdf4j.model.IRI iri = trimAndCheckIRIString(IRI);
 		if (iri != null) {
 			if (this.getRepository() == null) {
-				//Onlyu used for testing when not actual repository available
+				//Only used for testing when not actual repository available
 				getPrefixes().put(prefix, iri);
 			} else {
 				try {
 					RepositoryConnection connection = this.getRepository().getConnection();
-					connection.setNamespace(prefix, IRI);
+					connection.setNamespace(prefix, iri.stringValue());
+					getPrefixes().put(prefix, iri);
 					logger.debug("Added prefix {} for namespace {} ", prefix, iri);
 				} catch (Exception qe) {
 					throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,

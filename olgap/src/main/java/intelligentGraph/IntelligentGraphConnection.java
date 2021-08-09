@@ -107,15 +107,18 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		this.intelligentGraphSail.setContextsAreLazyLoaded(false);
 	}
 
-	/**
-	 * Adds the statement.
-	 *
-	 * @param subject the subject
-	 * @param predicate the predicate
-	 * @param object the object
-	 * @param contexts the contexts
-	 * @throws SailException the sail exception
-	 */
+	@Override
+	public void setNamespace(String prefix, String name) throws SailException {
+		this.intelligentGraphSail.setPrefixesAreLazyLoaded(false);
+		super.setNamespace(prefix, name);
+	}
+
+	@Override
+	public void clearNamespaces() throws SailException {
+		this.intelligentGraphSail.setPrefixesAreLazyLoaded(false);
+		super.clearNamespaces();
+	}
+
 	@Override
 	public void addStatement(Resource subject, IRI predicate, Value object, Resource... contexts)
 			throws SailException {
@@ -125,14 +128,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		//Or set lazyLoaded =false
 		super.addStatement(subject, predicate, object, contexts);
 	}
-
-
-//	@Override
-//	public void addStatement(Resource subj, URI pred, Value obj, Resource... contexts) throws SailException {
-//		// TODO Auto-generated method stub
-//		super.addStatement(subj, pred, obj, contexts);
-//	}
-
 
 	@Override
 	public void addStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
@@ -275,9 +270,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		String pathQL = toPathQLString(pathQLValue);
 		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
-		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,
-				pathElement, 0,contexts);
-		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement,this,customQueryOptions,true,contexts);
+		return traceThingFacts(source, thing,pathElement, contexts );
+		
+//		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,
+//				pathElement, 0,contexts);
+//		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement,this,customQueryOptions,true,contexts);
 	}
 
 	private CloseableIteration<? extends IntelligentStatement, SailException> getFacts(Resource thingresource, Value pathQLValue, Resource... contexts ) throws PathPatternException {
@@ -300,7 +297,10 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) 
 				new IntelligentStatementResults(source,thing, pathElement,this,customQueryOptions,contexts);
 	}
-	
+	private CloseableIteration<? extends IntelligentStatement, SailException> traceThingFacts(PathQLRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
+		return (CloseableIteration<? extends IntelligentStatement, SailException>) 
+				new IntelligentStatementResults(source,thing, pathElement,this,customQueryOptions,true,contexts);
+	}	
 	
 	private CloseableIteration<? extends IntelligentStatement, SailException> getThingPaths(PathQLRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementPaths( source,thing, pathElement,  this,customQueryOptions,contexts);	
@@ -344,7 +344,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(PathQLRepository source,Thing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-		CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+	CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
 //		pathElement.setCustomQueryOptions(customQueryOptions);
 		TupleExpr tupleExpr = pathTupleExpr.getTupleExpr();
 		SimpleDataset dataset = prepareDataset(pathElement, contexts);

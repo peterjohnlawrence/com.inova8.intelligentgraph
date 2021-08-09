@@ -138,7 +138,10 @@ class Example5_Tests {
 			Thing aPerson = source.getThing(":aPerson");
 
 			Trace trace = aPerson.traceFact("^:measurementOf[:hasDate [lt %1]]/:hasBMI",literal(LocalDate.parse("2021-08-03")));
-			assertEquals("\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>", trace.asText());
+			assertEquals("   1. Getting facts '^:measurementOf[:hasDate [lt %1]]/:hasBMI' of aPerson <http://inova8.com/intelligentgraph/example5/aPerson>\r\n"
+					+ "   2. ...using options: [1=\"2021-08-03\"^^<http://www.w3.org/2001/XMLSchema#date>]\r\n"
+					+ "   3. ...within contexts: [file://src/test/resources/example5.ttl, http://default]\r\n"
+					+ "   4. Returned fact 'http://inova8.com/intelligentgraph/example5/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example5/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", trace.asText());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

@@ -27,7 +27,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	Thing thing;
 	PathElement pathElement;
 	Iterations sortedIterations;
-	private Integer pathIteration;
+	private Integer pathIteration=0;
 	IntelligentGraphConnection intelligentGraphConnection;
 	PathQLRepository source;
 	private String pred;
@@ -37,7 +37,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private CustomQueryOptions customQueryOptions;
 	private Resource[] contexts;
 	private final Boolean trace;
-
+	@Deprecated
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
@@ -52,11 +52,13 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
+	@Deprecated
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
-		this.resultsIterator=resultsIterator;
+		this.resultsIterator=null;//resultsIterator;
 		this.thing=thing;
 		this.pathElement=pathElement;
+		this.sortedIterations = pathElement.getIterations().sortByPathLength();
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		this.contexts = contexts;
@@ -67,13 +69,29 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 	public IntelligentStatementResults( PathQLRepository source, Thing thing,
+			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
+		this.resultsIterator=null;//intelligentGraphConnection.getResultsIterator(source, thing,pathElement, contexts);
+		this.source=source;
+		this.thing=thing;
+		this.pathElement=pathElement;
+		this.sortedIterations = pathElement.getIterations().sortByPathLength();
+		this.intelligentGraphConnection=intelligentGraphConnection;
+		this.customQueryOptions=customQueryOptions;
+		this.contexts = contexts;
+		this.trace = trace;
+		subj = pathElement.getTargetSubject().toString();
+		pred = pathElement.getTargetPredicate().toString();
+		obj= pathElement.getTargetVariable().toString();
+		simpleValueFactory= SimpleValueFactory.getInstance();
+	}
+
+	public IntelligentStatementResults( PathQLRepository source, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=null;//intelligentGraphConnection.getResultsIterator(source, thing,pathElement, contexts);
 		this.source=source;
 		this.thing=thing;
 		this.pathElement=pathElement;
 		this.sortedIterations = pathElement.getIterations().sortByPathLength();
-		this.pathIteration=0;
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		this.contexts = contexts;

@@ -323,9 +323,9 @@ public class Tracer {
 		addParagraph();
 		
 	}
-	public void traceFactReturnStatement(Thing thing, Value predicate, Value value) {
+	public void traceFactNext(Thing thing, Value predicate, Value value) {
 		if(!tracing)return;
-		addTrace(String.format("Returned fact '%s' of %s = %s", toHTML(predicate.stringValue()), addIRI(thing.getSuperValue()),  value.stringValue()));
+		addTrace(String.format("Next fact '%s' of %s = %s", toHTML(predicate.stringValue()), addIRI(thing.getSuperValue()),  value.stringValue()));
 	}
 	public void traceFactReturnValue(Thing thing, String predicatePattern, Resource nextFact) {
 		if(!tracing)return;

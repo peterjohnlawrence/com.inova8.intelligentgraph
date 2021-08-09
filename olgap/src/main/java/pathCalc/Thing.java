@@ -19,6 +19,7 @@ import javax.script.SimpleBindings;
 
 import org.antlr.v4.runtime.RecognitionException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,6 @@ public class Thing extends Resource {
 	/** The cached resources. */
 	private HashMap<String, Resource> cachedResources;
 	private  IRI graphName;
-	boolean remoteHostProcessing = true;
 	protected Thing(org.eclipse.rdf4j.model.Value superValue) {
 		super(superValue);
 	}
@@ -198,32 +198,27 @@ public class Thing extends Resource {
 		return getFacts(predicatePattern,CustomQueryOptions.create(bindValues));
 	}
 	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
-		//This could be configured to process locally in a client or remotely in the server. Not sure both are required.
-		boolean remoteHostProcessing = true;
 		logger.debug("getFacts{}\n", predicatePattern);
-		if(remoteHostProcessing) {
-			this.getEvaluationContext().getTracer().traceFacts(this, predicatePattern);
-			SimpleDataset dataset = getDataset( customQueryOptions);
-			dataset.addDefaultGraph(this.graphName);
-			org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
-			ResourceStatementResults results = null;
-			if(this.getSource().getRepository()==null ) {
-				CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource()
-						.getTripleSource()
-						.getStatements(this.getIRI(),
-								iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
-				results = new ResourceStatementResults(localStatementIterator, this, null, customQueryOptions);
-			}else {
-				CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
-						.getRepository().getConnection()
-						.getStatements(this.getIRI(),
-								iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
-				results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
-			}
-			return results;
+		this.getEvaluationContext().getTracer().traceFacts(this, predicatePattern);
+		SimpleDataset dataset = getDataset( customQueryOptions);
+		dataset.addDefaultGraph(this.graphName);
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		ResourceStatementResults results = null;
+		if(this.getSource().getRepository()==null ) {
+			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource()
+					.getTripleSource()
+					.getStatements(this.getIRI(),
+							iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
+			results = new ResourceStatementResults(localStatementIterator, this, null, customQueryOptions);
 		}else {
-			return PathQL.evaluate(this, predicatePattern,customQueryOptions);
+			CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
+					.getRepository().getConnection()
+					.getStatements(this.getIRI(),
+							iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern), contextArray);
+			results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
 		}
+		return results;
+
 	}
 	public final Path getPath(String predicatePattern) throws PathPatternException, RDFParseException, UnsupportedRDFormatException, IOException {
 		logger.debug("getPath{}\n", predicatePattern);
@@ -245,34 +240,28 @@ public class Thing extends Resource {
 	 return  getPaths( predicatePattern, null);
 	}
 	public final PathResults getPaths(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
-		//This could be configured to process locally in a client or remotely in the server. Not sure both are required.
-		boolean remoteHostProcessing = true;
+
 		logger.debug("getPaths{}\n", predicatePattern);
-		if(remoteHostProcessing) {
-			this.getEvaluationContext().getTracer().tracePaths(this, predicatePattern);
-			SimpleDataset dataset = getDataset( customQueryOptions);
-			dataset.addDefaultGraph(this.graphName);
-			org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
-			PathResults results = null;
-			if(this.getSource().getRepository()==null ) {
-				CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getSource()
-						.getTripleSource()
-						.getStatements(this.getIRI(),
-								iri(IntelligentGraphConnection.GETPATHS), literal(predicatePattern), contextArray);
-				results = new PathResults(localPathIterator, this, null);
-			}else {
-				CloseableIteration<Statement, RepositoryException> pathIterator = this.getSource()
-						.getRepository().getConnection()
-						.getStatements(this.getIRI(),
-								iri(IntelligentGraphConnection.GETPATHS), literal(predicatePattern), contextArray);
-				results = new PathResults(pathIterator, this, null, customQueryOptions);
-			}
-			return results;
+
+		this.getEvaluationContext().getTracer().tracePaths(this, predicatePattern);
+		SimpleDataset dataset = getDataset( customQueryOptions);
+		dataset.addDefaultGraph(this.graphName);
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		PathResults results = null;
+		if(this.getSource().getRepository()==null ) {
+			CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getSource()
+					.getTripleSource()
+					.getStatements(this.getIRI(),
+							iri(IntelligentGraphConnection.GETPATHS), literal(predicatePattern), contextArray);
+			results = new PathResults(localPathIterator, this, null);
 		}else {
-		//	return PathQL.evaluate(this, predicatePattern,customQueryOptions);
-			return null;
+			CloseableIteration<Statement, RepositoryException> pathIterator = this.getSource()
+					.getRepository().getConnection()
+					.getStatements(this.getIRI(),
+							iri(IntelligentGraphConnection.GETPATHS), literal(predicatePattern), contextArray);
+			results = new PathResults(pathIterator, this, null, customQueryOptions);
 		}
-		
+		return results;
 	}
 
 	private org.eclipse.rdf4j.model.Resource[] prepareDataset(CustomQueryOptions customQueryOptions) {
@@ -291,8 +280,6 @@ public class Thing extends Resource {
 			this.getEvaluationContext().setCustomQueryOptions(customQueryOptions);
 		}
 	}
-
-
 
 	public Resource getSignal(String signal) {
 		getEvaluationContext().getTracer().incrementLevel();
@@ -602,28 +589,23 @@ public class Thing extends Resource {
 		return null;
 	}
 	public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
-
-		if(remoteHostProcessing) {	
-			SimpleDataset dataset = getDataset( customQueryOptions);
-			dataset.addDefaultGraph(this.graphName);
-			org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
-			ResourceStatementResults results = null;
-			CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
-						.getRepository().getConnection()
-						.getStatements(this.getIRI(),
-								iri(IntelligentGraphConnection.TRACEFACTS), literal(predicatePattern), contextArray);
-			results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
-			for(Resource result:results) {
-				String resultString = result.stringValue();
-				results.close();
-				return new Trace(resultString);
-			}
+		SimpleDataset dataset = getDataset( customQueryOptions);
+		dataset.addDefaultGraph(this.graphName);
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		ResourceStatementResults results = null;
+		CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
+					.getRepository().getConnection()
+					.getStatements(this.getIRI(),
+							iri(IntelligentGraphConnection.TRACEFACTS), literal(predicatePattern), contextArray);
+		results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
+		for(Resource result:results) {
+			String resultString = result.stringValue();
 			results.close();
-			return new Trace("results");
-		}else {
-
+			return new Trace(resultString);
 		}
-		return null;
+		results.close();
+		return new Trace("results");
+
 	}
 
 	public Trace traceFact(String predicatePattern, Value...  bindValues) throws PathPatternException {
@@ -631,61 +613,11 @@ public class Thing extends Resource {
 	}
 
 	public void deleteFacts(String predicatePattern) throws Exception {		
-		if(remoteHostProcessing) {
-			org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
-			this.getSource().getRepository().getConnection().remove(this.getIRI(),
+		org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
+		this.getSource().getRepository().getConnection().remove(this.getIRI(),
 							iri(IntelligentGraphConnection.GETFACTS), literal(predicatePattern));
-		}else {
-//			try {
-//				PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(this, predicatePattern);
-//				pathQLResults.ResourceResults facts;
-//				if (predicateElement != null) {
-//					facts = PathQL.evaluate(this, predicateElement);
-//				} else {
-//					throw new PathPatternException();
-//				}
-//				if (predicateElement.getIsReified()) {
-//					deleteReifiedFacts(facts);
-//				} else if (predicateElement.getIsDereified()) {
-//					throw new NotSupportedException("derifiedFact deletion");
-//				} else {
-//					deleteFacts(facts);
-//				}
-//				//Since changed the database, we need to clear any cache values.
-//				PathQLRepository.clearCaches();
-//	
-//			} catch (Exception e) {
-//				throw e;
-//			}
-			
-		}
 	}
-//	@Deprecated
-//	private void deleteFacts(pathQLResults.ResourceResults facts) throws QueryEvaluationException, RepositoryException {
-//		RepositoryConnection connection = this.getSource().getRepository().getConnection();//getContextAwareConnection();
-//		while (facts.hasNext()) {
-//			Fact nextFact = facts.nextFact();		
-//			connection.remove(nextFact.getSubjectIRI(), nextFact.getPredicateIRI(), nextFact.getValue(), this.getGraphName());
-//		}
-//	}
-//	@Deprecated
-//	private void deleteReifiedFacts(pathQLResults.ResourceResults facts)
-//			throws QueryEvaluationException, RepositoryException {
-//		RepositoryConnection connection = this.getSource().getRepository().getConnection();//getContextAwareConnection();
-//		PredicateElement predicateElement = (PredicateElement) facts.getPathElement();
-//
-//		ReificationType reificationType = this.getSource().getReificationTypes()
-//				.get(predicateElement.getReification().stringValue());
-//		if (reificationType != null) {
-//
-//			while (facts.hasNext()) {
-//				IRI reificationValue = facts.nextReifiedValue();		
-//				connection.remove(reificationValue, null, null, this.getGraphName());
-//			}
-//		} else {
-//			logger.error("Reified type not supported:" + predicateElement.toString());
-//		}
-//	}
+
 
 	public Thing addFact(String property, String value, IRI dataType) {
 
@@ -693,21 +625,55 @@ public class Thing extends Resource {
 			Literal literal = literal(value, dataType);
 			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
 
-			addFact(literal, predicateElement);
+			addFact(predicateElement,literal );
 
 		} catch (Exception e) {
 
 		}
 		return this;
-
 	}
 
-	public Thing addFact(String property, String value) {
+	
+	public Thing addFact(IRI property, Value value) {
+		Validate.notNull(property);
+		Validate.notNull(value);
+		RepositoryConnection connection = this.getSource().getContextAwareConnection();
+		switch(value.getClass().getName() ) {
+			case "pathCalc.Thing":
+				connection.add(this.getIRI(), property, ((Thing) value).getIRI(), this.getGraphName());
+				break;
+			default:
+				connection.add(this.getIRI(), property, value, this.getGraphName());
+		}		
+		PathQLRepository.clearCaches();
+		return this;
+	}
+	public Thing addFact(String property, Value value) {
+		Validate.notNull(property);
+		Validate.notNull(value);
+		try {
+			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
+			switch(value.getClass().getName() ) {
+			case "pathCalc.Thing":
+				addFact(predicateElement,((Thing) value).getIRI() );
+				break;
+			default:
+				addFact(predicateElement,value );
+		}
+			
+		} catch (Exception e) {
 
+		}		
+		
+		return this;
+	}
+	public Thing addFact(String property, String value) {
+		Validate.notNull(property);
+		Validate.notNull(value);
 		try {
 			Literal literal = literal(value);
 			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
-			addFact(literal, predicateElement);
+			addFact(predicateElement,literal );
 		} catch (Exception e) {
 
 		}
@@ -715,7 +681,7 @@ public class Thing extends Resource {
 
 	}
 
-	private void addFact(Literal literal, PredicateElement predicateElement) throws RepositoryException {
+	private void addFact( PredicateElement predicateElement,Value value) throws RepositoryException {
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
 		if (predicateElement.getIsReified()) {
 			ReificationType reificationType = this.getSource().getReificationTypes()
@@ -723,14 +689,14 @@ public class Thing extends Resource {
 			if (reificationType != null) {
 				IRI reification = iri(
 						reificationType.getReificationType().stringValue() + "/" + this.getIRI().hashCode() + "."
-								+ predicateElement.getPredicate().hashCode() + "." + literal.hashCode());
+								+ predicateElement.getPredicate().hashCode() + "." + value.hashCode());
 				connection.add(reification, Evaluator.RDF_TYPE_IRI, predicateElement.getReification(),
 						this.getGraphName());
 				connection.add(reification, reificationType.getReificationSubject(), this.getIRI(),
 						this.getGraphName());
 				connection.add(reification, reificationType.getReificationPredicate(), predicateElement.getPredicate(),
 						this.getGraphName());
-				connection.add(reification, reificationType.getReificationObject(), literal,
+				connection.add(reification, reificationType.getReificationObject(), value,
 						this.getGraphName());
 			} else {
 				logger.error("Reified type not supported:" + predicateElement.toString());
@@ -739,7 +705,7 @@ public class Thing extends Resource {
 		} else {
 			IRI propertyIri = predicateElement.getPredicate();
 			
-			connection.add(this.getIRI(), propertyIri, literal, this.getGraphName());
+			connection.add(this.getIRI(), propertyIri, value, this.getGraphName());
 		}
 		//Since changed the database, we need to xclear any cache values.
 		PathQLRepository.clearCaches();

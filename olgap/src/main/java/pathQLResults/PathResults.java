@@ -81,7 +81,7 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	public Path next() throws QueryEvaluationException {
 		if (pathSet != null) {
 			Statement next = getPathSet().next();
-			thing.getEvaluationContext().getTracer().traceFactReturnStatement(thing,next.getPredicate(), next.getObject());
+			thing.getEvaluationContext().getTracer().traceFactNext(thing,next.getPredicate(), next.getObject());
 			try {
 				return Path.create(thing, next.getObject());
 			} catch (RDFParseException | UnsupportedRDFormatException | IOException e) {

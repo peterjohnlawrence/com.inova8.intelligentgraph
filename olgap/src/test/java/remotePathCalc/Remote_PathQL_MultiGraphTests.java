@@ -14,11 +14,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Evaluator;
 import pathCalc.Thing;
 import pathQLModel.Resource;
+import pathCalc.Evaluator;
+import pathQLRepository.*;
 import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
 import pathQLResults.ResourceResults;
 import utilities.Query;
 
@@ -49,15 +49,12 @@ class Remote_PathQL_MultiGraphTests {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
-		source =PathQLRepository.create("http://localhost:8080/rdf4j-server","calc2graph");
-		source.prefix("<http://inova8.com/calc2graph/def/>");
-		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
+//		source =PathQLRepository.create("http://localhost:8080/rdf4j-server","calc2graph");
+//		source.prefix("<http://inova8.com/calc2graph/def/>");
+//		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 	}
 
-	
-	/**
-	 * Test 10.
-	 */
+
 	@Test
 	@Order(10)
 	void test_10() {
@@ -80,9 +77,7 @@ class Remote_PathQL_MultiGraphTests {
 			fail();
 		}
 	}
-	/**
-	 * Test 20.
-	 */
+
 	@Test
 	@Order(20)
 	void test_20() {
