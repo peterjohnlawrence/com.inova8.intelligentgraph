@@ -15,6 +15,7 @@ import com.inova8.intelligentgraph.pathCalc.Thing;
 public class IntelligentEvaluator {
 	private final  FactCache factCache=new FactCache();
 	protected final Logger logger = LoggerFactory.getLogger(IntelligentEvaluator.class);
+	private boolean factCacheDirty=false;
 	public IntelligentEvaluator(IntelligentGraphSail intelligentGraphSail) {
 	}
 
@@ -71,10 +72,14 @@ public class IntelligentEvaluator {
 		}
 	}
 	public  void clearCache(Value... args) {
-		factCache.clear();
+		factCacheDirty = true;
 	}
 
 	public FactCache getFactCache() {
+		if(factCacheDirty) {
+			factCache.clear();
+			factCacheDirty = false;
+		}
 		return factCache;
 	}
 
