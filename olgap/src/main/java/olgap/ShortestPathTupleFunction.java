@@ -155,6 +155,9 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.inova8.intelligentgraph.vocabulary.OLGAP;
+
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
@@ -233,11 +236,6 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	/** The Constant GT. */
 	protected static final String GT = ">";
 	
-	/** The Constant NAMESPACE. */
-	public static final String NAMESPACE = "http://inova8.com/olgap/";
-	
-	/** The Constant SHORTEST_PATH_PROPERTY. */
-	protected static final String SHORTEST_PATH_PROPERTY = "shortestPath";
 
 	/** The working rep. */
 	public static org.eclipse.rdf4j.repository.Repository workingRep;
@@ -311,7 +309,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	 */
 	@Override
 	public String getURI() {
-		return NAMESPACE + SHORTEST_PATH_PROPERTY;
+		return OLGAP.SHORTESTPATH;
 	}
 	
 	/**
@@ -327,7 +325,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 			ValueFactory valueFactory, Value... args) throws QueryEvaluationException {
 		if (args.length != 5) {
 			throw new ValueExprEvaluationException(
-					SHORTEST_PATH_PROPERTY + " requires" + "exactly 5 arguments: service, start, end, path, max. Got "
+					OLGAP.SHORTESTPATH + " requires" + "exactly 5 arguments: service, start, end, path, max. Got "
 							+ args.length);
 		}
 //		queryContext=QueryContext.getQueryContext();

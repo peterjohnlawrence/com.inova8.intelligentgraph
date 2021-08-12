@@ -14,6 +14,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.9 ;
   :hasLocation :Tideswell ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -23,6 +24,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Female ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.9 ;
   :hasLocation :Tideswell ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -32,6 +34,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.5 ;
   :hasLocation :Tideswell ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -41,6 +44,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Female ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.8 ;
   :hasLocation :Tideswell ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -50,6 +54,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.7 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -59,6 +64,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Female ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 2 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -68,6 +74,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.8 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -77,6 +84,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Female ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.5 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -86,6 +94,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.5 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -95,6 +104,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Female ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.7 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -104,6 +114,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.6 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -113,6 +124,7 @@
   a :Person ;
   :hasBMI "<:BMI>"^^script:groovy ;
   :hasGender :Female ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
   :hasHeight 1.7 ;
   :hasLocation :Maidstone ;
   :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
@@ -144,6 +156,15 @@
 :Gender
   a owl:Class ;
   rdfs:label "Gender" ;
+.
+:GenderLocationRelativeBMI
+  a :Script ;
+  script:scriptCode """BMI=_this.getFact(':hasBMI').doubleValue();
+gender=_this.getFact(':hasGender');
+location=_this.getFact(':hasLocation');
+genderLocationAverageBMI = _this.getThing(':Gender_Location').getFact('^rdf:type[:hasGender %1; :hasLocation %2]/:averageBMI',gender,location).doubleValue();
+BMI/genderLocationAverageBMI;"""^^script:groovy ;
+  rdfs:label "GenderLocationRelativeBMI" ;
 .
 :Gender_Location
   a owl:Class ;
@@ -193,15 +214,6 @@ location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()"""^^s
   :averageBMI "_this.getFacts('^rdf:type/:hasBMI').average()"^^script:groovy ;
   rdfs:label "Person" ;
 .
-:aPerson
-  a :Person ;
-  :hasBMI "<:BMI>"^^script:groovy ;
-  :hasGender :Male ;
-  :hasHeight 1.7 ;
-  :hasLocation :Tideswell ;
-  :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
-  :hasWeight "62"^^xsd:decimal ;
-.
 :RelativeBMI
   a :Script ;
   script:scriptCode "double averageBMI = _this.getFact('rdf:type/:averageBMI').doubleValue(); _this.getFact(':hasBMI').doubleValue()/averageBMI;"^^script:groovy ;
@@ -214,6 +226,16 @@ location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()"""^^s
   a :Location ;
   :averageBMI "<:LocationAverageBMI>"^^script:groovy ;
   rdfs:label "Tideswell" ;
+.
+:aPerson
+  a :Person ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasGender :Male ;
+  :hasGenderLocationRelativeBMI "<:GenderLocationRelativeBMI>"^^script:groovy ;
+  :hasHeight 1.7 ;
+  :hasLocation :Tideswell ;
+  :hasRelativeBMI "<:RelativeBMI>"^^script:groovy ;
+  :hasWeight "62"^^xsd:decimal ;
 .
 :averageBMI
   a owl:DatatypeProperty ;
@@ -231,6 +253,11 @@ location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()"""^^s
   rdfs:domain :Person ;
   rdfs:label "has gender" ;
   rdfs:range :Gender ;
+.
+:hasGenderLocationRelativeBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain :Person ;
+  rdfs:label "has gender location relative BMI" ;
 .
 :hasHeight
   a owl:DatatypeProperty ;

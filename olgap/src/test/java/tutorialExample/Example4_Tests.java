@@ -17,16 +17,17 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Thing;
-import pathQLModel.Resource;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+
 import utilities.Query;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example4_Tests {
 
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
 	@BeforeAll
@@ -39,7 +40,7 @@ class Example4_Tests {
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example4/");
 		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 
 	}
 	@AfterAll
@@ -105,6 +106,20 @@ class Example4_Tests {
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(4)
+	void example4_5() {
+
+		try {
+
+			Thing aPerson = source.getThing(":aPerson");
+
+			Double genderLocationRelativeBMI = aPerson.getFact(":hasGenderLocationRelativeBMI").doubleValue();
+			assertEquals("0.9394366395990403", genderLocationRelativeBMI.toString());
+		} catch (Exception e) {
+			assertEquals("",e.getMessage());
 		}
 	}
 }

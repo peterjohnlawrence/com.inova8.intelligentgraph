@@ -16,18 +16,18 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Thing;
-import pathPatternElement.Iterations;
-import pathPatternElement.PathElement;
-import pathQL.PathParser;
-import pathQLRepository.PathQLRepository;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.pathql.element.Iterations;
+import com.inova8.pathql.element.PathElement;
+import com.inova8.pathql.parser.PathParser;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PathIterationTests {
 	ArrayList<Integer> spanMin = new ArrayList<Integer>();
 	ArrayList<Integer> spanMax = new ArrayList<Integer>();
 	/** The source. */
-	static PathQLRepository source;
+	static IntelligentGraphRepository source;
 	
 	/** The thing. */
 	static Thing thing;
@@ -39,7 +39,7 @@ public class PathIterationTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source = new PathQLRepository();
+		source = new IntelligentGraphRepository();
 		thing = source.getThing( "http://",null);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 

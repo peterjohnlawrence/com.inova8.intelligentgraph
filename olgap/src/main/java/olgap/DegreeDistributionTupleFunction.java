@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.inova8.intelligentgraph.vocabulary.OLGAP;
+
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration;
 import org.eclipse.rdf4j.common.iteration.ConvertingIteration;
@@ -41,8 +44,6 @@ public class DegreeDistributionTupleFunction implements InverseMagicProperty{
 	/** The conn. */
 	public  RepositoryConnection conn;
 
-	/** The Constant NAMESPACE. */
-	public static final String NAMESPACE = "http://inova8.com/olgap/";
 	
 	/**
 	 * Gets the uri.
@@ -51,7 +52,7 @@ public class DegreeDistributionTupleFunction implements InverseMagicProperty{
 	 */
 	@Override
 	public String getURI() {
-		return NAMESPACE + "degreeDistribution";
+		return OLGAP.DEGREEDISTRIBUTION;//NAMESPACE + "degreeDistribution";
 	}
 	
 	/**

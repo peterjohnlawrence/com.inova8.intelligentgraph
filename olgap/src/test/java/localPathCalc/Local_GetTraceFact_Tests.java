@@ -15,14 +15,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.CustomQueryOptions;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathCalc.Trace;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathCalc.Trace;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+
 import utilities.Query;
 
 /**
@@ -65,7 +67,7 @@ class Local_GetTraceFact_Tests {
 		@Order(1)
 		void test_1() {
 			try {
-				PathQLRepository source = PathQLRepository.create(workingRep);
+				IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 				Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"));
 				Resource result1 = _this.getFact(":volumeFlow");
 				Trace trace = _this.traceFact(":massFlow");
@@ -89,7 +91,7 @@ class Local_GetTraceFact_Tests {
 		@Order(2)
 		void test_2() {
 			try {
-				PathQLRepository source = PathQLRepository.create(workingRep);
+				IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 				Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"));
 				Trace trace =  _this.traceFact(":volumeFlow");
 				
@@ -113,7 +115,7 @@ class Local_GetTraceFact_Tests {
 		void test_3() {
 	
 			try {
-				PathQLRepository source = PathQLRepository.create(workingRep);
+				IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 				Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"), null);
 				source.clearCache();
 				Trace trace = _this.traceFact(":massThroughput");
@@ -138,7 +140,7 @@ class Local_GetTraceFact_Tests {
 		void test_4() {
 	
 			try {
-				PathQLRepository source = PathQLRepository.create(workingRep);
+				IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 				//Graph graph = source.addGraph("<file://src/test/resources/calc2graph.data.ttl>");
 				//Thing _this =graph.getThing("<http://inova8.com/calc2graph/id/BatteryLimit1>");
 				Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
@@ -164,11 +166,11 @@ class Local_GetTraceFact_Tests {
 	void test_5() {
 		
 		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
+			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":myCountry");
-			myCountry.addFact(":myOption", "_customQueryOptions.get(\"time\").integerValue() ;", Evaluator.GROOVY);
+			myCountry.addFact(":myOption", "_customQueryOptions.get(\"time\").integerValue() ;", SCRIPT.GROOVY);
 			CustomQueryOptions  customQueryOptions1 = new CustomQueryOptions();
 			customQueryOptions1.add("time",42);
 		    customQueryOptions1.add("name","Peter");

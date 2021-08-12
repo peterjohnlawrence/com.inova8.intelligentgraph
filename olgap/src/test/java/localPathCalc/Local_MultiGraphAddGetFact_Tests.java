@@ -18,16 +18,19 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.CustomQueryOptions;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathCalc.Trace;
-import pathPatternProcessor.PathPatternException;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathCalc.Trace;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.pathql.processor.PathPatternException;
+
 import utilities.Query;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
@@ -38,7 +41,7 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 class Local_MultiGraphAddGetFact_Tests {
 
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 	/** The conn. */
 	private static RepositoryConnection conn;	
@@ -59,7 +62,7 @@ class Local_MultiGraphAddGetFact_Tests {
  		conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
-		source =  PathQLRepository.create(workingRep);
+		source =  IntelligentGraphRepository.create(workingRep);
 
 	}
 	@AfterAll
@@ -135,7 +138,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			Graph graph1 = source.openGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Thing myCountry = graph1.getThing(":Country");
 			String performanceCalculation = "2*3";
-			myCountry.addFact(":salesPerformance", performanceCalculation, Evaluator.GROOVY) ;
+			myCountry.addFact(":salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
 			
 			ResourceResults results = myCountry.getFacts(":salesPerformance") ;
 			for(Resource result:results) {
@@ -164,7 +167,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "5");
 
 			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
 		    customQueryOptions.add("name","Peter");
@@ -194,7 +197,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "5");
 
 			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
 		    customQueryOptions.add("name","Peter");
@@ -226,7 +229,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "40");
 			myCountry.addFact(":sales", "50");
 			String totalSalesScript = "return _this.getFacts(\":sales\").total();";
-			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":totalSales", totalSalesScript, SCRIPT.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
 			assertEquals(150.0, totalCountrySales);
@@ -255,7 +258,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
 			String averageSalesScript = "return _this.getFacts(\":sales\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(300.0, averageCountrySales);
@@ -283,7 +286,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			Graph graph = source.openGraph("<http://inova8.com/calc2graph/testGraph5>");
 			Thing myCountry = graph.getThing(":Country");
 			String performanceCalculation = "2*3";
-			myCountry.addFact(":Attribute@:salesPerformance", performanceCalculation, Evaluator.GROOVY) ;
+			myCountry.addFact(":Attribute@:salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
 			
 			ResourceResults results = myCountry.getFacts(":Attribute@:salesPerformance") ;
 			for(Resource result:results) {

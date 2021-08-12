@@ -17,19 +17,20 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import path.Path;
-import path.PathBinding;
-import pathCalc.CustomQueryOptions;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQL.Match;
-import pathQLModel.MatchFact;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.MatchResults;
-import pathQLResults.PathResults;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.path.Path;
+import com.inova8.intelligentgraph.path.PathBinding;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.MatchFact;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.MatchResults;
+import com.inova8.intelligentgraph.pathQLResults.PathResults;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.pathql.parser.Match;
+
 import utilities.Query;
 
 /**
@@ -42,7 +43,7 @@ class Local_GetPath_Tests {
 
 	
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
@@ -61,7 +62,7 @@ class Local_GetPath_Tests {
 		conn.setNamespace("def", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 
 
 	}

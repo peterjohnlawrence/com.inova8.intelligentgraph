@@ -17,16 +17,17 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Thing;
-import pathCalc.Trace;
-import pathQLModel.Resource;
-import pathQLRepository.PathQLRepository;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathCalc.Trace;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+
 import utilities.Query;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example1_Tests {
 
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
 	@BeforeAll
@@ -39,29 +40,17 @@ class Example1_Tests {
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example1/");
 		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 
 	}
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
+
 	@Test
 	@Order(1)
 	void example1_1() {
-
-		try {
-			Thing aPerson = source.getThing(":aPerson");
-			Resource bmi = aPerson.getFact(":hasBMI");
-			assertEquals("21.453287197231838", bmi.stringValue());
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
-	@Test
-	@Order(2)
-	void example1_2() {
 
 		try {
 			Thing aPerson = source.getThing(":aPerson");
@@ -73,17 +62,30 @@ class Example1_Tests {
 					+ "         2. double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)\n"
 					+ "\n"
 					+ "               1. Getting facts ':hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
-					+ "               2. Returned fact 'http://inova8.com/intelligentgraph/example1/hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 1.7\n"
+					+ "               2. Next fact 'http://inova8.com/intelligentgraph/example1/hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 1.7\n"
 					+ "               3. Returned fact ':hasHeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 1.7^^decimal <http://www.w3.org/2001/XMLSchema#decimal>\n"
 					+ "\n"
 					+ "               4. Getting facts ':hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
-					+ "               5. Returned fact 'http://inova8.com/intelligentgraph/example1/hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 62\n"
+					+ "               5. Next fact 'http://inova8.com/intelligentgraph/example1/hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 62\n"
 					+ "               6. Returned fact ':hasWeight' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 62^^decimal <http://www.w3.org/2001/XMLSchema#decimal>\n"
 					+ "\n"
 					+ "         3. Evaluated hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
 					+ "   3. Calculated hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
 					+ "   4. Retrieved cached value hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
 					+ "   5. Returned fact 'http://inova8.com/intelligentgraph/example1/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", trace.asText());
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(2)
+	void example1_2() {
+
+		try {
+			Thing aPerson = source.getThing(":aPerson");
+			Resource bmi = aPerson.getFact(":hasBMI");
+			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

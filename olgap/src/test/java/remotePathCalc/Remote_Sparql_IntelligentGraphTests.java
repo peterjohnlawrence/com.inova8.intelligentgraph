@@ -39,15 +39,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import intelligentGraph.IntelligentGraphConfig;
-import intelligentGraph.IntelligentGraphFactory;
-import intelligentGraph.IntelligentGraphSail;
-import pathCalc.Evaluator;
-import pathQL.PathQL;
-import pathQLModel.Resource;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
+import com.inova8.intelligentgraph.IntelligentGraphConfig;
+import com.inova8.intelligentgraph.IntelligentGraphFactory;
+import com.inova8.intelligentgraph.IntelligentGraphSail;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.FactResults;
+import com.inova8.intelligentgraph.pathQLResults.PathQLResults;
+import com.inova8.pathql.parser.PathQLEvaluator;
+
 import utilities.Query;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -65,7 +66,7 @@ class Remote_Sparql_IntelligentGraphTests {
 	static RepositoryTripleSource repositoryTripleSource;
 	
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 	/** The evaluator. */
 	private static Evaluator evaluator;
@@ -80,7 +81,7 @@ class Remote_Sparql_IntelligentGraphTests {
 	static void setUpBeforeClass() throws Exception {
 		org.eclipse.rdf4j.repository.Repository workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","calc2graph");
 		//org.eclipse.rdf4j.repository.Repository workingRep = new SPARQLRepository("http://localhost:8080/rdf4j-server/repositories/calc2graph");
-		source =PathQLRepository.create(workingRep);
+		source =IntelligentGraphRepository.create(workingRep);
 		conn = workingRep.getConnection();
 	}
 

@@ -14,14 +14,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.CustomQueryOptions;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathCalc.Trace;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathCalc.Trace;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+
 import utilities.Query;
 
 /**
@@ -59,14 +61,14 @@ class Local_GetContextFact_Tests {
 	void test_1() {
 		
 		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
+			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 			//source.prefix("<http://inova8.com/calc2graph/def/>");
 			//source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			//source.prefix("xsd", "<http://www.w3.org/2001/XMLSchema#>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":myCountry");
-			myCountry.addFact(":myOption", "_customQueryOptions.get(\"time\").integerValue() ;", Evaluator.GROOVY);
+			myCountry.addFact(":myOption", "_customQueryOptions.get(\"time\").integerValue() ;", SCRIPT.GROOVY);
 			CustomQueryOptions  customQueryOptions1 = new CustomQueryOptions();
 			customQueryOptions1.add("time",42);
 		    customQueryOptions1.add("name","Peter");
@@ -97,11 +99,11 @@ class Local_GetContextFact_Tests {
 	void test_2() {
 		
 		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
+			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":myCountry");
-			myCountry.addFact(":myOption", "_customQueryOptions.get(\"time\").integerValue() ;", Evaluator.GROOVY);
+			myCountry.addFact(":myOption", "_customQueryOptions.get(\"time\").integerValue() ;", SCRIPT.GROOVY);
 			CustomQueryOptions  customQueryOptions1 = new CustomQueryOptions();
 			customQueryOptions1.add("time",42);
 		    customQueryOptions1.add("name","Peter");

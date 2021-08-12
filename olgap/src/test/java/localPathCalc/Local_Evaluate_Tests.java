@@ -14,11 +14,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathQL.PathQL;
-import pathQLModel.Resource;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.FactResults;
-import pathQLResults.PathQLResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.FactResults;
+import com.inova8.intelligentgraph.pathQLResults.PathQLResults;
+import com.inova8.pathql.parser.PathQLEvaluator;
+
 import utilities.Query;
 
 /**
@@ -33,7 +34,7 @@ class Local_Evaluate_Tests {
 
 	
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
 	/**
@@ -53,7 +54,7 @@ class Local_Evaluate_Tests {
 		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 //		source.prefix("<http://inova8.com/calc2graph/def/>");
 //		source.prefix("id","<http://inova8.com/calc2graph/id/>");
 //		source.prefix("rdfs", "<http://www.w3.org/2000/01/rdf-schema#>");
@@ -67,7 +68,7 @@ class Local_Evaluate_Tests {
 	void pathql_1() {
 
 		try {
-			PathQLResults pathqlResultsIterator = (PathQLResults) PathQL.evaluate(source,"[ eq id:Unit1]");
+			PathQLResults pathqlResultsIterator = (PathQLResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -90,7 +91,7 @@ class Local_Evaluate_Tests {
 	void pathql_2() {
 
 		try {
-			PathQLResults pathqlResultsIterator = (PathQLResults) PathQL.evaluate(source,"[ like 'Unit1']");
+			PathQLResults pathqlResultsIterator = (PathQLResults) PathQLEvaluator.evaluate(source,"[ like 'Unit1']");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -114,7 +115,7 @@ class Local_Evaluate_Tests {
 	void pathql_3() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit");
+			FactResults pathqlResultsIterator = (FactResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -138,7 +139,7 @@ class Local_Evaluate_Tests {
 	void pathql_4() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit/:volumeFlow");
+			FactResults pathqlResultsIterator = (FactResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit/:volumeFlow");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -162,7 +163,7 @@ class Local_Evaluate_Tests {
 	void pathql_5() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQL.evaluate(source,"[ like \"Unit1\"]>:hasProductBatteryLimit");
+			FactResults pathqlResultsIterator = (FactResults) PathQLEvaluator.evaluate(source,"[ like \"Unit1\"]>:hasProductBatteryLimit");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(

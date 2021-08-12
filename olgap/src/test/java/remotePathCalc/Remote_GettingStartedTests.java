@@ -14,12 +14,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Thing;
-import pathQLModel.Resource;
-import pathCalc.Evaluator;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
-import pathQLRepository.Graph;
+import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 /**
  * The Class RemoteThingTests.
@@ -31,7 +33,7 @@ class Remote_GettingStartedTests {
 //	static RepositoryTripleSource repositoryTripleSource;
 	
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 	/**
 	 *  The evaluator.
@@ -54,7 +56,7 @@ class Remote_GettingStartedTests {
 	@Order(1)
 	void test_1() {
 		try {
-			PathQLRepository source = PathQLRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
 			source.prefix("<http://inova8.com/intelligentgraph/example1/>");
 			source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
@@ -66,7 +68,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts('<http://inova8.com/intelligentgraph/example1/sales>')){totalSales +=  sales.doubleValue();count++}; if(count==0) return Double.POSITIVE_INFINITY else return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Resource average = myCountry.getFact(":averageSales");
 			assertEquals("3.0", average.stringValue());
 		} catch (Exception e) {
@@ -83,7 +85,7 @@ class Remote_GettingStartedTests {
 			Graph graph1 = source.openGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Thing myCountry = graph1.getThing(":Country1");
 			String performanceCalculation = "2*3";
-			myCountry.addFact(":salesPerformance", performanceCalculation, Evaluator.GROOVY) ;
+			myCountry.addFact(":salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
 			
 			ResourceResults results = myCountry.getFacts(":salesPerformance") ;
 			for(Resource result:results) {
@@ -113,7 +115,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "5");
 			myCountry.addFact(":sales", "60");
 			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(12.5, averageCountrySales);
@@ -140,7 +142,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "40");
 			myCountry.addFact(":sales", "50");
 			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
-			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":totalSales", totalSalesScript, SCRIPT.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
 			assertEquals(150.0, totalCountrySales);
@@ -166,7 +168,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
 			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Double averageCountrySales;
 			averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
 			assertEquals(300.0, averageCountrySales);
@@ -194,7 +196,7 @@ class Remote_GettingStartedTests {
 			Graph graph = source.openGraph("<http://inova8.com/calc2graph/testGraph5>");
 			Thing myCountry = graph.getThing(":Country1");
 			String performanceCalculation = "2*3";
-			myCountry.addFact(":Attribute@:salesPerformance", performanceCalculation, Evaluator.GROOVY) ;
+			myCountry.addFact(":Attribute@:salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
 			
 			ResourceResults results = myCountry.getFacts(":Attribute@:salesPerformance") ;
 			//if(results.hasNext()) {

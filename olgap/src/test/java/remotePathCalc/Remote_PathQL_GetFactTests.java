@@ -20,15 +20,17 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.MatchResults;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.pathql.parser.Match;
+
 import olgap.ClearCache;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQL.Match;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.MatchResults;
-import pathQLResults.ResourceResults;
 
 /**
  * The Class RemoteThingTests.
@@ -41,7 +43,7 @@ class Remote_PathQL_GetFactTests {
 	static RepositoryTripleSource repositoryTripleSource;
 	
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 	/** The evaluator. */
 	private static Evaluator evaluator;
@@ -64,7 +66,7 @@ class Remote_PathQL_GetFactTests {
 		headers.put("Accept", "text/plain");
 		workingRep.setAdditionalHttpHeaders(headers);
 
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 		match = new Match(source);
@@ -615,7 +617,7 @@ class Remote_PathQL_GetFactTests {
 			Graph graph1 = source.openGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Thing myCountry = graph1.getThing(":Country1");
 			String performanceCalculation = "2*3";
-			myCountry.addFact(":salesPerformance", performanceCalculation, Evaluator.GROOVY) ;
+			myCountry.addFact(":salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
 			
 			ResourceResults results = myCountry.getFacts(":salesPerformance") ;
 			for(Resource result:results) {
@@ -644,7 +646,7 @@ class Remote_PathQL_GetFactTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\":sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			
 			Value averageCountrySales = myCountry.getFact(":averageSales").getValue() ;
 			assertEquals("3.0", averageCountrySales.stringValue());
@@ -671,7 +673,7 @@ class Remote_PathQL_GetFactTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
-			myCountry.addFact(":totalSales", totalSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":totalSales", totalSalesScript, SCRIPT.GROOVY) ;
 			
 			Value totalCountrySales = myCountry.getFact(":totalSales").getValue() ;
 			assertEquals("15.0", totalCountrySales.stringValue());
@@ -698,7 +700,7 @@ class Remote_PathQL_GetFactTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			
 			Value averageCountrySales = myCountry.getFact(":averageSales").getValue() ;
 			assertEquals("3.0", averageCountrySales.stringValue());

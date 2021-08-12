@@ -14,11 +14,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathPatternProcessor.PathPatternException;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.pathql.processor.PathPatternException;
+
 import utilities.Query;
 
 /**
@@ -28,7 +29,7 @@ import utilities.Query;
 class SPARQL_To_TupleExpr {
 
 	/** The source. */
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 	/** The conn. */
 	private static RepositoryConnection conn;	
@@ -49,7 +50,7 @@ class SPARQL_To_TupleExpr {
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		conn.setNamespace("rdf","http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		source =  PathQLRepository.create(workingRep);
+		source =  IntelligentGraphRepository.create(workingRep);
 
 	}
 	@AfterAll

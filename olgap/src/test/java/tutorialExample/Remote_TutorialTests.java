@@ -13,33 +13,24 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
-
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQLRepository.PathQLRepository;
-import pathQLRepository.Graph;
 
 /**
  * The Class RemoteThingTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_TutorialTests {
+
 	
-	/** The repository triple source. */
-//	static RepositoryTripleSource repositoryTripleSource;
-	
-	/** The source. */
-	private static PathQLRepository source;
-	
-	/**
-	 *  The evaluator.
-	 *
-	 * @throws Exception the exception
-	 */
-//	private static Evaluator evaluator;
-	
+
 	/**
 	 * Sets the up before class.
 	 *
@@ -54,7 +45,7 @@ class Remote_TutorialTests {
 	@Order(1)
 	void test_1() {
 		try {
-			PathQLRepository source = PathQLRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
 			source.prefix("<http://inova8.com/intelligentgraph/example1/>");
 			source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 			source.removeGraph("<http://inova8.com/intelligentgraph/example1>");
@@ -63,7 +54,7 @@ class Remote_TutorialTests {
 			Thing Person = graph.getThing(":Person");
 			aPerson.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.7",XSD.DOUBLE).addFact(":hasWeight", "62",XSD.DOUBLE);
 			assertEquals("http://inova8.com/intelligentgraph/example1/aPerson", aPerson.stringValue());
-			aPerson.addFact(":hasBMI", "height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",Evaluator.GROOVY);
+			aPerson.addFact(":hasBMI", "height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",SCRIPT.GROOVY);
 			assertEquals("   1. Getting facts ':hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\r\n"
 					+ "   2. ...within contexts: [http://inova8.com/intelligentgraph/example1]\r\n"
 					+ "         1. Evaluating predicate hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> , by invoking groovy script\r\n"

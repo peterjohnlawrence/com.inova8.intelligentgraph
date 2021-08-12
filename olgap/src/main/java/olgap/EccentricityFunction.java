@@ -5,6 +5,9 @@ package olgap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.inova8.intelligentgraph.vocabulary.OLGAP;
+
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
@@ -77,9 +80,7 @@ public class EccentricityFunction  implements Function{
 		workingRep = new SailRepository(new MemoryStore());
 		workingRep.init();
 	}
-	
-	/** The Constant NAMESPACE. */
-	public static final String NAMESPACE = "http://inova8.com/olgap/";
+
 	
 	/**
 	 * Gets the uri.
@@ -88,7 +89,7 @@ public class EccentricityFunction  implements Function{
 	 */
 	@Override
 	public String getURI() {
-		return NAMESPACE + "eccentricity";
+		return OLGAP.ECCENTRICITY;
 	}
 	
 	/**

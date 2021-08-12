@@ -21,7 +21,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import intelligentGraph.IntelligentGraphSail;
+import com.inova8.intelligentgraph.IntelligentGraphSail;
+import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
+
 import utilities.Query;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -181,7 +183,7 @@ class Local_GetContextStatement_Tests {
 			//&time='42'^^xsd:int
 			String param1 = URLEncoder.encode("43^^xsd:int", StandardCharsets.UTF_8.toString());
 			String param2 = URLEncoder.encode("2019^^xsd:double", StandardCharsets.UTF_8.toString());
-			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/pathql/getFacts"), literal(":testProperty6"),iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?time="+param1+"&date="+param2));
+			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/pathql/getFacts"), literal(":testProperty6"),iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?time="+param1+"&date="+param2));
 			Statement result;
 			if( results.hasNext()) {
 				result=results.next();
@@ -204,7 +206,7 @@ class Local_GetContextStatement_Tests {
 			//&time='42'^^xsd:int
 			String param1 = URLEncoder.encode("43.0", StandardCharsets.UTF_8.toString());
 			String param2 = URLEncoder.encode("", StandardCharsets.UTF_8.toString());
-			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/pathql/getFacts"), literal(":testProperty6"),iri(IntelligentGraphSail.URN_CUSTOM_QUERY_OPTIONS+"?time="+param1+"&date="+param2));
+			RepositoryResult<Statement> results = conn.getStatements(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), iri("http://inova8.com/pathql/getFacts"), literal(":testProperty6"),iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?time="+param1+"&date="+param2));
 			Statement result;
 			if( results.hasNext()) {
 				result=results.next();

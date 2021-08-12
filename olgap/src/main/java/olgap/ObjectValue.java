@@ -10,16 +10,16 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
-
-import pathCalc.CustomQueryOptions;
-import pathCalc.EvaluationContext;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQLRepository.PathQLRepository;
-
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
 
 /**
@@ -46,7 +46,7 @@ public class ObjectValue extends Evaluator implements Function {
 	 */
 	@Override
 	public String getURI() {
-		return OLGAPNAMESPACE + "objectValue";
+		return OLGAP.OBJECTVALUE;
 	}
 
 	/**
@@ -82,13 +82,13 @@ public class ObjectValue extends Evaluator implements Function {
 				literalValue = (SimpleLiteral)args[2];
 				if( isScriptEngine(literalValue.getDatatype()) ) {		
 					Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
-					PathQLRepository source = PathQLRepository.create(tripleSource);//sources.getSource(tripleSource, argumentArray );
+					IntelligentGraphRepository source = IntelligentGraphRepository.create(tripleSource);//sources.getSource(tripleSource, argumentArray );
 					CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				
 					EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 					//Thing subjectThing = source.thingFactory( null, subject, new Stack<String>(),customQueryOptions);	
 					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
-					pathQLModel.Resource fact = subjectThing.getFact(predicate,//new PredicateElement(source,predicate),
+					com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(predicate,//new PredicateElement(source,predicate),
 							literalValue,customQueryOptions); 
 					if( fact != null) {
 						Value result = fact.getValue();

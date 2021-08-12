@@ -5,6 +5,9 @@ package olgap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.inova8.intelligentgraph.vocabulary.OLGAP;
+
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
@@ -48,8 +51,7 @@ public class TrianglesFunction  implements Function{
 		workingRep.init();
 	}
 	
-	/** The Constant NAMESPACE. */
-	public static final String NAMESPACE = "http://inova8.com/olgap/";
+
 	
 	/**
 	 * Gets the uri.
@@ -58,7 +60,7 @@ public class TrianglesFunction  implements Function{
 	 */
 	@Override
 	public String getURI() {
-		return NAMESPACE + "triangles";
+		return OLGAP.TRIANGLES;//NAMESPACE + "triangles";
 	}
 	
 	/**

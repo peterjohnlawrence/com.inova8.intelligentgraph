@@ -16,12 +16,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+
 import utilities.Query;
 /**
  * The Class PathQLTests.
@@ -64,7 +66,7 @@ class Local_AddGetDeleteFact_Test {
 	void ig_0() {
 
 		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
+			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Thing myCountry = graph.getThing(":Country1");
@@ -93,7 +95,7 @@ class Local_AddGetDeleteFact_Test {
 	void ig_1() {
 
 		try {
-			PathQLRepository source = PathQLRepository.create(workingRep);
+			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Thing myCountry = graph.getThing(":Country2");
@@ -109,12 +111,12 @@ class Local_AddGetDeleteFact_Test {
 			factsinrange = facts.count();
 			assertEquals(1, factsinrange);
 			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			myCountry.addFact(":averageSales", averageSalesScript, Evaluator.GROOVY) ;
+			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Resource averageSales = myCountry.getFact(":averageSales");
 			assertEquals(2.3333333333333335, averageSales.doubleValue());
 			Thing country3= myCountry.getThing(":Country3");
 			String averageSalesScript3 = "totalSales=0; count=0; myCountry=_this.getThing(\":Country2\"); for(sales in myCountry.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
-			country3.addFact(":averageSales", averageSalesScript3, Evaluator.GROOVY) ;
+			country3.addFact(":averageSales", averageSalesScript3, SCRIPT.GROOVY) ;
 			Resource averageSales3 = myCountry.getFact(":averageSales");
 			assertEquals(2.3333333333333335, averageSales3.doubleValue());
 			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");

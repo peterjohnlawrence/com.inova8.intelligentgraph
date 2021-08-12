@@ -15,23 +15,25 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.CustomQueryOptions;
-import pathCalc.Evaluator;
-import pathCalc.Thing;
-import pathQL.Match;
-import pathQLModel.MatchFact;
-import pathQLModel.Resource;
-import pathQLRepository.Graph;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.MatchResults;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.MatchFact;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.MatchResults;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.pathql.parser.Match;
+
 import utilities.Query;
 
 @SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetFact_Tests {
 
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	
 
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
@@ -46,7 +48,7 @@ class Local_GetFact_Tests {
 		conn.setNamespace("def", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 
 
 	}
@@ -647,7 +649,7 @@ class Local_GetFact_Tests {
 	void test_34() {
 		
 		try {
-			source = PathQLRepository.create(workingRep);
+			source = IntelligentGraphRepository.create(workingRep);
 
 			Thing _this = source.getThing( iri("http://inova8.com/calc2graph/id/BatteryLimit3"),null);
 			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massYield>");
@@ -665,11 +667,11 @@ class Local_GetFact_Tests {
 	void test_35() {
 		
 		try {
-			source = PathQLRepository.create(workingRep);
+			source = IntelligentGraphRepository.create(workingRep);
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", Evaluator.GROOVY);
+			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
 			CustomQueryOptions  customQueryOptions = new CustomQueryOptions();
 			customQueryOptions.add("time",42);
 			customQueryOptions.add("name","Peter");

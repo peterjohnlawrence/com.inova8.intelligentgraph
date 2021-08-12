@@ -17,16 +17,17 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import pathCalc.Thing;
-import pathQLModel.Resource;
-import pathQLRepository.PathQLRepository;
-import pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+
 import utilities.Query;
 import org.eclipse.rdf4j.model.Literal;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example2_Tests {
 
-	private static PathQLRepository source;
+	private static IntelligentGraphRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
 	@BeforeAll
@@ -40,7 +41,7 @@ class Example2_Tests {
 		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		source = PathQLRepository.create(workingRep);
+		source = IntelligentGraphRepository.create(workingRep);
 
 	}
 	@AfterAll

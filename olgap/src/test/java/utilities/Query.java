@@ -36,9 +36,10 @@ import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
-import intelligentGraph.IntelligentGraphConfig;
-import intelligentGraph.IntelligentGraphFactory;
-import intelligentGraph.IntelligentGraphSail;
+import com.inova8.intelligentgraph.IntelligentGraphConfig;
+import com.inova8.intelligentgraph.IntelligentGraphFactory;
+import com.inova8.intelligentgraph.IntelligentGraphSail;
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 public class Query {

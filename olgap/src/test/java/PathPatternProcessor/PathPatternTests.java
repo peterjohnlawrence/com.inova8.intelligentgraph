@@ -17,15 +17,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.pathql.element.PathElement;
+import com.inova8.pathql.parser.PathParser;
+import com.inova8.pathql.processor.PathErrorListener;
+import com.inova8.pathql.processor.PathPatternVisitor;
+
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.PathPatternContext;
-import pathCalc.Thing;
-import pathPatternElement.PathElement;
-import pathPatternProcessor.PathErrorListener;
-import pathPatternProcessor.PathPatternVisitor;
-import pathQL.PathParser;
-import pathQLRepository.PathQLRepository;
 
 /**
  * The Class PathPatternParserTests.
@@ -34,7 +35,7 @@ import pathQLRepository.PathQLRepository;
 class PathPatternTests {
 	
 	/** The source. */
-	static PathQLRepository source;
+	static IntelligentGraphRepository source;
 	
 	/** The thing. */
 	static Thing thing;
@@ -46,7 +47,7 @@ class PathPatternTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source = new PathQLRepository();
+		source = new IntelligentGraphRepository();
 		thing = source.getThing( "http://",null);
 		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 

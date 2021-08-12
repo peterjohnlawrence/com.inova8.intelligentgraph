@@ -18,19 +18,23 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import static org.eclipse.rdf4j.model.util.Values.iri;
+
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.path.PathTupleExpr;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.pathql.element.Iterations;
+import com.inova8.pathql.element.PathElement;
+import com.inova8.pathql.parser.PathParser;
+import com.inova8.pathql.processor.PathConstants;
+import com.inova8.pathql.processor.PathErrorListener;
+import com.inova8.pathql.processor.PathPatternVisitor;
+
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
 import PathPattern.PathPatternParser.PathPatternContext;
-import path.PathTupleExpr;
-import pathCalc.Thing;
-import pathPatternElement.Iterations;
-import pathPatternElement.PathElement;
-import pathPatternProcessor.PathConstants;
-import pathPatternProcessor.PathErrorListener;
-import pathPatternProcessor.PathPatternVisitor;
-import pathQL.PathParser;
-import pathQLRepository.PathQLRepository;
+
+import static org.eclipse.rdf4j.model.util.Values.iri;
+
 import utilities.Query;
 
 /**
@@ -43,7 +47,7 @@ class MultiPathPatternQueryExpressionTests {
 	static Thing thing;
 	
 	/** The source. */
-	static PathQLRepository source;
+	static IntelligentGraphRepository source;
 	
 	/** The indices. */
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -55,7 +59,7 @@ class MultiPathPatternQueryExpressionTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source= new PathQLRepository();
+		source= new IntelligentGraphRepository();
 		source.getReifications().addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
 		source.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
 		source.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);

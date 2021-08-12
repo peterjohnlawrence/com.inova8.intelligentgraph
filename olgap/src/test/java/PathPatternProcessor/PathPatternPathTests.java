@@ -16,16 +16,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import path.PathBinding;
-import path.PathBindings;
+import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.path.PathBinding;
+import com.inova8.intelligentgraph.path.PathBindings;
+import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.pathql.element.PathElement;
+import com.inova8.pathql.parser.PathParser;
+import com.inova8.pathql.processor.PathConstants;
+import com.inova8.pathql.processor.PathPatternException;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
-import pathCalc.Thing;
-import pathPatternElement.PathElement;
-import pathPatternProcessor.PathConstants;
-import pathPatternProcessor.PathPatternException;
-import pathQL.PathParser;
-import pathQLRepository.PathQLRepository;
 
 /**
  * The Class PathPatternPathTests.
@@ -37,14 +37,14 @@ class PathPatternPathTests {
 	static Thing thing;
 	
 	/** The source. */
-	static PathQLRepository source;
+	static IntelligentGraphRepository source;
 	
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
 	
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source= new PathQLRepository();
+		source= new IntelligentGraphRepository();
 		source.getReifications().addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
 		source.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
 		source.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);

@@ -17,7 +17,9 @@ import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pathCalc.Evaluator;
+
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
 /**
  * The Class ClearCache.
@@ -45,7 +47,7 @@ public class ClearCache extends Evaluator implements Function{
 	 */
 	@Override
 	public String getURI() {
-		return OLGAPNAMESPACE + "clearCache";
+		return OLGAP.CLEARCACHE ;
 	}
 	
 	/**
