@@ -10,12 +10,12 @@ import org.eclipse.rdf4j.model.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 
 public class IntelligentEvaluator {
 	private final  FactCache factCache=new FactCache();
 	protected final Logger logger = LoggerFactory.getLogger(IntelligentEvaluator.class);
-	private boolean factCacheDirty=false;
+
 	public IntelligentEvaluator(IntelligentGraphSail intelligentGraphSail) {
 	}
 
@@ -72,14 +72,10 @@ public class IntelligentEvaluator {
 		}
 	}
 	public  void clearCache(Value... args) {
-		factCacheDirty = true;
+		factCache.setDirty(true);
 	}
 
 	public FactCache getFactCache() {
-		if(factCacheDirty) {
-			factCache.clear();
-			factCacheDirty = false;
-		}
 		return factCache;
 	}
 

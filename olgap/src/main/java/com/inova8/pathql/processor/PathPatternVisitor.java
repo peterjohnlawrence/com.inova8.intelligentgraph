@@ -16,7 +16,7 @@ import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.AlternativePathElement;
 import com.inova8.pathql.element.BindVariableElement;
 import com.inova8.pathql.element.BoundPathElement;

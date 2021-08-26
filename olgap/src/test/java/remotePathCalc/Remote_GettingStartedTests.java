@@ -18,8 +18,8 @@ import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 

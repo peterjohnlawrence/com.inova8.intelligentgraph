@@ -17,11 +17,12 @@ import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
+import static org.eclipse.rdf4j.model.util.Values.iri;
 
 
 public  class IntelligentStatementResults extends AbstractCloseableIteration< IntelligentStatement, SailException> {
@@ -106,19 +107,17 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
-		boolean hasNext = getResultsIterator().hasNext();
-		if(hasNext) {
+		if(resultsIterator!=null && resultsIterator.hasNext()) {
 			return true;
 		}else {
-			pathIteration ++;
-			if(pathIteration < this.sortedIterations.size()) {
+			while(pathIteration < this.sortedIterations.size() ) {
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
-				return getResultsIterator().hasNext();
-			}else {
-				return false;
+				pathIteration ++;
+				boolean hasNext = resultsIterator.hasNext();
+				if(hasNext) return true;
 			}
-		}
-		
+			return false;
+		}	
 	}
 
 	@Override
@@ -140,7 +139,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 
 	@Override
 	public void remove() throws QueryEvaluationException {
-		resultsIterator.remove();	
+		getResultsIterator().remove();	
 	}
 	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
 		if(resultsIterator!=null)

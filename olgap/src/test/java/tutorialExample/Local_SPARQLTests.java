@@ -2,7 +2,6 @@ package tutorialExample;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -10,12 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.Thing;
-import com.inova8.intelligentgraph.vocabulary.RDF;
-import com.inova8.intelligentgraph.vocabulary.SCRIPT;
-
 import utilities.Query;
 import org.eclipse.rdf4j.query.Update;
 public class Local_SPARQLTests {

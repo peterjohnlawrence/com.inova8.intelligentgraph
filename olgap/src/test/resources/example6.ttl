@@ -1,0 +1,160 @@
+# baseURI: http://inova8.com/intelligentgraph/example6/
+
+@prefix : <http://inova8.com/intelligentgraph/example6/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:
+  a owl:Ontology ;
+.
+:BMI
+  a :Script ;
+  script:scriptCode "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
+  rdfs:label "BMI" ;
+.
+:BMIObservation
+  a :ObservationType ;
+  rdfs:label "BMIObservation" ;
+.
+:Measurement
+  a owl:Class ;
+  rdfs:label "Measurement" ;
+.
+:Measurement_1
+  a :Measurement ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasDate "2021-08-01"^^xsd:date ;
+  :hasHeight 1.7 ;
+  :hasWeight "62"^^xsd:decimal ;
+.
+:Measurement_2
+  a :Measurement ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasDate "2021-08-02"^^xsd:date ;
+  :hasHeight 1.65 ;
+  :hasWeight "60"^^xsd:decimal ;
+.
+:Measurement_3
+  a :Measurement ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasDate "2021-08-03"^^xsd:date ;
+  :hasHeight 1.7 ;
+  :hasWeight "65"^^xsd:decimal ;
+.
+:Measurement_4
+  a :Measurement ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasDate "2021-08-04"^^xsd:date ;
+  :hasHeight 1.7 ;
+  :hasWeight "57"^^xsd:decimal ;
+.
+:Measurement_5
+  a :Measurement ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasDate "2021-08-05"^^xsd:date ;
+  :hasHeight 1.75 ;
+  :hasWeight "61"^^xsd:decimal ;
+.
+:Measurement_6
+  a :Measurement ;
+  :hasBMI "<:BMI>"^^script:groovy ;
+  :hasDate "2021-08-06"^^xsd:date ;
+  :hasHeight 1.75 ;
+  :hasWeight "63"^^xsd:decimal ;
+.
+:Observation
+  a owl:Class ;
+  rdfs:label "Observation" ;
+  rdfs:subClassOf rdf:Statement ;
+.
+:ObservationType
+  a owl:Class ;
+  rdfs:label "Observation type" ;
+.
+:Person
+  a owl:Class ;
+  rdfs:label "Person" ;
+.
+:Script
+  a owl:Class ;
+  rdfs:label "Script" ;
+.
+:aPerson
+  a :Person ;
+.
+:aPerson_Observation_1
+  a :Observation ;
+  :observationMeasurement :Measurement_1 ;
+  :observationOf :aPerson ;
+  :observationType :BMIObservation ;
+.
+:aPerson_Observation_2
+  a :Observation ;
+  :observationMeasurement :Measurement_2 ;
+  :observationOf :aPerson ;
+  :observationType :BMIObservation ;
+.
+:aPerson_Observation_3
+  a :Observation ;
+  :observationMeasurement :Measurement_3 ;
+  :observationOf :aPerson ;
+  :observationType :BMIObservation ;
+.
+:aPerson_Observation_4
+  a :Observation ;
+  :observationMeasurement :Measurement_4 ;
+  :observationOf :aPerson ;
+  :observationType :BMIObservation ;
+.
+:aPerson_Observation_5
+  a :Observation ;
+  :observationMeasurement :Measurement_5 ;
+  :observationOf :aPerson ;
+  :observationType :BMIObservation ;
+.
+:aPerson_Observation_6
+  a :Observation ;
+  :observationMeasurement :Measurement_6 ;
+  :observationOf :aPerson ;
+  :observationType :BMIObservation ;
+.
+:hasBMI
+  a owl:DatatypeProperty ;
+  rdfs:domain :Measurement ;
+.
+:hasDate
+  a owl:DatatypeProperty ;
+  rdfs:domain :Observation ;
+  rdfs:label "has date" ;
+  rdfs:range xsd:date ;
+.
+:hasHeight
+  a owl:DatatypeProperty ;
+  rdfs:domain :Measurement ;
+  rdfs:range xsd:decimal ;
+.
+:hasWeight
+  a owl:DatatypeProperty ;
+  rdfs:domain :Measurement ;
+.
+:observationMeasurement
+  a rdf:Property ;
+  rdfs:domain :Observation ;
+  rdfs:range :Measurement ;
+  rdfs:subPropertyOf rdf:object ;
+.
+:observationOf
+  a owl:ObjectProperty ;
+  rdfs:domain :Observation ;
+  rdfs:range :Person ;
+  rdfs:subPropertyOf rdf:subject ;
+.
+:observationType
+  a rdf:Property ;
+  rdfs:domain :Observation ;
+  rdfs:range :ObservationType ;
+  rdfs:subPropertyOf rdf:predicate ;
+.

@@ -21,8 +21,8 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.element.PredicateElement;

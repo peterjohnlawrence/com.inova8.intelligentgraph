@@ -14,10 +14,10 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathCalc.Tracer;
 import com.inova8.intelligentgraph.pathQLModel.Fact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
 
 /**

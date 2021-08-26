@@ -10,7 +10,7 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -117,7 +117,7 @@ public class SequencePathElement extends PathElement {
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
-		Join intermediateJoinPattern = null;
+		TupleExpr intermediateJoinPattern = null;
 		PathTupleExpr joinPattern = null;
 
 		if (getCardinality(pathIteration) > 0) {
@@ -128,7 +128,7 @@ public class SequencePathElement extends PathElement {
 			for (int iteration = 1; iteration <= getCardinality(pathIteration); iteration++) {
 				if (iteration == 1) {
 					intermediateSourceVariable = sourceVariable;
-					intermediateVariable= getLeftPathElement().getTargetVariable();
+					intermediateVariable=  new Variable(getLeftPathElement().getTargetVariable().getName(),getLeftPathElement().getTargetVariable().getValue());   //getLeftPathElement().getTargetVariable();
 					intermediateTargetVariable=targetVariable;
 				}
 				if (iteration < getCardinality(pathIteration)) {
@@ -146,17 +146,30 @@ public class SequencePathElement extends PathElement {
 					}
 				}
 				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,
-						intermediateVariable, pathIteration,customQueryOptions);			
-				PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
-						pathIteration,customQueryOptions);
-				intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
+						intermediateVariable, pathIteration,customQueryOptions);
+				PathTupleExpr rightPattern;
+				if (leftPattern==null){
+					intermediateVariable.setValue(intermediateSourceVariable.getValue());
+					//intermediateVariable.setName(intermediateSourceVariable.getName());
+					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
+							pathIteration,customQueryOptions);
+				}else {
+					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
+							pathIteration,customQueryOptions);
+				}
+				
+				if(leftPattern!=null)
+					intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
+				else {
+					intermediateJoinPattern =rightPattern.getTupleExpr();
+				}
 				if (joinPattern == null) {
 					joinPattern = new PathTupleExpr((TupleExpr)intermediateJoinPattern);
-					joinPattern.getPath().addAll( leftPattern.getPath());
+					if(leftPattern!=null) joinPattern.getPath().addAll( leftPattern.getPath());
 					joinPattern.getPath().addAll( rightPattern.getPath());
 				} else {
 					joinPattern.setTupleExpr(new Join(joinPattern.getTupleExpr(), intermediateJoinPattern));
-					joinPattern.getPath().addAll( leftPattern.getPath());
+					if(leftPattern!=null)joinPattern.getPath().addAll( leftPattern.getPath());
 					joinPattern.getPath().addAll( rightPattern.getPath());
 				}
 			}

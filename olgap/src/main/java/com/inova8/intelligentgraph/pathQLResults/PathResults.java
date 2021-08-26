@@ -19,7 +19,7 @@ import com.inova8.intelligentgraph.path.EdgeBinding;
 import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
 
 /**

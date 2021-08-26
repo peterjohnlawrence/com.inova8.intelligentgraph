@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.IriRefValueElement;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;

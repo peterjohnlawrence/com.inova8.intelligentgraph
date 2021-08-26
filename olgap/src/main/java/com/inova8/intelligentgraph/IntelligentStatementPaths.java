@@ -24,7 +24,7 @@ import com.inova8.intelligentgraph.path.EdgeBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
@@ -72,22 +72,20 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	}
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
-		boolean hasNext = getResultsIterator().hasNext();
-		if(hasNext) {
+		if(resultsIterator!=null && resultsIterator.hasNext()) {
 			return true;
-		}else {
-			pathIteration ++;
-			if(pathIteration < this.sortedIterations.size()) {
+		}else {		
+			while(pathIteration < this.sortedIterations.size() ) {
 				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
 				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
+				pathIteration ++;
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr,contexts);
-				return getResultsIterator().hasNext();
-			}else {
-				return false;
+				boolean hasNext = resultsIterator.hasNext();
+				if(hasNext) return true;
 			}
+			return false;
 		}	
 	}
-
 	@Override
 	public IntelligentStatement next() throws QueryEvaluationException {
 		BindingSet nextBindingset = getResultsIterator().next();
@@ -98,7 +96,16 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		else
 			return new IntelligentStatement(null, null, null,null);
 	}
-
+	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
+		if(resultsIterator!=null)
+			return resultsIterator;
+		else {	
+			CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
+			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
+			return resultsIterator;
+		}
+	}
 	@Override
 	public void remove() throws QueryEvaluationException {
 		getResultsIterator().remove();	
@@ -126,14 +133,5 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		Rio.write(pathModel, pathJSON, RDFFormat.TURTLE);
 		return literal(pathJSON.toString());
 	}
-	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
-		if(resultsIterator!=null)
-			return resultsIterator;
-		else {
-			CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
-			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
-			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
-			return resultsIterator;
-		}
-	}
+
 }

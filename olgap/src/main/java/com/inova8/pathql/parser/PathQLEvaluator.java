@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLQueryIterator.MatchJoinIterator;
 import com.inova8.intelligentgraph.pathQLResults.FactResults;
 import com.inova8.intelligentgraph.pathQLResults.PathQLResults;

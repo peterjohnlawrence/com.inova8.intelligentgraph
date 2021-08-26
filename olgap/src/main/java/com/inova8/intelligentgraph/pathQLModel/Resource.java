@@ -10,7 +10,6 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.EvaluationStack;
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathCalc.Tracer;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.pathql.element.PredicateElement;
@@ -24,6 +23,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -43,26 +43,29 @@ public abstract class Resource implements Value {
 	private IntelligentGraphRepository source;
 
 	public static Resource create(IntelligentGraphRepository source, Value value, EvaluationContext evaluationContext) {
-		switch (value.getClass().getSimpleName()) {
-		case "SimpleLiteral":
-		case "BooleanLiteral":
-		case "BooleanLiteralImpl":
-		case "CalendarLiteral":
-		case "DecimalLiteral":
-		case "IntegerLiteral":
-		case "MemLiteral":
-		case "BooleanMemLiteral":
-		case "CalendarMemLiteral":
-		case "DecimalMemLiteral":
-		case "IntegerMemLiteral":
-		case "NumericMemLiteral":
-		case "NativeLiteral":
-		case "NumericLiteral":
-			return new Literal(value);
-		default:
-			return Thing.create(source, (IRI) value, evaluationContext);
+		if(value!=null) {
+			switch (value.getClass().getSimpleName()) {
+			case "SimpleLiteral":
+			case "BooleanLiteral":
+			case "BooleanLiteralImpl":
+			case "CalendarLiteral":
+			case "DecimalLiteral":
+			case "IntegerLiteral":
+			case "MemLiteral":
+			case "BooleanMemLiteral":
+			case "CalendarMemLiteral":
+			case "DecimalMemLiteral":
+			case "IntegerMemLiteral":
+			case "NumericMemLiteral":
+			case "NativeLiteral":
+			case "NumericLiteral":
+				return new Literal(value);
+			default:
+				return Thing.create(source, (IRI) value, evaluationContext);
+			}
+		}else {
+			return new Literal(null);
 		}
-
 	}
 
 	protected Resource(Value value) {
@@ -165,33 +168,6 @@ public abstract class Resource implements Value {
 		}
 	}
 
-	@Deprecated
-	public boolean notTracing() {
-		if (evaluationContext != null && evaluationContext.getTracer() != null)
-			return !evaluationContext.isTracing();
-		else
-			return true;
-	}
-
-	@Deprecated
-	public void decrementTraceLevel() {
-		if (evaluationContext != null && evaluationContext.getTracer() != null)
-			evaluationContext.getTracer().decrementLevel();
-	}
-
-	@Deprecated
-	public void incrementTraceLevel() {
-		if (evaluationContext != null && evaluationContext.getTracer() != null)
-			evaluationContext.getTracer().incrementLevel();
-	}
-
-	@Deprecated
-	protected String indentScriptForTrace(String script) {
-		if (evaluationContext != null && evaluationContext.getTracer() != null)
-			return evaluationContext.getTracer().indentScriptForTrace(script);
-		else
-			return null;
-	}
 
 	/**
 	 * Gets the stack.

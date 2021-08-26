@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathBindings;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathConstants;

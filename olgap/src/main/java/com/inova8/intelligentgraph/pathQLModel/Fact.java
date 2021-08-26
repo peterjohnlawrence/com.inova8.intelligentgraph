@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.processor.PathPatternException;

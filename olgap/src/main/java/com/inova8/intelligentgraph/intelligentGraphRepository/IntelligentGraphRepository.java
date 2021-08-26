@@ -30,7 +30,7 @@ import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathCalc.Prefixes;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.parser.PathParser;
@@ -487,6 +487,9 @@ public class IntelligentGraphRepository {
 	}
 
 	private void initializePrefixes(IntelligentGraphConnection connection) {
+		if(!connection.isOpen()) {
+			connection = new IntelligentGraphConnection(connection.getIntelligentGraphSail().getConnection(),  connection.getIntelligentGraphSail());
+		}
 		CloseableIteration<? extends Namespace, SailException> namespaces = connection.getNamespaces();
 		while (namespaces.hasNext()) {
 			Namespace namespace = namespaces.next();
@@ -497,6 +500,9 @@ public class IntelligentGraphRepository {
 
 	private void initializePrefixes(ContextAwareConnection connection)
 			throws RepositoryException, IllegalArgumentException {
+		if(!connection.isOpen()) {
+			//TODO this should be an error or a reconnection
+		}
 		RepositoryResult<Namespace> namespaces = connection.getNamespaces();
 		while (namespaces.hasNext()) {
 			Namespace namespace = namespaces.next();
@@ -762,7 +768,12 @@ public class IntelligentGraphRepository {
 	}
 
 	public IntelligentGraphConnection getIntelligentGraphConnection() {
-		return intelligentGraphConnection;
+		if(intelligentGraphConnection.isOpen())
+			return intelligentGraphConnection;
+		else {
+			intelligentGraphConnection = intelligentGraphConnection.getIntelligentGraphSail().getConnection();
+			return intelligentGraphConnection;
+		}
 	}
 
 	public Reifications getReifications() {

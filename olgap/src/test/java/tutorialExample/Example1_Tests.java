@@ -18,9 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 
 import utilities.Query;
 
@@ -57,7 +57,7 @@ class Example1_Tests {
 
 			Trace trace = aPerson.traceFact(":hasBMI");
 			assertEquals("   1. Getting facts ':hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
-					+ "   2. ...within contexts: [http://default, file://src/test/resources/example1.ttl]\n"
+					+ "   2. ...within contexts: [http://inova8.com/intelligentgraph/example1, file://src/test/resources/example1.ttl]\n"
 					+ "         1. Evaluating predicate hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> , by invoking groovy script\n"
 					+ "         2. double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)\n"
 					+ "\n"

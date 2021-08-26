@@ -15,7 +15,7 @@ import org.eclipse.rdf4j.query.algebra.ValueExpr;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 

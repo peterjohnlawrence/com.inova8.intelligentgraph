@@ -18,9 +18,9 @@ import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Thing;
 import com.inova8.intelligentgraph.pathQLModel.Literal;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 
 public class CustomQueryOptions extends Hashtable<String, Resource> {
 	@Override

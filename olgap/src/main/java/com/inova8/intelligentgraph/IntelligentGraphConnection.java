@@ -37,7 +37,7 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.Prefixes;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.element.PredicateElement;

@@ -1,5 +1,6 @@
 package com.inova8.intelligentgraph;
 
+import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
 import org.eclipse.rdf4j.model.IRI;
@@ -12,7 +13,7 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+import com.inova8.intelligentgraph.pathQLModel.Thing;
 
 public class IntelligentStatement extends ContextStatement {
 
@@ -31,31 +32,44 @@ public class IntelligentStatement extends ContextStatement {
 		this.customQueryOptions = customQueryOptions;
 		this.contexts = contexts;
 	}
+	protected IntelligentStatement( IntelligentGraphRepository source, EvaluationContext evaluationContext, CustomQueryOptions customQueryOptions, Resource ... contexts) {
+		super(iri("http://null"), iri("http://null"), iri("http://null"),null);
+		this.contextStatement=null;
+		this.source=source;
+		this.evaluationContext=evaluationContext;
+		this.customQueryOptions = customQueryOptions;
+		this.contexts = contexts;
+	}
 	@Override
 	public Value getObject() {
-		if( contextStatement.getObject().isLiteral()) {
-			SimpleLiteral literalValue = (SimpleLiteral)(contextStatement.getObject());
-			if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
-				Thing subjectThing = Thing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
-				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getIntelligentGraphConnection().getPrefixes());
-				 try {
-					 com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
-					 return fact.getSuperValue();
-				 }catch (Exception e) {
-					 String exceptionMessage = "";
-					 for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
-						exceptionMessage +=  t.getMessage()+"\n";
-					 }			
-					 if (exceptionMessage=="") exceptionMessage=e.getMessage();
-					 if (exceptionMessage=="") exceptionMessage="Exception w/o message";
-					 return  literal(exceptionMessage);
-				 }
-			}else {
-				return contextStatement.getObject(); 
+		if(contextStatement!=null) {
+			if( contextStatement.getObject().isLiteral()) {
+				SimpleLiteral literalValue = (SimpleLiteral)(contextStatement.getObject());
+				if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
+					Thing subjectThing = Thing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
+					CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getIntelligentGraphConnection().getPrefixes());
+					 try {
+						 com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
+						 return fact.getSuperValue();
+					 }catch (Exception e) {
+						 String exceptionMessage = "";
+						 for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
+							exceptionMessage +=  t.getMessage()+"\n";
+						 }			
+						 if (exceptionMessage=="") exceptionMessage=e.getMessage();
+						 if (exceptionMessage=="") exceptionMessage="Exception w/o message";
+						 return  literal(exceptionMessage);
+					 }
+				}else {
+					return contextStatement.getObject(); 
+				}
+			}	else {
+				return contextStatement.getObject();
 			}
-		}	else {
-			return contextStatement.getObject();
+		}else {
+			return null;
 		}
+			
 	}
 	public IntelligentGraphRepository getSource() {
 		return source;
