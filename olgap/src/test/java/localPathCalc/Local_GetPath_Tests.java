@@ -97,13 +97,13 @@ class Local_GetPath_Tests {
 		try {
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Equipment_1"), null);
 			PathResults paths =  _this.getPaths(":connectedTo/:connectedTo/:connectedTo");
-			assertEquals("Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_3,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_4,INVERSE]\r\n"
+			assertEquals("Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_3,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_4,DIRECT]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_3,INVERSE]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_3,DIRECT]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -121,9 +121,9 @@ class Local_GetPath_Tests {
 		try {
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Continuant_1"), null);
 			PathResults paths =  _this.getPaths(":Connection@:connectedTo/:Connection@:connectedTo/:Connection@:connectedTo");
-			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_3,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_4,INVERSE,false]\r\n"
+			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,DIRECT,false]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_3,DIRECT,false]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_4,DIRECT,false]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -140,9 +140,9 @@ class Local_GetPath_Tests {
 		try {
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Continuant_1"), null);
 			PathResults paths =  _this.getPaths(":Connection@:connectedTo/:Connection@:connectedTo/:Connection@:connectedTo#");
-			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_3,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Connection_3_4,INVERSE,false]\r\n"
+			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,DIRECT,false]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_3,DIRECT,false]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Connection_3_4,DIRECT,true]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -162,10 +162,10 @@ class Local_GetPath_Tests {
 		try {
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Continuant_1"), null);
 			PathResults paths =  _this.getPaths(":Connection@:connectedTo/:Connection@:connectedTo#/:connection.to.Continuant/:Connection@:connectedTo");
-			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Connection_2_3,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Connection_2_3,http://inova8.com/calc2graph/def/connection.to.Continuant,http://inova8.com/calc2graph/id/Continuant_3,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_4,INVERSE,false]\r\n"
+			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,DIRECT,false]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Connection_2_3,DIRECT,true]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Connection_2_3,http://inova8.com/calc2graph/def/connection.to.Continuant,http://inova8.com/calc2graph/id/Continuant_3,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_4,DIRECT,false]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -183,8 +183,8 @@ class Local_GetPath_Tests {
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
 			Path path = _this.getPath(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
 
-			assertEquals("Path=[[http://inova8.com/calc2graph/id/BatteryLimit1,<http://inova8.com/calc2graph/def/Location>@http://inova8.com/calc2graph/def/appearsOn,http://inova8.com/calc2graph/id/Location_BL1,INVERSE,false]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Location_BL1,http://inova8.com/calc2graph/def/lat,\"400\"^^<http://www.w3.org/2001/XMLSchema#integer>,INVERSE]\r\n"
+			assertEquals("Path=[[http://inova8.com/calc2graph/id/BatteryLimit1,<http://inova8.com/calc2graph/def/Location>@http://inova8.com/calc2graph/def/appearsOn,http://inova8.com/calc2graph/id/Location_BL1,DIRECT,true]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Location_BL1,http://inova8.com/calc2graph/def/lat,\"400\"^^<http://www.w3.org/2001/XMLSchema#integer>,DIRECT]\r\n"
 					+ "]\r\n"
 					+ "", path.toString());
 		} catch (Exception e) {
@@ -202,7 +202,7 @@ class Local_GetPath_Tests {
 			Path path  = _this.getPath(":Location@:appearsOn[eq id:Calc2Graph2]#"); //""
 
 			if (path != null)
-				assertEquals("Path=[[http://inova8.com/calc2graph/id/BatteryLimit1,<http://inova8.com/calc2graph/def/Location>@http://inova8.com/calc2graph/def/appearsOn,http://inova8.com/calc2graph/id/Location_BL1_2,INVERSE,false]\r\n"
+				assertEquals("Path=[[http://inova8.com/calc2graph/id/BatteryLimit1,<http://inova8.com/calc2graph/def/Location>@http://inova8.com/calc2graph/def/appearsOn,http://inova8.com/calc2graph/id/Location_BL1_2,DIRECT,true]\r\n"
 						+ "]\r\n"
 						+ "", path.toString());
 
@@ -228,23 +228,23 @@ class Local_GetPath_Tests {
 			for (Path path : paths) {
 				pathArrayList.add(path.toString());
 			}
-			assertEquals("[Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,INVERSE]\r\n"
+			assertEquals("[Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
 					+ "]\r\n"
-					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,INVERSE]\r\n"
+					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
 					+ "]\r\n"
-					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,INVERSE]\r\n"
+					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,DIRECT]\r\n"
 					+ "]\r\n"
-					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,INVERSE]\r\n"
+					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,DIRECT]\r\n"
 					+ "]\r\n"
-					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_3,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_4,INVERSE]\r\n"
+					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_3,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_4,DIRECT]\r\n"
 					+ "]\r\n"
-					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,INVERSE]\r\n"
-					+ "[http://inova8.com/calc2graph/id/Equipment_2_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_3,INVERSE]\r\n"
+					+ ", Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_3,DIRECT]\r\n"
 					+ "]\r\n"
 					+ "]", pathArrayList.toString());
 		} catch (Exception e) {

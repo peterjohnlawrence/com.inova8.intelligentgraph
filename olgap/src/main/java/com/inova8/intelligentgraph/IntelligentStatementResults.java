@@ -12,7 +12,6 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
-import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
@@ -20,9 +19,9 @@ import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
-
 import static org.eclipse.rdf4j.model.util.Values.literal;
-import static org.eclipse.rdf4j.model.util.Values.iri;
+
+import java.net.URISyntaxException;
 
 
 public  class IntelligentStatementResults extends AbstractCloseableIteration< IntelligentStatement, SailException> {
@@ -120,21 +119,29 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		}	
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IntelligentStatement next() throws QueryEvaluationException {
 		BindingSet nextBindingset = getResultsIterator().next();
 		Binding subjBinding = nextBindingset.getBinding(subj);
 		Binding predBinding =nextBindingset.getBinding(pred);
 		Binding objBinding =nextBindingset.getBinding(obj);
-		if(subjBinding!=null && predBinding!=null && objBinding!=null )
+		if(subjBinding!=null && predBinding!=null && objBinding!=null ) {
+			IRI parameterizedPredicate ;
+			try {
+				 parameterizedPredicate = this.pathElement.getParameterizedPredicate((IRI)predBinding.getValue());
+			} catch (URISyntaxException e) {
+				 parameterizedPredicate =(IRI)predBinding.getValue();
+			}	
 			if(trace) {
 				thing.getEvaluationContext().getTracer().traceFactReturnValue(thing, predBinding.getValue().stringValue(), objBinding.getValue());
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), literal(thing.getEvaluationContext().getTrace()),null),null,thing.getEvaluationContext(), customQueryOptions);
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), parameterizedPredicate, literal(thing.getEvaluationContext().getTrace()),null),null,thing.getEvaluationContext(), customQueryOptions);
 			}else {
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), (IRI)predBinding.getValue(), objBinding.getValue(),null),null,thing.getEvaluationContext(), customQueryOptions);
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), parameterizedPredicate, objBinding.getValue(),null),null,thing.getEvaluationContext(), customQueryOptions);
 			}
+		}
 		else
-			return new IntelligentStatement(null, null, null,null);
+			return new IntelligentStatement(null, null, null);
 	}
 
 	@Override

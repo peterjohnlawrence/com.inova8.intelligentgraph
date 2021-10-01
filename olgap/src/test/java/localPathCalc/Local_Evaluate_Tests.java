@@ -26,6 +26,7 @@ import utilities.Query;
  * The Class PathQLTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Deprecated
 class Local_Evaluate_Tests {
 	
 	/** The lucenesail. */

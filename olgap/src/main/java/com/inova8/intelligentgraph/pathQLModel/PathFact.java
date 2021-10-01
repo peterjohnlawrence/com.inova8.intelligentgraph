@@ -17,7 +17,7 @@ public class PathFact extends Fact {
 
 	Direction direction;
 
-	public PathFact(Resource subject, Resource predicate, Value value, Direction direction) {
+	public PathFact(Resource subject, Predicate predicate, Value value, Direction direction) {
 		super(subject, predicate, value);
 		this.direction = direction;
 	}

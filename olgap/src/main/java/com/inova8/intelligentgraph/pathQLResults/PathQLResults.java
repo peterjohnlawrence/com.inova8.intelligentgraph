@@ -12,9 +12,6 @@ import com.inova8.intelligentgraph.pathQLModel.MatchFact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 
 
-/**
- * The Class PathQLResults.
- */
 public class PathQLResults extends ResourceBindingSetResults {
 	
 	/**
@@ -61,5 +58,17 @@ public class PathQLResults extends ResourceBindingSetResults {
 	public Resource nextResource() {
 		return nextMatch();
 	}
+
+//	@Override
+//	public Fact nextFact() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public IRI nextReifiedValue() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

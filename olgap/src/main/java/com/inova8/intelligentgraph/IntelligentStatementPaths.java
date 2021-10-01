@@ -12,7 +12,6 @@ import org.eclipse.rdf4j.model.impl.ContextStatement;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
-import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -89,12 +88,12 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	@Override
 	public IntelligentStatement next() throws QueryEvaluationException {
 		BindingSet nextBindingset = getResultsIterator().next();
-		Binding predBinding =nextBindingset.getBinding("n0");
+		//Binding predBinding =nextBindingset.getBinding("n0");
 		Literal obj = pathToLiteral(nextBindingset);
 		if(obj!=null )
 				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement(this.thing.getIRI(), PATHQL.HASPATH, obj,null),null,thing.getEvaluationContext(), customQueryOptions);
 		else
-			return new IntelligentStatement(null, null, null,null);
+			return new IntelligentStatement(null, null, null);
 	}
 	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
 		if(resultsIterator!=null)
@@ -124,7 +123,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 			subject.add(PATHQL.edge_Source , bindingset.getBinding(edge.getSourceVariable().getName()).getValue());
 			subject.add(PATHQL.edge_Predicate , bindingset.getBinding(edge.getPredicateVariable().getName()).getValue());
 			subject.add(PATHQL.edge_Target , bindingset.getBinding(edge.getTargetVariable().getName()).getValue());
-			subject.add(PATHQL.edge_Direct ,edge.getDirection());
+			subject.add(PATHQL.edge_Direction ,edge.getDirection());
 			if(edge.getIsDereified()!=null) subject.add(PATHQL.edge_Dereified , edge.getIsDereified());
 			if(edge.getReification()!=null) subject.add(PATHQL.edge_Reification , edge.getReification());			
 		}

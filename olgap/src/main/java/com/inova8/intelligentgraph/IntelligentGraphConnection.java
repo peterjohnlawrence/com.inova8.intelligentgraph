@@ -158,10 +158,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
 	@Override
 	public void removeNamespace(String prefix) throws SailException {
-		//TODO
-		// remove namespace from prefix cached list 
-		//Or set lazyLoaded =false
-		//this.intelligentGraphSail.clearCache();
 		super.removeNamespace(prefix);
 	}
 
@@ -237,6 +233,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	private CloseableIteration<? extends IntelligentStatement, SailException> traceFacts(Resource thingresource, Value pathQLValue,	  Resource... contexts) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
@@ -248,10 +245,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return traceThingFacts(source, thing,pathElement, contexts );
-		
-//		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,
-//				pathElement, 0,contexts);
-//		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementResults( resultsIterator,thing, pathElement,this,customQueryOptions,true,contexts);
 	}
 
 	private CloseableIteration<? extends IntelligentStatement, SailException> getFacts(Resource thingresource, Value pathQLValue, Resource... contexts ) throws PathPatternException {
@@ -321,7 +314,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-	CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+//	CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
 //		pathElement.setCustomQueryOptions(customQueryOptions);
 		TupleExpr tupleExpr = pathTupleExpr.getTupleExpr();
 		SimpleDataset dataset = prepareDataset(pathElement, contexts);
@@ -399,6 +392,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		}
 		return false;
 	}
+	@SuppressWarnings("unlikely-arg-type")
 	private Boolean containsOnlyPrivateContexts(Resource[] contexts) {
 		for(Resource context:contexts) {
 			if(context.stringValue().startsWith(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS) ) {

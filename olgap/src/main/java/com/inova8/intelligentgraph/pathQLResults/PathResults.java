@@ -15,9 +15,7 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.path.EdgeBinding;
 import com.inova8.intelligentgraph.path.Path;
-import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
@@ -25,7 +23,7 @@ import com.inova8.pathql.element.PathElement;
 /**
  * The Class PathResults.
  */
-public class PathResults implements CloseableIteration<Path, QueryEvaluationException> , Iterable<Path>{//extends ResourceResults{
+public class PathResults implements CloseableIteration<Path, QueryEvaluationException> , Iterable<Path>{
 	protected CustomQueryOptions customQueryOptions; 
 	protected PathElement pathElement; 
 	protected Thing thing;
@@ -48,11 +46,11 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	public CloseableIteration<Statement, RepositoryException> getPathSet() {
 		return pathSet;
 	}
-	public PathBinding nextPath() {
-		getPathSet().next();
-		EdgeBinding edge = new EdgeBinding(null, null, null, true);
-		return null;
-	}
+//	public PathBinding nextPath() {
+//		getPathSet().next();
+//		//EdgeBinding edge = new EdgeBinding(null, null, null, true);
+//		return null;
+//	}
 
 
 

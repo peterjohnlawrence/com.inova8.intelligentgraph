@@ -56,119 +56,83 @@
  * :Location@:appearsOn#{ :location.Map  [rdfs:label "Calc2Graph1" ] }/:lat
 */	
 
-grammar PathPattern;
-
-queryString : pathPattern queryOptions? EOF ;
-
-queryOptions : ( queryOption )+;
-queryOption: KEY '=' literal ('^^' type )?;
-KEY : '&' [a-zA-Z]+ ; 
-type : qname;
-
-pathPattern : binding ('/'|'>') pathPatterns  #boundPattern
- 			| binding  #matchOnlyPattern
- 			| pathPatterns  #pathOnlyPattern;
-
-binding : factFilterPattern  ;
-pathPatterns :  pathEltOrInverse cardinality?  #Path  
-				|  pathPatterns '|'  pathPatterns  #PathAlternative  
-				|  pathPatterns ('/'|'>')  pathPatterns  #PathSequence
-				|   negation? '(' pathPatterns ')'  cardinality? #PathParentheses;
- 
+grammar				PathPattern;
+// PARSER RULES
+queryString 		:	pathPattern queryOptions? EOF ;
+queryOptions 		:	( queryOption )+;
+queryOption			:	KEY '=' literal ('^^' type )?;
+type 				:	qname;
+pathPattern 		:	binding ('/'|'>') pathPatterns  #boundPattern
+ 					|	binding  #matchOnlyPattern
+ 					|	pathPatterns  #pathOnlyPattern;
+binding 			:	factFilterPattern  ;
+pathPatterns 		:	pathEltOrInverse cardinality?  #Path  
+					|	pathPatterns '|'  pathPatterns  #PathAlternative  
+					|	pathPatterns ('/'|'>')  pathPatterns  #PathSequence
+					|	negation? '(' pathPatterns ')'  cardinality? #PathParentheses;
+					
 //pathNegatedPropertySet	  :  	PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' ;
 //pathOneInPropertySet	  : 	iri | 'a' | '^' ( iri | 'a' );
 
-cardinality :	  '{'  INTEGER (',' ( INTEGER )? )?  '}'  ;
-negation: '!';
- 
-pathEltOrInverse :  negation? INVERSE? predicate  ;
-predicate :   ( reifiedPredicate | predicateRef | rdfType | anyPredicate ) factFilterPattern? ;
-anyPredicate : ANYPREDICATE ;
-reifiedPredicate :  iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ;
-predicateRef :  IRI_REF  | rdfType  |  qname | pname_ns ;
-iriRef  : IRI_REF |  qname | pname_ns ;  
-dereifier : DEREIFIER ;
-
-factFilterPattern : '['  propertyListNotEmpty   ']';
-propertyListNotEmpty :   	verbObjectList ( ';' ( verbObjectList )? )* ;  
-verbObjectList : verb objectList;
-verb : operator | pathEltOrInverse ;
-objectList : object ( ',' object )*;
-object : iriRef  | literal | factFilterPattern | BINDVARIABLE ;
-
-qname : PNAME_NS PN_LOCAL; 
-pname_ns : PNAME_NS ;   
-literal : (DQLITERAL | SQLITERAL) ('^^' (IRI_REF |  qname) )? ;  
-
-operator : OPERATOR ;
-rdfType : RDFTYPE ;
+cardinality 		:	'{'  INTEGER (',' ( INTEGER )? )?  '}'  ;
+negation			:	'!';
+pathEltOrInverse 	:	negation? INVERSE? predicate  ;
+predicate 			:	( reifiedPredicate | predicateRef | rdfType | anyPredicate ) factFilterPattern? ;
+anyPredicate		:	ANYPREDICATE ;
+reifiedPredicate 	:	iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ;
+predicateRef 		:	IRI_REF  | rdfType  |  qname | pname_ns ;
+iriRef  			:	IRI_REF |  qname | pname_ns ;  
+dereifier 			:	DEREIFIER ;
+factFilterPattern 	:	'['  propertyListNotEmpty   ']';
+propertyListNotEmpty:	verbObjectList ( ';' ( verbObjectList )? )* ;  
+verbObjectList 		:	verb objectList;
+verb 				:	operator | pathEltOrInverse ;
+objectList 			:	object ( ',' object )*;
+object 				:	iriRef  | literal | factFilterPattern | BINDVARIABLE ;
+qname 				:	PNAME_NS PN_LOCAL; 
+pname_ns			:	PNAME_NS ;   
+literal 			:	(DQLITERAL | SQLITERAL) ('^^' (IRI_REF |  qname) )? ;  
+operator 			:	OPERATOR ;
+rdfType 			:	RDFTYPE ;
 
 // LEXER RULES
-//CARDINALITY :  INTEGER ;
-//MAXCARDINALITY : (INTEGER |'*')  ;
-
-//fragment  
-INTEGER : DIGIT+ ; 
-BINDVARIABLE : '%' DIGIT+ ;
-
+KEY 				:	'&' [a-zA-Z]+ ;  
+INTEGER 			:	DIGIT+ ; 
+BINDVARIABLE 		:	'%' DIGIT+ ;
 fragment
-DIGIT
-    : [0-9]
-    ;
-    
-INVERSE : '^';
-REIFIER :'@';
-DEREIFIER : '#';
-RDFTYPE : 'a';
-ANYPREDICATE : '*' ;
-OPERATOR : 'lt'|'gt'|'le'|'ge'|'eq'|'ne'|'like'|'query'|'property';
-
-DQLITERAL:  '"' (~('"' | '\\' | '\r' | '\n') | '\\' ('"' | '\\'))* '"';
-SQLITERAL:  '\'' (~('\'' | '\\' | '\r' | '\n') | '\\' ('\'' | '\\'))* '\'';
-
-IRI_REF
-    : '<' ( ~('<' | '>' | '"' | '{' | '}' | '|' | '^' | '\\' | '`') | (PN_CHARS))* '>' 
-    ;
-       
-PNAME_NS : PN_PREFIX? (':'|'~')  ;
-    
-VARNAME : '?' [a-zA-Z]+ ;		
-
+DIGIT				:	[0-9] ;  
+INVERSE 			:	'^';
+REIFIER 			:	'@';
+DEREIFIER 			:	'#';
+RDFTYPE 			:	'a';
+ANYPREDICATE 		:	'*' ;
+OPERATOR 			:	'lt'|'gt'|'le'|'ge'|'eq'|'ne'|'like'|'query'|'property';
+DQLITERAL			:	'"' (~('"' | '\\' | '\r' | '\n') | '\\' ('"' | '\\'))* '"';
+SQLITERAL			:	'\'' (~('\'' | '\\' | '\r' | '\n') | '\\' ('\'' | '\\'))* '\'';
+IRI_REF				:	'<' ( ~('<' | '>' | '"' | '{' | '}' | '|' | '^' | '\\' | '`') | (PN_CHARS))* '>' ;      
+PNAME_NS 			:	PN_PREFIX? (':'|'~')  ;   
+VARNAME 			:	'?' [a-zA-Z]+ ;		
 fragment
-PN_CHARS_U
-    : PN_CHARS_BASE | '_' 
-    ;
+PN_CHARS_U			:	PN_CHARS_BASE | '_'  ;
 fragment   
-PN_CHARS
-    : PN_CHARS_U
-    | '-'
-    | DIGIT
-    ;
+PN_CHARS			:	PN_CHARS_U
+    				|	'-'
+   					|	DIGIT  ;
 fragment
-PN_PREFIX
-    : PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
-    ;
-
-PN_LOCAL
-    : ( PN_CHARS_U | DIGIT ) ((PN_CHARS|'.')* PN_CHARS)?
-    ;
+PN_PREFIX			:	PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)? ;
+PN_LOCAL			:	( PN_CHARS_U | DIGIT ) ((PN_CHARS|'.')* PN_CHARS)? ;
 fragment
-PN_CHARS_BASE
-    : 'A'..'Z'
-    | 'a'..'z'
-    | '\u00C0'..'\u00D6'
-    | '\u00D8'..'\u00F6'
-    | '\u00F8'..'\u02FF'
-    | '\u0370'..'\u037D'
-    | '\u037F'..'\u1FFF'
-    | '\u200C'..'\u200D'
-    | '\u2070'..'\u218F'
-    | '\u2C00'..'\u2FEF'
-    | '\u3001'..'\uD7FF'
-    | '\uF900'..'\uFDCF'
-    | '\uFDF0'..'\uFFFD'
-    ;
-
-
-
-WS : [ \t\r\n]+ -> skip ; 
+PN_CHARS_BASE		:	'A'..'Z'
+					|	'a'..'z'
+					|	'\u00C0'..'\u00D6'
+					|	'\u00D8'..'\u00F6'
+					|	'\u00F8'..'\u02FF'
+					|	'\u0370'..'\u037D'
+					|	'\u037F'..'\u1FFF'
+					|	'\u200C'..'\u200D'
+					|	'\u2070'..'\u218F'
+					|	'\u2C00'..'\u2FEF'
+					|	'\u3001'..'\uD7FF'
+					|	'\uF900'..'\uFDCF'
+					|	'\uFDF0'..'\uFFFD' ;
+WS 					:	[ \t\r\n]+ -> skip ; 

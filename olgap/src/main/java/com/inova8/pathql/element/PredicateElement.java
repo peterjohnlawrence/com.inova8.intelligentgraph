@@ -3,18 +3,23 @@
  */
 package com.inova8.pathql.element;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.algebra.Compare;
 import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.EdgeBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.vocabulary.PATHQL;
+import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -23,7 +28,7 @@ import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
-
+import static org.eclipse.rdf4j.model.util.Values.iri;
 /**
  * The Class PredicateElement.
  */
@@ -78,23 +83,25 @@ public class PredicateElement extends PathElement {
 		this.reification = reification;
 
 	}
-
-	/**
-	 * Instantiates a new predicate element.
-	 *
-	 * @param source the source
-	 */
+	public IRI  getParameterizedPredicate(IRI predicate ) throws URISyntaxException {
+		URIBuilder builder = new URIBuilder(predicate.stringValue());
+		if(isInverseOf)builder.addParameter(PATHQL.EDGE_DIRECTIONSTRING, Edge.Direction.INVERSE.toString());
+		if(isReified) {
+			if(reification!=null) {			
+				builder.addParameter(PATHQL.EDGE_REIFICATIONSTRING, reification.stringValue());
+			}else {
+				builder.addParameter(PATHQL.EDGE_REIFICATIONSTRING, RDF.Statement);
+			}
+			if(isDereified)builder.addParameter(PATHQL.EDGE_DEREIFIEDSTRING, "true");
+		}
+		return iri(builder.toString());
+	}
 	public PredicateElement(IntelligentGraphRepository source) {
 		super(source);
 		operator = PathConstants.Operator.PREDICATE;
 	}
 
-	/**
-	 * Instantiates a new predicate element.
-	 *
-	 * @param source the source
-	 * @param predicate the predicate
-	 */
+
 	public PredicateElement(IntelligentGraphRepository source,IRI predicate) {
 		super(source);
 		operator = PathConstants.Operator.PREDICATE;
@@ -106,11 +113,7 @@ public class PredicateElement extends PathElement {
 	 public Integer getMinimumPathLength() {
 		 return getMinCardinality();
 	 }
-	/**
-	 * Gets the checks if is inverse of.
-	 *
-	 * @return the checks if is inverse of
-	 */
+
 	public Boolean getIsInverseOf() {
 		return isInverseOf;
 	}
@@ -906,12 +909,12 @@ public class PredicateElement extends PathElement {
 		EdgeBinding predicateEdge;
 		Variable sourceVariable = this.getSourceVariable();
 		Variable targetVariable = this.getTargetVariable();	
-		Variable reificationVariable= this.getReifiedVariable();
+		//Variable reificationVariable= this.getReifiedVariable();
 		
 		Variable intermediateSourceVariable = null ;
 		Variable intermediateTargetVariable = null;
 		Variable priorIntermediateTargetVariable = null ;
-		Variable intermediateReificationVariable  = null ;
+		//Variable intermediateReificationVariable  = null ;
 		for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
 			if( iteration==1) {
 				intermediateSourceVariable = sourceVariable;
@@ -924,9 +927,9 @@ public class PredicateElement extends PathElement {
 			if( iteration==getCardinality(pathIteration)) {
 				if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 				intermediateTargetVariable = targetVariable;
-				intermediateReificationVariable  = reificationVariable;
+			//	intermediateReificationVariable  = reificationVariable;
 			}else {
-				intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
+			//	intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
 			}
 			predicateEdge = new EdgeBinding( intermediateSourceVariable, this.reification, getPredicateVariable(), intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
 			pathBinding.add(predicateEdge);

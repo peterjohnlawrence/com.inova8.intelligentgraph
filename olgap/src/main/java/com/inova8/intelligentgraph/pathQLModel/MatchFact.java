@@ -21,7 +21,7 @@ public class MatchFact extends Fact {
  Double score;
 	
 
-	public MatchFact(Resource subject, Resource predicate, Value value, String snippet, Double score) {
+	public MatchFact(Resource subject, Predicate predicate, Value value, String snippet, Double score) {
 		super(subject, predicate, value);
 		this.snippet = snippet;
 		this.score = score;

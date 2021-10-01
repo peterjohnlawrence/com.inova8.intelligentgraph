@@ -14,8 +14,6 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.Tracer;
-import com.inova8.intelligentgraph.pathQLModel.Fact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
@@ -114,17 +112,12 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		return thing;
 	}
 
-	/**
-	 * Gets the tracer.
-	 *
-	 * @return the tracer
-	 */
-	protected Tracer getTracer() {
-		if(thing!=null) 
-			return thing.getTracer();
-		else 
-			return null;
-	}
+//	protected Tracer getTracer() {
+//		if(thing!=null) 
+//			return thing.getTracer();
+//		else 
+//			return null;
+//	}
 
 	protected EvaluationContext getEvaluationContext() {
 		if(thing!=null)
@@ -132,11 +125,7 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		else 
 			return null;
 	}
-	/**
-	 * Gets the stack.
-	 *
-	 * @return the stack
-	 */
+
 	protected Stack<String> getStack() {
 		if(thing!=null)
 			return thing.getStack();
@@ -144,11 +133,6 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 			return null;
 	}
 
-	/**
-	 * Gets the custom query options.
-	 *
-	 * @return the custom query options
-	 */
 	protected CustomQueryOptions getCustomQueryOptions() {
 		return this.customQueryOptions;
 	}
@@ -174,8 +158,8 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	}
 
 	public abstract Resource nextResource();
-	public abstract Fact nextFact();	
-	public abstract IRI nextReifiedValue();
+//	public abstract Fact nextFact();	
+//	public abstract IRI nextReifiedValue();
 	/**
 	 * Count.
 	 *
@@ -219,10 +203,10 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	 
 	}
 	public String toString() {
-		String toString="";
+		String toString="[";
 		while( hasNext()) {
-			toString +=next().toString();
+			toString +=next().toString()+";";
 		}
-		return toString;
+		return toString+"]";
 	}
 }

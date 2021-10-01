@@ -12,7 +12,6 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.util.Values;
 
-import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
@@ -465,9 +464,11 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public IriRefValueElement visitPname_ns(Pname_nsContext ctx) {
 		// pname_ns : PNAME_NS ;   
+		
 		IriRefValueElement pname_nsElement = new IriRefValueElement(getSource());
 		ConcurrentHashMap<String, IRI> prefixes=null;
-		if(thing!=null) prefixes=thing.getPrefixes();
+		prefixes=source.getPrefixes();
+	//	if(thing!=null) prefixes=thing.getPrefixes();
 		IRI qname = getSource().convertQName(ctx.getText(),prefixes);
 		if (qname!=null) {
 			pname_nsElement.setIri(qname);
@@ -477,20 +478,6 @@ public PathPatternVisitor(Thing thing) {
 			throw new ScriptFailedException( String.format("Error identifying namespace of qName %s", ctx.getText()));
 		}
 	}
-
-//	@Override
-//	public LiteralValueElement visitLiteral(LiteralContext ctx) {
-//		//literal : rdfLiteral | BINDVARIABLE ;
-//		if(ctx.rdfLiteral()!=null) {
-//			return visitRdfLiteral(ctx.rdfLiteral());
-//		}else if(ctx.BINDVARIABLE()!=null ) {
-//			String bindVariableIndex = ctx.BINDVARIABLE().getText().substring(1);
-//			BindVariableElement bindVariableElement = new BindVariableElement(getSource());
-//			bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
-//			return bindVariableElement;
-//		}
-//		return null;
-//	}
 
 	@Override
 	public LiteralValueElement visitLiteral(LiteralContext ctx) {

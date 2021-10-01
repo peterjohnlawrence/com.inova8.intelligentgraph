@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import com.inova8.intelligentgraph.FactCache;
 import com.inova8.intelligentgraph.IntelligentGraphConnection;
 import com.inova8.intelligentgraph.IntelligentGraphSail;
-import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.exceptions.ServerException;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
@@ -67,9 +66,7 @@ public class IntelligentGraphRepository {
 	private static final String FAILEDTOADDGRAPH_EXCEPTION = "Failed To Add Graph";
 	private static final String FAILEDTOOPENGRAPH_EXCEPTION = "Failed To Open Graph";
 	private static final String FAILEDTOREMOVEGRAPH_EXCEPTION = "Failed To Remove Graph";
-	private static final String FAILEDTOADDNAMESPACE_EXCEPTION = "Failed To Add Namespace";
 	private static final String FAILEDTOCLOSEGRAPH_EXCEPTION = "Failed To Close Graph";
-	private org.eclipse.rdf4j.repository.Repository cacheRep;
 	private String cacheService;
 	private org.eclipse.rdf4j.repository.Repository repository;
 	private final FactCache factCache = new FactCache();
@@ -246,41 +243,30 @@ public class IntelligentGraphRepository {
 		return things;
 	}
 
-	@Deprecated
-	public ConcurrentHashMap<String, ReificationType> getReificationTypes() {
-		return this.getReifications().getReificationTypes();
-	}
+//	@Deprecated
+//	public ConcurrentHashMap<String, ReificationType> getReificationTypes() {
+//		return this.getReifications().getReificationTypes();
+//	}
+//
+//	@Deprecated
+//	ConcurrentHashMap<String, ReificationType> getPredicateReificationTypes() {
+//		return this.getReifications().getPredicateReificationTypes();
+//	}
 
-	@Deprecated
-	ConcurrentHashMap<String, ReificationType> getPredicateReificationTypes() {
-		return this.getReifications().getPredicateReificationTypes();
-	}
+//	@Deprecated
+//	private void initializeReificationTypes() {
+//		this.getReifications().initializeReificationTypes();
+//	}
 
-	@Deprecated
-	private void initializeReificationTypes() {
-		this.getReifications().initializeReificationTypes();
-	}
+//	@Deprecated
+//	public org.eclipse.rdf4j.repository.Repository getCacheRep() {
+//		return this.cacheRep;
+//	}
 
-	/**
-	 * Gets the cache rep.
-	 *
-	 * @return the cache rep
-	 */
-	@Deprecated
-	public org.eclipse.rdf4j.repository.Repository getCacheRep() {
-		return this.cacheRep;
-	}
-
-	/**
-	 * Sets the cache rep.
-	 *
-	 * @param cacheRep
-	 *            the new cache rep
-	 */
-	@Deprecated
-	public void setCacheRep(org.eclipse.rdf4j.repository.Repository cacheRep) {
-		this.cacheRep = cacheRep;
-	}
+//	@Deprecated
+//	public void setCacheRep(org.eclipse.rdf4j.repository.Repository cacheRep) {
+//		this.cacheRep = cacheRep;
+//	}
 
 	/**
 	 * Gets the cache service.
@@ -678,6 +664,7 @@ public class IntelligentGraphRepository {
 		IRI graphNameIri = null;
 		try {
 			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			@SuppressWarnings("deprecation")
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (!contextExists) {
 				addGraph(graphName);
@@ -697,6 +684,7 @@ public class IntelligentGraphRepository {
 		IRI graphNameIri = null;
 		try {
 			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			@SuppressWarnings("deprecation")
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (contextExists) {
 				connection.clear(graphNameIri);

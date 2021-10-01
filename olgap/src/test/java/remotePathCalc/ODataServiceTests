@@ -5,27 +5,27 @@ pm.request.url.query.each((q) => {
      q.update(encodeURI(q.toString()))
 });
 
-OData Search
+Unrestricted getFacts
 
-http://localhost:8070/odata2sparql/calc2graph/$all?$search=Unit* NOT location OR product*&$format=json
-http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource?$search=Unit* NOT location OR product*&$format=json
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Product-1>&pred=<http://inova8.com/pathql/getFacts>&obj="^*|*"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Product-1>&pred=<http://inova8.com/pathql/getFacts>&obj="^*"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Product-1>&pred=<http://inova8.com/pathql/getFacts>&obj="*"
 
-pathql.fact  $This
+Specific getFacts
 
-http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource('calc2graphData~Unit1')/pathql.fact(pathql=':hasProductBatteryLimit')?$select=*&$format=json
-http://localhost:8070/odata2sparql/calc2graph/Unit('calc2graphData~Unit1')/pathql.fact(pathql=':hasProductBatteryLimit>:massFlow')?$select=*&$format=json
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Product-1>&pred=<http://inova8.com/pathql/getFacts>&obj="model:unitsInStock"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getFacts>&obj="^model:customer"
 
+ShortestPath
 
-pathql.facts All members of a class
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getPaths>&obj="^model:customer[eq :Order-10850]"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getPaths>&obj="^model:customer/^model:order/model:product[eq :Product-54]"
 
-http://localhost:8070/odata2sparql/calc2graph/Unit/pathql.facts(pathql=':hasProductBatteryLimit')?$select=*&$format=json
+Connected facts
 
-pathQL Combined Query
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getFacts>&obj="^model:customer>"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getFacts>&obj="^model:customer/^model:order"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getFacts>&obj="^model:customer/^model:order/model:product"
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/Customer-VICTE>&pred=<http://inova8.com/pathql/getFacts>&obj="^model:customer/^model:order/model:product[eq :Product-54]"
 
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq calc2graphData~Unit1]>:hasProductBatteryLimit'&$select=*&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq calc2graphData~Unit1]>:hasProductBatteryLimit>:massFlow'&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit*"]'&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit* NOT (location OR product*)"]>:hasProductBatteryLimit>:massFlow'&$format=json
-http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit* NOT (location OR product*)"; a :Unit ]>:hasProductBatteryLimit>:massFlow'&$format=json
-
-http://localhost:8070/odata2sparql/eastman3d/pathQL(pathql=@p)?@p='[ like "Unit*"]'&$format=json&$select=*
+http://localhost:8080/rdf4j-server/repositories/northwind/statements?subj=<http://northwind.com/model/Region>&pred=<http://inova8.com/pathql/getFacts>&obj="^rdf:type/rdfs:label|model:regionDescription"

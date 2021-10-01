@@ -26,7 +26,6 @@ import com.inova8.pathql.element.PredicateElement;
  */
 public class Tracer {
 	private StringBuilder traceStringBuilder = new StringBuilder("<ol style='list-style-type:none;'>");
-	private Trace trace ;
 
 	private int level = 0;
 
@@ -157,6 +156,7 @@ public class Tracer {
 	}
 
 
+	@SuppressWarnings("unused")
 	private String addIRIHRef(org.eclipse.rdf4j.model.Value value) {
 		IRI iri = (IRI) value;
 		return addIRIHRef(iri);
@@ -171,6 +171,7 @@ public class Tracer {
 	private String addService(String service) {
 		return "<a href='" + service + "' target='_blank'>" + service + "</a>";
 	}
+	@SuppressWarnings("unused")
 	private String addThisIRI(Thing thing) {
 		IRI iri = (IRI) thing.getValue();
 		return addIRI(iri);

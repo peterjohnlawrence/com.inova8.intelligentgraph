@@ -23,7 +23,6 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -31,8 +30,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public abstract class Resource implements Value {
 
 	private static final long serialVersionUID = 1L;
-
-	private Value superValue;
+	Predicate predicate =null;
+	Resource subject;
+	protected Value superValue;
 
 	protected final Logger logger = LoggerFactory.getLogger(Resource.class);
 
@@ -67,7 +67,12 @@ public abstract class Resource implements Value {
 			return new Literal(null);
 		}
 	}
-
+	public static Resource create(IntelligentGraphRepository source, Resource subject, Predicate predicate, Value value, EvaluationContext evaluationContext) {
+		Resource resource = Resource.create(source, value, evaluationContext);
+		resource.subject =subject;
+		resource.predicate =predicate;
+		return resource;
+	}
 	protected Resource(Value value) {
 		super();
 		this.superValue = value;
@@ -351,12 +356,16 @@ public abstract class Resource implements Value {
 		this.source = source;
 	}
 
-	public abstract Resource getSubject();
+	public  Resource getSubject() {
+		return subject;
+	};
 
-	public abstract Resource getPredicate();
+	public  Predicate getPredicate() {
+		return predicate;
+	};
 
-	public abstract Object getSnippet();
-
-	public abstract Object getScore();
+//	public abstract Object getSnippet();
+//
+//	public abstract Object getScore();
 
 }

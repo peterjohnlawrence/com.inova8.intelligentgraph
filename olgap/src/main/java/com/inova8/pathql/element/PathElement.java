@@ -3,7 +3,10 @@
  */
 package com.inova8.pathql.element;
 
+import java.net.URISyntaxException;
 import java.util.HashMap;
+
+import org.eclipse.rdf4j.model.IRI;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Reifications;
@@ -399,7 +402,11 @@ public abstract class PathElement {
 		//TODO
 		this.sourceVariable = sourceVariable;
 	}
-
+	public IRI  getParameterizedPredicate(IRI predicate ) throws URISyntaxException {
+		if (getRightPathElement() != null)
+			return getRightPathElement().getParameterizedPredicate(predicate);
+		return null;
+	}
 	public Variable getTargetSubject() {
 		if (getRightPathElement() != null)
 			return getRightPathElement().getTargetSubject();

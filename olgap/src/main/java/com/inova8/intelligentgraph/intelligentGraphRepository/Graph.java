@@ -62,6 +62,7 @@ public Thing getThing(String thing) throws RecognitionException, PathPatternExce
 		return getThing(thingIri, customQueryOptions);
 	}
 
+@SuppressWarnings("deprecation")
 public Boolean closeGraph() {
 	return source.getPublicContexts().remove(graphName);
 }

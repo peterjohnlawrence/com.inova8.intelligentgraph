@@ -28,24 +28,17 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class Evaluator {
 
-	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(Evaluator.class);
 
-	/** The Constant sources. */
 	static protected final Sources sources = new Sources();
 
-	/** The script engine manager. */
 	static protected ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
-	/** The script engines. */
-	//static protected HashMap<String, ScriptEngine> scriptEngines = new HashMap<String, ScriptEngine>();
 
-	static protected final Properties scriptEngines = new Properties();
+	static protected final Properties scriptEngines=new Properties();
 
-	/** The digest. */
 	static private MessageDigest digest;
 
-	/** The trace. */
 	static protected boolean trace = false;
 
 	static {
@@ -85,6 +78,8 @@ public class Evaluator {
 			setTrace(Evaluator.trace);
 		} catch (NoSuchAlgorithmException e) {
 			logger.error(e.getMessage());
+		}finally {
+			scriptEngines.clear();
 		}
 	}
 

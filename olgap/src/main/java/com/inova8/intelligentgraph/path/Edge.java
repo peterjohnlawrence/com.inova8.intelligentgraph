@@ -9,9 +9,17 @@ import org.eclipse.rdf4j.model.IRI;
 public class Edge {
 
 
-	enum Direction {
+	public enum Direction {
 		DIRECT, 
-		 INVERSE
+		 INVERSE;
+		  @Override
+		  public String toString() {
+		    switch(this) {
+		      case DIRECT: return "DIRECT";
+		      case INVERSE: return "INVERSE";
+		      default: throw new IllegalArgumentException();
+		    }
+		  }
 	};
 	org.eclipse.rdf4j.model.Resource source;
 	org.eclipse.rdf4j.model.Resource predicate;

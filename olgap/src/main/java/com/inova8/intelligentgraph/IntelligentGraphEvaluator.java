@@ -287,6 +287,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	 * @return the binding set
 	 * @throws QueryEvaluationException the query evaluation exception
 	 */
+	@SuppressWarnings("deprecation")
 	private BindingSet nextTuple() throws QueryEvaluationException {
 		BindingSet nextBindingSet = getEvaluator().next();
 		QueryBindingSet modifiedBindingSet = new QueryBindingSet(); // Iterations.asSet(evaluator)

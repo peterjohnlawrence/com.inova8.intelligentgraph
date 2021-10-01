@@ -1,14 +1,15 @@
 package com.inova8.intelligentgraph.pathQLResults;
 
+import java.net.URISyntaxException;
+
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Fact;
+import com.inova8.intelligentgraph.pathQLModel.Predicate;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
@@ -98,8 +99,18 @@ public class ResourceStatementResults extends ResourceResults {
 	public Resource next() throws QueryEvaluationException {
 		if (statementSet != null) {
 			Statement next = getStatementSet().next();
-			thing.getEvaluationContext().getTracer().traceFactNext(thing,next.getPredicate(), next.getObject());
-			return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
+
+			//return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
+			//Resource predicate, Boolean direction, IRI reification, Boolean isDereified,
+			Resource subject = Resource.create(thing.getSource(),next.getSubject(), getEvaluationContext());
+			Predicate predicate;
+			try {
+				predicate = new Predicate(next.getPredicate());
+			} catch (URISyntaxException e) {
+				throw new QueryEvaluationException(e);
+			}
+			thing.getEvaluationContext().getTracer().traceFactNext(thing,predicate, next.getObject());
+			return Resource.create(thing.getSource(), subject, predicate, next.getObject(), getEvaluationContext());
 		}
 		if (localStatementIterator != null) {
 			Statement next = localStatementIterator.next();
@@ -108,15 +119,15 @@ public class ResourceStatementResults extends ResourceResults {
 		return null;
 	}
 
-	@Override
-	public Fact nextFact() {
-		Statement next = getStatementSet().next();
-		return new Fact(next.getSubject(), next.getPredicate(), next.getObject());
-	}
-
-	@Override
-	public IRI nextReifiedValue() {
-		return null;
-	}
+//	@Override
+//	public Fact nextFact() {
+//		Statement next = getStatementSet().next();
+//		return new Fact(next.getSubject(), next.getPredicate(), next.getObject());
+//	}
+//
+//	@Override
+//	public IRI nextReifiedValue() {
+//		return null;
+//	}
 
 }

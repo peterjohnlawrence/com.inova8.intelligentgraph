@@ -1,20 +1,14 @@
 package com.inova8.intelligentgraph.pathQLResults;
 
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
-import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Fact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
-import com.inova8.pathql.element.PredicateElement;
-import com.inova8.pathql.element.Variable;
 
 
 public abstract class ResourceBindingSetResults extends ResourceResults {
@@ -67,24 +61,24 @@ public abstract class ResourceBindingSetResults extends ResourceResults {
 		//return thing.getSource().resourceFactory(getTracer(), next.getValue(getPathElement().getTargetVariable().getName()), getStack(), getCustomQueryOptions(),getPrefixes());
 		return Resource.create(thing.getSource(), next.getValue(getPathElement().getTargetVariable().getName()), getEvaluationContext());
 	}
-	public Fact nextFact() {
-		BindingSet bindingSet = nextBindingSet();
-		PredicateElement predicateElement = (PredicateElement)getPathElement();
-		Variable subject = predicateElement.getTargetSubject();
-		Variable predicate = predicateElement.getTargetPredicate();
-		Variable target = predicateElement.getTargetVariable();
-		Value subjectValue = bindingSet.getValue(subject.getName());
-		Value predicateValue = bindingSet.getValue(predicate.getName());
-		Value targetValue = bindingSet.getValue(target.getName());
-		return new Fact(subjectValue, predicateValue,targetValue );
-	}
-	public IRI nextReifiedValue() {
-		BindingSet bindingSet = nextBindingSet();
-		PredicateElement predicateElement = (PredicateElement)getPathElement();
-		Variable reification = predicateElement.getReifiedVariable();
-		IRI reificationValue = (IRI) bindingSet.getValue(reification.getName());
-
-		return reificationValue;
-	}
+//	public Fact nextFact() {
+//		BindingSet bindingSet = nextBindingSet();
+//		PredicateElement predicateElement = (PredicateElement)getPathElement();
+//		Variable subject = predicateElement.getTargetSubject();
+//		Variable predicate = predicateElement.getTargetPredicate();
+//		Variable target = predicateElement.getTargetVariable();
+//		Value subjectValue = bindingSet.getValue(subject.getName());
+//		Value predicateValue = bindingSet.getValue(predicate.getName());
+//		Value targetValue = bindingSet.getValue(target.getName());
+//		return new Fact(subjectValue, predicateValue,targetValue );
+//	}
+//	public IRI nextReifiedValue() {
+//		BindingSet bindingSet = nextBindingSet();
+//		PredicateElement predicateElement = (PredicateElement)getPathElement();
+//		Variable reification = predicateElement.getReifiedVariable();
+//		IRI reificationValue = (IRI) bindingSet.getValue(reification.getName());
+//
+//		return reificationValue;
+//	}
 
 }

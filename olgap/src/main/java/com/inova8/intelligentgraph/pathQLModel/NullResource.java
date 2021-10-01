@@ -35,28 +35,4 @@ public class NullResource extends Resource {
 		return null;
 	}
 
-	@Override
-	public Resource getSubject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Resource getPredicate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getSnippet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getScore() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -3,7 +3,9 @@
  */
 package tutorialExample;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -18,8 +20,11 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.path.Edge;
+import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.pathQLResults.PathResults;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
@@ -385,7 +390,7 @@ class Local_TutorialTests {
 			}
 			
 
-			assertEquals("\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>",
+			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]",
 					graph.getThing(":aPerson").getFacts("^:measurementOf/:hasBMI").toString());
 			assertEquals("22.03856749311295",
 					graph.getThing(":aPerson").getFact("^:measurementOf[:hasDate %1]/:hasBMI",
@@ -453,7 +458,7 @@ class Local_TutorialTests {
 			graph.getThing(":aPerson_Observation_5").addFact(RDF.TYPE, Observation).addFact(":observationMeasurement", Measurement_5).addFact(":observationType", BMIObservation).addFact(":observationOf", aPerson);
 			graph.getThing(":aPerson_Observation_6").addFact(RDF.TYPE, Observation).addFact(":observationMeasurement", Measurement_6).addFact(":observationType", BMIObservation).addFact(":observationOf", aPerson);
 
-			assertEquals("\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>",
+			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]",
 					graph.getThing(":aPerson").getFacts(":Observation@:BMIObservation/:hasBMI").toString());
 			
 			assertEquals("22.03856749311295",
@@ -468,4 +473,125 @@ class Local_TutorialTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+
+	@Test
+	@Order(7)
+	void test_7() {
+		try {
+			Repository workingRep = Query.createNativeLuceneIntelligentGraphRepository(
+					"src/test/resources/datadir/Local_TutorialTests7/");
+
+			RepositoryConnection conn = workingRep.getConnection();
+			conn.setNamespace("", "http://inova8.com/intelligentgraph/example7/");
+			conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+			conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
+
+			source.removeGraph("<http://inova8.com/intelligentgraph/example7>");
+			Graph graph = source.addGraph("<http://inova8.com/intelligentgraph/example7>");
+			Thing aPerson = graph.getThing(":aPerson");
+			Thing Another1 = graph.getThing(":Another1");
+			Thing Another2 = graph.getThing(":Another2");
+			Thing Another3 = graph.getThing(":Another3");
+			Thing Another4 = graph.getThing(":Another4");
+			Thing Another5 = graph.getThing(":Another5");
+			Thing Another6 = graph.getThing(":Another6");
+			Thing Another7 = graph.getThing(":Another7");
+			Thing Another8 = graph.getThing(":Another8");
+			Thing Another9 = graph.getThing(":Another9");
+			Thing Another10 = graph.getThing(":Another10");
+			Thing Another11 = graph.getThing(":Another11");
+			Thing Another12 = graph.getThing(":Another12");
+
+			Thing Location = graph.getThing(":Location");
+			Thing Maidstone = graph.getThing(":Maidstone").addFact(RDF.TYPE, Location);
+			Thing Tideswell = graph.getThing(":Tideswell").addFact(RDF.TYPE, Location);
+
+			Thing Gender = graph.getThing(":Gender");
+			Thing Male = graph.getThing(":Male").addFact(RDF.TYPE, Gender);
+			Thing Female = graph.getThing(":Female").addFact(RDF.TYPE, Gender);
+
+			Thing Person = graph.getThing(":Person");
+
+			aPerson.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "62", XSD.DOUBLE).addFact(":hasLocation", Tideswell).addFact(":hasGender", Male).addFact(":hasParent", Another1).addFact(":hasParent", Another3);
+			Another1.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.9", XSD.DOUBLE).addFact(":hasWeight", "72", XSD.DOUBLE).addFact(":hasLocation", Tideswell).addFact(":hasGender", Male).addFact(":hasParent", Another2);
+			Another2.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "65", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Male);
+			Another3.addFact(RDF.TYPE, Person).addFact(":hasHeight", "2", XSD.DOUBLE).addFact(":hasWeight", "59", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Female).addFact(":hasParent", Another4);
+			Another4.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.8", XSD.DOUBLE).addFact(":hasWeight", "47", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Male).addFact(":hasParent", Another5).addFact(":hasParent", Another6);
+			Another5.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.5", XSD.DOUBLE).addFact(":hasWeight", "70", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Female);
+			Another6.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.5", XSD.DOUBLE).addFact(":hasWeight", "56", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Male);
+			Another7.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "63", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Female).addFact(":hasParent", Another5).addFact(":hasParent", Another8).addFact(":hasParent", Another9);
+			Another8.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.6", XSD.DOUBLE).addFact(":hasWeight", "66", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Male);
+			Another9.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "46", XSD.DOUBLE).addFact(":hasLocation", Maidstone).addFact(":hasGender", Female).addFact(":hasParent", Another10).addFact(":hasParent", Another11).addFact(":hasParent", Another12);
+			Another10.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.9", XSD.DOUBLE).addFact(":hasWeight", "61", XSD.DOUBLE).addFact(":hasLocation", Tideswell).addFact(":hasGender", Female);
+			Another11.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.5", XSD.DOUBLE)	.addFact(":hasWeight", "61", XSD.DOUBLE).addFact(":hasLocation", Tideswell).addFact(":hasGender", Male);
+			Another11.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.8", XSD.DOUBLE).addFact(":hasWeight", "75", XSD.DOUBLE).addFact(":hasLocation", Tideswell).addFact(":hasGender", Female);	
+
+			assertEquals("http://inova8.com/intelligentgraph/example7/aPerson", aPerson.stringValue());
+			assertEquals("http://inova8.com/intelligentgraph/example7/Another3",
+					aPerson.getFact(":hasParent[:hasGender :Female]").stringValue());
+			assertEquals("http://inova8.com/intelligentgraph/example7/Another3",
+					aPerson.getFact(":hasParent[:hasLocation :Maidstone]").stringValue());
+			assertEquals("http://inova8.com/intelligentgraph/example7/Another3",
+					aPerson.getFact(":hasParent{0,4}/:hasParent[:hasGender :Female]").stringValue());
+			assertEquals(
+					"[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another5;]",
+					aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
+			assertEquals(
+					"[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another2;http://inova8.com/intelligentgraph/example7/Another4;http://inova8.com/intelligentgraph/example7/Another5;http://inova8.com/intelligentgraph/example7/Another6;]",
+					aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasLocation :Maidstone]").toString());
+			PathResults paths = aPerson.getPaths(":hasParent{0,4}/:hasParent[:hasGender :Female]");
+			assertEquals(
+					"Path=[[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another3,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another3,DIRECT]\r\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another3,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another4,DIRECT]\r\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another4,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another5,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "",
+					paths.toString());
+			paths = aPerson.getPaths(":hasParent{0,4}/:hasParent[:hasLocation :Maidstone]");
+			String pathString="";
+			for (Path path:paths) {
+				pathString +="Path"+"\n";
+				for ( Edge edge: path) {
+					pathString +=edge.toString()+"\n" ;	
+				}
+			}
+			assertEquals("Path\n"
+					+ "[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another3,DIRECT]\n"
+					+ "Path\n"
+					+ "[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another1,DIRECT]\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another1,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another2,DIRECT]\n"
+					+ "Path\n"
+					+ "[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another3,DIRECT]\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another3,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another4,DIRECT]\n"
+					+ "Path\n"
+					+ "[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another3,DIRECT]\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another3,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another4,DIRECT]\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another4,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another5,DIRECT]\n"
+					+ "Path\n"
+					+ "[http://inova8.com/intelligentgraph/example7/aPerson,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another3,DIRECT]\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another3,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another4,DIRECT]\n"
+					+ "[http://inova8.com/intelligentgraph/example7/Another4,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another6,DIRECT]\n"
+					+ "",pathString);
+			
+			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
+			"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
+			SCRIPT.GROOVY);
+
+			Thing familialRelativeBMI = graph.getThing(":FamilialRelativeBMI").addFact(SCRIPT.SCRIPTCODE,
+			"_this.getFact(':hasBMI').doubleValue()/_this.getFacts(':hasParent{0,4}/:hasBMI').average();",
+			SCRIPT.GROOVY);
+			for (Resource person : graph.getThing(":Person").getFacts("^rdf:type")) {
+				((Thing) person).addFact(":hasBMI", "<:BMI>", SCRIPT.GROOVY).addFact(":hasFamilialRelativeBMI", "<:FamilialRelativeBMI>", SCRIPT.GROOVY);
+			}			
+			
+			 assertEquals(1.006889937409004,aPerson.getFact(":hasFamilialRelativeBMI").doubleValue() );
+		} catch (Exception e) {
+			assertEquals("", e.getMessage());
+			fail();
+		}
+	}
+
 }

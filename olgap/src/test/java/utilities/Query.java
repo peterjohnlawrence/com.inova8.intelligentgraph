@@ -173,9 +173,7 @@ public class Query {
 				Statement nextResult = result.next();
 				aResult.append(nextResult.toString()).append("\n");
 			}
-//			for (Statement statement: result) {
-//				aResult.append(statement.toString());
-//			}
+
 			
 		}catch(Exception e){
 			return aResult.toString();

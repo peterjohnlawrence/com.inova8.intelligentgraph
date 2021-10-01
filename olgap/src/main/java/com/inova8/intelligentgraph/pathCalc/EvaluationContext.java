@@ -9,18 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.EvaluationStack;
-import com.inova8.intelligentgraph.pathCalc.Prefixes;
-import com.inova8.intelligentgraph.pathCalc.Tracer;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.Dataset;
 
-/**
- * The Class EvaluationContext.
- */
 public class EvaluationContext {
 	
 	/** The logger. */

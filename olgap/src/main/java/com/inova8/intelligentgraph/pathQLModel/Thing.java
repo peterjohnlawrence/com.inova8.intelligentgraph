@@ -9,7 +9,6 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -81,6 +80,7 @@ public class Thing extends Resource {
 			EvaluationContext evaluationContext) {
 		return Thing.create( source,  null, superValue,	 evaluationContext);
 	}
+	@SuppressWarnings("deprecation")
 	public static Thing create(IntelligentGraphRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		Thing thing;
@@ -135,6 +135,7 @@ public class Thing extends Resource {
 		return graphName;
 	}
 
+	@SuppressWarnings("deprecation")
 	public final IRI generateCacheContext(IRI predicate) {
 		String key;
 		if (predicate != null) {
@@ -269,6 +270,7 @@ public class Thing extends Resource {
 		return results;
 	}
 
+	@SuppressWarnings("unused")
 	private org.eclipse.rdf4j.model.Resource[] prepareDataset(CustomQueryOptions customQueryOptions) {
 		SimpleDataset dataset = getDataset( customQueryOptions);
 		if(dataset!=null) {
@@ -286,6 +288,7 @@ public class Thing extends Resource {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public Resource getSignal(String signal) {
 		getEvaluationContext().getTracer().incrementLevel();
 		//incrementTraceLevel();
@@ -335,6 +338,7 @@ public class Thing extends Resource {
 			scriptCode = scriptCode.trim();
 			if (scriptCode.startsWith("<")) {
 				String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
+				@SuppressWarnings("deprecation")
 				org.eclipse.rdf4j.model.Resource scriptResource = convertQName(scriptIRI);
 				//IRI scriptPropertyIRI = iri(SCRIPT.SCRIPTCODE);
 				Statement scriptStatement;
@@ -431,6 +435,7 @@ public class Thing extends Resource {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public String generateStackKey(IRI predicate) {
 		String stackKey;
 		if (predicate != null) {
@@ -558,31 +563,6 @@ public class Thing extends Resource {
 	}
 
 
-	@Override
-	public Resource getSubject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Resource getPredicate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Object getSnippet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getScore() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
 		SimpleDataset dataset = getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
@@ -608,7 +588,7 @@ public class Thing extends Resource {
 	}
 
 	public void deleteFacts(String predicatePattern) throws Exception {		
-		org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
+		//org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
 		this.getSource().getRepository().getConnection().remove(this.getIRI(),
 							PATHQL.GETFACTS, literal(predicatePattern));
 	}
@@ -678,7 +658,7 @@ public class Thing extends Resource {
 	private void addFact( PredicateElement predicateElement,Value value) throws RepositoryException {
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
 		if (predicateElement.getIsReified()) {
-			ReificationType reificationType = this.getSource().getReificationTypes()
+			ReificationType reificationType = this.getSource().getReifications().getReificationTypes()
 					.get(predicateElement.getReification().stringValue());
 			if (reificationType != null) {
 				IRI reification = iri(
@@ -714,12 +694,7 @@ public class Thing extends Resource {
 		return (IRI) getSuperValue();
 	}
 
-
-	/**
-	 * Gets the dataset.
-	 *
-	 * @return the dataset
-	 */
+	@SuppressWarnings("deprecation")
 	public SimpleDataset getDataset(org.eclipse.rdf4j.model.Resource... declaredContexts) {
 		//The graphs can be defined in three ways: as the dataset of a tuplequery, as contexts in getStatements query, or as explicitly defined graphs in a PathCalc query
 		SimpleDataset dataset = (SimpleDataset) getEvaluationContext().getDataset();
@@ -756,19 +731,11 @@ public class Thing extends Resource {
 	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
 		SimpleDataset dataset = new SimpleDataset();//getDataset();
 		if(customQueryOptions!=null) {
-			if(dataset==null)dataset=new SimpleDataset();
 			dataset.addDefaultGraph(iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
 		}
 		return dataset;
 	}
-	/**
-	 * Gets the thing.
-	 *
-	 * @param thing the thing
-	 * @return the thing
-	 * @throws RecognitionException the recognition exception
-	 * @throws PathPatternException the path pattern exception
-	 */
+
 	public Thing getThing(String thing) throws RecognitionException, PathPatternException {
 		IRI thingIri = PathParser.parseIriRef(this.getSource(),thing).getIri();
 		return create(this.getSource(), thingIri,this.getEvaluationContext());

@@ -15,15 +15,7 @@ import com.inova8.pathql.processor.PathPatternException;
 public class Fact extends Resource {
 	private static final long serialVersionUID = 1L;
 
-	Resource predicate =null;
-
-	Resource subject;
-
-	IRI reification;	
-
-	Boolean isDereified;
-
-	public Fact(Resource subject, Resource predicate,  Value value ) {
+	public Fact(Resource subject, Predicate predicate,  Value value ) {
 		super(value);
 		this.predicate = predicate;
 		this.subject = subject;
@@ -32,12 +24,17 @@ public class Fact extends Resource {
 	public Fact(Value subject, Value predicate, Value value) {
 		super(value);
 		if(predicate!=null)
-			this.predicate =Thing.create(getSource(), predicate, getEvaluationContext() );	
+			try {
+				this.predicate =new Predicate((IRI)predicate) ;
+			} catch (URISyntaxException e) {
+				//TODO
+				this.predicate=null;
+			} 
 		if(subject!=null)
 			this.subject = Thing.create(getSource(), subject, getEvaluationContext());
 	}
 
-	public Resource getPredicate() {
+	public Predicate getPredicate() {
 		return predicate;
 	}
 	public IRI getPredicateIRI() {
@@ -89,17 +86,17 @@ public class Fact extends Resource {
 	}
 	
 
-	@Override
-	public Object getSnippet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-
-	@Override
-	public Object getScore() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Object getSnippet() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//
+//	@Override
+//	public Object getScore() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }
