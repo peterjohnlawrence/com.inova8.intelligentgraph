@@ -79,7 +79,7 @@ public class Evaluator {
 		} catch (NoSuchAlgorithmException e) {
 			logger.error(e.getMessage());
 		}finally {
-			scriptEngines.clear();
+			//scriptEngines.clear();
 		}
 	}
 
