@@ -688,6 +688,7 @@ public class IntelligentGraphRepository {
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (contextExists) {
 				connection.clear(graphNameIri);
+				connection.remove(graphNameIri, (IRI) null, null, graphNameIri);
 				connection.remove((Resource) null, (IRI) null, null, graphNameIri);
 				logger.debug("Removed graph {} ", graphNameIri.stringValue());
 			} else {

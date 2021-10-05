@@ -60,6 +60,8 @@ class Local_TutorialTests {
 
 			source.removeGraph("<http://inova8.com/intelligentgraph/example1>");
 			Graph graph = source.addGraph("<http://inova8.com/intelligentgraph/example1>");
+			source.removeGraph("<http://inova8.com/intelligentgraph/example1>");
+			graph = source.addGraph("<http://inova8.com/intelligentgraph/example1>");
 			Thing aPerson = graph.getThing(":aPerson");
 			Thing Person = graph.getThing(":Person");
 			aPerson.addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "62",

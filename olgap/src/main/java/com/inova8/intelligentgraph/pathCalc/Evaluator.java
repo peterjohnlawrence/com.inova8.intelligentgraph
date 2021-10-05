@@ -26,7 +26,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 /**
  * The Class Evaluator.
  */
-public class Evaluator {
+public  class Evaluator {
 
 	private static final Logger logger   = LoggerFactory.getLogger(Evaluator.class);
 
@@ -189,5 +189,8 @@ public class Evaluator {
 	 */
 	public static Properties getEngineNames() {
 		return scriptEngines;
+	}
+	public void finalize() {
+		scriptEngines.clear();
 	}
 }

@@ -340,7 +340,6 @@ public class Thing extends Resource {
 				String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
 				@SuppressWarnings("deprecation")
 				org.eclipse.rdf4j.model.Resource scriptResource = convertQName(scriptIRI);
-				//IRI scriptPropertyIRI = iri(SCRIPT.SCRIPTCODE);
 				Statement scriptStatement;
 				SimpleLiteral scriptCodeliteral = null;
 				try {
