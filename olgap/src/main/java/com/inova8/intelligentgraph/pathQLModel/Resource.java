@@ -216,7 +216,12 @@ public abstract class Resource implements Value {
 	public void popStack() {
 		evaluationContext.getStack().pop();
 	}
-
+	public abstract Resource addFact(String property, String value, IRI dataType);
+	public abstract Resource addFact(IRI property, String value, IRI dataType );
+	public abstract Resource addFact(IRI property, Value value);
+	public abstract Resource addFact(String property, Value value);
+	public abstract Resource addFact(String property, String value);
+	
 	public abstract Resource getFact(String predicatePattern, Value... bindValues) throws PathPatternException;
 
 	public abstract ResourceResults getFacts(String predicatePattern, Value... bindValues) throws PathPatternException;

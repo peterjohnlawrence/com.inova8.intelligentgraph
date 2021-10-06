@@ -158,7 +158,8 @@ class Local_TutorialTests {
 					SCRIPT.GROOVY);
 			
 			for (Resource person : graph.getThing(":Person").getFacts("^rdf:type")) {
-				((Thing) person).addFact(":hasBMI", "<:BMI>", SCRIPT.GROOVY).addFact(":hasRelativeBMI", "<:RelativeBMI>", SCRIPT.GROOVY);
+			//	((Thing) person)
+				person.addFact(":hasBMI", "<:BMI>", SCRIPT.GROOVY).addFact(":hasRelativeBMI", "<:RelativeBMI>", SCRIPT.GROOVY);
 			}
 			
 			Person.addFact(":averageBMI", "_this.getFacts('^rdf:type/:hasBMI').average()", SCRIPT.GROOVY);

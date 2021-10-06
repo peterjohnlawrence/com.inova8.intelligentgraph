@@ -4,9 +4,11 @@
 package localPathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
+import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -680,6 +682,52 @@ class Local_GetFact_Tests {
 			assertEquals("42", result.stringValue());
 		} catch (Exception e) {
 			fail();
+			e.printStackTrace();
+		} 
+	}
+	/**
+	 * Test 36.
+	 */
+	@Test
+	@Order(36)
+	void test_36() {
+		
+		try {
+			source = IntelligentGraphRepository.create(workingRep);
+			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
+			Thing myCountry = graph.getThing(":Country1");
+			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
+
+			Literal time = literal(42);
+	
+			Thing myCountry1 = graph.getThing( ":Country1");
+			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>[eq %1; gt %2]",time);
+			assertEquals("42", result.stringValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
+	/**
+	 * Test 37.
+	 */
+	@Test
+	@Order(37)
+	void test_37() {
+		
+		try {
+			source = IntelligentGraphRepository.create(workingRep);
+			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
+			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
+			Thing myCountry = graph.getThing(":Country1");
+			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
+
+			Literal time = literal(42);
+	
+			Thing myCountry1 = graph.getThing( ":Country1");
+			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>[eq %1]",time);
+			assertEquals("42", result.stringValue());
+		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 	}

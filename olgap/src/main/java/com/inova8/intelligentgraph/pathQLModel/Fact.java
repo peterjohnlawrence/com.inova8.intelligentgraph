@@ -84,6 +84,36 @@ public class Fact extends Resource {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Resource addFact(String property, String value, IRI dataType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource addFact(IRI property, String value, IRI dataType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource addFact(IRI property, Value value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource addFact(String property, Value value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resource addFact(String property, String value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 //	@Override

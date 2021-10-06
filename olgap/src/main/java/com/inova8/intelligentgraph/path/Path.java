@@ -99,5 +99,30 @@ public class Path extends Resource  implements Iterable<Edge>{
 	public Iterator<Edge> iterator() {
 		return path.iterator();
 	}
+	@Override
+	public Resource addFact(String property, String value, IRI dataType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Resource addFact(IRI property, String value, IRI dataType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Resource addFact(IRI property, Value value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Resource addFact(String property, Value value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Resource addFact(String property, String value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 } 

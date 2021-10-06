@@ -12,28 +12,53 @@ import org.eclipse.rdf4j.model.IRI;
 
 public class BindVariableElement extends ObjectElement {
 	Integer bindVariableIndex;
+
 	public BindVariableElement(IntelligentGraphRepository source) {
 		super(source);
 	}
+
 	public Integer getBindVariableIndex() {
 		return bindVariableIndex;
 	}
+
 	public void setBindVariableIndex(Integer bindVariableIndex) {
 		this.bindVariableIndex = bindVariableIndex;
 	}
+
 	public Literal getLiteral(CustomQueryOptions customQueryOptions) {
-		Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
-		return (Literal) rdfLiteral.getSuperValue();
+		if (customQueryOptions != null) {
+			Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
+			if (rdfLiteral != null)
+				return (Literal) rdfLiteral.getSuperValue();
+			else
+				return (Literal) null;
+		} else
+			return (Literal) null;
 	}
+
 	public IRI getIri(CustomQueryOptions customQueryOptions) {
-		Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
-		return (IRI) rdfLiteral.getSuperValue();
+		if (customQueryOptions != null) {
+			Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
+			if (rdfLiteral != null)
+				return (IRI) rdfLiteral.getSuperValue();
+			else
+				return (IRI) null;
+		} else
+			return (IRI) null;
 	}
+
 	public Value getValue(CustomQueryOptions customQueryOptions) {
-		Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
-		return  rdfLiteral.getSuperValue();
+		if (customQueryOptions != null) {
+			Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
+			if (rdfLiteral != null)
+				return rdfLiteral.getSuperValue();
+			else
+				return (Value) null;
+		} else
+			return (Value) null;
 	}
+
 	public String toString() {
-		return IntelligentGraphConstants.BINDVARIABLEPREFIX+bindVariableIndex.toString();
+		return IntelligentGraphConstants.BINDVARIABLEPREFIX + bindVariableIndex.toString();
 	}
 }
