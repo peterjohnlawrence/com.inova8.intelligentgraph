@@ -1,7 +1,8 @@
-// Generated from PathPattern.g4 by ANTLR 4.9
+// Generated from PathPattern.g4 by ANTLR 4.4
 package PathPattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -16,408 +17,408 @@ public class PathPatternBaseListener implements PathPatternListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQueryString(PathPatternParser.QueryStringContext ctx) { }
+	@Override public void enterNegation(@NotNull PathPatternParser.NegationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQueryString(PathPatternParser.QueryStringContext ctx) { }
+	@Override public void exitNegation(@NotNull PathPatternParser.NegationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQueryOptions(PathPatternParser.QueryOptionsContext ctx) { }
+	@Override public void enterVerbObjectList(@NotNull PathPatternParser.VerbObjectListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQueryOptions(PathPatternParser.QueryOptionsContext ctx) { }
+	@Override public void exitVerbObjectList(@NotNull PathPatternParser.VerbObjectListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQueryOption(PathPatternParser.QueryOptionContext ctx) { }
+	@Override public void enterAnyPredicate(@NotNull PathPatternParser.AnyPredicateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQueryOption(PathPatternParser.QueryOptionContext ctx) { }
+	@Override public void exitAnyPredicate(@NotNull PathPatternParser.AnyPredicateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(PathPatternParser.TypeContext ctx) { }
+	@Override public void enterBinding(@NotNull PathPatternParser.BindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType(PathPatternParser.TypeContext ctx) { }
+	@Override public void exitBinding(@NotNull PathPatternParser.BindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoundPattern(PathPatternParser.BoundPatternContext ctx) { }
+	@Override public void enterType(@NotNull PathPatternParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoundPattern(PathPatternParser.BoundPatternContext ctx) { }
+	@Override public void exitType(@NotNull PathPatternParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { }
+	@Override public void enterDereifier(@NotNull PathPatternParser.DereifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { }
+	@Override public void exitDereifier(@NotNull PathPatternParser.DereifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { }
+	@Override public void enterPathOnlyPattern(@NotNull PathPatternParser.PathOnlyPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { }
+	@Override public void exitPathOnlyPattern(@NotNull PathPatternParser.PathOnlyPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinding(PathPatternParser.BindingContext ctx) { }
+	@Override public void enterReifiedPredicate(@NotNull PathPatternParser.ReifiedPredicateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinding(PathPatternParser.BindingContext ctx) { }
+	@Override public void exitReifiedPredicate(@NotNull PathPatternParser.ReifiedPredicateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPath(PathPatternParser.PathContext ctx) { }
+	@Override public void enterOperator(@NotNull PathPatternParser.OperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPath(PathPatternParser.PathContext ctx) { }
+	@Override public void exitOperator(@NotNull PathPatternParser.OperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathAlternative(PathPatternParser.PathAlternativeContext ctx) { }
+	@Override public void enterLiteral(@NotNull PathPatternParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPathAlternative(PathPatternParser.PathAlternativeContext ctx) { }
+	@Override public void exitLiteral(@NotNull PathPatternParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathParentheses(PathPatternParser.PathParenthesesContext ctx) { }
+	@Override public void enterPredicate(@NotNull PathPatternParser.PredicateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPathParentheses(PathPatternParser.PathParenthesesContext ctx) { }
+	@Override public void exitPredicate(@NotNull PathPatternParser.PredicateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathSequence(PathPatternParser.PathSequenceContext ctx) { }
+	@Override public void enterQueryOption(@NotNull PathPatternParser.QueryOptionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPathSequence(PathPatternParser.PathSequenceContext ctx) { }
+	@Override public void exitQueryOption(@NotNull PathPatternParser.QueryOptionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCardinality(PathPatternParser.CardinalityContext ctx) { }
+	@Override public void enterQname(@NotNull PathPatternParser.QnameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCardinality(PathPatternParser.CardinalityContext ctx) { }
+	@Override public void exitQname(@NotNull PathPatternParser.QnameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNegation(PathPatternParser.NegationContext ctx) { }
+	@Override public void enterBoundPattern(@NotNull PathPatternParser.BoundPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNegation(PathPatternParser.NegationContext ctx) { }
+	@Override public void exitBoundPattern(@NotNull PathPatternParser.BoundPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathEltOrInverse(PathPatternParser.PathEltOrInverseContext ctx) { }
+	@Override public void enterPathParentheses(@NotNull PathPatternParser.PathParenthesesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPathEltOrInverse(PathPatternParser.PathEltOrInverseContext ctx) { }
+	@Override public void exitPathParentheses(@NotNull PathPatternParser.PathParenthesesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPredicate(PathPatternParser.PredicateContext ctx) { }
+	@Override public void enterPredicateRef(@NotNull PathPatternParser.PredicateRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPredicate(PathPatternParser.PredicateContext ctx) { }
+	@Override public void exitPredicateRef(@NotNull PathPatternParser.PredicateRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAnyPredicate(PathPatternParser.AnyPredicateContext ctx) { }
+	@Override public void enterPath(@NotNull PathPatternParser.PathContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAnyPredicate(PathPatternParser.AnyPredicateContext ctx) { }
+	@Override public void exitPath(@NotNull PathPatternParser.PathContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReifiedPredicate(PathPatternParser.ReifiedPredicateContext ctx) { }
+	@Override public void enterPathEltOrInverse(@NotNull PathPatternParser.PathEltOrInverseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReifiedPredicate(PathPatternParser.ReifiedPredicateContext ctx) { }
+	@Override public void exitPathEltOrInverse(@NotNull PathPatternParser.PathEltOrInverseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPredicateRef(PathPatternParser.PredicateRefContext ctx) { }
+	@Override public void enterQueryOptions(@NotNull PathPatternParser.QueryOptionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPredicateRef(PathPatternParser.PredicateRefContext ctx) { }
+	@Override public void exitQueryOptions(@NotNull PathPatternParser.QueryOptionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIriRef(PathPatternParser.IriRefContext ctx) { }
+	@Override public void enterVerb(@NotNull PathPatternParser.VerbContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIriRef(PathPatternParser.IriRefContext ctx) { }
+	@Override public void exitVerb(@NotNull PathPatternParser.VerbContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDereifier(PathPatternParser.DereifierContext ctx) { }
+	@Override public void enterMatchOnlyPattern(@NotNull PathPatternParser.MatchOnlyPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDereifier(PathPatternParser.DereifierContext ctx) { }
+	@Override public void exitMatchOnlyPattern(@NotNull PathPatternParser.MatchOnlyPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFactFilterPattern(PathPatternParser.FactFilterPatternContext ctx) { }
+	@Override public void enterQueryString(@NotNull PathPatternParser.QueryStringContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFactFilterPattern(PathPatternParser.FactFilterPatternContext ctx) { }
+	@Override public void exitQueryString(@NotNull PathPatternParser.QueryStringContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPropertyListNotEmpty(PathPatternParser.PropertyListNotEmptyContext ctx) { }
+	@Override public void enterPathSequence(@NotNull PathPatternParser.PathSequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPropertyListNotEmpty(PathPatternParser.PropertyListNotEmptyContext ctx) { }
+	@Override public void exitPathSequence(@NotNull PathPatternParser.PathSequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVerbObjectList(PathPatternParser.VerbObjectListContext ctx) { }
+	@Override public void enterCardinality(@NotNull PathPatternParser.CardinalityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVerbObjectList(PathPatternParser.VerbObjectListContext ctx) { }
+	@Override public void exitCardinality(@NotNull PathPatternParser.CardinalityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVerb(PathPatternParser.VerbContext ctx) { }
+	@Override public void enterObjectList(@NotNull PathPatternParser.ObjectListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVerb(PathPatternParser.VerbContext ctx) { }
+	@Override public void exitObjectList(@NotNull PathPatternParser.ObjectListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectList(PathPatternParser.ObjectListContext ctx) { }
+	@Override public void enterPname_ns(@NotNull PathPatternParser.Pname_nsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObjectList(PathPatternParser.ObjectListContext ctx) { }
+	@Override public void exitPname_ns(@NotNull PathPatternParser.Pname_nsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObject(PathPatternParser.ObjectContext ctx) { }
+	@Override public void enterIriRef(@NotNull PathPatternParser.IriRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObject(PathPatternParser.ObjectContext ctx) { }
+	@Override public void exitIriRef(@NotNull PathPatternParser.IriRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQname(PathPatternParser.QnameContext ctx) { }
+	@Override public void enterPropertyListNotEmpty(@NotNull PathPatternParser.PropertyListNotEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQname(PathPatternParser.QnameContext ctx) { }
+	@Override public void exitPropertyListNotEmpty(@NotNull PathPatternParser.PropertyListNotEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPname_ns(PathPatternParser.Pname_nsContext ctx) { }
+	@Override public void enterPathAlternative(@NotNull PathPatternParser.PathAlternativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPname_ns(PathPatternParser.Pname_nsContext ctx) { }
+	@Override public void exitPathAlternative(@NotNull PathPatternParser.PathAlternativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteral(PathPatternParser.LiteralContext ctx) { }
+	@Override public void enterFactFilterPattern(@NotNull PathPatternParser.FactFilterPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteral(PathPatternParser.LiteralContext ctx) { }
+	@Override public void exitFactFilterPattern(@NotNull PathPatternParser.FactFilterPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOperator(PathPatternParser.OperatorContext ctx) { }
+	@Override public void enterRdfType(@NotNull PathPatternParser.RdfTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOperator(PathPatternParser.OperatorContext ctx) { }
+	@Override public void exitRdfType(@NotNull PathPatternParser.RdfTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRdfType(PathPatternParser.RdfTypeContext ctx) { }
+	@Override public void enterObject(@NotNull PathPatternParser.ObjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRdfType(PathPatternParser.RdfTypeContext ctx) { }
+	@Override public void exitObject(@NotNull PathPatternParser.ObjectContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEveryRule(ParserRuleContext ctx) { }
+	@Override public void enterEveryRule(@NotNull ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEveryRule(ParserRuleContext ctx) { }
+	@Override public void exitEveryRule(@NotNull ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitTerminal(TerminalNode node) { }
+	@Override public void visitTerminal(@NotNull TerminalNode node) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitErrorNode(ErrorNode node) { }
+	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
 }

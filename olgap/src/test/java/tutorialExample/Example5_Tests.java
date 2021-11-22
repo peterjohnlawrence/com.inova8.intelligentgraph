@@ -62,7 +62,7 @@ class Example5_Tests {
 			Resource bmi = aPerson_Measurement.getFact(":hasBMI");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

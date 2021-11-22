@@ -30,8 +30,8 @@ public class PathBinding extends ArrayList<EdgeBinding>  {
 	 */
 	public String toString() {
 		String pathString = "";
-		for ( EdgeBinding edge : this) {
-			pathString += edge.toString() +"\r\n";
+		for ( EdgeBinding edgeBinding : this) {
+			pathString += edgeBinding.toString() +"\r\n";
 		};
 		return pathString;
 	}

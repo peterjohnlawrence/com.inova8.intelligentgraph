@@ -612,8 +612,9 @@ public class IntelligentGraphRepository {
 		return Thing.create(this, iri, new EvaluationContext(customQueryOptions));
 	}
 
-	public Thing getThing(String iri, CustomQueryOptions customQueryOptions) {
-		return getThing(iri(iri), customQueryOptions);
+	public Thing getThing(String iri, CustomQueryOptions customQueryOptions) throws RecognitionException, PathPatternException {
+		IRI thingIri = PathParser.parseIriRef(this,iri).getIri();
+		return getThing(thingIri, customQueryOptions);
 	}
 
 	public void writeModelToCache(Thing thing, Object result, IRI cacheContext) {
@@ -680,16 +681,22 @@ public class IntelligentGraphRepository {
 	}
 
 	public IRI removeGraph(String graphName) {
-		RepositoryConnection connection = this.getRepository().getConnection();//.getContextAwareConnection();
+		//RepositoryConnection connection = this.getRepository().getConnection();//.getContextAwareConnection();
 		IRI graphNameIri = null;
-		try {
+		try(RepositoryConnection connection = this.getRepository().getConnection())  {
 			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
 			@SuppressWarnings("deprecation")
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (contextExists) {
-				connection.clear(graphNameIri);
-				connection.remove(graphNameIri, (IRI) null, null, graphNameIri);
-				connection.remove((Resource) null, (IRI) null, null, graphNameIri);
+				Resource[] contexts = {graphNameIri};
+				//connection.begin(IsolationLevels.SERIALIZABLE);
+				//connection.clear(graphNameIri);
+				//connection.clear();
+				connection.remove((IRI) null, (IRI) null, null, contexts);
+				//connection.remove(graphNameIri, (IRI) null, null,contexts);//graphNameIri);
+				//connection.remove((Resource) null, (IRI) null, null);//graphNameIri);
+				//connection.commit();
+				
 				logger.debug("Removed graph {} ", graphNameIri.stringValue());
 			} else {
 				logger.error("Failed to remove graph {} ", graphNameIri.stringValue());

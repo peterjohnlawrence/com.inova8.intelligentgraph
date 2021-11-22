@@ -55,7 +55,7 @@ class Example3_Tests {
 			Resource bmi = tideswell.getFact(":averageBMI");
 			assertEquals("21.7109303439298", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -69,11 +69,11 @@ class Example3_Tests {
 				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt '1.9'^^xsd:double ]]/:hasBMI").average();
 				assertEquals("23.904182152163695", bmi.toString());
 			} catch (Exception e) {
-				fail();
+				assertEquals("", e.getMessage());
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -88,11 +88,11 @@ class Example3_Tests {
 				Double bmi = tideswell.getFacts("^:hasLocation[:hasHeight [ lt  %1 ]]/:hasBMI",maxHeight).average();
 				assertEquals("23.904182152163695", bmi.toString());
 			} catch (Exception e) {
-				fail();
+				assertEquals("", e.getMessage());
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -104,7 +104,7 @@ class Example3_Tests {
 			Resource bmi = source.getThing(":Maidstone").getFact(":averageBMI");
 			assertEquals("21.405629412031697", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathQLModel.Fact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
@@ -85,9 +86,7 @@ class Local_AddGetDeleteFact_Test {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			//assertEquals(true, closed);
 		} catch (Exception e) {
-
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test
@@ -110,6 +109,13 @@ class Local_AddGetDeleteFact_Test {
 			facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
 			factsinrange = facts.count();
 			assertEquals(1, factsinrange);
+//			double totalSales = 0; 
+//			int count = 0;
+//			for(Resource sales : myCountry.getFacts(":Attribute@:sales")){
+//				totalSales +=  sales.doubleValue();
+//				count++;
+//			};	
+//			double averagesales= totalSales/count;
 			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Resource averageSales = myCountry.getFact(":averageSales");
@@ -122,9 +128,7 @@ class Local_AddGetDeleteFact_Test {
 			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			assertEquals(true, closed);
 		} catch (Exception e) {
-
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getMessage());
 		}
 	}	
 

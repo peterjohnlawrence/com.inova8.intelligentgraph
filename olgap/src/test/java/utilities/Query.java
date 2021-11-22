@@ -61,6 +61,29 @@ public class Query {
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
 		return workingRep;
 	}
+	public static org.eclipse.rdf4j.repository.Repository createNativeIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
+		File dataDir = new File(dir);
+		FileUtils.deleteDirectory(dataDir);
+		
+		IntelligentGraphConfig intelligentGraphConfig = new IntelligentGraphConfig();
+		IntelligentGraphFactory intelligentGraphFactory = new IntelligentGraphFactory();
+		IntelligentGraphSail intelligentGraphSail= (IntelligentGraphSail)intelligentGraphFactory.getSail(intelligentGraphConfig);
+		//IntelligentGraphSail intelligentGraphSail = new IntelligentGraphSail();		
+		
+
+		Sail baseSail = new NativeStore(dataDir);		
+		intelligentGraphSail.setBaseSail(baseSail);
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
+		return workingRep;
+	}
+	public static org.eclipse.rdf4j.repository.Repository createNativeRepository(String dir) throws IOException, SailConfigException {
+		File dataDir = new File(dir);
+		FileUtils.deleteDirectory(dataDir);
+		Sail baseSail = new NativeStore(dataDir);		
+
+		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(baseSail);
+		return workingRep;
+	}
 	public static org.eclipse.rdf4j.repository.Repository createMemoryIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
 		File dataDir = new File(dir);
 		FileUtils.deleteDirectory(dataDir);
@@ -125,6 +148,7 @@ public class Query {
 					aResult.append(bindingName).append("=").append(solution.getValue(bindingName).stringValue())
 							.append(";");
 			}
+			aResult.append("\r\n");
 			}
 		}
 		contextResults.close();
@@ -149,6 +173,7 @@ public class Query {
 						aResult.append(bindingName).append("=").append(bindingSet.getValue(bindingName).stringValue())
 								.append(";");
 				}
+				aResult.append("\r\n");
 			}
 			
 		}

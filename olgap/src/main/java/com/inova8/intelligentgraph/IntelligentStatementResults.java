@@ -50,6 +50,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.contexts = contexts;
 		this.trace=false;
 		subj = pathElement.getTargetSubject().toString();
+		//TODO
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
@@ -66,6 +67,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.contexts = contexts;
 		this.trace = trace;
 		subj = pathElement.getTargetSubject().toString();
+		//TODO
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();

@@ -62,7 +62,7 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			for(Integer bindIndex =1; bindIndex <=bindValues.length; bindIndex++) {
 				Value bindValue = bindValues[bindIndex-1];
 				if(bindValue.isLiteral())
-					customQueryOptions.add(bindIndex.toString(), bindValue);
+					customQueryOptions.add(bindIndex.toString(), bindValue);//((Literal)bindValue).getSuperValue());
 				else if(bindValue.isIRI())
 					customQueryOptions.add(bindIndex.toString(), ((Thing)bindValue).getIRI());
 				else
@@ -84,6 +84,22 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 		super(t);
 		// TODO Auto-generated constructor stub
 	}
+	public CustomQueryOptions addAll(Value[] bindValues) {
+		if(bindValues.length>0) {  
+			
+			for(Integer bindIndex =1; bindIndex <=bindValues.length; bindIndex++) {
+				Value bindValue = bindValues[bindIndex-1];
+				if(bindValue.isLiteral())
+					this.add(bindIndex.toString(), bindValue);//((Literal)bindValue).getSuperValue());
+				else if(bindValue.isIRI())
+					this.add(bindIndex.toString(), ((Thing)bindValue).getIRI());
+				else
+					this.add(bindIndex.toString(), bindValue);	
+			}
+			return this;
+		}else
+			return this;	
+	}
 	public void add(String key,Object value ) {
 		if(value!=null) {
 			switch (value.getClass().getSimpleName()) {
@@ -103,6 +119,9 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			case "NumericLiteral":
 			case "TemporalAccessorLiteral":
 				this.put(key,new Literal((Value) value));
+				break;
+			case "Literal":
+				this.put(key,(Literal)value);
 				break;
 			case "SimpleIRI":
 			case "NativeIRI":
@@ -211,4 +230,5 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 	public String toHTML() {
 		return null;
 	}
+
 }

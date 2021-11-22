@@ -59,7 +59,7 @@ class ExampleLanguageTest_Tests {
 			Resource bmi = peter.getFact(":hasBMI");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -72,7 +72,7 @@ class ExampleLanguageTest_Tests {
 			Resource bmi = peter.getFact(":hasBMIjs");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -85,7 +85,7 @@ class ExampleLanguageTest_Tests {
 			Resource bmi = peter.getFact(":hasBMIpytest");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -98,7 +98,7 @@ class ExampleLanguageTest_Tests {
 			Resource bmi = peter.getFact(":hasBMIpy");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -116,7 +116,7 @@ class ExampleLanguageTest_Tests {
 			Resource bmi = peter.getFact(":hasCustomQueryOptionTest",customQueryOptions);
 			assertEquals("\"2018-02-14T06:30:00.0\"^^<http://www.w3.org/2001/XMLSchema#dateTime>", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -133,9 +133,10 @@ class ExampleLanguageTest_Tests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("aOption=2018-02-14T06:30:00.0;o=\"2018-02-14T06:30:00.0\"^^<http://www.w3.org/2001/XMLSchema#dateTime>;",result);
+			assertEquals("aOption=2018-02-14T06:30:00.0;o=\"2018-02-14T06:30:00.0\"^^<http://www.w3.org/2001/XMLSchema#dateTime>;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

@@ -145,7 +145,7 @@ class Local_Sparql_IntelligentGraphTests {
 					,result);
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -161,11 +161,13 @@ class Local_Sparql_IntelligentGraphTests {
 			String queryString1 = "select $o  ?time FROM <file://src/test/resources/calc2graph.data.ttl> WHERE {VALUES(?time){(41)(42)} <http://inova8.com/calc2graph/id/BatteryLimit1> <http://inova8.com/calc2graph/def/testProperty6> $o } ";
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("time=41;o=41;time=42;o=42;"
+			assertEquals("time=41;o=41;\r\n"
+					+ "time=42;o=42;\r\n"
+					+ ""
 					,result); 
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -186,7 +188,7 @@ class Local_Sparql_IntelligentGraphTests {
 			Query.assertEqualsWOSpaces("o_SCRIPT=59;;o_TRACE=<olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>javascript</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>59;</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=59^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/volumeFlow'target='_blank'>volumeFlow</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=59^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li>;time=41;o=59;"
 					,result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -202,10 +204,11 @@ class Local_Sparql_IntelligentGraphTests {
 			String queryString1 = "select * {VALUES(?time){(41)} <http://inova8.com/calc2graph/id/BatteryLimit1> <http://inova8.com/calc2graph/def/massFlow> $o} limit 1";
 
 			String result = Query.runQuery(conn, queryString1);
-			assertEquals("time=41;o=24.77999922633171;"
+			assertEquals("time=41;o=24.77999922633171;\r\n"
+					+ ""
 					,result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -216,14 +219,14 @@ class Local_Sparql_IntelligentGraphTests {
 	@Test
 	@Order(5)
 	void ig_5() {
-
+ 
 		try {
 			String queryString1 = "select * {BIND(\"42*3;\"^^<http://inova8.com/script/groovy> as ?result) } ";
 
 			String result = Query.runQuery(conn, queryString1);
 			assertEquals("126",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -246,9 +249,10 @@ class Local_Sparql_IntelligentGraphTests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=12.5;",result);
+			assertEquals("o=12.5;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -271,9 +275,10 @@ class Local_Sparql_IntelligentGraphTests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=150.0;",result);
+			assertEquals("o=150.0;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -296,9 +301,10 @@ class Local_Sparql_IntelligentGraphTests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=300.0;",result);
+			assertEquals("o=300.0;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -317,9 +323,10 @@ class Local_Sparql_IntelligentGraphTests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/id/calculateLatitude;o=return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();;",result);
+			assertEquals("s=http://inova8.com/calc2graph/id/calculateLatitude;o=return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -335,9 +342,10 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "{\n"
 					+ "  <http://inova8.com/calc2graph/id/Attribute_3>  <http://inova8.com/calc2graph/def/attribute.value> ?o }";
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("o=.5;",result);
+			assertEquals("o=.5;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -355,7 +363,7 @@ class Local_Sparql_IntelligentGraphTests {
 			String result = Query.runSPARQL(conn, queryString1);
 			Query.assertEqualsWOSpaces("o_SCRIPT=_this.getFact(\":testProperty3\").doubleValue();o_TRACE=<olstyle='list-style-type:none;'><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;:testProperty3&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Gettingfacts':testProperty3'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a></li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty3'target='_blank'>testProperty3</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Gettingfacts'&lt;http://inova8.com/calc2graph/def/testProperty2&gt;'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a></li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;:testProperty3&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Circularreferenceencounteredwhenevaluating<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>:</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>]</code></pre></div></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;:testProperty3&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Circularreferenceencounteredwhenevaluating<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>:</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>]</code></pre></div></li><li>Nextfact'http://inova8.com/calc2graph/def/testProperty2'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]</li></li><li>Returnedfact'&lt;http://inova8.com/calc2graph/def/testProperty2&gt;'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]^^<ahref='http://www.w3.org/2001/XMLSchema#string'target='_blank'>string</a></li></li><p></ol><li>Scriptfailedwith<br/><code><spanstyle=\"white-space:pre-wrap\">java.lang.NumberFormatException:Forinputstring:&quot;Circularreferenceencounteredwhenevaluating&lt;http://inova8.com/calc2graph/def/testProperty2&gt;of&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;.[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;]&quot;</span></code></li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty3'target='_blank'>testProperty3</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Gettingfacts'&lt;http://inova8.com/calc2graph/def/testProperty2&gt;'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a></li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;:testProperty3&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Circularreferenceencounteredwhenevaluating<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>:</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>]</code></pre></div></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_this.getFact(&quot;:testProperty3&quot;).doubleValue()</code></pre></div></li><olstyle='list-style-type:none;'><li>Circularreferenceencounteredwhenevaluating<ahref='http://inova8.com/calc2graph/def/testProperty2'target='_blank'>testProperty2</a>of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>:</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;<br>]</code></pre></div></li><li>Nextfact'http://inova8.com/calc2graph/def/testProperty2'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]</li></li><li>Returnedfact'&lt;http://inova8.com/calc2graph/def/testProperty2&gt;'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]^^<ahref='http://www.w3.org/2001/XMLSchema#string'target='_blank'>string</a></li></li><p></ol><li>Scriptfailedwith<br/><code><spanstyle=\"white-space:pre-wrap\">java.lang.NumberFormatException:Forinputstring:&quot;Circularreferenceencounteredwhenevaluating&lt;http://inova8.com/calc2graph/def/testProperty2&gt;of&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;.[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;]&quot;</span></code></li></li><li>Nextfact'http://inova8.com/calc2graph/def/testProperty3'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=java.lang.NumberFormatException:Forinputstring:\"Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]\"Forinputstring:\"Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]\"</li></li><li>Returnedfact':testProperty3'of<ahref='http://inova8.com/calc2graph/id/BatteryLimit1'target='_blank'>BatteryLimit1</a>=java.lang.NumberFormatException:Forinputstring:\"Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]\"Forinputstring:\"Circularreferenceencounteredwhenevaluating<http://inova8.com/calc2graph/def/testProperty2>of<http://inova8.com/calc2graph/id/BatteryLimit1>.[<http://inova8.com/calc2graph/def/testProperty2><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>,<http://inova8.com/calc2graph/def/testProperty3><http://inova8.com/calc2graph/id/BatteryLimit1>;queryOptions=o_SCRIPT=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o_TRACE=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>&o=\"_this.getFact(\":testProperty3\").doubleValue()\"^^<http://inova8.com/script/groovy>]\"^^<ahref='http://www.w3.org/2001/XMLSchema#string'target='_blank'>string</a></li></li><p></ol><li>Scriptfailedwith<br/><code><spanstyle=\"white-space:pre-wrap\">java.lang.NumberFormatException:Forinputstring:&quot;java.lang.NumberFormatException:Forinputstring:&quot;Circularreferenceencounteredwhenevaluating&lt;http://inova8.com/calc2graph/def/testProperty2&gt;of&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;.[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;]&quot;Forinputstring:&quot;Circularreferenceencounteredwhenevaluating&lt;http://inova8.com/calc2graph/def/testProperty2&gt;of&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;.[&lt;http://inova8.com/calc2graph/def/testProperty2&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;,&lt;http://inova8.com/calc2graph/def/testProperty3&gt;&lt;http://inova8.com/calc2graph/id/BatteryLimit1&gt;;queryOptions=o_SCRIPT=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o_TRACE=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;&amp;o=&quot;_this.getFact(&quot;:testProperty3&quot;).doubleValue()&quot;^^&lt;http://inova8.com/script/groovy&gt;]&quot;&quot;</span></code></li></li>;o=javax.script.ScriptException:java.lang.NumberFormatException:Forinputstring:\\\"java.lang.NumberFormatException:Forinputstring:\\\"Circularreferenceencounteredwhenevaluating<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2>of<http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>.\\r\\n[<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2><http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>;queryOptions=o_SCRIPT=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o_TRACE=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>\\r\\n,<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty3><http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>;queryOptions=o_SCRIPT=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o_TRACE=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>\\r\\n]\\\"\\nForinputstring:\\\"Circularreferenceencounteredwhenevaluating<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2>of<http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>.\\r\\n[<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty2><http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>;queryOptions=o_SCRIPT=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o_TRACE=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>\\r\\n,<http:\\/\\/inova8.com\\/calc2graph\\/def\\/testProperty3><http:\\/\\/inova8.com\\/calc2graph\\/id\\/BatteryLimit1>;queryOptions=o_SCRIPT=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o_TRACE=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>&o=\\\"_this.getFact(\\\":testProperty3\\\").doubleValue()\\\"^^<http:\\/\\/inova8.com\\/script\\/groovy>\\r\\n]\\\"\\\";",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -435,7 +443,7 @@ class Local_Sparql_IntelligentGraphTests {
 					+ "(http://inova8.com/calc2graph/id/BatteryLimit3, http://www.w3.org/2000/01/rdf-schema#label, \"BatteryLimit3\")\n"
 					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -454,7 +462,7 @@ class Local_Sparql_IntelligentGraphTests {
 					,result); 
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

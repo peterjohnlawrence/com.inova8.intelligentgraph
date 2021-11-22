@@ -95,7 +95,7 @@ class PathPatternQueryExpressionTests {
 		PathElement element = pathPatternVisitor.visit(pathPatternTree);
 		element.indexVisitor(null, 0,null);
 		element.setIterations(Iterations.create(element));
-		element.setPathBindings(PathBindings.create(element));
+	//	element.setPathBindings(PathBindings.create(element));
 		return element;
 	}	
 
@@ -107,20 +107,20 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n0)\r\n"
-				+ "         Variable (name=p0_1, value=http://default/parent1)\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/parent2)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "      Variable (name=p2_3, value=http://default/parent3)\r\n"
-				+ "      Variable (name=n3)\r\n"
-				+ "" , element.pathPatternQuery(thing).toString());
+						+ "   Join\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n0)\r\n"
+						+ "         Variable (name=p_n0_n1, value=http://default/parent1)\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2, value=http://default/parent2)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n2)\r\n"
+						+ "      Variable (name=p_n2_n3, value=http://default/parent3)\r\n"
+						+ "      Variable (name=n3)\r\n"
+						+ "" , element.pathPatternQuery(thing).toString());
 	}
 
 
@@ -132,40 +132,40 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         Join\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n0)\r\n"
-				+ "               Variable (name=p0_1, value=http://default/parent1)\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_0_1, value=http://default/gender)\r\n"
-				+ "               Variable (name=n1_1, value=http://default/female)\r\n"
-				+ "         Join\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_0_1, value=http://default/birthplace)\r\n"
-				+ "               Variable (name=n1_1)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1_1)\r\n"
-				+ "               Variable (name=p1_0_1, value=http://rdfs/label)\r\n"
-				+ "               Variable (name=n1_1, value=\"Maidstone\")\r\n"
-				+ "      Join\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_2, value=http://default/parent2)\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "            Variable (name=p2_0_1, value=http://default/gender)\r\n"
-				+ "            Variable (name=n2_1, value=http://default/male)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "      Variable (name=p2_3, value=http://default/parent3)\r\n"
-				+ "      Variable (name=n3)\r\n"
-				+ ""
+						+ "   Join\r\n"
+						+ "      Join\r\n"
+						+ "         Join\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n0)\r\n"
+						+ "               Variable (name=p_n0_n1, value=http://default/parent1)\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n1_1, value=http://default/gender)\r\n"
+						+ "               Variable (name=n1_1, value=http://default/female)\r\n"
+						+ "         Join\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n1_1, value=http://default/birthplace)\r\n"
+						+ "               Variable (name=n1_1)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1_1)\r\n"
+						+ "               Variable (name=p_n1_1_n1_1, value=http://rdfs/label)\r\n"
+						+ "               Variable (name=n1_1, value=\"Maidstone\")\r\n"
+						+ "      Join\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p_n1_n2, value=http://default/parent2)\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "            Variable (name=p_n2_n2_1, value=http://default/gender)\r\n"
+						+ "            Variable (name=n2_1, value=http://default/male)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n2)\r\n"
+						+ "      Variable (name=p_n2_n3, value=http://default/parent3)\r\n"
+						+ "      Variable (name=n3)\r\n"
+						+ ""
 				 , element.pathPatternQuery(thing).toString());
 	}
 
@@ -177,35 +177,35 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Union\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "            Variable (name=n0)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n0)\r\n"
-				+ "            Variable (name=isObjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "      Union\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "            Variable (name=p0_1, value=http://default/volumeFlow)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=p0_1, value=http://default/volumeFlow)\r\n"
-				+ "            Variable (name=isPropertyOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "   Union\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "         Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=isSubjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Join\r\n"
+				 		+ "      Union\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+				 		+ "            Variable (name=n0)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=n0)\r\n"
+				 		+ "            Variable (name=isObjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "      Union\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "            Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+				 		+ "            Variable (name=p_n0_n1, value=http://default/volumeFlow)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=p_n0_n1, value=http://default/volumeFlow)\r\n"
+				 		+ "            Variable (name=isPropertyOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "   Union\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=r1)\r\n"
+				 		+ "         Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=isSubjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+				 		+ "         Variable (name=r1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -219,10 +219,10 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://local#volumeFlow)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Variable (name=n0)\r\n"
+				 		+ "   Variable (name=p_n0_n1, value=http://local#volumeFlow)\r\n"
+				 		+ "   Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -236,15 +236,15 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+						+ "      Variable (name=n2)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -258,14 +258,14 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Filter\r\n"
-				+ "   Compare (>)\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      ValueConstant (value=\"35\")\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/volumeFlow)\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Compare (>)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      ValueConstant (value=\"35\")\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/volumeFlow)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -279,30 +279,30 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         Join\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "               Variable (name=n0)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "               Variable (name=p0_1, value=http://default/appearsOn)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_0_1, value=http://rdfs/label)\r\n"
-				+ "         Variable (name=n1_1, value=\"eastman3d\")\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=r1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/lat)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Join\r\n"
+				 		+ "      Join\r\n"
+				 		+ "         Join\r\n"
+				 		+ "            StatementPattern\r\n"
+				 		+ "               Variable (name=r1)\r\n"
+				 		+ "               Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+				 		+ "               Variable (name=n0)\r\n"
+				 		+ "            StatementPattern\r\n"
+				 		+ "               Variable (name=r1)\r\n"
+				 		+ "               Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+				 		+ "               Variable (name=p_n0_r1, value=http://default/appearsOn)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p_n1_n1_1, value=http://rdfs/label)\r\n"
+				 		+ "         Variable (name=n1_1, value=\"eastman3d\")\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=r1)\r\n"
+				 		+ "      Variable (name=p_r1_n2, value=http://default/lat)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -316,40 +316,40 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         Join\r\n"
-				+ "            Join\r\n"
-				+ "               Join\r\n"
-				+ "                  StatementPattern\r\n"
-				+ "                     Variable (name=r1)\r\n"
-				+ "                     Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "                     Variable (name=n0)\r\n"
-				+ "                  StatementPattern\r\n"
-				+ "                     Variable (name=r1)\r\n"
-				+ "                     Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "                     Variable (name=p0_1, value=http://default/appearsOn)\r\n"
-				+ "               StatementPattern\r\n"
-				+ "                  Variable (name=r1)\r\n"
-				+ "                  Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "                  Variable (name=n1)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "               Variable (name=p1_2, value=http://default/lat)\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "            Variable (name=p2_3, value=http://default/long)\r\n"
-				+ "            Variable (name=n3)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n4)\r\n"
-				+ "         Variable (name=p3_4, value=http://default/left)\r\n"
-				+ "         Variable (name=n3)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n4)\r\n"
-				+ "      Variable (name=p4_5, value=http://default/right)\r\n"
-				+ "      Variable (name=n5)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   Join\r\n"
+						+ "      Join\r\n"
+						+ "         Join\r\n"
+						+ "            Join\r\n"
+						+ "               Join\r\n"
+						+ "                  StatementPattern\r\n"
+						+ "                     Variable (name=r1)\r\n"
+						+ "                     Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+						+ "                     Variable (name=n0)\r\n"
+						+ "                  StatementPattern\r\n"
+						+ "                     Variable (name=r1)\r\n"
+						+ "                     Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+						+ "                     Variable (name=p_n0_r1, value=http://default/appearsOn)\r\n"
+						+ "               StatementPattern\r\n"
+						+ "                  Variable (name=r1)\r\n"
+						+ "                  Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+						+ "                  Variable (name=n1)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "               Variable (name=p_r1_n2, value=http://default/lat)\r\n"
+						+ "               Variable (name=r1)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "            Variable (name=p_n2_n3, value=http://default/long)\r\n"
+						+ "            Variable (name=n3)\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n4)\r\n"
+						+ "         Variable (name=p_n3_n4, value=http://default/left)\r\n"
+						+ "         Variable (name=n3)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n4)\r\n"
+						+ "      Variable (name=p_n4_n5, value=http://default/right)\r\n"
+						+ "      Variable (name=n5)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -363,19 +363,19 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Filter\r\n"
-				+ "      Compare (>)\r\n"
-				+ "         Variable (name=n1, value=\"36\")\r\n"
-				+ "         ValueConstant (value=\"35\")\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n0)\r\n"
-				+ "         Variable (name=p0_1, value=http://default/volumeFlow)\r\n"
-				+ "         Variable (name=n1, value=\"36\")\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1, value=\"36\")\r\n"
-				+ "      Variable (name=p1_0_1, value=http://rdfs/label)\r\n"
-				+ "      Variable (name=n1_1, value=\"Calc2Graph1\")\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Filter\r\n"
+				 		+ "      Compare (>)\r\n"
+				 		+ "         Variable (name=n1, value=\"36\")\r\n"
+				 		+ "         ValueConstant (value=\"35\")\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n0)\r\n"
+				 		+ "         Variable (name=p_n0_n1, value=http://default/volumeFlow)\r\n"
+				 		+ "         Variable (name=n1, value=\"36\")\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1, value=\"36\")\r\n"
+				 		+ "      Variable (name=p_n1_n1_1, value=http://rdfs/label)\r\n"
+				 		+ "      Variable (name=n1_1, value=\"Calc2Graph1\")\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -389,35 +389,35 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         Join\r\n"
-				+ "            Join\r\n"
-				+ "               StatementPattern\r\n"
-				+ "                  Variable (name=r1)\r\n"
-				+ "                  Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "                  Variable (name=n0)\r\n"
-				+ "               StatementPattern\r\n"
-				+ "                  Variable (name=r1)\r\n"
-				+ "                  Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "                  Variable (name=p0_1, value=http://default/appearsOn)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_0_1, value=http://rdfs/label)\r\n"
-				+ "            Variable (name=n1_1, value=\"eastman3d\")\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "         Variable (name=p0_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
-				+ "         Variable (name=n0_1, value=http://default/Location)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=r1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/lat)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Join\r\n"
+				 		+ "      Join\r\n"
+				 		+ "         Join\r\n"
+				 		+ "            Join\r\n"
+				 		+ "               StatementPattern\r\n"
+				 		+ "                  Variable (name=r1)\r\n"
+				 		+ "                  Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+				 		+ "                  Variable (name=n0)\r\n"
+				 		+ "               StatementPattern\r\n"
+				 		+ "                  Variable (name=r1)\r\n"
+				 		+ "                  Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+				 		+ "                  Variable (name=p_n0_r1, value=http://default/appearsOn)\r\n"
+				 		+ "            StatementPattern\r\n"
+				 		+ "               Variable (name=r1)\r\n"
+				 		+ "               Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+				 		+ "               Variable (name=n1)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "            Variable (name=p_n1_n1_1, value=http://rdfs/label)\r\n"
+				 		+ "            Variable (name=n1_1, value=\"eastman3d\")\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=r1)\r\n"
+				 		+ "         Variable (name=p_r1_n0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
+				 		+ "         Variable (name=n0_1, value=http://default/Location)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=r1)\r\n"
+				 		+ "      Variable (name=p_r1_n2, value=http://default/lat)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -431,30 +431,30 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         Join\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "               Variable (name=n0)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "               Variable (name=p0_1, value=http://default/appearsOn)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "         Variable (name=p0_0_1, value=http://default/location.Map)\r\n"
-				+ "         Variable (name=n0_1, value=http://id/Calc2Graph2)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=r1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/long)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Join\r\n"
+				 		+ "      Join\r\n"
+				 		+ "         Join\r\n"
+				 		+ "            StatementPattern\r\n"
+				 		+ "               Variable (name=r1)\r\n"
+				 		+ "               Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+				 		+ "               Variable (name=n0)\r\n"
+				 		+ "            StatementPattern\r\n"
+				 		+ "               Variable (name=r1)\r\n"
+				 		+ "               Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+				 		+ "               Variable (name=p_n0_r1, value=http://default/appearsOn)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+				 		+ "            Variable (name=n1)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=r1)\r\n"
+				 		+ "         Variable (name=p_r1_n0_1, value=http://default/location.Map)\r\n"
+				 		+ "         Variable (name=n0_1, value=http://id/Calc2Graph2)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=r1)\r\n"
+				 		+ "      Variable (name=p_r1_n2, value=http://default/long)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -468,25 +468,25 @@ class PathPatternQueryExpressionTests {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "            Variable (name=n0)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "            Variable (name=p0_1, value=http://default/appearsOn)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=r1)\r\n"
-				+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=r1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/lat)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Join\r\n"
+				 		+ "      Join\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "            Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+				 		+ "            Variable (name=n0)\r\n"
+				 		+ "         StatementPattern\r\n"
+				 		+ "            Variable (name=r1)\r\n"
+				 		+ "            Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+				 		+ "            Variable (name=p_n0_r1, value=http://default/appearsOn)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=r1)\r\n"
+				 		+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=r1)\r\n"
+				 		+ "      Variable (name=p_r1_n2, value=http://default/lat)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}
 	
 	/**
@@ -512,20 +512,20 @@ class PathPatternQueryExpressionTests {
 			//Query.assertEqualsWOSpaces 
 			assertEquals
 			 ("Join\r\n"
-					+ "   Join\r\n"
-					+ "      StatementPattern\r\n"
-					+ "         Variable (name=rnull)\r\n"
-					+ "         Variable (name=subjectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-					+ "         Variable (name=nnull)\r\n"
-					+ "      StatementPattern\r\n"
-					+ "         Variable (name=rnull)\r\n"
-					+ "         Variable (name=propertynull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-					+ "         Variable (name=pnull_null, value=http://default/appearsOn)\r\n"
-					+ "   StatementPattern\r\n"
-					+ "      Variable (name=rnull)\r\n"
-					+ "      Variable (name=objectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-					+ "      Variable (name=nnull, value=http://id/Calc2Graph2)\r\n"
-					+ "" ,element.pathPatternQuery(thing).toString());
+			 		+ "   Join\r\n"
+			 		+ "      StatementPattern\r\n"
+			 		+ "         Variable (name=rnull)\r\n"
+			 		+ "         Variable (name=subjectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+			 		+ "         Variable (name=nnull)\r\n"
+			 		+ "      StatementPattern\r\n"
+			 		+ "         Variable (name=rnull)\r\n"
+			 		+ "         Variable (name=propertynull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+			 		+ "         Variable (name=p_nnull_rnull, value=http://default/appearsOn)\r\n"
+			 		+ "   StatementPattern\r\n"
+			 		+ "      Variable (name=rnull)\r\n"
+			 		+ "      Variable (name=objectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+			 		+ "      Variable (name=nnull, value=http://id/Calc2Graph2)\r\n"
+			 		+ "" ,element.pathPatternQuery(thing).toString());
 		}catch(Exception e){
 			Query.assertEqualsWOSpaces ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
 		}
@@ -554,27 +554,22 @@ class PathPatternQueryExpressionTests {
 			//Query.assertEqualsWOSpaces 
 			assertEquals
 			 ("Join\r\n"
-					+ "   Join\r\n"
-					+ "      StatementPattern\r\n"
-					+ "         Variable (name=r1)\r\n"
-					+ "         Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-					+ "         Variable (name=n0)\r\n"
-					+ "      StatementPattern\r\n"
-					+ "         Variable (name=r1)\r\n"
-					+ "         Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-					+ "         Variable (name=p0_1, value=http://default/appearsOn)\r\n"
-					+ "   Join\r\n"
-					+ "      StatementPattern\r\n"
-					+ "         Variable (name=r1)\r\n"
-					+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-					+ "         Variable (name=r1, value=http://id/Calc2Graph1)\r\n"
-					+ "      StatementPattern\r\n"
-					+ "         Variable (name=r1)\r\n"
-					+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-					+ "         Variable (name=n1, value=http://id/Calc2Graph2)\r\n"
-					+ "" ,element.pathPatternQuery(thing).toString());
+			 		+ "   Join\r\n"
+			 		+ "      StatementPattern\r\n"
+			 		+ "         Variable (name=r1)\r\n"
+			 		+ "         Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+			 		+ "         Variable (name=n0)\r\n"
+			 		+ "      StatementPattern\r\n"
+			 		+ "         Variable (name=r1)\r\n"
+			 		+ "         Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+			 		+ "         Variable (name=p_n0_r1, value=http://default/appearsOn)\r\n"
+			 		+ "   StatementPattern\r\n"
+			 		+ "      Variable (name=r1)\r\n"
+			 		+ "      Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+			 		+ "      Variable (name=n1, value=http://id/Calc2Graph1)\r\n"
+			 		+ "" ,element.pathPatternQuery(thing).toString());
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
@@ -590,17 +585,17 @@ void test_14() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 /**
@@ -615,17 +610,17 @@ void test_15() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -640,17 +635,17 @@ void test_16() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -666,22 +661,22 @@ void test_17() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "         Variable (name=n0)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "      Variable (name=p2_3, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n3)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   Join\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "         Variable (name=n0)\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n2)\r\n"
+						+ "      Variable (name=p_n2_n3, value=http://default/massThroughput)\r\n"
+						+ "      Variable (name=n3)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -697,12 +692,12 @@ void test_18() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Variable (name=n0)\r\n"
+				 		+ "   Variable (name=p_n0_n1)\r\n"
+				 		+ "   Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 /**
@@ -717,22 +712,22 @@ void test_19() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "         Variable (name=n0)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "      Variable (name=p2_3)\r\n"
-				+ "      Variable (name=n3)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Join\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "         Variable (name=n0)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+				 		+ "         Variable (name=n2)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "      Variable (name=p_n2_n3)\r\n"
+				 		+ "      Variable (name=n3)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -748,22 +743,22 @@ void test_20() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   Join\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "         Variable (name=n0)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "      Variable (name=p2_3, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n3)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   Join\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "         Variable (name=n0)\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n2)\r\n"
+						+ "      Variable (name=p_n2_n3, value=http://default/massThroughput)\r\n"
+						+ "      Variable (name=n3)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -779,17 +774,17 @@ void test_21() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "      Variable (name=p0_1)\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_2, value=http://default/massThroughput)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "      Variable (name=p_n0_n1)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -805,17 +800,17 @@ void test_22() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_2)\r\n"
-				+ "      Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n1_n2)\r\n"
+				 		+ "      Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -831,22 +826,22 @@ void test_23() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   Union\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/massFlow)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/volumeFlow)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "   Union\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p_n1_n2, value=http://default/massFlow)\r\n"
+				 		+ "         Variable (name=n2)\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=n1)\r\n"
+				 		+ "         Variable (name=p_n1_n2, value=http://default/volumeFlow)\r\n"
+				 		+ "         Variable (name=n2)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -862,27 +857,27 @@ void test_24() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   Union\r\n"
-				+ "      Union\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_2, value=http://default/massFlow)\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_2, value=http://default/volumeFlow)\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/density)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "   Union\r\n"
+						+ "      Union\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p_n1_n2, value=http://default/massFlow)\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p_n1_n2, value=http://default/volumeFlow)\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2, value=http://default/density)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -898,32 +893,32 @@ void test_25() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   Union\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2, value=http://default/temp)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "      Union\r\n"
-				+ "         Union\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_2, value=http://default/massFlow)\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_2)\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_2)\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "   Union\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2, value=http://default/temp)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "      Union\r\n"
+						+ "         Union\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n2, value=http://default/massFlow)\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p1_2)\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p1_2)\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -939,32 +934,32 @@ void test_26() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "   Union\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "      Union\r\n"
-				+ "         Union\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_2, value=http://default/massFlow)\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_2, value=http://default/volumeFlow)\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_2, value=http://default/density)\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "   Union\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "      Union\r\n"
+						+ "         Union\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n2, value=http://default/massFlow)\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n2, value=http://default/volumeFlow)\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p_n1_n2, value=http://default/density)\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -980,41 +975,41 @@ void test_27() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
-				+ "   Union\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n0)\r\n"
-				+ "         Variable (name=p0_1)\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "      Filter\r\n"
-				+ "         Compare (!=)\r\n"
-				+ "            Variable (name=p0_1)\r\n"
-				+ "            Variable (name=p2, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p0_1)\r\n"
-				+ "            Variable (name=n0)\r\n"
-				+ "   Union\r\n"
-				+ "      StatementPattern\r\n"
-				+ "         Variable (name=n1)\r\n"
-				+ "         Variable (name=p1_2)\r\n"
-				+ "         Variable (name=n2)\r\n"
-				+ "      Union\r\n"
-				+ "         Union\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_2, value=http://default/massFlow)\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n1)\r\n"
-				+ "               Variable (name=p1_2, value=http://default/volumeFlow)\r\n"
-				+ "               Variable (name=n2)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=p1_2, value=http://default/density)\r\n"
-				+ "            Variable (name=n2)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   Union\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n0)\r\n"
+						+ "         Variable (name=p_n0_n1)\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "      Filter\r\n"
+						+ "         Compare (!=)\r\n"
+						+ "            Variable (name=p0_1)\r\n"
+						+ "            Variable (name=p2, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p0_1)\r\n"
+						+ "            Variable (name=n0)\r\n"
+						+ "   Union\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=n1)\r\n"
+						+ "         Variable (name=p_n1_n2)\r\n"
+						+ "         Variable (name=n2)\r\n"
+						+ "      Union\r\n"
+						+ "         Union\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n2, value=http://default/massFlow)\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n1)\r\n"
+						+ "               Variable (name=p_n1_n2, value=http://default/volumeFlow)\r\n"
+						+ "               Variable (name=n2)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=p_n1_n2, value=http://default/density)\r\n"
+						+ "            Variable (name=n2)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1030,42 +1025,42 @@ void test_28() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Union\r\n"
-				+ "   Join\r\n"
-				+ "      Join\r\n"
-				+ "         Union\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "               Variable (name=n0)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=n0)\r\n"
-				+ "               Variable (name=isSubjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "         Union\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "               Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "               Variable (name=p0_1, value=http://default/density)\r\n"
-				+ "            StatementPattern\r\n"
-				+ "               Variable (name=p0_1, value=http://default/density)\r\n"
-				+ "               Variable (name=isPropertyOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
-				+ "               Variable (name=r1)\r\n"
-				+ "      Union\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "         StatementPattern\r\n"
-				+ "            Variable (name=n1)\r\n"
-				+ "            Variable (name=isObjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
-				+ "            Variable (name=r1)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/density)\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   Join\r\n"
+						+ "      Join\r\n"
+						+ "         Union\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=r1)\r\n"
+						+ "               Variable (name=subject1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+						+ "               Variable (name=n0)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=n0)\r\n"
+						+ "               Variable (name=isSubjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
+						+ "               Variable (name=r1)\r\n"
+						+ "         Union\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=r1)\r\n"
+						+ "               Variable (name=property1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+						+ "               Variable (name=p_n0_n1, value=http://default/density)\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=p_n0_n1, value=http://default/density)\r\n"
+						+ "               Variable (name=isPropertyOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate)\r\n"
+						+ "               Variable (name=r1)\r\n"
+						+ "      Union\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=r1)\r\n"
+						+ "            Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=n1)\r\n"
+						+ "            Variable (name=isObjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
+						+ "            Variable (name=r1)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/density)\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1081,14 +1076,14 @@ void test_29() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" 
+						+ "   Variable (name=n0)\r\n"
+						+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "   Variable (name=n1)\r\n"
+						+ "" 
 				,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("BIND(<http://default/Unit1> as ?n0)\n"	+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1104,14 +1099,14 @@ void test_30() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Variable (name=n0)\r\n"
+				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "   Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1127,13 +1122,13 @@ void test_31() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Variable (name=n0)\r\n"
+				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "   Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1149,13 +1144,13 @@ void test_32() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Variable (name=n0)\r\n"
+				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "   Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1171,14 +1166,14 @@ void test_33() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+						+ "   Variable (name=n0)\r\n"
+						+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "   Variable (name=n1)\r\n"
+						+ "" ,element.pathPatternQuery(thing).toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1194,12 +1189,12 @@ void test_34() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
-				+ "   Variable (name=n0)\r\n"
-				+ "   Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "   Variable (name=n1)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   Variable (name=n0)\r\n"
+				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "   Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -1213,17 +1208,17 @@ void test_35() {
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n0)\r\n"
-				+ "      Variable (name=p0_1, value=http://default/hasProductBatteryLimit)\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "   StatementPattern\r\n"
-				+ "      Variable (name=n1)\r\n"
-				+ "      Variable (name=p1_0_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
-				+ "      Variable (name=n1_1, value=http://default/BatteryLimit)\r\n"
-				+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "      Variable (name=p_n1_n1_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
+				 		+ "      Variable (name=n1_1, value=http://default/BatteryLimit)\r\n"
+				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 @Test 
@@ -1240,7 +1235,7 @@ void test_36() {
 				 		+ "      ValueConstant (value=\"1.7\")\r\n"
 				 		+ "   StatementPattern\r\n"
 				 		+ "      Variable (name=n0)\r\n"
-				 		+ "      Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
@@ -1263,15 +1258,15 @@ void test_37() {
 				 		+ "      Join\r\n"
 				 		+ "         StatementPattern\r\n"
 				 		+ "            Variable (name=n0)\r\n"
-				 		+ "            Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "            Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "            Variable (name=n1)\r\n"
 				 		+ "         StatementPattern\r\n"
 				 		+ "            Variable (name=n1)\r\n"
-				 		+ "            Variable (name=p1_0_1, value=http://default/hasHeight)\r\n"
+				 		+ "            Variable (name=p_n1_n1_1, value=http://default/hasHeight)\r\n"
 				 		+ "            Variable (name=n1_1)\r\n"
 				 		+ "   StatementPattern\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "      Variable (name=p1_2, value=http://default/hasBMI)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/hasBMI)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
 				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
@@ -1292,7 +1287,7 @@ void test_38() {
 				 		+ "      ValueConstant (value=\"1.7\")\r\n"
 				 		+ "   StatementPattern\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "      Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "      Variable (name=n0)\r\n"
 				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
@@ -1315,15 +1310,15 @@ void test_39() {
 				 		+ "      Join\r\n"
 				 		+ "         StatementPattern\r\n"
 				 		+ "            Variable (name=n1)\r\n"
-				 		+ "            Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "            Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "            Variable (name=n0)\r\n"
 				 		+ "         StatementPattern\r\n"
 				 		+ "            Variable (name=n1)\r\n"
-				 		+ "            Variable (name=p0_0_1, value=http://default/hasHeight)\r\n"
+				 		+ "            Variable (name=p_n1_n0_1, value=http://default/hasHeight)\r\n"
 				 		+ "            Variable (name=n0_1)\r\n"
 				 		+ "   StatementPattern\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "      Variable (name=p1_2, value=http://default/hasBMI)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/hasBMI)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
 				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
@@ -1342,15 +1337,15 @@ void test_40() {
 				 		+ "   Join\r\n"
 				 		+ "      StatementPattern\r\n"
 				 		+ "         Variable (name=n1)\r\n"
-				 		+ "         Variable (name=p0_1, value=http://rdf/type)\r\n"
+				 		+ "         Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "         Variable (name=n0)\r\n"
 				 		+ "      StatementPattern\r\n"
 				 		+ "         Variable (name=n1)\r\n"
-				 		+ "         Variable (name=p0_0_1, value=http://default/hasLocation)\r\n"
+				 		+ "         Variable (name=p_n1_n0_1, value=http://default/hasLocation)\r\n"
 				 		+ "         Variable (name=n0_1, value=http://default/Tideswell)\r\n"
 				 		+ "   StatementPattern\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "      Variable (name=p0_0_1, value=http://default/hasGender)\r\n"
+				 		+ "      Variable (name=p_n1_n0_1, value=http://default/hasGender)\r\n"
 				 		+ "      Variable (name=n0_1, value=http://default/Male)\r\n"
 				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){
@@ -1369,15 +1364,15 @@ void test_41() {
 				 		+ "   Join\r\n"
 				 		+ "      StatementPattern\r\n"
 				 		+ "         Variable (name=n1)\r\n"
-				 		+ "         Variable (name=p0_1, value=http://default/measurementOf)\r\n"
+				 		+ "         Variable (name=p_n0_n1, value=http://default/measurementOf)\r\n"
 				 		+ "         Variable (name=n0)\r\n"
 				 		+ "      StatementPattern\r\n"
 				 		+ "         Variable (name=n1)\r\n"
-				 		+ "         Variable (name=p0_0_1, value=http://default/hasOrdinal)\r\n"
+				 		+ "         Variable (name=p_n1_n0_1, value=http://default/hasOrdinal)\r\n"
 				 		+ "         Variable (name=n0_1)\r\n"
 				 		+ "   StatementPattern\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "      Variable (name=p1_2, value=http://default/hasBMI)\r\n"
+				 		+ "      Variable (name=p_n1_n2, value=http://default/hasBMI)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
 				 		+ "" ,element.pathPatternQuery(thing).toString());
 	}catch(Exception e){

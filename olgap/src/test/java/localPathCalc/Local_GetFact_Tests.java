@@ -5,6 +5,7 @@ package localPathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,7 +85,7 @@ class Local_GetFact_Tests {
 				break;
 			}
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -113,7 +114,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact(":volumeFlow");
 			assertEquals("40", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -128,7 +129,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact(":hasFeedBatteryLimit/:volumeFlow");
 			assertEquals("59", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -142,7 +143,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact(":long");
 			assertEquals("501", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -169,7 +170,7 @@ class Local_GetFact_Tests {
 			;
 			assertEquals(0.0, fact);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -186,7 +187,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact(":massThroughput");
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -208,7 +209,7 @@ class Local_GetFact_Tests {
 			else
 				fail();
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -225,7 +226,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massFlow>");
 			assertEquals("10.0", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -242,7 +243,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massThroughput>");
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -260,7 +261,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -278,7 +279,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("0.7368421", result.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -295,7 +296,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("38.0", result.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -312,7 +313,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -330,7 +331,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -348,7 +349,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -368,7 +369,7 @@ class Local_GetFact_Tests {
 				assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
 
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -385,7 +386,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("501", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -403,7 +404,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL2", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -421,7 +422,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("http://inova8.com/calc2graph/id/BatteryLimit2", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -439,7 +440,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -457,7 +458,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -475,7 +476,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("400", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -493,7 +494,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("501", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -511,7 +512,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("502", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -529,7 +530,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("http://inova8.com/calc2graph/id/Location_BL1_2", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -547,7 +548,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -566,7 +567,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("37.99999952316284", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -584,7 +585,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("24.77999922633171", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -602,7 +603,7 @@ class Local_GetFact_Tests {
 
 			assertEquals("-13.220000296831131", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -620,7 +621,7 @@ class Local_GetFact_Tests {
 				assertEquals(".42", result.stringValue());
 			}
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
@@ -639,7 +640,7 @@ class Local_GetFact_Tests {
 				assertEquals(".42", result.stringValue());
 			}
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	
@@ -657,7 +658,7 @@ class Local_GetFact_Tests {
 			Resource result = _this.getFact("<http://inova8.com/calc2graph/def/massYield>");
 			assertEquals("0.26315789803903855", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		} 
 	}
@@ -681,7 +682,7 @@ class Local_GetFact_Tests {
 			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>",customQueryOptions);
 			assertEquals("42", result.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		} 
 	}
@@ -700,12 +701,17 @@ class Local_GetFact_Tests {
 			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
 
 			Literal time = literal(42);
-	
+			Literal time1 = literal(41);			
+			
+			CustomQueryOptions customQueryOptions=new CustomQueryOptions();
+			customQueryOptions.add("time",time);
 			Thing myCountry1 = graph.getThing( ":Country1");
-			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>[eq %1; gt %2]",time);
+			Resource result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>[eq %1; gt %2]",customQueryOptions, time,time1);
+			assertEquals("42", result.stringValue());
+			 result = myCountry1.getFact("<http://inova8.com/calc2graph/def/time>[eq %1; gt %2]",customQueryOptions,time);
 			assertEquals("42", result.stringValue());
 		} catch (Exception e) {
-			e.printStackTrace();
+			assertEquals("", e.getMessage());
 		} 
 	}
 	/**
@@ -720,8 +726,8 @@ class Local_GetFact_Tests {
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":Country1");
-			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
-
+			//TODO myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
+			myCountry.addFact(":time", "42 ;", SCRIPT.GROOVY);
 			Literal time = literal(42);
 	
 			Thing myCountry1 = graph.getThing( ":Country1");

@@ -19,7 +19,7 @@ public class ScriptFailedException extends HandledException{
 	 * @param code the code
 	 * @param e the e
 	 */
-	public ScriptFailedException( ScriptException e) {
+	public ScriptFailedException( HandledException e) {
 		super(SCRIPTFAILED_EXCEPTION, e);
 	}
 
@@ -42,6 +42,10 @@ public class ScriptFailedException extends HandledException{
 	 */
 	public ScriptFailedException( String message) {
 		super(SCRIPTFAILED_EXCEPTION, message);
+	}
+
+	public ScriptFailedException(ScriptException e) {
+		super(SCRIPTFAILED_EXCEPTION, e);
 	}
 
 }

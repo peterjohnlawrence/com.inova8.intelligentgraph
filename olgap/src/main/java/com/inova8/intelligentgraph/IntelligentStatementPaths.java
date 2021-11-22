@@ -115,17 +115,8 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		PathBinding thisPathBinding =pathTupleExpr.getPath();
 		
 		for(EdgeBinding edge: thisPathBinding) {
-			ModelBuilder pathModelBuilder = builder.subject("urn://path/"+bindingset.hashCode());
-			String edgeCode = "urn://edge/"+bindingset.hashCode()+"/"+ edge.toString().hashCode();
-			pathModelBuilder.add(PATHQL.path_Edge, edgeCode);
-			ModelBuilder subject = builder.subject(edgeCode);
-			subject.add(RDF.TYPE ,PATHQL.EDGE);
-			subject.add(PATHQL.edge_Source , bindingset.getBinding(edge.getSourceVariable().getName()).getValue());
-			subject.add(PATHQL.edge_Predicate , bindingset.getBinding(edge.getPredicateVariable().getName()).getValue());
-			subject.add(PATHQL.edge_Target , bindingset.getBinding(edge.getTargetVariable().getName()).getValue());
-			subject.add(PATHQL.edge_Direction ,edge.getDirection());
-			if(edge.getIsDereified()!=null) subject.add(PATHQL.edge_Dereified , edge.getIsDereified());
-			if(edge.getReification()!=null) subject.add(PATHQL.edge_Reification , edge.getReification());			
+			edge.addEdgeToPathModel(builder,bindingset);
+					
 		}
 		Model pathModel = builder.build();
 		OutputStream pathJSON = new ByteArrayOutputStream();

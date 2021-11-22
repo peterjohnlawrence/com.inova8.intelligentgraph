@@ -188,7 +188,7 @@ class Local_GetPath_Tests {
 					+ "]\r\n"
 					+ "", path.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -207,7 +207,7 @@ class Local_GetPath_Tests {
 						+ "", path.toString());
 
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

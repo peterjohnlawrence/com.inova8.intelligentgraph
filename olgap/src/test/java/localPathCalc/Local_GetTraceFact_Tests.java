@@ -82,7 +82,7 @@ class Local_GetTraceFact_Tests {
 						trace.asHTML());
 				assertEquals("37.99999952316284", result2.stringValue());
 			} catch (Exception e) {
-				fail();
+				assertEquals("", e.getMessage());
 				e.printStackTrace();
 			}
 	
@@ -104,7 +104,7 @@ class Local_GetTraceFact_Tests {
 				("1.Gettingfacts':volumeFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>2....withincontexts:[file://src/test/resources/calc2graph.def.ttl,file://src/test/resources/calc2graph.data.ttl]1.EvaluatingpredicatevolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>,byinvokingjavascriptscript2.59;3.EvaluatedvolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>3.CalculatedvolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>4.RetrievedcachedvaluevolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>5.Returnedfact'http://inova8.com/calc2graph/def/volumeFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>"
 						, trace.asText());
 			} catch (Exception e) {
-				fail();
+				assertEquals("", e.getMessage());
 				e.printStackTrace();
 			}
 	
@@ -131,7 +131,7 @@ class Local_GetTraceFact_Tests {
 							, trace.asHTML());
 				source.clearCache();
 			} catch (Exception e) {
-				fail();
+				assertEquals("", e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -157,7 +157,7 @@ class Local_GetTraceFact_Tests {
 				("1.Gettingfacts':massFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>2....withincontexts:[file://src/test/resources/calc2graph.def.ttl,file://src/test/resources/calc2graph.data.ttl]3.RedirectingevaluationofpredicatemassFlow<http://inova8.com/calc2graph/def/massFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>,to<http://inova8.com/calc2graph/id/calculateMassFlow>script1.EvaluatingpredicatemassFlow<http://inova8.com/calc2graph/def/massFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>,byinvokinggroovyscript2.varresult=_this.getFact(\":volumeFlow\").floatValue()*_this.getFact(\":Attribute@:density\").floatValue();result;1.Gettingfacts':volumeFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>1.EvaluatingpredicatevolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>,byinvokingjavascriptscript2.59;3.EvaluatedvolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>2.CalculatedvolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>3.RetrievedcachedvaluevolumeFlow<http://inova8.com/calc2graph/def/volumeFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>4.Nextfact'http://inova8.com/calc2graph/def/volumeFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=595.Returnedfact':volumeFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=59^^int<http://www.w3.org/2001/XMLSchema#int>6.Gettingfacts':Attribute@:density'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>7.Nextfact'http://inova8.com/calc2graph/def/density'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=.428.Returnedfact':Attribute@:density'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=.42^^string<http://www.w3.org/2001/XMLSchema#string>3.EvaluatedmassFlow<http://inova8.com/calc2graph/def/massFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=24.77999922633171^^double<http://www.w3.org/2001/XMLSchema#double>4.CalculatedmassFlow<http://inova8.com/calc2graph/def/massFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=24.77999922633171^^double<http://www.w3.org/2001/XMLSchema#double>5.RetrievedcachedvaluemassFlow<http://inova8.com/calc2graph/def/massFlow>ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=24.77999922633171^^double<http://www.w3.org/2001/XMLSchema#double>6.Returnedfact'http://inova8.com/calc2graph/def/massFlow'ofBatteryLimit1<http://inova8.com/calc2graph/id/BatteryLimit1>=24.77999922633171^^double<http://www.w3.org/2001/XMLSchema#double>"
 						, renderedTrace.asText());
 			} catch (Exception e) {
-				fail();
+				assertEquals("", e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -198,7 +198,7 @@ class Local_GetTraceFact_Tests {
 			}
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		} 
 	}

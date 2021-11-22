@@ -13,7 +13,7 @@ import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.Edge;
-import com.inova8.intelligentgraph.path.EdgeBinding;
+import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
@@ -585,6 +585,7 @@ public class PredicateElement extends PathElement {
 		
 		if(getCardinality(pathIteration)>0) {
 			Variable intermediateSourceVariable = null ;
+			Variable intermediatePredicateVariable = null ;
 			Variable intermediateTargetVariable = null;
 			Variable priorIntermediateTargetVariable = null ;
 			Variable intermediateReificationVariable  = null ;
@@ -604,7 +605,8 @@ public class PredicateElement extends PathElement {
 				}else {
 					intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
 				}
-				predicatePattern = pathReifiedPredicatePatternTupleExpr(thing, predicatePattern,intermediateSourceVariable, intermediateTargetVariable, intermediateReificationVariable,customQueryOptions);
+				intermediatePredicateVariable = new Variable("p_"+ sourceVariable.getName()+"_"+targetVariable.getName());
+				predicatePattern = pathReifiedPredicatePatternTupleExpr(thing, predicatePattern,intermediateSourceVariable, intermediatePredicateVariable, intermediateTargetVariable, intermediateReificationVariable,customQueryOptions);
 			}
 			//predicatePattern.getPath().addAll(getPathBindings().get(pathIteration));
 			return predicatePattern;
@@ -612,14 +614,15 @@ public class PredicateElement extends PathElement {
 			return null;
 		}
 	}
-	private PathTupleExpr pathReifiedPredicatePatternTupleExpr(Thing thing, PathTupleExpr predicatePattern, Variable sourceVariable, Variable targetVariable,Variable reificationVariable,CustomQueryOptions customQueryOptions) {
+	private PathTupleExpr pathReifiedPredicatePatternTupleExpr(Thing thing, PathTupleExpr predicatePattern, Variable sourceVariable, Variable intermediatePredicateVariable, Variable targetVariable,Variable reificationVariable,CustomQueryOptions customQueryOptions) {
 		ArrayList<Variable> targetVariables = new ArrayList<Variable>();
 		if (objectFilterElement != null)
 			targetVariables = objectFilterElement.bindTargetVariable(targetVariable);
 		if (targetVariables.size() == 0)
 			targetVariables.add(getTargetObject());
 		TupleExpr reifiedPredicatePattern = null;
-		Variable predicateVariable = getPredicateVariable();
+		intermediatePredicateVariable.setValue(getPredicate());
+		Variable predicateVariable = intermediatePredicateVariable;//getPredicateVariable();
 		IRI subject = getReifications().getReificationSubject(reification);
 		IRI isSubjectOf = getReifications().getReificationIsSubjectOf(reification);
 		IRI property = getReifications().getReificationPredicate(reification);
@@ -757,13 +760,13 @@ public class PredicateElement extends PathElement {
 		if (statementFilterElement != null) {
 			reifiedPredicatePattern =   statementFilterElement.filterExpression(  thing,reificationVariable,null,reifiedPredicatePattern,customQueryOptions).getTupleExpr(); 
 		}
-		EdgeBinding edge = new EdgeBinding(sourceVariable,getReification(), predicateVariable, targetVariable, getIsInverseOf(), getIsDereified());	
+		StatementBinding statementBinding = new StatementBinding(sourceVariable,getReification(), predicateVariable, targetVariable, getIsInverseOf(), getIsDereified());	
 		if(predicatePattern==null) {
 			predicatePattern= new PathTupleExpr(reifiedPredicatePattern); 
 		}else{
 			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), reifiedPredicatePattern));
 		}
-		predicatePattern.getPath().add(edge);
+		predicatePattern.getPath().add(statementBinding);
 		return predicatePattern;
 	}
 
@@ -771,37 +774,34 @@ public class PredicateElement extends PathElement {
 		PathTupleExpr predicatePattern = null;
 		if(getCardinality(pathIteration)>0) {
 			Variable intermediateSourceVariable = null ;
+			Variable intermediatePredicateVariable = null ;
 			Variable intermediateTargetVariable = null;
 			Variable priorIntermediateTargetVariable = null ;
 			for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
 				if( iteration==1) {
 					intermediateSourceVariable = sourceVariable;
 				}
-				if(iteration<getCardinality(pathIteration)) {
-					
-					 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
-					
+				if(iteration<getCardinality(pathIteration)) {				
+					 if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;				
 					intermediateTargetVariable = new Variable(targetVariable.getName()+"_i"+iteration);
-					priorIntermediateTargetVariable = intermediateTargetVariable;
-					
+					priorIntermediateTargetVariable = intermediateTargetVariable;				
 				}
 				if( iteration==getCardinality(pathIteration)) {
 					if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 					intermediateTargetVariable = targetVariable;
 				}
-				predicatePattern = pathPredicatePatternTupleExpr(thing, predicatePattern, intermediateSourceVariable,
+				 intermediatePredicateVariable = new Variable("p_"+ sourceVariable.getName()+"_"+targetVariable.getName());
+				predicatePattern = pathPredicatePatternTupleExpr(thing, predicatePattern, intermediateSourceVariable,intermediatePredicateVariable,
 						intermediateTargetVariable,customQueryOptions);
 			}
-		//	predicatePattern.setPath(getPathBindings().get(pathIteration));
 			return predicatePattern;
 		}else {
 			return null;
-			//return new SameTerm(sourceVariable,targetVariable);
 		}
 	}
 
 	private PathTupleExpr pathPredicatePatternTupleExpr(Thing thing, PathTupleExpr predicatePattern,
-			Variable intermediateSourceVariable, Variable intermediateTargetVariable,CustomQueryOptions customQueryOptions) {
+			Variable intermediateSourceVariable, Variable intermediatePredicateVariable, Variable intermediateTargetVariable,CustomQueryOptions customQueryOptions) {
 		TupleExpr intermediatePredicatePattern;
 		Variable predicateVariable ;
 		if (isNegated) {
@@ -818,7 +818,8 @@ public class PredicateElement extends PathElement {
 						intermediateTargetVariable);
 			}
 		} else {
-			predicateVariable = new Variable(getPredicateSPARQLVariable(), predicate);
+			intermediatePredicateVariable.setValue(predicate);
+			predicateVariable = intermediatePredicateVariable;// Variable(getPredicateSPARQLVariable(), predicate);
 
 			if (isInverseOf) {
 				intermediatePredicatePattern = new StatementPattern(intermediateTargetVariable, predicateVariable,
@@ -832,14 +833,16 @@ public class PredicateElement extends PathElement {
 		if (objectFilterElement != null) {
 			intermediatePredicatePattern = (TupleExpr) objectFilterElement.filterExpression( thing,intermediateTargetVariable,null,intermediatePredicatePattern,customQueryOptions).getTupleExpr();
 		}	
-		EdgeBinding edge = new EdgeBinding(intermediateSourceVariable, predicateVariable, intermediateTargetVariable, getIsInverseOf());	
+		//EdgeBinding 
+		statementBinding = new StatementBinding(intermediateSourceVariable, predicateVariable, intermediateTargetVariable, getIsInverseOf());	
 		
 		if(predicatePattern==null) {
 			predicatePattern = new PathTupleExpr(intermediatePredicatePattern);
+			predicatePattern.setStatementBinding(statementBinding);
 		}else{
 			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), intermediatePredicatePattern));
 		}
-		predicatePattern.getPath().add(edge);
+		predicatePattern.getPath().add(statementBinding);
 		return predicatePattern;
 	}
 	/**
@@ -906,7 +909,7 @@ public class PredicateElement extends PathElement {
 		return pathBinding;
 	}
 	private PathBinding visitReifiedPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
-		EdgeBinding predicateEdge;
+		StatementBinding predicateEdge;
 		Variable sourceVariable = this.getSourceVariable();
 		Variable targetVariable = this.getTargetVariable();	
 		//Variable reificationVariable= this.getReifiedVariable();
@@ -931,13 +934,13 @@ public class PredicateElement extends PathElement {
 			}else {
 			//	intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
 			}
-			predicateEdge = new EdgeBinding( intermediateSourceVariable, this.reification, getPredicateVariable(), intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
+			predicateEdge = new StatementBinding( intermediateSourceVariable, this.reification, getPredicateVariable(), intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
 			pathBinding.add(predicateEdge);
 		}
 		return pathBinding;
 	}
 	private PathBinding visitPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
-		EdgeBinding predicateEdge;
+		StatementBinding predicateEdge;
 		Variable sourceVariable = this.getSourceVariable();
 		Variable targetVariable = this.getTargetVariable();		
 		
@@ -960,7 +963,7 @@ public class PredicateElement extends PathElement {
 				if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 				intermediateTargetVariable = targetVariable;
 			}
-			predicateEdge = new EdgeBinding( intermediateSourceVariable,getPredicateVariable(), intermediateTargetVariable,getIsInverseOf());
+			predicateEdge = new StatementBinding( intermediateSourceVariable,getPredicateVariable(), intermediateTargetVariable,getIsInverseOf());
 			pathBinding.add(predicateEdge);
 		}
 		return pathBinding;

@@ -24,6 +24,7 @@ import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.algebra.evaluation.impl.StrictEvaluationStrategy;
 import org.eclipse.rdf4j.query.algebra.helpers.VarNameCollector;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.eclipse.rdf4j.sail.NotifyingSailConnection;
 import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.UpdateContext;
@@ -79,11 +80,28 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		return intelligentGraphSail;
 	}
 	@Override
-	public void clear(Resource... contexts) throws SailException {
-		super.clear(contexts);
+	public synchronized void clear(Resource... contexts) throws SailException {
+		boolean local =  startLocalTransaction();
+		//TODO clear(contexts) fails to commit the chnages to the named graph, so removeStatements used instead
+		//getWrappedConnection(). clear(contexts);
+		removeStatements(null,null,null,contexts);
+		conditionalCommit(local);
 		this.intelligentGraphSail.setContextsAreLazyLoaded(false);
 	}
 
+	protected final boolean startLocalTransaction() throws RepositoryException {
+		if (!isActive()) {
+			begin();
+			return true;
+		}
+		return false;
+	}
+
+	protected final void conditionalCommit(boolean condition) throws RepositoryException {
+		if (condition) {
+			commit();
+		}
+	}
 	@Override
 	public void setNamespace(String prefix, String name) throws SailException {
 		this.intelligentGraphSail.setPrefixesAreLazyLoaded(false);
@@ -114,9 +132,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	@Override
 	public void removeStatements(Resource subj, IRI pred, Value obj, Resource... contexts) throws SailException {
-	//	this.intelligentGraphSail.clearCache();
-	//	super.removeStatements(subj, pred, obj, contexts);
-	//	removeStatement(null,subj, pred, obj, contexts);
 		try {
 		if(pred!=null)
 			switch (pred.stringValue()){
@@ -136,9 +151,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	@Override
 	public void removeStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
 			throws SailException {
-	 //	this.intelligentGraphSail.clearCache();
-	//	super.removeStatement(modify, subj, pred, obj, contexts);
-		
 		try {
 		if(pred!=null)
 			switch (pred.stringValue()){
@@ -161,12 +173,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		super.removeNamespace(prefix);
 	}
 
-
-	/**
-	 * Gets the prefixes.
-	 *
-	 * @return the prefixes
-	 */
 	public Prefixes getPrefixes() {
 		return intelligentGraphSail.getPrefixes();
 		
@@ -217,7 +223,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 				return new IntelligentGraphStatementsIterator( super.getStatements(subj, pred, obj, includeInferred, extendedContexts),intelligentGraphSail,this,extendedContexts); 
 			}
 		}catch(Exception e) {
-			throw new SailException(e);
+			throw new SailException(e.getMessage(),e);
 		}
 	}
 	private CloseableIteration<? extends IntelligentStatement, SailException> clearCache(Resource subj, IRI pred,Value obj,
@@ -312,6 +318,34 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			}
 		}
 	}
+//	private void deleteThingFacts(UpdateContext modify,IntelligentGraphRepository source,Thing thing, PathElement pathElement, Resource... contexts) throws PathPatternException {
+//		//CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,pathElement, 0,contexts);
+//		CloseableIteration<IntelligentStatement, SailException> resultsIterator =new IntelligentStatementResults(source,thing, pathElement,this,customQueryOptions,contexts);
+//		if(((PredicateElement)pathElement).getIsReified()) {
+//			String reified = ((PredicateElement)pathElement).getReifiedVariable().getName();
+//			while(resultsIterator.hasNext()){
+//				//BindingSet bindingSet = resultsIterator.next();			
+//				//super.removeStatements((Resource)bindingSet.getBinding(reified).getValue(), null, null, contexts);
+//				IntelligentStatement bindingSet = resultsIterator.next();
+//				List<NameValuePair> paramPairs = URLEncodedUtils.parse(bindingSet.getPredicate().stringValue().split("\\?")[1],Charset.forName("UTF-8"));
+//				for(NameValuePair paramPair:paramPairs) {
+//					if(paramPair.getName().equals(PATHQL.EDGE_REIFICATIONSTRING)) {
+//						super.removeStatements(iri(paramPair.getValue()), null, null, contexts);
+//					}
+//				}
+//			}			
+//		}else {
+//			//String subj = pathElement.getTargetSubject().getName();
+//			//String pred = pathElement.getTargetPredicate().getName();
+//			//String obj = pathElement.getTargetVariable().getName();	
+//			while(resultsIterator.hasNext()){
+//				//BindingSet bindingSet = resultsIterator.next();
+//				//super.removeStatements((Resource)bindingSet.getBinding(subj).getValue(), (IRI)bindingSet.getBinding(pred).getValue(), null, contexts);
+//				IntelligentStatement bindingSet = resultsIterator.next();
+//				super.removeStatements(bindingSet.getSubject(), bindingSet.getPredicate(), bindingSet.getObject(), contexts);
+//			}
+//		}
+//	}
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
 //	CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());

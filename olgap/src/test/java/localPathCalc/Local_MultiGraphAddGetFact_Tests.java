@@ -147,7 +147,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	/**
@@ -177,7 +177,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			assertEquals(3.0, averageCountrySales);
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	/**
@@ -210,7 +210,7 @@ class Local_MultiGraphAddGetFact_Tests {
 					averageCountrySalesTrace.asHTML());
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	/**
@@ -238,7 +238,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
@@ -270,7 +270,7 @@ class Local_MultiGraphAddGetFact_Tests {
 		//	source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 	}
@@ -295,7 +295,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			}
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph5>");
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 }

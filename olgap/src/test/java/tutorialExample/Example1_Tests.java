@@ -57,7 +57,7 @@ class Example1_Tests {
 
 			Trace trace = aPerson.traceFact(":hasBMI");
 			assertEquals("   1. Getting facts ':hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson>\n"
-					+ "   2. ...within contexts: [http://inova8.com/intelligentgraph/example1, file://src/test/resources/example1.ttl]\n"
+					+ "   2. ...within contexts: [http://default, file://src/test/resources/example1.ttl]\n"
 					+ "         1. Evaluating predicate hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> , by invoking groovy script\n"
 					+ "         2. double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)\n"
 					+ "\n"
@@ -74,7 +74,7 @@ class Example1_Tests {
 					+ "   4. Retrieved cached value hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
 					+ "   5. Returned fact 'http://inova8.com/intelligentgraph/example1/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", trace.asText());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -87,7 +87,7 @@ class Example1_Tests {
 			Resource bmi = aPerson.getFact(":hasBMI");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

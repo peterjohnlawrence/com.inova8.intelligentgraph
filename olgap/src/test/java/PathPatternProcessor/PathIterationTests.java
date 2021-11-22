@@ -51,7 +51,7 @@ public class PathIterationTests {
 			assertEquals ("{1,2,4}",element.getPathShareString(1));
 			assertEquals ("{1,4,4}",element.getPathShareString(3));
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test 
@@ -68,7 +68,7 @@ public class PathIterationTests {
 			assertEquals ("({1,2,4}/{1,2,2}){1,1,1}",element.getPathShareString(3));
 			
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test 
@@ -85,7 +85,7 @@ public class PathIterationTests {
 			assertEquals ("(({1,1,2}/{1,2,2}){1,1,1}/{1,2,2}){1,1,1}",element.getPathShareString(3));
 			
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test 
@@ -104,7 +104,7 @@ public class PathIterationTests {
 			assertEquals ("(({1,1,1}/{1,1,1}){1,1,2}/{1,1,1}){1,3,3}",element.getPathShareString(4));
 			assertEquals ("(({1,1,1}/{1,1,1}){1,2,2}/{1,1,1}){1,3,3}",element.getPathShareString(5));
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test 
@@ -121,7 +121,7 @@ public class PathIterationTests {
 			assertEquals ("({0,1,4}/{1,2,2}){1,1,1}",element.getPathShareString(3));
 			
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test 
@@ -139,7 +139,7 @@ public class PathIterationTests {
 			assertEquals ("({0,3,4}/{1,1,1}){1,1,1}",element.getPathShareString(3));
 			
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 }

@@ -99,7 +99,7 @@ class SPARQL_To_TupleExpr {
 					+ "",result);
 
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -130,7 +130,7 @@ class SPARQL_To_TupleExpr {
 					+ "",result);
 
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

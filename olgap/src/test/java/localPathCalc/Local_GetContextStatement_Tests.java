@@ -79,7 +79,7 @@ class Local_GetContextStatement_Tests {
 			}
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -95,7 +95,7 @@ class Local_GetContextStatement_Tests {
 			}
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}	
@@ -115,7 +115,7 @@ class Local_GetContextStatement_Tests {
 			}
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -131,7 +131,7 @@ class Local_GetContextStatement_Tests {
 			}
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -147,7 +147,7 @@ class Local_GetContextStatement_Tests {
 			}
 		} catch (Exception e) {
 
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -170,7 +170,7 @@ class Local_GetContextStatement_Tests {
 				fail();
 		//	
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -191,9 +191,9 @@ class Local_GetContextStatement_Tests {
 				 return;
 				
 			}else
-				fail();
+				fail();;
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -216,7 +216,7 @@ class Local_GetContextStatement_Tests {
 			}else
 				fail();
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

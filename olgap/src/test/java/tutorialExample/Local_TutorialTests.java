@@ -436,9 +436,6 @@ class Local_TutorialTests {
 			Thing observationMeasurement = graph.getThing(":observationMeasurement").addFact("rdfs:subPropertyOf", RDF.OBJECT).addFact("rdfs:domain", Observation).addFact("rdfs:range", Measurement);
 
 			
-			
-
-			
 			Thing Measurement_1=graph.getThing(":aPerson_Observation_1").addFact(RDF.TYPE, Measurement).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "62", XSD.DOUBLE).addFact(":hasDate", "2021-08-01", XSD.DATE);
 			Thing Measurement_2=graph.getThing(":aPerson_Observation_2").addFact(RDF.TYPE, Measurement).addFact(":hasHeight", "1.65", XSD.DOUBLE).addFact(":hasWeight", "60", XSD.DOUBLE).addFact(":hasDate", "2021-08-02", XSD.DATE);
 			Thing Measurement_3=graph.getThing(":aPerson_Observation_3").addFact(RDF.TYPE, Measurement).addFact(":hasHeight", "1.7", XSD.DOUBLE).addFact(":hasWeight", "65", XSD.DOUBLE).addFact(":hasDate", "2021-08-03", XSD.DATE);
@@ -472,6 +469,20 @@ class Local_TutorialTests {
 			assertEquals("21.453287197231838",
 					graph.getThing(":aPerson").getFact(":Observation@:BMIObservation[:hasDate [lt %1]]/:hasBMI",
 							literal(LocalDate.parse("2021-08-03"))).stringValue());
+			
+			Resource Measurement_2_hasDate = Measurement_2.getFact(":hasDate");
+			assertEquals("22.03856749311295",
+					graph.getThing(":aPerson").getFact(":Observation@:BMIObservation[:hasDate %1]/:hasBMI",
+							Measurement_2_hasDate).stringValue());
+ 			assertEquals(21.453287197231838,
+					graph.getThing(":Measurement").getFact("^rdf:type[eq %1]/:hasBMI",
+							graph.getThing(":aPerson_Observation_2")).doubleValue());			
+			assertEquals("21.453287197231838",
+					graph.getThing(":aPerson").getFact(":Observation@:BMIObservation[eq %1]/:hasBMI",
+							graph.getThing(":aPerson_Observation_2")).stringValue());
+			assertEquals("21.453287197231838",
+					graph.getThing(":aPerson").getFact(":Observation@:BMIObservation#[eq %1]/:hasBMI",
+							graph.getThing(":aPerson_Observation_2")).stringValue());
 
 		} catch (Exception e) {
 			assertEquals("", e.getMessage());
@@ -594,7 +605,6 @@ class Local_TutorialTests {
 			 assertEquals(1.006889937409004,aPerson.getFact(":hasFamilialRelativeBMI").doubleValue() );
 		} catch (Exception e) {
 			assertEquals("", e.getMessage());
-			fail();
 		}
 	}
 

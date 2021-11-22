@@ -90,7 +90,7 @@ class Local_GetContextFact_Tests {
 			}
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		} 
 	}
@@ -125,7 +125,7 @@ class Local_GetContextFact_Tests {
 			}
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		} 
 	}

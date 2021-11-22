@@ -80,7 +80,7 @@ class GettingStarted_Tests {
 			myCountry.addFact(":sales", "500");
 			assertEquals(85.83333333333333, myCountry.getFact(":averageSales").doubleValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

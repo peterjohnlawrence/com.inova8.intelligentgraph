@@ -61,7 +61,7 @@ class Example4_Tests {
 			}
 			assertEquals("[http://inova8.com/intelligentgraph/example4/Another1, http://inova8.com/intelligentgraph/example4/Another11, http://inova8.com/intelligentgraph/example4/aPerson]", personValues.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -73,7 +73,7 @@ class Example4_Tests {
 			Double bmi = source.getThing(":Person").getFacts("^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]/:hasBMI").average();
 			assertEquals("22.83633221543103", bmi.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -89,7 +89,7 @@ class Example4_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasLocation %2 ; :hasGender %1 ]/:hasBMI",gender,location).average();
 			assertEquals("22.83633221543103", bmi.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -104,7 +104,7 @@ class Example4_Tests {
 			Double bmi = male_Tideswell.getFact(":averageBMI").doubleValue();
 			assertEquals("22.83633221543103", bmi.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

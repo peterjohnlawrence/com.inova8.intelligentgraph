@@ -278,6 +278,10 @@ public class Tracer {
 		addScript(evaluationStack.subList(evaluationStack.size() - evaluationStack.search(stackKey), evaluationStack.size())
 				.toString());
 	}
+	public void traceSignalError(String error) {
+		if(!tracing)return;
+		addTrace(error);
+	}
 	public void traceSEEQ(String seeq, CustomQueryOptions customQueryOptions) {
 		if(!tracing)return;
 		addTrace(String.format("Fetching SEEQ signal %s with customQueryOptions %s", seeq,

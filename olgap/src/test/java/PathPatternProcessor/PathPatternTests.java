@@ -284,7 +284,7 @@ class PathPatternTests {
 
 			PathParser.parsePathPattern(thing, ":Location@:appearsOn][eq id:Calc2Graph2]#");
 		}catch(Exception e){
-			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, KEY}]"
+			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, '/', '|', '>', KEY}]"
 					,e.getMessage() );
 		}
 	}
@@ -300,7 +300,7 @@ class PathPatternTests {
 			PathElement element = PathParser.parsePathPattern(thing, ":Location@:appearsOn[eq id:Calc2Graph1, id:Calc2Graph2]#");
 			assertEquals ("<http://default/Location>@<http://default/appearsOn>[eq (<http://id/Calc2Graph1> , <http://id/Calc2Graph2> ) ]#" , element.toString());
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
@@ -315,7 +315,7 @@ void test_14() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1, 42}/:massThroughput");
 		assertEquals ("^<http://default/hasProductBatteryLimit>{1,42} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -330,7 +330,7 @@ void test_15() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1,}/:massThroughput");
 		assertEquals ("^<http://default/hasProductBatteryLimit>{1,20} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -345,7 +345,7 @@ void test_16() {
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>){1,2}" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -360,7 +360,7 @@ void test_17() {
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>){1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -375,7 +375,7 @@ void test_18() {
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / <http://default/massThroughput>){1,2} / *" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -390,7 +390,7 @@ void test_19() {
 		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
 		assertEquals ("(^<http://default/hasProductBatteryLimit> / *){1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -406,7 +406,7 @@ void test_20() {
 		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
 		assertEquals ("*{1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -420,7 +420,7 @@ void test_21() {
 		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
 		assertEquals ("*{1,2} / <http://default/massThroughput>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -435,7 +435,7 @@ void test_22() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/*");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / *" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -450,7 +450,7 @@ void test_23() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow)");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / (<http://default/massFlow> | <http://default/volumeFlow>)" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -465,7 +465,7 @@ void test_24() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow  |:density)");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / ((<http://default/massFlow> | <http://default/volumeFlow>) | <http://default/density>)" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -480,7 +480,7 @@ void test_25() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:temp | (:massFlow |! :volumeFlow  |! :density))");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / (<http://default/temp> | ((<http://default/massFlow> | !<http://default/volumeFlow>) | !<http://default/density>))" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -495,7 +495,7 @@ void test_26() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(* | !(:massFlow |:volumeFlow  |:density))");
 		assertEquals ("^<http://default/hasProductBatteryLimit> / (* | !((<http://default/massFlow> | <http://default/volumeFlow>) | <http://default/density>))" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -510,7 +510,7 @@ void test_27() {
 		PathElement element = PathParser.parsePathPattern(thing, "(* | !^:hasProductBatteryLimit)/(* | !(:massFlow |:volumeFlow  |:density))");
 		assertEquals ("(* | !^<http://default/hasProductBatteryLimit>) / (* | !((<http://default/massFlow> | <http://default/volumeFlow>) | <http://default/density>))" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 @Test 
@@ -521,7 +521,7 @@ void test_28() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:type[:hasHeight [gt %1; lt %2]]/:bmi");
 		assertEquals ("^<http://default/type>[<http://default/hasHeight> [gt %1 ;lt %2 ] ] / <http://default/bmi>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 @Test 
@@ -532,7 +532,7 @@ void test_29() {
 		PathElement element = PathParser.parsePathPattern(thing, "^:type[:hasLocation :Tideswell  ; :hasGender :Male ]/:hasBMI");
 		assertEquals ("^<http://default/type>[<http://default/hasLocation> <http://default/Tideswell> ;<http://default/hasGender> <http://default/Male> ] / <http://default/hasBMI>" , element.toString());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 @Test

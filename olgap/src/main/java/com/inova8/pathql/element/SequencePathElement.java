@@ -4,6 +4,7 @@
 package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.query.algebra.Join;
+import org.eclipse.rdf4j.query.algebra.Projection;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
@@ -159,18 +160,27 @@ public class SequencePathElement extends PathElement {
 				}
 				
 				if(leftPattern!=null)
-					intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
+					if( rightPattern!=null)
+						intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
+					else {
+						intermediateVariable.setName(intermediateTargetVariable.getName());
+						// Projection bindRight = new Projection((TupleExpr) intermediateVariable);
+						 intermediateJoinPattern= leftPattern.getTupleExpr();
+					}
 				else {
-					intermediateJoinPattern =rightPattern.getTupleExpr();
+					if( rightPattern!=null)
+						intermediateJoinPattern =rightPattern.getTupleExpr();
+					else
+						intermediateJoinPattern=null;
 				}
 				if (joinPattern == null) {
 					joinPattern = new PathTupleExpr((TupleExpr)intermediateJoinPattern);
 					if(leftPattern!=null) joinPattern.getPath().addAll( leftPattern.getPath());
-					joinPattern.getPath().addAll( rightPattern.getPath());
+					if(rightPattern!=null) joinPattern.getPath().addAll( rightPattern.getPath());
 				} else {
 					joinPattern.setTupleExpr(new Join(joinPattern.getTupleExpr(), intermediateJoinPattern));
 					if(leftPattern!=null)joinPattern.getPath().addAll( leftPattern.getPath());
-					joinPattern.getPath().addAll( rightPattern.getPath());
+					if(rightPattern!=null)joinPattern.getPath().addAll( rightPattern.getPath());
 				}
 			}
 			//joinPattern.setPath(getPathBindings().get(pathIteration));

@@ -327,7 +327,7 @@ class PathPatternSPARQLTests {
 					+ "BIND(<http://id/Calc2Graph1> as <http://id/Calc2Graph2>)\r\n"
 					+ "" , element.toSPARQL());
 		}catch(Exception e){
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
@@ -346,7 +346,7 @@ void test_14() {
 				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -365,7 +365,7 @@ void test_15() {
 				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -383,7 +383,7 @@ void test_16() {
 				+ "#,2}\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -403,7 +403,7 @@ void test_17() {
 				+ "?n2 <http://default/massThroughput> ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -419,7 +419,7 @@ void test_18() {
 		assertEquals ("?n0 ?p0_1 ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 /**
@@ -438,7 +438,7 @@ void test_19() {
 				+ "?n2 ?p2_3 ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -458,7 +458,7 @@ void test_20() {
 				+ "?n2 <http://default/massThroughput> ?n3 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -477,7 +477,7 @@ void test_21() {
 				+ "?n1 <http://default/massThroughput> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -494,7 +494,7 @@ void test_22() {
 				+ "?n1 ?p1_2 ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -513,7 +513,7 @@ void test_23() {
 				+ "?n1 <http://default/volumeFlow> ?n2 .\r\n"
 				+ "}}" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -534,7 +534,7 @@ void test_24() {
 				+ "?n1 <http://default/density> ?n2 .\r\n"
 				+ "}}" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -557,7 +557,7 @@ void test_25() {
 				+ "?n1 ?p1_2 ?n2. FILTER(?p1_2!=<http://default/density>)\r\n"
 				+ "}}}}" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -580,7 +580,7 @@ void test_26() {
 				+ "?n1 <http://default/density> ?n2 .\r\n"
 				+ "}}}}" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -605,7 +605,7 @@ void test_27() {
 				+ "?n1 <http://default/density> ?n2 .\r\n"
 				+ "}}}}" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -625,7 +625,7 @@ void test_28() {
 				+ "?n0 <http://default/density> ?n1 .\r\n"
 				+ "}}" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -642,7 +642,7 @@ void test_29() {
 				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -659,7 +659,7 @@ void test_30() {
 				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -676,7 +676,7 @@ void test_31() {
 		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -692,7 +692,7 @@ void test_32() {
 		assertEquals ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -709,7 +709,7 @@ void test_33() {
 				+ "?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -723,7 +723,7 @@ void test_34() {
 		assertEquals ("?n0 <http://default/hasProductBatteryLimit> ?n1 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 
@@ -738,7 +738,7 @@ void test_35() {
 				+ "?n1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/BatteryLimit> .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 @Test 
@@ -753,7 +753,7 @@ void test_36() {
 				+ "?n1 <http://default/hasBMI> ?n2 .\r\n"
 				+ "" , element.toSPARQL());
 	}catch(Exception e){
-		fail();
+		assertEquals("", e.getMessage());
 	}
 }
 }

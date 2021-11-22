@@ -10,8 +10,8 @@ import org.eclipse.rdf4j.model.IRI;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Reifications;
+import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
-import com.inova8.intelligentgraph.path.PathBindings;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
@@ -38,7 +38,8 @@ public abstract class PathElement {
 	private Integer index;
 
 	private EdgeCode edgeCode;
-	private PathBindings pathBindings;
+//	protected PathBindings pathBindings;
+	protected StatementBinding statementBinding ;
 	protected Variable sourceVariable = new Variable();
 
 	private Variable targetSubject = new Variable();
@@ -284,15 +285,15 @@ public abstract class PathElement {
 		return this.iterations;
 	}
 	
-	public PathBindings getPathBindings() {
-		return pathBindings;
-	}
-
-	public void setPathBindings(PathBindings pathBindings) {
-		this.pathBindings = pathBindings;
-		if (getRightPathElement() != null) getRightPathElement().setPathBindings(pathBindings);
-		if (getLeftPathElement() != null) getLeftPathElement().setPathBindings(pathBindings);	
-	}
+//	public PathBindings getPathBindings() {
+//		return pathBindings;
+//	}
+//
+//	public void setPathBindings(PathBindings pathBindings) {
+//		this.pathBindings = pathBindings;
+//		if (getRightPathElement() != null) getRightPathElement().setPathBindings(pathBindings);
+//		if (getLeftPathElement() != null) getLeftPathElement().setPathBindings(pathBindings);	
+//	}
 
 	public void resetIteration() {
 		setCardinality(0, getMinCardinality());
@@ -303,20 +304,44 @@ public abstract class PathElement {
 		if (getLeftPathElement() != null) {
 			if (getRightPathElement() != null) {
 				if (getRightPathElement().hasNextCardinality(iteration)) {
-					setCardinality(iteration, iterationCardinality.get(iteration-1));
+					setCardinality(iteration,getCardinality(iteration-1));
 					return true;
 				} else {
 					if (getLeftPathElement().hasNextCardinality(iteration)) {
-						setCardinality(iteration, iterationCardinality.get(iteration-1));
+						setCardinality(iteration,getCardinality(iteration-1));
 						return true;
 					} else {
-						setCardinality(iteration, iterationCardinality.get(iteration-1));
-						return false;
+						 Integer cardinality = getCardinality(iteration-1);
+						 if( cardinality < getMaxCardinality()) {
+							cardinality++;
+							setCardinality(iteration,cardinality);
+							return true;
+						 }else {
+							setCardinality(iteration,getMinCardinality());
+							return false;
+						 }
 					}
 				}
 			}
 		}
 		return false;
+//		if (getLeftPathElement() != null) {
+//			if (getRightPathElement() != null) {
+//				if (getRightPathElement().hasNextCardinality(iteration)) {
+//					setCardinality(iteration, iterationCardinality.get(iteration-1));
+//					return true;
+//				} else {
+//					if (getLeftPathElement().hasNextCardinality(iteration)) {
+//						setCardinality(iteration, iterationCardinality.get(iteration-1));
+//						return true;
+//					} else {
+//						setCardinality(iteration, iterationCardinality.get(iteration-1));
+//						return false;
+//					}
+//				}
+//			}
+//		}
+//		return false;
 	}
 	public String getPathShareString(Integer iteration) {
 		StringBuilder pathShareString = new StringBuilder("");
@@ -437,6 +462,7 @@ public abstract class PathElement {
 			return getLeftPathElement().getTargetPredicate();
 		targetPredicate.setName("p" + getEntryIndex() + "_" + getExitIndex());
 		//TODO
+		targetPredicate.setName("p_" + getTargetSubject().getName() + "_" + getTargetVariable().getName());
 		return targetPredicate;
 	}
 

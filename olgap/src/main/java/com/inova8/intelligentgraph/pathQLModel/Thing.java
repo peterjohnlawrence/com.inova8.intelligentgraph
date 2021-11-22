@@ -160,7 +160,22 @@ public class Thing extends Resource {
 		Resource fact = processFactObjectValue(predicate,scriptString,  customQueryOptions ,contexts);
 		return fact;
 	}
+	public final Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions, Value...bindValues) throws PathPatternException{
+		logger.debug("getFact{}\n", predicatePattern);
 
+		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions,bindValues);
+		if (factValues == null) {
+			throw new NullValueReturnedException( String.format(
+					"No values found for pattern %s with subject %s, customQueryOptions %s, and bind variables %s", predicatePattern, this,customQueryOptions,bindValues));
+		} else if (factValues.hasNext()) {
+			return factValues.next();
+		} else {
+			factValues.close();
+			throw new NullValueReturnedException( String.format(
+					"No values found for pattern %s with subject %s, customQueryOptions %s, and bind variables %s", predicatePattern, this,customQueryOptions,bindValues));
+		}
+		
+	}
 	public final Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException{
 		logger.debug("getFact{}\n", predicatePattern);
 
@@ -202,6 +217,9 @@ public class Thing extends Resource {
 
 	public final ResourceResults getFacts(String predicatePattern, Value... bindValues ) throws PathPatternException {
 		return getFacts(predicatePattern,CustomQueryOptions.create(bindValues));
+	}
+	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions, Value... bindValues ) throws PathPatternException {
+		return getFacts(predicatePattern,customQueryOptions.addAll(bindValues));
 	}
 	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
 		logger.debug("getFacts{}\n", predicatePattern);
@@ -289,7 +307,12 @@ public class Thing extends Resource {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Resource getSignal(String signal) {
+	public Resource getSignal(String signal) {		
+		return getSignal(signal, getCustomQueryOptions());	
+	}
+	
+	
+	public Resource getSignal(String signal, CustomQueryOptions customQueryOptions) {
 		getEvaluationContext().getTracer().incrementLevel();
 		//incrementTraceLevel();
 		signal = IntelligentGraphRepository.trimIRIString(signal);
@@ -299,33 +322,38 @@ public class Thing extends Resource {
 		case "SEEQ:":
 			SEEQSource seeqSource = null;
 			try {
-				getEvaluationContext().getTracer().traceSEEQ(elements[5],
-						getCustomQueryOptions());
-				//addTrace(String.format("Fetching SEEQ signal %s with customQueryOptions %s", elements[5],
-				//		getCustomQueryOptions()));
-				seeqSource = getSource().seeqSourceFactory(elements[2]);
-				result = seeqSource.getSignal(elements[5], getCustomQueryOptions());
-				//decrementTraceLevel();
-				getEvaluationContext().getTracer().decrementLevel();
-				//return getSource().resourceFactory(getTracer(),PathQLRepository.getTripleSource().getValueFactory().createLiteral((Double) result), getStack(),customQueryOptions,this.prefixes);
-				return Resource.create(getSource(), literal((Double) result), this.getEvaluationContext());
+				if(elements.length<6) {
+					getEvaluationContext().getTracer().decrementLevel();
+					String error = String.format("Unsupported signal source: %s", signal);
+					logger.error(error);
+					getEvaluationContext().getTracer().traceSignalError(error);
+					throw new ScriptFailedException( error);
+				}else {
+					getEvaluationContext().getTracer().traceSEEQ(elements[5],
+							customQueryOptions);
+					seeqSource = getSource().seeqSourceFactory(elements[2]);
+					result = seeqSource.getSignal(elements[5], customQueryOptions);
+					getEvaluationContext().getTracer().decrementLevel();
+					return Resource.create(getSource(), literal((Double) result), this.getEvaluationContext());
+				}
 			} catch (ScriptException e) {
-				return Resource.create(getSource(), literal("**SEEQ Source Error**"), this.getEvaluationContext());
+				//return Resource.create(getSource(), literal("**SEEQ Source Error**"), this.getEvaluationContext());
+				throw new ScriptFailedException( e);
+				
 			} catch (HandledException e) {
-				return Resource.create(getSource(), literal(e.getCode()), this.getEvaluationContext());
+				//return Resource.create(getSource(), literal(e.getCode()), this.getEvaluationContext());
+				throw new ScriptFailedException( e);
 			}
 		case "HTTP:":
 			getEvaluationContext().getTracer().traceSEEQHTTPError(signal);
-			//String httpMessage = String.format("HTTP not supported signal source: %s", signal);
 			logger.error(String.format("HTTP not supported signal source: %s", signal));
-			//addTrace(httpMessage);
-			return Resource.create(getSource(), literal("**HTTP Source Error**"), this.getEvaluationContext());
+			//return Resource.create(getSource(), literal("**HTTP Source Error**"), this.getEvaluationContext());
+			throw new ScriptFailedException( String.format("HTTP not supported signal source: %s", signal));
 		default:
 			getEvaluationContext().getTracer().traceSEEQError(signal);
-			//String defaultMessage = String.format("Unsupported signal source: %s", signal);
 			logger.error(String.format("Unsupported signal source: %s", signal));
-			//addTrace(defaultMessage);
-			return Resource.create(getSource(), literal("**Unsupported Source Error**"), this.getEvaluationContext());
+			//return Resource.create(getSource(), literal("**Unsupported Source Error**"), this.getEvaluationContext());
+			throw new ScriptFailedException( String.format("Unsupported signal source: %s", signal));
 
 		}
 	}
@@ -589,7 +617,7 @@ public class Thing extends Resource {
 	public void deleteFacts(String predicatePattern) throws Exception {		
 		//org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
 		this.getSource().getRepository().getConnection().remove(this.getIRI(),
-							PATHQL.GETFACTS, literal(predicatePattern));
+							PATHQL.GETFACTS, literal(predicatePattern), this.getGraphName());
 	}
 
 

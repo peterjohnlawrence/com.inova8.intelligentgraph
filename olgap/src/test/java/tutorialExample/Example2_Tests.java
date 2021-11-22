@@ -60,7 +60,7 @@ class Example2_Tests {
 			Resource another1bmi = another1.getFact(":hasBMI");
 			assertEquals("19.94459833795014", another1bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -77,7 +77,7 @@ class Example2_Tests {
 			 }
 			assertEquals("[http://inova8.com/intelligentgraph/example2/Another1, http://inova8.com/intelligentgraph/example2/Another10, http://inova8.com/intelligentgraph/example2/Another11, http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another3, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another5, http://inova8.com/intelligentgraph/example2/Another6, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another8, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/aPerson]", personValues.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -94,7 +94,7 @@ class Example2_Tests {
 			 }
 			assertEquals("[19.94459833795014, 16.897506925207757, 27.11111111111111, 23.148148148148145, 22.49134948096886, 14.75, 14.506172839506172, 31.11111111111111, 24.88888888888889, 21.79930795847751, 25.781249999999996, 15.91695501730104, 21.453287197231838]", personValues.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -107,7 +107,7 @@ class Example2_Tests {
 			Resource averagebmi = person.getFact(":averageBMI");
 			assertEquals("21.523052847377123", averagebmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -120,7 +120,7 @@ class Example2_Tests {
 			Resource relativeBMI = person.getFact(":hasRelativeBMI");
 			assertEquals("0.9967585615925397", relativeBMI.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -133,7 +133,7 @@ class Example2_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge '1.9'^^xsd:double ]]/:hasBMI").average();
 			assertEquals("17.197368421052634", bmi.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -146,7 +146,7 @@ class Example2_Tests {
 			Resource bmi = person.getFact(":averageTallBMI");
 			assertEquals("17.197368421052634", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -163,7 +163,7 @@ class Example2_Tests {
 			}
 			assertEquals("[http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/aPerson]", personValues.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -176,7 +176,7 @@ class Example2_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]/:hasBMI").average();
 			assertEquals("19.885870106938924", bmi.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -191,7 +191,7 @@ class Example2_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge %1  ; le %2  ]]/:hasBMI",minHeight,maxHeight).average();
 			assertEquals("19.885870106938924", bmi.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -204,7 +204,7 @@ class Example2_Tests {
 			Resource bmi = person.getFact(":average1.7-1.8BMI");
 			assertEquals("19.885870106938924", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

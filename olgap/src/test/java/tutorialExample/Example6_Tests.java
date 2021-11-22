@@ -62,7 +62,7 @@ class Example6_Tests {
 			Resource bmi = aPerson_Measurement.getFact(":hasBMI");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -75,7 +75,7 @@ class Example6_Tests {
 			Resource bmi = aPerson_Measurement.getFact(":hasBMI");
 			assertEquals("22.03856749311295", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -89,7 +89,7 @@ class Example6_Tests {
 			ResourceResults bmis = aPerson.getFacts(":Observation@:BMIObservation/:hasBMI");
 			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]", bmis.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -101,7 +101,7 @@ class Example6_Tests {
 			Resource bmi = source.getThing(":aPerson").getFact(":Observation@:BMIObservation[:hasDate %1]/:hasBMI",literal(LocalDate.parse("2021-08-02")));
 			assertEquals("22.03856749311295", bmi.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -115,7 +115,7 @@ class Example6_Tests {
 			ResourceResults bmis = aPerson.getFacts(":Observation@:BMIObservation[:hasDate [lt %1]]/:hasBMI",literal(LocalDate.parse("2021-08-03")));
 			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;]", bmis.toString());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -132,7 +132,7 @@ class Example6_Tests {
 					+ "   3. ...within contexts: [http://default, file://src/test/resources/example6.ttl]\r\n"
 					+ "   4. Returned fact 'http://inova8.com/intelligentgraph/example6/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example6/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", trace.asText());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}

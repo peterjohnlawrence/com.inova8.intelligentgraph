@@ -136,11 +136,12 @@ class Local_SPARQL_Tests {
 
 			String result = Query.runSPARQL(conn, queryString1);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;\r\n"
+					+ "",result);
 
 		} catch (Exception e) {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -167,10 +168,11 @@ class Local_SPARQL_Tests {
 
 			String result = Query.runSPARQL(conn, queryString1);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=3.0;\r\n"
+					+ "",result);
 
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 		}
@@ -189,12 +191,13 @@ class Local_SPARQL_Tests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=150.0;\r\n"
+					+ "",result);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			 result = Query.runSPARQL(conn, queryString1);
 			assertEquals("",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -225,12 +228,13 @@ class Local_SPARQL_Tests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country1;o=1500.0;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country1;o=1500.0;\r\n"
+					+ "",result);
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			 result = Query.runSPARQL(conn, queryString1);
 			assertEquals("",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -250,7 +254,7 @@ class Local_SPARQL_Tests {
 			conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph4>\r\n"
-					+ "FROM <http://default>\n"
+//					+ "FROM <http://default>\n"
 //					+ "FROM <file://calc2graph.data.ttl>\r\n"
 //					+ "FROM <file://calc2graph.def.ttl>\r\n"
 					+ "{\r\n"
@@ -258,9 +262,10 @@ class Local_SPARQL_Tests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=300.0;",result);
+			assertEquals("s=http://inova8.com/calc2graph/def/Country;o=300.0;\r\n"
+					+ "",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -290,7 +295,7 @@ class Local_SPARQL_Tests {
 			String result = Query.runCONSTRUCT(conn, queryString1);
 			assertEquals("(http://inova8.com/calc2graph/def/Country, http://inova8.com/calc2graph/def/averageSales, \"300.0\"^^<http://www.w3.org/2001/XMLSchema#double>)\n",result);
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 			e.printStackTrace();
 		}
 	}
