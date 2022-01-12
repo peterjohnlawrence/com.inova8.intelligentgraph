@@ -134,4 +134,90 @@ class SPARQL_To_TupleExpr {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	@Order(3)
+	void test_3() {
+		
+		try {
+			String queryString1 = "PREFIX : <http://default> SELECT * \r\n"
+					+ " {\r\n"
+					+ "FILTER(?n1 < \"4\")\r\n"
+					+ "FILTER(?n1 >= \"2\")\r\n"
+					+ "{{ ?r1 <http://inova8.com/calc2graph/def/attribute.of.Item> <http://inova8.com/calc2graph/def/Country2>}\r\n"
+					+ "UNION\r\n"
+					+ "{ <http://inova8.com/calc2graph/def/Country2> <http://inova8.com/calc2graph/def/item.attribute>  ?r1}}\r\n"
+					+ "{{ ?r1 <http://inova8.com/calc2graph/def/attribute.Property> <http://inova8.com/calc2graph/def/sales>}\r\n"
+					+ "UNION\r\n"
+					+ "{ <http://inova8.com/calc2graph/def/sales> <http://inova8.com/calc2graph/def/property.Attribute>  ?r1}}\r\n"
+					+ "{ ?r1 <http://inova8.com/calc2graph/def/attribute.value> ?n1}\r\n"
+					+ "}";
+			String result = Query.parseSPARQL(conn, queryString1);
+			assertEquals("Projection\r\n"
+					+ "   ProjectionElemList\r\n"
+					+ "      ProjectionElem \"s\"\r\n"
+					+ "      ProjectionElem \"o\"\r\n"
+					+ "   Union\r\n"
+					+ "      StatementPattern\r\n"
+					+ "         Var (name=s)\r\n"
+					+ "         Var (name=_const_29d7f744_uri, value=http://defaultspouse, anonymous)\r\n"
+					+ "         Var (name=o)\r\n"
+					+ "      Union\r\n"
+					+ "         StatementPattern\r\n"
+					+ "            Var (name=s)\r\n"
+					+ "            Var (name=_const_23e72d59_uri, value=http://defaultparent, anonymous)\r\n"
+					+ "            Var (name=o)\r\n"
+					+ "         Filter\r\n"
+					+ "            Compare (!=)\r\n"
+					+ "               Var (name=_anon_3a1af08a_0a4f_4289_8bb0_946b60c755ca, anonymous)\r\n"
+					+ "               ValueConstant (value=http://defaultchild)\r\n"
+					+ "            StatementPattern\r\n"
+					+ "               Var (name=s)\r\n"
+					+ "               Var (name=_anon_3a1af08a_0a4f_4289_8bb0_946b60c755ca, anonymous)\r\n"
+					+ "               Var (name=o)\r\n"
+					+ "",result);
+
+		} catch (Exception e) {
+			assertEquals("", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+//	@Test
+//	@Order(3)
+//	void test_3() {
+//		
+//		try {
+//			String queryString1 = "PREFIX : <http://default> SELECT * \r\n"
+//					+ "{\r\n"
+//					+ "?s (:spouse|:parent|!:child) ?o . \r\n"
+//					+ "}";
+//			String result = Query.parseSPARQL(conn, queryString1);
+//			assertEquals("Projection\r\n"
+//					+ "   ProjectionElemList\r\n"
+//					+ "      ProjectionElem \"s\"\r\n"
+//					+ "      ProjectionElem \"o\"\r\n"
+//					+ "   Union\r\n"
+//					+ "      StatementPattern\r\n"
+//					+ "         Var (name=s)\r\n"
+//					+ "         Var (name=_const_29d7f744_uri, value=http://defaultspouse, anonymous)\r\n"
+//					+ "         Var (name=o)\r\n"
+//					+ "      Union\r\n"
+//					+ "         StatementPattern\r\n"
+//					+ "            Var (name=s)\r\n"
+//					+ "            Var (name=_const_23e72d59_uri, value=http://defaultparent, anonymous)\r\n"
+//					+ "            Var (name=o)\r\n"
+//					+ "         Filter\r\n"
+//					+ "            Compare (!=)\r\n"
+//					+ "               Var (name=_anon_3a1af08a_0a4f_4289_8bb0_946b60c755ca, anonymous)\r\n"
+//					+ "               ValueConstant (value=http://defaultchild)\r\n"
+//					+ "            StatementPattern\r\n"
+//					+ "               Var (name=s)\r\n"
+//					+ "               Var (name=_anon_3a1af08a_0a4f_4289_8bb0_946b60c755ca, anonymous)\r\n"
+//					+ "               Var (name=o)\r\n"
+//					+ "",result);
+//
+//		} catch (Exception e) {
+//			assertEquals("", e.getMessage());
+//			e.printStackTrace();
+//		}
+//	}
 }

@@ -22,7 +22,8 @@ import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import utilities.Query;
@@ -192,7 +193,7 @@ class Local_GetTraceFact_Tests {
 			//assertEquals
 			("1.Gettingfacts'<http://inova8.com/calc2graph/def/myOption>&time='2019'^^xsd:int'ofmyCountry<http://inova8.com/calc2graph/def/myCountry>2....withincontexts:[file://src/test/resources/calc2graph.def.ttl,http://inova8.com/calc2graph/contextGraph,file://src/test/resources/calc2graph.data.ttl]1.EvaluatingpredicatemyOption<http://inova8.com/calc2graph/def/myOption>ofmyCountry<http://inova8.com/calc2graph/def/myCountry>,byinvokinggroovyscript2._customQueryOptions.get(\"time\").integerValue();3.EvaluatedmyOption<http://inova8.com/calc2graph/def/myOption>ofmyCountry<http://inova8.com/calc2graph/def/myCountry>=2019^^int<http://www.w3.org/2001/XMLSchema#int>3.CalculatedmyOption<http://inova8.com/calc2graph/def/myOption>ofmyCountry<http://inova8.com/calc2graph/def/myCountry>=2019^^int<http://www.w3.org/2001/XMLSchema#int>4.RetrievedcachedvaluemyOption<http://inova8.com/calc2graph/def/myOption>ofmyCountry<http://inova8.com/calc2graph/def/myCountry>=2019^^int<http://www.w3.org/2001/XMLSchema#int>5.Returnedfact'http://inova8.com/calc2graph/def/myOption'ofmyCountry<http://inova8.com/calc2graph/def/myCountry>=2019^^int<http://www.w3.org/2001/XMLSchema#int>"
 					, result.asText());
-			ResourceResults results = myCountry1.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
+			FactResults results = myCountry1.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
 			for (Resource result1:results ) {
 				Query.assertEqualsWOSpaces("2020", result1.stringValue());
 			}

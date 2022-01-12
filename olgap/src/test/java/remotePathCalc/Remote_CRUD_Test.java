@@ -42,9 +42,10 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.FactResults;
-import com.inova8.intelligentgraph.pathQLResults.PathQLResults;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.FactBindingsetResults;
+import com.inova8.intelligentgraph.pathQLResults.PathQLBindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
 import com.inova8.pathql.parser.PathQLEvaluator;
 import com.inova8.pathql.processor.PathPatternException;
 
@@ -100,7 +101,7 @@ class Remote_CRUD_Test {
 			myCountry.addFact(":sales", "2");
 			myCountry.addFact(":sales", "3");
 			myCountry.addFact(":sales", "4");
-			ResourceResults facts = myCountry.getFacts(":sales[ge '2';lt '4']");
+			FactResults facts = myCountry.getFacts(":sales[ge '2';lt '4']");
 			Integer factsinrange = facts.count();
 			assertEquals(2, factsinrange);
 			myCountry.deleteFacts(":sales[eq '3']");
@@ -126,7 +127,7 @@ class Remote_CRUD_Test {
 			myCountry.addFact(":Attribute@:sales", "2");
 			myCountry.addFact(":Attribute@:sales", "3");
 			myCountry.addFact(":Attribute@:sales", "4");
-			ResourceResults facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
+			FactResults facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
 			Integer factsinrange = facts.count();
 			assertEquals(2, factsinrange);
 			myCountry.deleteFacts(":Attribute@:sales[eq '3']");

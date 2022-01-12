@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
+import com.inova8.intelligentgraph.constants.PathConstants;
+import com.inova8.intelligentgraph.constants.PathConstants.FilterOperator;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.FactFilterElement;
 import com.inova8.pathql.element.ObjectElement;
 import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.element.VerbObjectList;
-import com.inova8.pathql.processor.PathConstants.FilterOperator;
 
 import org.eclipse.rdf4j.model.IRI;
 

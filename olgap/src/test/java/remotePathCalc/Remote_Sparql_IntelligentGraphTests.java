@@ -45,8 +45,8 @@ import com.inova8.intelligentgraph.IntelligentGraphSail;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLResults.FactResults;
-import com.inova8.intelligentgraph.pathQLResults.PathQLResults;
+import com.inova8.intelligentgraph.pathQLResults.FactBindingsetResults;
+import com.inova8.intelligentgraph.pathQLResults.PathQLBindingSetResults;
 import com.inova8.pathql.parser.PathQLEvaluator;
 
 import utilities.Query;

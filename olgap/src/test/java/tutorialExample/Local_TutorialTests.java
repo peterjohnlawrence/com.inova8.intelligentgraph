@@ -23,7 +23,7 @@ import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.PathResults;
+import com.inova8.intelligentgraph.results.PathResults;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;

@@ -20,7 +20,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
 
 import utilities.Query;
 import org.eclipse.rdf4j.model.Literal;
@@ -70,7 +71,7 @@ class Example2_Tests {
 
 		try {
 			Thing personType = source.getThing(":Person");
-			 ResourceResults persons = personType.getFacts("^rdf:type");
+			FactResults persons = personType.getFacts("^rdf:type");
 			 ArrayList<String> personValues = new ArrayList<String>();;
 			 for(Resource person:persons) {
 				 personValues.add(person.getValue().stringValue());
@@ -87,7 +88,7 @@ class Example2_Tests {
 
 		try {
 			Thing personType = source.getThing(":Person");
-			 ResourceResults persons = personType.getFacts("^rdf:type/:hasBMI");
+			FactResults persons = personType.getFacts("^rdf:type/:hasBMI");
 			 ArrayList<String> personValues = new ArrayList<String>();;
 			 for(Resource person:persons) {
 				 personValues.add(person.getValue().stringValue());
@@ -156,7 +157,7 @@ class Example2_Tests {
 
 		try {
 			Thing person = source.getThing(":Person"); 
-			ResourceResults persons = person.getFacts("^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]");
+			FactResults persons = person.getFacts("^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]");
 			ArrayList<String> personValues = new ArrayList<String>();
 			for(Resource person1:persons) {
 				personValues.add(person1.getValue().stringValue());

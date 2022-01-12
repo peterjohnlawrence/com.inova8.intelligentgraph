@@ -22,7 +22,9 @@ import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Fact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.results.FactResults;
+import com.inova8.intelligentgraph.results.PathResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import utilities.Query;
@@ -75,8 +77,9 @@ class Local_AddGetDeleteFact_Test {
 			myCountry.addFact(":sales", "2");
 			myCountry.addFact(":sales", "3");
 			myCountry.addFact(":sales", "4");
-			ResourceResults facts = myCountry.getFacts(":sales[ge '2';lt '4']");
-			Integer factsinrange = facts.count();
+			FactResults facts = myCountry.getFacts(":sales[ge '2';lt '4']");
+			assertEquals("[\"2\";\"3\";]", facts.toString());
+			Integer factsinrange = myCountry.getFacts(":sales[ge '2';lt '4']").count();
 			assertEquals(2, factsinrange);
 			//myCountry = graph.getThing(":Country1");////////////////////////////////////////////////////
 			myCountry.deleteFacts(":sales[eq '3']");
@@ -102,10 +105,23 @@ class Local_AddGetDeleteFact_Test {
 			myCountry.addFact(":Attribute@:sales", "2");
 			myCountry.addFact(":Attribute@:sales", "3");
 			myCountry.addFact(":Attribute@:sales", "4");
-			ResourceResults facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
-			Integer factsinrange = facts.count();
+			
+			PathResults paths = myCountry.getPaths(":Attribute@:sales[ge '2';lt '4']"); 
+			assertEquals("Path=[[http://inova8.com/calc2graph/def/Country2,<http://inova8.com/calc2graph/def/Attribute>@http://inova8.com/calc2graph/def/sales,\"2\",DIRECT,false]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/def/Country2,<http://inova8.com/calc2graph/def/Attribute>@http://inova8.com/calc2graph/def/sales,\"3\",DIRECT,false]\r\n"
+					+ "]\r\n"
+					+ "", paths.toString());
+			
+			FactResults facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']"); 
+			assertEquals("[\"2\";\"3\";]", facts.toString());
+			Integer factsinrange = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']").count();
 			assertEquals(2, factsinrange);
 			myCountry.deleteFacts(":Attribute@:sales[eq '3']");
+//			 paths = myCountry.getPaths(":Attribute@:sales[ge '2';lt '4']"); 
+//			assertEquals("Path=[[http://inova8.com/calc2graph/def/Country2,<http://inova8.com/calc2graph/def/Attribute>@http://inova8.com/calc2graph/def/sales,\"2\",DIRECT,false]\r\n"
+//					+ "]\r\n"
+//					+ "", paths.toString());
 			facts = myCountry.getFacts(":Attribute@:sales[ge '2';lt '4']");
 			factsinrange = facts.count();
 			assertEquals(1, factsinrange);

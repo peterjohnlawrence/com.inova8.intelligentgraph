@@ -20,7 +20,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
 
 import utilities.Query;
 
@@ -53,7 +54,7 @@ class Example4_Tests {
 
 		try {
 			Thing person = source.getThing(":Person"); 
-			ResourceResults persons = person.getFacts("^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]");
+			FactResults persons = person.getFacts("^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]");
 			//ResourceResults persons = person.getFacts("^rdf:type[:hasLocation :Tideswell ]");
 			ArrayList<String> personValues = new ArrayList<String>();
 			for(Resource person1:persons) {

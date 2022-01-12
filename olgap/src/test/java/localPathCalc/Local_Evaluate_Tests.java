@@ -17,8 +17,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLResults.FactResults;
-import com.inova8.intelligentgraph.pathQLResults.PathQLResults;
+import com.inova8.intelligentgraph.pathQLResults.FactBindingsetResults;
+import com.inova8.intelligentgraph.pathQLResults.PathQLBindingSetResults;
 import com.inova8.pathql.parser.PathQLEvaluator;
 
 import utilities.Query;
@@ -70,7 +70,7 @@ class Local_Evaluate_Tests {
 	void pathql_1() {
 
 		try {
-			PathQLResults pathqlResultsIterator = (PathQLResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]");
+			PathQLBindingSetResults pathqlResultsIterator = (PathQLBindingSetResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -92,7 +92,7 @@ class Local_Evaluate_Tests {
 	void pathql_2() {
 
 		try {
-			PathQLResults pathqlResultsIterator = (PathQLResults) PathQLEvaluator.evaluate(source,"[ like 'Unit1']");
+			PathQLBindingSetResults pathqlResultsIterator = (PathQLBindingSetResults) PathQLEvaluator.evaluate(source,"[ like 'Unit1']");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -115,7 +115,7 @@ class Local_Evaluate_Tests {
 	void pathql_3() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit");
+			FactBindingsetResults pathqlResultsIterator = (FactBindingsetResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -138,7 +138,7 @@ class Local_Evaluate_Tests {
 	void pathql_4() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit/:volumeFlow");
+			FactBindingsetResults pathqlResultsIterator = (FactBindingsetResults) PathQLEvaluator.evaluate(source,"[ eq id:Unit1]/:hasProductBatteryLimit/:volumeFlow");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(
@@ -161,7 +161,7 @@ class Local_Evaluate_Tests {
 	void pathql_5() {
 		
 		try {
-			FactResults pathqlResultsIterator = (FactResults) PathQLEvaluator.evaluate(source,"[ like \"Unit1\"]>:hasProductBatteryLimit");
+			FactBindingsetResults pathqlResultsIterator = (FactBindingsetResults) PathQLEvaluator.evaluate(source,"[ like \"Unit1\"]>:hasProductBatteryLimit");
 			if (pathqlResultsIterator.hasNext()) {
 				Resource nextMatch = pathqlResultsIterator.nextResource();
 				assertEquals(

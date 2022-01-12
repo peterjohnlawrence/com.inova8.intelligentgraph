@@ -323,7 +323,7 @@ class Local_Sparql_IntelligentGraphTests {
 
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("s=http://inova8.com/calc2graph/id/calculateLatitude;o=return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();;\r\n"
+			assertEquals("s=http://inova8.com/calc2graph/id/calculateLatitude;o=return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#/:lat\").integerValue();;\r\n"
 					+ "",result);
 		} catch (Exception e) {
 			assertEquals("", e.getMessage());

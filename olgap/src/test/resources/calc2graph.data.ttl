@@ -666,7 +666,7 @@ massThroughput;"""^^script:groovy ;
 .
 id:calculateLatitude
   a script:Script ;
-  script:scriptCode "return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#\").getFact(\":lat\").integerValue();"^^script:groovy ;
+  script:scriptCode "return _this.getFact(\":Location@:appearsOn[eq id:Calc2Graph1]#/:lat\").integerValue();"^^script:groovy ;
   rdfs:label "calculateLatitude" ;
 .
 id:calculateLongitude

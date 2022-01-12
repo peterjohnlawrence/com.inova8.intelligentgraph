@@ -25,7 +25,8 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
 
 import utilities.Query;
 
@@ -86,7 +87,7 @@ class Example5_Tests {
 		try {
 			Thing aPerson = source.getThing(":aPerson");
 
-			ResourceResults bmis = aPerson.getFacts("^:measurementOf/:hasBMI");
+			FactResults bmis = aPerson.getFacts("^:measurementOf/:hasBMI");
 			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]", bmis.toString());
 		} catch (Exception e) {
 			fail();
@@ -124,7 +125,7 @@ class Example5_Tests {
 		try {
 			Thing aPerson = source.getThing(":aPerson");
 
-			ResourceResults bmis = aPerson.getFacts("^:measurementOf[:hasDate [lt %1]]/:hasBMI",literal(LocalDate.parse("2021-08-03")));
+			FactResults bmis = aPerson.getFacts("^:measurementOf[:hasDate [lt %1]]/:hasBMI",literal(LocalDate.parse("2021-08-03")));
 			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;]", bmis.toString());
 		} catch (Exception e) {
 			fail();

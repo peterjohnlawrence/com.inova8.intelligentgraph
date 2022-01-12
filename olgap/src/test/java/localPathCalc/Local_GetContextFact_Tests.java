@@ -21,7 +21,8 @@ import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import utilities.Query;
@@ -84,7 +85,7 @@ class Local_GetContextFact_Tests {
 			customQueryOptions3.add("time",2019);
 			result = myCountry.getFact(":myOption&time='2019'^^xsd:int",customQueryOptions3 );
 			assertEquals("2019", result.stringValue());
-			ResourceResults results = myCountry.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
+			FactResults results = myCountry.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
 			for (Resource result1:results ) {
 				assertEquals("2020", result1.stringValue());
 			}
@@ -119,7 +120,7 @@ class Local_GetContextFact_Tests {
 			result = myCountry1.traceFact("<http://inova8.com/calc2graph/def/myOption>&time='2019'^^xsd:int" );
 			Query.assertEqualsWOSpaces("<olstyle='list-style-type:none;'><li>Gettingfacts'&lt;http://inova8.com/calc2graph/def/myOption&gt;&amp;time='2019'^^xsd:int'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a></li></li><li>...withincontexts:[file://src/test/resources/calc2graph.def.ttl,http://inova8.com/calc2graph/contextGraph,file://src/test/resources/calc2graph.data.ttl]</li></li><olstyle='list-style-type:none;'><li>Evaluatingpredicate<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>,byinvoking<b>groovy</b>script</li></li><li><divstyle='border:1pxsolidblack;'><pre><code>_customQueryOptions.get(&quot;time&quot;).integerValue();</code></pre></div></li><olstyle='list-style-type:none;'></ol><li>Evaluated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li></ol><li>Calculated<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Retrievedcachedvalue<ahref='http://inova8.com/calc2graph/def/myOption'target='_blank'>myOption</a>of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><li>Returnedfact'http://inova8.com/calc2graph/def/myOption'of<ahref='http://inova8.com/calc2graph/def/myCountry'target='_blank'>myCountry</a>=2019^^<ahref='http://www.w3.org/2001/XMLSchema#int'target='_blank'>int</a></li></li><p></ol>"
 					, result.asHTML());
-			ResourceResults results = myCountry1.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
+			FactResults results = myCountry1.getFacts("<http://inova8.com/calc2graph/def/myOption>&time='2020'^^xsd:int" );
 			for (Resource result1:results ) {
 				Query.assertEqualsWOSpaces("2020", result1.stringValue());
 			}

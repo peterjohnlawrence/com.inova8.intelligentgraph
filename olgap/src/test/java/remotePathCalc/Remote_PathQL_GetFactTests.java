@@ -25,8 +25,9 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.MatchResults;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.pathQLResults.MatchBindingSetResults;
+import com.inova8.intelligentgraph.results.FactResults;
+import com.inova8.intelligentgraph.pathQLResults.BindingSetResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.parser.Match;
 
@@ -95,7 +96,7 @@ class Remote_PathQL_GetFactTests {
 	void search_1() {
 		
 		try {
-			MatchResults searchResultsIterator = match.entityMatch("Unit2");
+			MatchBindingSetResults searchResultsIterator = match.entityMatch("Unit2");
 			while(searchResultsIterator.hasNext()) {
 				 BindingSet nextSearchResultBindingSet = searchResultsIterator.nextBindingSet();
 				int i=1;
@@ -173,7 +174,7 @@ class Remote_PathQL_GetFactTests {
 				Resource factValue = batterylimit.getFact(":massFlow");
 				fact += batterylimit.getFact(":massFlow").doubleValue();
 			}
-			ResourceResults batterylimits = $this.getFacts(":hasProductBatteryLimit");
+			FactResults batterylimits = $this.getFacts(":hasProductBatteryLimit");
 			Resource batterylimit; 
 			while(batterylimits.hasNext() ) {
 				batterylimit = batterylimits.next();
@@ -619,7 +620,7 @@ class Remote_PathQL_GetFactTests {
 			String performanceCalculation = "2*3";
 			myCountry.addFact(":salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
 			
-			ResourceResults results = myCountry.getFacts(":salesPerformance") ;
+			FactResults results = myCountry.getFacts(":salesPerformance") ;
 			for(Resource result:results) {
 				result.getValue();
 				assertEquals("6", result.getValue().stringValue());
