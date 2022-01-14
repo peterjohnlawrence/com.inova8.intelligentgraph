@@ -15,6 +15,7 @@ import org.eclipse.rdf4j.model.util.Values;
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.Prefixes;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.AlternativePathElement;
 import com.inova8.pathql.element.BindVariableElement;
@@ -466,7 +467,7 @@ public PathPatternVisitor(Thing thing) {
 		// pname_ns : PNAME_NS ;   
 		
 		IriRefValueElement pname_nsElement = new IriRefValueElement(getSource());
-		ConcurrentHashMap<String, IRI> prefixes=null;
+		Prefixes prefixes=null;
 		prefixes=source.getPrefixes();
 	//	if(thing!=null) prefixes=thing.getPrefixes();
 		IRI qname = getSource().convertQName(ctx.getText(),prefixes);

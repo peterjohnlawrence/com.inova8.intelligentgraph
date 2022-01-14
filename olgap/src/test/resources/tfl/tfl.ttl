@@ -1,0 +1,19 @@
+# baseURI: http://in4mium.com/tfl
+# imports: http://in4mium.com/londontube/data/lines/
+# imports: http://in4mium.com/londontube/data/stations/
+# imports: http://in4mium.com/londontube/schema/londontubeModel
+# prefix: tfl
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tfl: <http://in4mium.com/tfl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://in4mium.com/tfl>
+  rdf:type owl:Ontology ;
+  owl:imports <http://in4mium.com/londontube/data/lines/> ;
+  owl:imports <http://in4mium.com/londontube/data/stations/> ;
+  owl:imports <http://in4mium.com/londontube/schema/londontubeModel> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.

@@ -1,0 +1,46 @@
+# baseURI: http://in4mium.com/masterdatakg/data/sakila/sakilamms/pii
+# imports: http://in4mium.com/masterdatakg/data/sakila/sakilamms
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext/pii
+# prefix: pii
+
+@prefix mms-ex: <http://in4mium.com/masterdatakg/schema/mms-ext> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pii: <http://in4mium.com/masterdatakg/data/sakila/sakilamms/pii#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://in4mium.com/masterdatakg/data/sakila/sakilamms/pii>
+  a owl:Ontology ;
+  owl:imports <http://in4mium.com/masterdatakg/data/sakila/sakilamms> ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext/pii> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.postal_code>
+  mms-ext:dataElementSensitivity mms-ext:NonSensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.email>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.first_name>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.last_name>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.email>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.first_name>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.last_name>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.password>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.username>
+  mms-ext:dataElementSensitivity mms-ext:Sensitive_PII ;
+.

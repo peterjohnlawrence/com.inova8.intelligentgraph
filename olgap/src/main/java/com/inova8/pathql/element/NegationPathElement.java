@@ -70,11 +70,11 @@ public class NegationPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}

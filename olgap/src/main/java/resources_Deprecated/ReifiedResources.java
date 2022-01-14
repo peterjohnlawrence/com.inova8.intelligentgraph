@@ -23,7 +23,7 @@ public class ReifiedResources extends Resources{
 	Statement currentObjectStatement;
 	
 	
-	public ReifiedResources(Thing thing, PredicateElement predicateElement) {
+	public ReifiedResources(DeprecatedThing thing, PredicateElement predicateElement) {
 		super( Resources.Selector.OBJECT, thing, predicateElement.getReification(), predicateElement.getPredicate());
 		this.predicateElement = predicateElement;
 		//Initialize 

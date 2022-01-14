@@ -81,16 +81,16 @@ public abstract class PathElement {
 		return pathBinding;
 	};
 	public  PathTupleExpr pathPatternQuery(Thing thing) {
-		return pathPatternQuery(thing,(Variable)null,(Variable)null,null);
+		return pathPatternQuery(thing,(Variable)null,(Variable)null,(Variable)null,null);
 	};
 	public  PathTupleExpr pathPatternQuery(Thing thing, Integer pathIteration,CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing,null,null,pathIteration,customQueryOptions);
+		return pathPatternQuery(thing,null,null,null,pathIteration,customQueryOptions);
 	};
 	public abstract Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode);
 
-	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions);
+	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions);
 
-	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions);
 
 	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {

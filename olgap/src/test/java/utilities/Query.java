@@ -106,7 +106,14 @@ public class Query {
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.add(dataModel.getStatements(null, null, null),iri("file://"+dataFilename));
 	}
-
+	public static void addRDFFile(org.eclipse.rdf4j.repository.Repository workingRep, String dataFilename)
+			throws FileNotFoundException, IOException, RDFParseException, UnsupportedRDFormatException,
+			RepositoryException {
+		InputStream dataInput = new FileInputStream(dataFilename);
+		Model dataModel = Rio.parse(dataInput, "", RDFFormat.RDFXML);
+		RepositoryConnection conn = workingRep.getConnection();
+		conn.add(dataModel.getStatements(null, null, null),iri("file://"+dataFilename));
+	}
 	/**
 	 * Run boolean.
 	 *

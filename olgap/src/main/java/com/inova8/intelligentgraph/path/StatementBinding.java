@@ -4,8 +4,10 @@
 package com.inova8.intelligentgraph.path;
 
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.BindingSet;
 
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
@@ -100,10 +102,35 @@ public class StatementBinding extends EdgeBinding{
 		ModelBuilder subject = builder.subject(edgeCode);
 		subject.add(RDF.TYPE ,PATHQL.EDGE);
 		subject.add(PATHQL.edge_Source , bindingset.getBinding(this.getSourceVariable().getName()).getValue());
-		subject.add(PATHQL.edge_Predicate , bindingset.getBinding(this.getPredicateVariable().getName()).getValue());
+		subject.add(PATHQL.edge_Predicate ,  getAlternatePredicateBindingValue(bindingset));
 		subject.add(PATHQL.edge_Target , bindingset.getBinding(this.getTargetVariable().getName()).getValue());
 		subject.add(PATHQL.edge_Direction ,this.getDirection());
 		if(this.getIsDereified()!=null) subject.add(PATHQL.edge_Dereified , this.getIsDereified());
 		if(this.getReification()!=null) subject.add(PATHQL.edge_Reification , this.getReification());	
+	}
+	private  Value getAlternatePredicateBindingValue(BindingSet bindingset ) {
+		
+		Binding predicateBinding = getAlternatePredicateBinding(bindingset, predicateVariable );
+		if(predicateBinding!=null) {
+			return predicateBinding.getValue();
+		}else {
+			return null;
+		}
+	}
+	public static Binding getAlternatePredicateBinding(BindingSet bindingset, Variable predicateVariable ) {
+		String predicateVariableName = predicateVariable.getName();
+		String predicateVariableNameRoot = predicateVariableName.split("_alt")[0];
+		if( bindingset.hasBinding(predicateVariableNameRoot)) {
+			return bindingset.getBinding(predicateVariableNameRoot);
+		}else {
+			for(Binding binding:bindingset) {
+				String bindingName =  binding.getName();
+				String bindingNameRoot = bindingName.split("_alt")[0];
+				if(bindingNameRoot.equals(predicateVariableNameRoot)) {
+					return binding;
+				}
+			}
+		}	
+		return null;
 	}
 }

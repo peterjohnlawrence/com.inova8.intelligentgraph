@@ -176,7 +176,7 @@ public class VerbObjectList extends FactFilterElement {
 		}
 		return targetValues;
 	};
-
+	@Override
 	/**
 	 * Bind target variable.
 	 *
@@ -300,7 +300,7 @@ public class VerbObjectList extends FactFilterElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		TupleExpr verbObjectListPattern = null;
 		if (filterOperator != null) {
 			if (filterOperator.equals(FilterOperator.EQ)) {
@@ -332,12 +332,12 @@ public class VerbObjectList extends FactFilterElement {
 					case IRIREF:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListPattern = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListPattern = predicate.pathPatternQuery(thing, sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case LITERAL:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
-						verbObjectListPattern = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListPattern = predicate.pathPatternQuery(thing, sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					default:
 					}
@@ -349,7 +349,7 @@ public class VerbObjectList extends FactFilterElement {
 		return new PathTupleExpr(verbObjectListPattern);
 
 	};
-	public QueryModelNode filterExpression(Thing thing, Variable sourceVariable, Variable targetVariable,CustomQueryOptions customQueryOptions) {
+	public QueryModelNode filterExpression(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,CustomQueryOptions customQueryOptions) {
 		QueryModelNode verbObjectListExpression = null;
 		if (filterOperator != null) {
 			if (filterOperator.equals(FilterOperator.EQ)) {
@@ -386,22 +386,22 @@ public class VerbObjectList extends FactFilterElement {
 						predicate.setObjectFilterElement((FactFilterElement) objectList.get(0));
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case IRIREF:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case LITERAL:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case OBJECT:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getValue(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;					
 					default:
 					}

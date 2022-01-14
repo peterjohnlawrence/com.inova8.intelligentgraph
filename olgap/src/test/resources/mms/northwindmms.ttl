@@ -1,0 +1,2656 @@
+@base          <http://in4mium.com/masterdatakg/data/northwind/northwindmms> .
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.description>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.description" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "description" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "description" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.first_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.first_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "order_details"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "order_details"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.web_page>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.web_page" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.quantity>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.quantity" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transaction_types.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transaction_types.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transaction_types> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<>      a       <http://www.w3.org/2002/07/owl#Ontology> ;
+        <http://www.w3.org/2002/07/owl#versionInfo>
+                "Created By In4mium"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.shipped_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.shipped_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "shipped_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "shipped_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.last_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.last_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.job_title>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.job_title" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.home_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.home_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.web_page>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.web_page" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.sales_reports.title>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.sales_reports.title" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.sales_reports> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "title" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "title" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.customer_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.customer_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "customer_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "customer_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.home_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.home_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.job_title>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.job_title" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.purchase_order_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.purchase_order_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.purchase_order_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.purchase_order_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.country_region>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.country_region" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.date_received>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.date_received" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "date_received" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "date_received" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.zip_postal_code>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.order_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.order_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.business_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.business_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.shipping_fee>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.shipping_fee" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "shipping_fee" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "shipping_fee" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.date_allocated>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.date_allocated" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "date_allocated" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "date_allocated" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.category>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.category" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "category" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "category" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "invoices"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "invoices"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.paid_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.paid_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "paid_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "paid_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.unit_cost>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.unit_cost" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "unit_cost" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "unit_cost" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders_status.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders_status.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.mobile_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.mobile_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.quantity>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.quantity" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.city>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.city" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.taxes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.taxes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "taxes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "taxes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.attachments>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.attachments" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longblob" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.attachments>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.attachments" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longblob" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.email_address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.email_address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.invoice_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.invoice_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "invoice_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "invoice_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.first_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.first_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.order_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.order_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "order_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "order_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.employee_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.employee_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "employee_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "employee_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.product_code>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.product_code" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "product_code" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "product_code" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.customer_order_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.customer_order_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "customer_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "customer_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.sales_reports.default>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.sales_reports.default" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.sales_reports> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "default" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "default" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.submitted_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.submitted_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "submitted_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "submitted_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.approved_by>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.approved_by" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "approved_by" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "approved_by" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.notes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.notes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.discount>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.discount" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "discount" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "discount" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "double" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.company>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.company" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.purchase_order_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "purchase_order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.home_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.home_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "purchase_orders"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "purchase_orders"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "purchase_order_details"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "purchase_order_details"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.order_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.order_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "order_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.status_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.status_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details_status.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.attachments>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.attachments" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longblob" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employee_privileges.privilege_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employee_privileges.privilege_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> , <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.privileges.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employee_privileges> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "privilege_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "privilege_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.creation_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.creation_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "creation_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "creation_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.discontinued>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.discontinued" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "discontinued" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "discontinued" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.comments>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.comments" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "comments" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "comments" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_status>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "purchase_order_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "purchase_order_status"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.amount_due>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.amount_due" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "amount_due" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "amount_due" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders_tax_status.tax_status_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders_tax_status.tax_status_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders_tax_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "tax_status_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "tax_status_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.sales_reports.group_by>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.sales_reports.group_by" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.sales_reports> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "group_by" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "group_by" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.business_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.business_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.tax_rate>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.tax_rate" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "tax_rate" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "tax_rate" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "double" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.quantity_per_unit>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.quantity_per_unit" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "quantity_per_unit" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "quantity_per_unit" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.ship_state_province>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.ship_state_province" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "ship_state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "ship_state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.product_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.product_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.products.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "product_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "product_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.city>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.city" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.mobile_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.mobile_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "shippers"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "shippers"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.mobile_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.mobile_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders_tax_status>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders_tax_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "orders_tax_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "orders_tax_status"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.privileges.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.privileges.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.privileges> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.expected_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.expected_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "expected_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "expected_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.payment_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.payment_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "payment_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "payment_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.reorder_level>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.reorder_level" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "reorder_level" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "reorder_level" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.status_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.status_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_status.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_status.status>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_status.status" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "status" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "status" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.unit_price>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.unit_price" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "unit_price" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "unit_price" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.state_province>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.state_province" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.standard_cost>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.standard_cost" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "standard_cost" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "standard_cost" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.target_level>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.target_level" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "target_level" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "target_level" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.privileges>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.privileges"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "privileges"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "privileges"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.notes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.notes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.ship_zip_postal_code>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.ship_zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "ship_zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "ship_zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.state_province>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.state_province" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.attachments>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.attachments" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longblob" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.city>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.city" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.transaction_modified_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.transaction_modified_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "transaction_modified_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "transaction_modified_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.sales_reports.display>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.sales_reports.display" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.sales_reports> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "display" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "display" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.tax>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.tax" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "tax" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "tax" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.supplier_ids>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.supplier_ids" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "supplier_ids" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "supplier_ids" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.first_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.first_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "suppliers"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "suppliers"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders_status>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "orders_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "orders_status"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.ship_address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.ship_address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "ship_address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "ship_address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details_status.status_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details_status.status_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "status_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "status_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.transaction_created_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.transaction_created_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "transaction_created_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "transaction_created_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.city>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.city" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "city" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.inventory_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.inventory_id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "inventory_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "inventory_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind>
+        a       <http://rdf.cdisc.org/mms#Model> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "northwind"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "northwind"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.job_title>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.job_title" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.last_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.last_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.posted_to_inventory>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.posted_to_inventory" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "posted_to_inventory" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "posted_to_inventory" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.web_page>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.web_page" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.last_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.last_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.shipper_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.shipper_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "shipper_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "shipper_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.privileges.privilege_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.privileges.privilege_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.privileges> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "privilege_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "privilege_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details_status.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details_status.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.strings>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.strings"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "strings"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "strings"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.sales_reports>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.sales_reports"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "sales_reports"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "sales_reports"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.notes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.notes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.fax_number>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.fax_number" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.created_by>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.created_by" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "created_by" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "created_by" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "orders"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "orders"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.ship_country_region>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.ship_country_region" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "ship_country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "ship_country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.state_province>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.state_province" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.sales_reports.filter_row_source>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.sales_reports.filter_row_source" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.sales_reports> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "filter_row_source" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "filter_row_source" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.attachments>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.attachments" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "attachments" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longblob" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details_status>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "order_details_status"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "order_details_status"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.country_region>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.country_region" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.web_page>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.web_page" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "web_page" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.payment_method>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.payment_method" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "payment_method" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "payment_method" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders_tax_status.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders_tax_status.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders_tax_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.last_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.last_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "last_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.job_title>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.job_title" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "job_title" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.notes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.notes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.country_region>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.country_region" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.email_address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.email_address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.payment_amount>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.payment_amount" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "payment_amount" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "payment_amount" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transaction_types.type_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transaction_types.type_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transaction_types> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "type_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "type_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.ship_city>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.ship_city" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "ship_city" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "ship_city" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.company>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.company" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "inventory_transactions"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "inventory_transactions"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.minimum_reorder_quantity>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.minimum_reorder_quantity" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "minimum_reorder_quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "minimum_reorder_quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.transaction_type>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.transaction_type" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transaction_types.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "transaction_type" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "transaction_type" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transaction_types>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transaction_types"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "inventory_transaction_types"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "inventory_transaction_types"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.due_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.due_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "due_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "due_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "products"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "products"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.fax_number>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.fax_number" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employee_privileges.employee_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employee_privileges.employee_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> , <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employee_privileges> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "employee_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "employee_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.list_price>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.list_price" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "list_price" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "list_price" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.approved_date>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.approved_date" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "approved_date" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "approved_date" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "datetime" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.fax_number>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.fax_number" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employee_privileges>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employee_privileges"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "employee_privileges"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "employee_privileges"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.product_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.inventory_transactions.product_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.products.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.inventory_transactions> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "product_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "product_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.payment_type>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.payment_type" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "payment_type" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "payment_type" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.submitted_by>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.submitted_by" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "submitted_by" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "submitted_by" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.notes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.notes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.products.product_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.products.product_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.products> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "product_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "product_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "employees"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "employees"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.first_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.first_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "first_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.notes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.notes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "notes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.state_province>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.state_province" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "state_province" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.inventory_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.inventory_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.inventory_transactions.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "inventory_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "inventory_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.status_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.status_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.orders_status.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.tax_status_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.tax_status_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.orders_tax_status.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "tax_status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "tax_status_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "tinyint" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.zip_postal_code>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.company>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.company" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.country_region>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.country_region" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "country_region" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.shipping_fee>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.shipping_fee" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "shipping_fee" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "shipping_fee" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.zip_postal_code>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.strings.string_data>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.strings.string_data" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.strings> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "string_data" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "string_data" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.taxes>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.taxes" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "taxes" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "taxes" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.home_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.home_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "home_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.business_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.business_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_details.product_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_details.product_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.products.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "product_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "product_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders_status.status_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders_status.status_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "status_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "status_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.mobile_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.mobile_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "mobile_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.invoices.shipping>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.invoices.shipping" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.invoices> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "shipping" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "shipping" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.orders.ship_name>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.orders.ship_name" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "ship_name" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "ship_name" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.strings.string_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.strings.string_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.strings> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "string_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "string_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "longtext" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.email_address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.email_address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_order_status.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_order_status.id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_order_status> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.business_phone>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.business_phone" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "business_phone" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.email_address>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.suppliers.email_address" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.suppliers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "email_address" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/model.northwind> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "customers"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "customers"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.order_details.quantity>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.order_details.quantity" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.order_details> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "quantity" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "decimal" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.shippers.company>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.shippers.company" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.shippers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "company" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.purchase_orders.supplier_id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.purchase_orders.supplier_id" ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#dataElementRole>
+                <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+        <http://in4mium.com/masterdatakg/schema/mms-ext#references>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/column.suppliers.id> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.purchase_orders> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "supplier_id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "supplier_id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "int" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.customers.zip_postal_code>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.customers.zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.customers> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "zip_postal_code" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .
+
+<http://in4mium.com/masterdatakg/mms/id/northwind/column.employees.fax_number>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "northwind.employees.fax_number" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/northwind/dataset.employees> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "fax_number" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "varchar" .

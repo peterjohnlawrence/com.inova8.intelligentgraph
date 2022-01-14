@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathCalc;
+package resources_Deprecated;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
@@ -36,13 +36,19 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.ReificationType;
 import com.inova8.intelligentgraph.intelligentGraphRepository.SEEQSource;
 import com.inova8.intelligentgraph.path.NullPath;
 import com.inova8.intelligentgraph.path.Path;
+import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
+import com.inova8.intelligentgraph.pathCalc.Evaluator;
+import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathPatternException;
-import com.inova8.intelligentgraph.pathCalc.Thing;
+
+import resources_Deprecated.DeprecatedThing;
+
 import com.inova8.intelligentgraph.pathQLModel.NullResource;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLResults.PathResults;
@@ -62,24 +68,24 @@ import org.eclipse.rdf4j.repository.RepositoryException;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
-public class Thing extends Resource {
+public class DeprecatedThing extends Resource {
 
 	private static final long serialVersionUID = 1L;
 	/** The logger. */
-	protected final Logger logger = LoggerFactory.getLogger(Thing.class);
+	protected final Logger logger = LoggerFactory.getLogger(DeprecatedThing.class);
 	/** The cached resources. */
 	private HashMap<String, Resource> cachedResources;
 	private  IRI graphName;
-	protected Thing(org.eclipse.rdf4j.model.Value superValue) {
+	protected DeprecatedThing(org.eclipse.rdf4j.model.Value superValue) {
 		super(superValue);
 	}
-	public static Thing create(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
+	public static DeprecatedThing create(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
-		return Thing.create( source,  null, superValue,	 evaluationContext);
+		return DeprecatedThing.create( source,  null, superValue,	 evaluationContext);
 	}
-	public static Thing create(IntelligentGraphRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
+	public static DeprecatedThing create(IntelligentGraphRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
-		Thing thing;
+		com.inova8.intelligentgraph.pathQLModel.Thing thing;
 
 		String graphThingKey = superValue.stringValue();//graphIri.stringValue()+"~"+ superValue.stringValue();
 		if (superValue != null && source != null && source.getThings().containsKey(graphThingKey)) {
@@ -96,7 +102,7 @@ public class Thing extends Resource {
 			if(graphIri!=null)thing.graphName= graphIri;
 			return thing;
 		} else {
-			thing = new Thing(source, superValue, evaluationContext);
+			thing = new DeprecatedThing(source, superValue, evaluationContext);
 			if (source != null)
 				source.getThings().put(graphThingKey, thing);
 			if(graphIri==null)graphIri= Graph.DEFAULTGRAPH;
@@ -118,7 +124,7 @@ public class Thing extends Resource {
 	 * @param evaluationContext
 	 *            the evaluation context
 	 */
-	private Thing(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
+	private DeprecatedThing(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		super(superValue, evaluationContext);
 		this.setSource(source);
@@ -493,10 +499,10 @@ public class Thing extends Resource {
 			case "BigInteger":
 				return Resource.create(getSource(), literal((BigInteger) result), this.getEvaluationContext());
 			case "Thing":
-				return (Thing) result;
+				return (DeprecatedThing) result;
 			case "LinkedHashModel":
 				getSource().writeModelToCache(this, result, cacheContextIRI);
-				return Thing.create(getSource(), cacheContextIRI, this.getEvaluationContext());
+				return DeprecatedThing.create(getSource(), cacheContextIRI, this.getEvaluationContext());
 			case "Literal":
 				Value content = ((com.inova8.intelligentgraph.pathQLModel.Literal) result).getValue();
 				switch (((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName()) {
@@ -535,7 +541,7 @@ public class Thing extends Resource {
 	}
 
 	@Deprecated
-	public Thing prefix(String prefix, String IRI) {
+	public DeprecatedThing prefix(String prefix, String IRI) {
 		org.eclipse.rdf4j.model.IRI iri = IntelligentGraphRepository.trimAndCheckIRIString(IRI);
 		if (iri != null) {
 			this.getEvaluationContext().getPrefixes().put(prefix, iri);
@@ -610,7 +616,7 @@ public class Thing extends Resource {
 	}
 
 
-	public Thing addFact(String property, String value, IRI dataType) {
+	public DeprecatedThing addFact(String property, String value, IRI dataType) {
 		try {
 			Literal literal = literal(value, dataType);
 			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
@@ -619,18 +625,18 @@ public class Thing extends Resource {
 		}
 		return this;
 	}
-	public Thing addFact(IRI property, String value, IRI dataType ) {
+	public DeprecatedThing addFact(IRI property, String value, IRI dataType ) {
 		Literal literal = literal(value, dataType);
 		addFact(property,literal);
 		return this;
 	}
-	public Thing addFact(IRI property, Value value) {
+	public DeprecatedThing addFact(IRI property, Value value) {
 		Validate.notNull(property);
 		Validate.notNull(value);
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
 		switch(value.getClass().getName() ) {
 			case "com.inova8.intelligentgraph.pathCalc.Thing":
-				connection.add(this.getIRI(), property, ((Thing) value).getIRI(), this.getGraphName());
+				connection.add(this.getIRI(), property, ((DeprecatedThing) value).getIRI(), this.getGraphName());
 				break;
 			default:
 				connection.add(this.getIRI(), property, value, this.getGraphName());
@@ -638,14 +644,14 @@ public class Thing extends Resource {
 		//IntelligentGraphRepository.clearCaches();
 		return this;
 	}
-	public Thing addFact(String property, Value value) {
+	public DeprecatedThing addFact(String property, Value value) {
 		Validate.notNull(property);
 		Validate.notNull(value);
 		try {
 			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
 			switch(value.getClass().getName() ) {
 			case "com.inova8.intelligentgraph.pathCalc.Thing":
-				addFact(predicateElement,((Thing) value).getIRI() );
+				addFact(predicateElement,((DeprecatedThing) value).getIRI() );
 				break;
 			default:
 				addFact(predicateElement,value );
@@ -657,7 +663,7 @@ public class Thing extends Resource {
 		
 		return this;
 	}
-	public Thing addFact(String property, String value) {
+	public DeprecatedThing addFact(String property, String value) {
 		Validate.notNull(property);
 		Validate.notNull(value);
 		try {
@@ -764,7 +770,7 @@ public class Thing extends Resource {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
-	public Thing getThing(String thing) throws RecognitionException, PathPatternException {
+	public DeprecatedThing getThing(String thing) throws RecognitionException, PathPatternException {
 		IRI thingIri = PathParser.parseIriRef(this.getSource(),thing).getIri();
 		return create(this.getSource(), thingIri,this.getEvaluationContext());
 	}

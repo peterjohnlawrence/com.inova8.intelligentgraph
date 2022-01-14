@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package pathQLModel;
+package com.inova8.intelligentgraph.pathQLModel;
 
 import java.util.HashSet;
 

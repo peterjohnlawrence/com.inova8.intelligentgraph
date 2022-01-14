@@ -102,7 +102,7 @@ class Local_PathTutorialTests {
 //			assertEquals("http://inova8.com/intelligentgraph/path1/Another3", aPerson.getFact(":hasParent[:hasGender :Female]").stringValue());
 //			assertEquals("http://inova8.com/intelligentgraph/path1/Another3", aPerson.getFact(":hasParent[:hasLocation :Maidstone]").stringValue());
 			assertEquals("http://inova8.com/intelligentgraph/path1/Another3", aPerson.getFact(":hasParent{0,4}/:hasParent[:hasGender :Female]").stringValue());
-			assertEquals("http://inova8.com/intelligentgraph/path1/Another3http://inova8.com/intelligentgraph/path1/Another5", aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
+			assertEquals("[http://inova8.com/intelligentgraph/path1/Another3;http://inova8.com/intelligentgraph/path1/Another5;]", aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
 //			PathElement element = PathParser.parsePathPattern(aPerson, ":hasParent[:hasGender :Female]{1,4}");
 //			assertEquals ("<http://inova8.com/intelligentgraph/path1/hasParent>[<http://inova8.com/intelligentgraph/path1/hasGender> <http://inova8.com/intelligentgraph/path1/Female> ]{1,4}" , element.toString());
 //			assertEquals ("{0=1, 1=2, 2=3, 3=4}",element.getIterations().toString());
@@ -124,11 +124,11 @@ class Local_PathTutorialTests {
 //						+ "]\r\n"
 //						+ "", paths.toString());	
 			PathResults	 paths =  aPerson.getPaths(":hasParent{0,4}/:hasParent[:hasGender :Female]");
-					assertEquals("Path=[[http://inova8.com/intelligentgraph/path1/aPerson,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another3,INVERSE]\r\n"
+					assertEquals("Path=[[http://inova8.com/intelligentgraph/path1/aPerson,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another3,DIRECT]\r\n"
 							+ "]\r\n"
-							+ "Path=[[http://inova8.com/intelligentgraph/path1/aPerson,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another3,INVERSE]\r\n"
-							+ "[http://inova8.com/intelligentgraph/path1/Another3,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another4,INVERSE]\r\n"
-							+ "[http://inova8.com/intelligentgraph/path1/Another4,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another5,INVERSE]\r\n"
+							+ "Path=[[http://inova8.com/intelligentgraph/path1/aPerson,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another3,DIRECT]\r\n"
+							+ "[http://inova8.com/intelligentgraph/path1/Another3,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another4,DIRECT]\r\n"
+							+ "[http://inova8.com/intelligentgraph/path1/Another4,http://inova8.com/intelligentgraph/path1/hasParent,http://inova8.com/intelligentgraph/path1/Another5,DIRECT]\r\n"
 							+ "]\r\n"
 							+ "", paths.toString());	
 		} catch (Exception e) {

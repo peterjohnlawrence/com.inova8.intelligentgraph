@@ -23,7 +23,7 @@ public class IsReifiedResourcesOf extends Resources{
 	Statement currentObjectStatement;
 	
 	
-	public IsReifiedResourcesOf(Thing thing, PredicateElement predicateElement) {
+	public IsReifiedResourcesOf(DeprecatedThing thing, PredicateElement predicateElement) {
 		super( Resources.Selector.OBJECT, thing, predicateElement.getReification(), predicateElement.getPredicate());
 		this.predicateElement = predicateElement;
 		//Initialize 

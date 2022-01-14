@@ -1,0 +1,43 @@
+# baseURI: http://inova8.com/Kennedys/inverses
+# imports: http://topbraid.org/examples/kennedys
+# prefix: inverses
+
+@prefix inverses: <http://inova8.com/Kennedys/inverses#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://inova8.com/Kennedys/inverses>
+  rdf:type owl:Ontology ;
+  owl:imports <http://topbraid.org/examples/kennedys> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+<http://topbraid.org/examples/kennedys#almaMater>
+  owl:inverseOf <http://topbraid.org/examples/kennedys#isAlmaMaterOf> ;
+.
+<http://topbraid.org/examples/kennedys#child>
+  owl:inverseOf <http://topbraid.org/examples/kennedys#parent> ;
+.
+<http://topbraid.org/examples/kennedys#gender>
+  owl:inverseOf <http://topbraid.org/examples/kennedys#isGenderOf> ;
+.
+<http://topbraid.org/examples/kennedys#isAlmaMaterOf>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "is alma mater of" ;
+.
+<http://topbraid.org/examples/kennedys#isGenderOf>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "is gender of" ;
+.
+<http://topbraid.org/examples/kennedys#isProfessionOf>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "is profession of" ;
+.
+<http://topbraid.org/examples/kennedys#profession>
+  owl:inverseOf <http://topbraid.org/examples/kennedys#isProfessionOf> ;
+.
+<http://topbraid.org/examples/kennedys#spouse>
+  rdfs:domain <http://topbraid.org/examples/kennedys#Person> ;
+  rdfs:range <http://topbraid.org/examples/kennedys#Person> ;
+.

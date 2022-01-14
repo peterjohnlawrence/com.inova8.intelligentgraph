@@ -36,7 +36,7 @@ public class SimpleResources extends Resources{
 
 	private CloseableIteration<? extends Statement, QueryEvaluationException>statements;
 
-	public SimpleResources( Thing thing, PredicateElement predicateElement	){
+	public SimpleResources( DeprecatedThing thing, PredicateElement predicateElement	){
 		//TODO
 		super( Resources.Selector.OBJECT, thing, predicateElement.getReification(), predicateElement.getPredicate());
 		
@@ -122,7 +122,7 @@ public class SimpleResources extends Resources{
    CloseableIteration<? extends Statement, QueryEvaluationException> getStatements() {
 		return statements;
 	}
-	public Thing getThing() {
+	public DeprecatedThing getThing() {
 		return thing;
 	}
 	protected Selector getSelector() {

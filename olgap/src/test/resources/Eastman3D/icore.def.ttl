@@ -1,0 +1,304 @@
+# baseURI: http://inova8.com/core/def/
+# prefix: icore
+
+@prefix : <http://inova8.com/core/def/> .
+@prefix icore: <http://inova8.com/core/def/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+icore:
+  a owl:Ontology ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+icore:Concept
+  a owl:Class ;
+  rdfs:isDefinedBy <https://www.w3.org/2009/08/skos-reference/skos.html#Concept> ;
+  rdfs:label "Concept" ;
+  rdfs:subClassOf owl:Thing ;
+.
+icore:ConceptScheme
+  a owl:Class ;
+  rdfs:isDefinedBy <https://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme> ;
+  rdfs:label "Concept scheme" ;
+  rdfs:subClassOf owl:Thing ;
+.
+icore:ConstitutionRelation
+  a icore:Concept ;
+  icore:broader icore:MpartRelation ;
+  rdfs:comment "Stuff-object, eg vase constitutedOf clay" ;
+  rdfs:label "ConstitutionRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:ContainmentRelation
+  a icore:Concept ;
+  icore:broader icore:SpatialParthoodRelation ;
+  rdfs:comment "3D objects, eg book contained in bag" ;
+  rdfs:label "ContainmentRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:Continuant
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000002> ;
+  rdfs:label "Continuant" ;
+  rdfs:subClassOf icore:Entity ;
+.
+icore:Disposition
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000016> ;
+  rdfs:label "Disposition" ;
+  rdfs:subClassOf icore:RealizableEntity ;
+.
+icore:Entity
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000001> ;
+  rdfs:label "Entity" ;
+  rdfs:subClassOf owl:Thing ;
+.
+icore:Function
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000034> ;
+  rdfs:label "Function" ;
+  rdfs:subClassOf icore:Disposition ;
+.
+icore:GenericallyDependentContinuant
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000031> ;
+  rdfs:label "Generically dependent continuant" ;
+  rdfs:subClassOf icore:Continuant ;
+.
+icore:History
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000182> ;
+  rdfs:label "History" ;
+  rdfs:subClassOf icore:Process ;
+.
+icore:ImmaterialEntity
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000141> ;
+  rdfs:label "Immaterial entity" ;
+  rdfs:subClassOf icore:IndependentContinuant ;
+.
+icore:IndependentContinuant
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000004> ;
+  rdfs:label "Independent continuant" ;
+  rdfs:subClassOf icore:Continuant ;
+.
+icore:InvolvementRelation
+  a icore:Concept ;
+  icore:broader icore:ParthoodRelation ;
+  rdfs:comment "Processess, eg chewing involves eating" ;
+  rdfs:label "InvolvementRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:LocationRelation
+  a icore:Concept ;
+  icore:broader icore:SpatialParthoodRelation ;
+  rdfs:comment "2D objects, eg Maidstone location Kent" ;
+  rdfs:label "LocationRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:MaterialEntity
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000040> ;
+  rdfs:label "Material entity" ;
+  rdfs:subClassOf icore:IndependentContinuant ;
+.
+icore:MembershipRelation
+  a icore:Concept ;
+  icore:broader icore:MpartRelation ;
+  rdfs:comment "Object/role-collective, eg musician meber of orchestra" ;
+  rdfs:label "MembershipRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:MpartRelation
+  a icore:Concept ;
+  icore:topConceptOf icore:PartWholeRelationships ;
+  rdfs:comment "Meronymic" ;
+  rdfs:label "MpartRelation" ;
+.
+icore:Object
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000030> ;
+  rdfs:label "Object" ;
+  rdfs:subClassOf icore:MaterialEntity ;
+.
+icore:ObjectAggregate
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000027> ;
+  rdfs:label "Object aggregate" ;
+  rdfs:subClassOf icore:MaterialEntity ;
+.
+icore:Occurrent
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000003> ;
+  rdfs:label "Occurrent" ;
+  rdfs:subClassOf icore:Entity ;
+.
+icore:OneDimensionalTemporalRegion
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000038> ;
+  rdfs:label "One dimensional temporal region" ;
+  rdfs:subClassOf icore:TemporalRegion ;
+.
+icore:ParthoodRelation
+  a icore:Concept ;
+  icore:topConceptOf icore:PartWholeRelationships ;
+  rdfs:comment "Mereology" ;
+  rdfs:label "ParthoodRelation" ;
+.
+icore:ParticipationRelation
+  a icore:Concept ;
+  icore:broader icore:MpartRelation ;
+  rdfs:comment "Object-process, eg musician particpates in peformance" ;
+  rdfs:label "ParticipationRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:PortionRelation
+  a icore:Concept ;
+  icore:broader icore:ParthoodRelation ;
+  rdfs:comment "Same stuffs, eg wine in wineglass" ;
+  rdfs:label "PortionRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:Process
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000015> ;
+  rdfs:label "Process" ;
+  rdfs:subClassOf icore:Occurrent ;
+.
+icore:ProcessProfile
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000182> ;
+  rdfs:label "ProcessProfile" ;
+  rdfs:subClassOf icore:Process ;
+.
+icore:Quality
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000019> ;
+  rdfs:label "Quality" ;
+  rdfs:subClassOf icore:SpecificallyDependentContinuant ;
+.
+icore:RealizableEntity
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000017> ;
+  rdfs:label "RealizableEntity" ;
+  rdfs:subClassOf icore:SpecificallyDependentContinuant ;
+.
+icore:Site
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000029> ;
+  rdfs:label "Site" ;
+  rdfs:subClassOf icore:ImmaterialEntity ;
+.
+icore:SpatialParthoodRelation
+  a icore:Concept ;
+  icore:broader icore:ParthoodRelation ;
+  rdfs:label "SpatialParthoodRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:SpecificallyDependentContinuant
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000020> ;
+  rdfs:label "Specifically dependent continuant" ;
+  rdfs:subClassOf icore:Continuant ;
+.
+icore:StructuralParthoodRelation
+  a icore:Concept ;
+  icore:broader icore:ParthoodRelation ;
+  rdfs:comment "Objects, eg wall partOf house" ;
+  rdfs:label "StructuralParthoodRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:StuffParthoodRelation
+  a icore:Concept ;
+  icore:broader icore:ParthoodRelation ;
+  rdfs:comment "Different stuffs, eg salt part of seawater" ;
+  rdfs:label "StuffParthoodRelation" ;
+  rdfs:subClassOf icore:Concept ;
+.
+icore:TemporalRegion
+  a owl:Class ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000008> ;
+  rdfs:label "Temporal region" ;
+  rdfs:subClassOf icore:Occurrent ;
+.
+icore:ZeroDimensionalTemporalRegion
+  a owl:Class ;
+  rdfs:comment "Temporal instant" ;
+  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/BFO_0000148> ;
+  rdfs:label "Zero dimensional temporal region" ;
+  rdfs:subClassOf icore:TemporalRegion ;
+.
+icore:broader
+  a owl:ObjectProperty ;
+  rdfs:domain icore:Concept ;
+  rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core#broader> ;
+  rdfs:label "Broader" ;
+  rdfs:range icore:Concept ;
+  owl:inverseOf icore:narrower ;
+.
+icore:hasTopConcept
+  a owl:ObjectProperty ;
+  rdfs:domain icore:ConceptScheme ;
+  rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core#hasTopConcept> ;
+  rdfs:label "Has Top-Concept" ;
+  rdfs:range icore:Concept ;
+  owl:inverseOf icore:topConceptOf ;
+.
+icore:inScheme
+  a owl:ObjectProperty ;
+  rdfs:domain icore:Concept ;
+  rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core#inScheme> ;
+  rdfs:label "In Scheme" ;
+  rdfs:range icore:ConceptScheme ;
+.
+icore:isObjectOf
+  a owl:ObjectProperty ;
+  rdfs:label "isObjectOf" ;
+.
+icore:isPredicateOf
+  a owl:ObjectProperty ;
+  rdfs:label "isPredicateOf" ;
+.
+icore:isSubjectOf
+  a owl:ObjectProperty ;
+  rdfs:label "isSubjectOf" ;
+.
+icore:narrower
+  a owl:ObjectProperty ;
+  rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core#narrower> ;
+  rdfs:label "Narrower" ;
+.
+icore:topConceptOf
+  a owl:ObjectProperty ;
+  rdfs:label "Top Concept Of" ;
+  rdfs:subPropertyOf icore:inScheme ;
+.
+script:groovy
+  a rdfs:Class ;
+  rdfs:label "groovy" ;
+  rdfs:subClassOf script:script ;
+.
+script:javascript
+  a rdfs:Class ;
+  rdfs:label "javascript" ;
+  rdfs:subClassOf script:script ;
+.
+script:script
+  a rdfs:Class ;
+  rdfs:label "script" ;
+  rdfs:subClassOf rdfs:Literal ;
+.
+rdf:object
+  owl:inverseOf icore:isObjectOf ;
+.
+rdf:predicate
+  owl:inverseOf icore:isPredicateOf ;
+.
+rdf:subject
+  owl:inverseOf icore:isSubjectOf ;
+.

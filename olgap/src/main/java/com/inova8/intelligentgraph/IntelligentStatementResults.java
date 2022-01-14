@@ -15,10 +15,14 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.path.PathTupleExpr;
+import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
+import com.inova8.pathql.element.Variable;
+
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
 import java.net.URISyntaxException;
@@ -32,6 +36,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private Integer pathIteration=0;
 	IntelligentGraphConnection intelligentGraphConnection;
 	IntelligentGraphRepository source;
+	private Variable predicateVariable;
 	private String pred;
 	private String obj;
 	private String subj;
@@ -39,6 +44,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private CustomQueryOptions customQueryOptions;
 	private Resource[] contexts;
 	private final Boolean trace;
+	private PathTupleExpr pathTupleExpr;
 	@Deprecated
 	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
@@ -51,6 +57,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.trace=false;
 		subj = pathElement.getTargetSubject().toString();
 		//TODO
+		predicateVariable =pathElement.getTargetPredicate();
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
@@ -68,6 +75,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.trace = trace;
 		subj = pathElement.getTargetSubject().toString();
 		//TODO
+		predicateVariable =pathElement.getTargetPredicate();
 		pred = pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
@@ -112,10 +120,18 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 			return true;
 		}else {
 			while(pathIteration < this.sortedIterations.size() ) {
-				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
+				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
 				pathIteration ++;
+				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr, contexts);
 				boolean hasNext = resultsIterator.hasNext();
-				if(hasNext) return true;
+				if(hasNext){
+					predicateVariable =pathTupleExpr.getStatementBinding().getPredicateVariable();
+					subj = pathTupleExpr.getStatementBinding().getSourceVariable().getName();
+					pred = pathTupleExpr.getStatementBinding().getPredicateVariable().getName();
+					obj = pathTupleExpr.getStatementBinding().getTargetVariable().getName();
+					return true;
+				}
 			}
 			return false;
 		}	
@@ -126,7 +142,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	public IntelligentStatement next() throws QueryEvaluationException {
 		BindingSet nextBindingset = getResultsIterator().next();
 		Binding subjBinding = nextBindingset.getBinding(subj);
-		Binding predBinding =nextBindingset.getBinding(pred);
+		Binding predBinding =StatementBinding.getAlternatePredicateBinding( nextBindingset,   predicateVariable );
 		Binding objBinding =nextBindingset.getBinding(obj);
 		if(subjBinding!=null && predBinding!=null && objBinding!=null ) {
 			IRI parameterizedPredicate ;
@@ -154,7 +170,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		if(resultsIterator!=null)
 			return resultsIterator;
 		else {
-			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
+	//		this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
 			return resultsIterator;
 		}
 	}

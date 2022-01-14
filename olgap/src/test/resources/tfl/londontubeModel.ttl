@@ -1,0 +1,103 @@
+# baseURI: http://in4mium.com/londontube/schema/londontubeModel
+# imports: http://inova8.com/wordmodel/
+# imports: http://www.w3.org/2003/01/geo/wgs84_pos
+# prefix: londontubeModel
+
+@prefix londontubeModel: <http://in4mium.com/londontube/schema/londontubeModel#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://in4mium.com/londontube/ref/NumberStationsInZone>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/Zone> ;
+  rdfs:label "Number Stations" ;
+  rdfs:range xsd:integer ;
+.
+<http://in4mium.com/londontube/ref/NumberStationsOnLine>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeLine> ;
+  rdfs:label "Number Stations" ;
+  rdfs:range xsd:integer ;
+.
+<http://in4mium.com/londontube/ref/TubeLine>
+  rdf:type owl:Class ;
+  rdfs:label "Line" ;
+.
+<http://in4mium.com/londontube/ref/TubeStation>
+  rdf:type owl:Class ;
+  rdfs:label "Station" ;
+.
+<http://in4mium.com/londontube/ref/Zone>
+  rdf:type owl:Class ;
+  rdfs:label "Zone" ;
+.
+<http://in4mium.com/londontube/ref/connectsFrom>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+  rdfs:label "Connects From" ;
+  rdfs:range <http://in4mium.com/londontube/ref/TubeStation> ;
+.
+<http://in4mium.com/londontube/ref/connectsTo>
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "Connects To" ;
+  owl:inverseOf <http://in4mium.com/londontube/ref/connectsFrom> ;
+.
+<http://in4mium.com/londontube/ref/hasStationInZone>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/Zone> ;
+  rdfs:label "has station in zone" ;
+  rdfs:range <http://in4mium.com/londontube/ref/TubeStation> ;
+.
+<http://in4mium.com/londontube/ref/hasStationOnLine>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeLine> ;
+  rdfs:label "has station on line" ;
+  rdfs:range <http://in4mium.com/londontube/ref/TubeStation> ;
+.
+<http://in4mium.com/londontube/ref/inZone>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+  rdfs:label "In Zone" ;
+  rdfs:range <http://in4mium.com/londontube/ref/Zone> ;
+.
+<http://in4mium.com/londontube/ref/onLine>
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+  rdfs:label "On Line" ;
+  rdfs:range <http://in4mium.com/londontube/ref/TubeLine> ;
+.
+<http://in4mium.com/londontube/ref/osx>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+  rdfs:label "OS X" ;
+  rdfs:range xsd:integer ;
+.
+<http://in4mium.com/londontube/ref/osy>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+  rdfs:label "OS Y" ;
+  rdfs:range xsd:integer ;
+.
+<http://in4mium.com/londontube/ref/postcode>
+  rdf:type owl:DatatypeProperty ;
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+  rdfs:label "Postcode" ;
+  rdfs:range xsd:string ;
+.
+<http://in4mium.com/londontube/schema/londontubeModel>
+  rdf:type owl:Ontology ;
+  owl:imports <http://inova8.com/wordmodel/> ;
+  owl:imports <http://www.w3.org/2003/01/geo/wgs84_pos> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+<http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+.
+<http://www.w3.org/2003/01/geo/wgs84_pos#lat_long>
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+.
+<http://www.w3.org/2003/01/geo/wgs84_pos#long>
+  rdfs:domain <http://in4mium.com/londontube/ref/TubeStation> ;
+.

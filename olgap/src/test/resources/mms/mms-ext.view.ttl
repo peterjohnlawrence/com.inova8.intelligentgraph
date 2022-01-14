@@ -1,0 +1,40 @@
+# baseURI: http://in4mium.com/masterdatakg/schema/mms-ext/view
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext
+# imports: http://rdf.cdisc.org/mms
+
+@prefix : <http://in4mium.com/masterdatakg/schema/mms-ext> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+mms-ext:contextDerivation
+  a owl:DatatypeProperty ;
+  rdfs:comment "Declares the 'formula' which is used to derive the context/dataset/etc" ;
+  rdfs:domain <http://rdf.cdisc.org/mms#Context> ;
+  rdfs:label "contextDerivation" ;
+.
+mms-ext:dataelementDerivation
+  a owl:DatatypeProperty ;
+  rdfs:comment "Declares the 'formula' which is used to derive the dataelement/column" ;
+  rdfs:domain <http://rdf.cdisc.org/mms#DataElement> ;
+  rdfs:label "dataelementDerivation" ;
+.
+mms-ext:derives
+  a owl:ObjectProperty ;
+  rdfs:label "derives" ;
+.
+mms-ext:isDerivedFrom
+  a owl:ObjectProperty ;
+  rdfs:domain <http://rdf.cdisc.org/mms#DataElement> ;
+  rdfs:label "is derived from" ;
+  rdfs:range <http://rdf.cdisc.org/mms#DataElement> ;
+  owl:inverseOf mms-ext:derives ;
+.
+<http://in4mium.com/masterdatakg/schema/mms-ext/view>
+  a owl:Ontology ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext> ;
+  owl:imports <http://rdf.cdisc.org/mms> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.

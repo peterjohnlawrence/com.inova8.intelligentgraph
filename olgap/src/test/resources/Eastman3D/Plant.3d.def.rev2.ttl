@@ -1,0 +1,1058 @@
+# baseURI: http://inova8.com/plant.3d/def/
+# imports: http://inova8.com/core/def/
+
+@prefix icore: <http://inova8.com/core/def/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix plant: <http://inova8.com/plant/def/> .
+@prefix plant.AttributeKind: <http://inova8.com/plant/def/AttributeKind/> .
+@prefix plant.CommandKind: <http://inova8.com/plant/def/CommandKind/> .
+@prefix plant.ConceptScheme: <http://inova8.com/plant/def/ConceptScheme/> .
+@prefix plant.ConstituentKind: <http://inova8.com/plant/def/ConstituentKind/> .
+@prefix plant.ParthoodKind: <http://inova8.com/plant/def/ParthoodKind/> .
+@prefix plant.ProcessKind: <http://inova8.com/plant/def/ProcessKind/> .
+@prefix plant.Script: <http://inova8.com/plant/def/Script/> .
+@prefix plant.StateKind: <http://inova8.com/plant/def/StateKind/> .
+@prefix plant.SubProcedureKind: <http://inova8.com/plant/def/SubProcedureKind/> .
+@prefix plant.TransferenceKind: <http://inova8.com/plant/def/TransferenceKind/> .
+@prefix plant.UOM: <http://inova8.com/plant/def/UOM/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix script: <http://inova8.com/script/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://inova8.com/plant.3d/def/>
+  a owl:Ontology ;
+  owl:imports icore: ;
+  owl:versionInfo "Rev1" ;
+.
+plant:ArchetypeConcept
+  a owl:Class ;
+  rdfs:label "Archetypes" ;
+  rdfs:subClassOf plant:Concept ;
+.
+plant:Area
+  a plant:CollectionConcept ;
+  icore:broader plant:PlanningZone ;
+  rdfs:label "Area" ;
+.
+plant:Attribute
+  a owl:Class ;
+  rdfs:label "Attribute" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:AttributeKind
+  a owl:Class ;
+  rdfs:label "Attribute Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.AttributeKind:Density
+  a plant:AttributeKind ;
+  rdfs:label "Density" ;
+.
+plant.AttributeKind:Flow
+  a plant:AttributeKind ;
+  rdfs:label "Flow" ;
+.
+plant.AttributeKind:Level
+  a plant:AttributeKind ;
+  rdfs:label "Level" ;
+.
+plant.AttributeKind:LiquidVolume
+  a plant:AttributeKind ;
+  rdfs:label "LiquidVolume" ;
+.
+plant.AttributeKind:LiquidVolumeBalance
+  a plant:AttributeKind ;
+  rdfs:label "LiquidVolumeBalance" ;
+.
+plant.AttributeKind:LiquidVolumeThroughput
+  a plant:AttributeKind ;
+  rdfs:label "LiquidVolumeThroughput" ;
+.
+plant.AttributeKind:LiquidVolumeYield
+  a plant:AttributeKind ;
+  rdfs:label "LiquidVolumeYield" ;
+.
+plant.AttributeKind:MassBalance
+  a plant:AttributeKind ;
+  rdfs:label "MassBalance" ;
+.
+plant.AttributeKind:MassFlow
+  a plant:AttributeKind ;
+  rdfs:label "MassFlow" ;
+.
+plant.AttributeKind:MassThroughput
+  a plant:AttributeKind ;
+  rdfs:label "MassThroughput" ;
+.
+plant.AttributeKind:MassYield
+  a plant:AttributeKind ;
+  rdfs:label "MassYield" ;
+.
+plant.AttributeKind:MolarFlow
+  a plant:AttributeKind ;
+  rdfs:label "MolarFlow" ;
+.
+plant.AttributeKind:MolarFlowBalance
+  a plant:AttributeKind ;
+  rdfs:label "MolarFlowBalance" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.A>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.A" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.B>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.B" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.C>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.C" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.D>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.D" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.E>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.E" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.F>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.F" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.G>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.G" ;
+.
+<http://inova8.com/plant/def/AttributeKind/MoleFraction.H>
+  a plant:AttributeKind ;
+  rdfs:label "MoleFraction.H" ;
+.
+plant.AttributeKind:Power
+  a plant:AttributeKind ;
+  rdfs:label "Power" ;
+.
+plant.AttributeKind:Pressure
+  a plant:AttributeKind ;
+  rdfs:label "Pressure" ;
+.
+plant.AttributeKind:SteamFlow
+  a plant:AttributeKind ;
+  rdfs:label "SteamFlow" ;
+.
+plant.AttributeKind:Temperature
+  a plant:AttributeKind ;
+  rdfs:label "Temperature" ;
+.
+plant.AttributeKind:ValvePosition
+  a plant:AttributeKind ;
+  rdfs:label "ValvePosition" ;
+.
+plant.AttributeKind:VolumeFlow
+  a plant:AttributeKind ;
+  rdfs:label "VolumeFlow" ;
+.
+plant:BatteryLimit
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Battery limit" ;
+.
+plant:Boiler
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Boiler" ;
+.
+plant:CollectionConcept
+  a owl:Class ;
+  rdfs:label "Collections" ;
+  rdfs:subClassOf plant:Concept ;
+.
+plant:Command
+  a owl:Class ;
+  rdfs:label "Command" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:CommandKind
+  a owl:Class ;
+  rdfs:label "Command Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.CommandKind:Abort
+  a plant:CommandKind ;
+  rdfs:label "Abort" ;
+.
+plant.CommandKind:Clear_Failures
+  a plant:CommandKind ;
+  rdfs:label "Clear_Failures" ;
+.
+plant.CommandKind:Hold
+  a plant:CommandKind ;
+  rdfs:label "Hold" ;
+.
+plant.CommandKind:Restart
+  a plant:CommandKind ;
+  rdfs:label "Restart" ;
+.
+plant.CommandKind:Start
+  a plant:CommandKind ;
+  rdfs:label "Start" ;
+.
+plant:Compressor
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Compressor" ;
+.
+plant:Concept
+  a owl:Class ;
+  rdfs:label "Concept" ;
+  rdfs:subClassOf icore:Concept ;
+.
+plant:ConceptScheme
+  a owl:Class ;
+  rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core> ;
+  rdfs:label "Concept scheme" ;
+  rdfs:subClassOf icore:ConceptScheme ;
+.
+plant.ConceptScheme:PlantItems
+  a plant:ConceptScheme ;
+  icore:hasTopConcept plant:PlantItem ;
+  rdfs:label "Plant items" ;
+.
+plant:Constituent
+  a owl:Class ;
+  rdfs:label "Constituent" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:ConstituentKind
+  a owl:Class ;
+  rdfs:label "Constituent Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.ConstituentKind:Constituted
+  a plant:ConstituentKind ;
+  rdfs:label "Constituted" ;
+.
+plant.ConstituentKind:Member
+  a plant:ConstituentKind ;
+  rdfs:label "Member" ;
+.
+plant.ConstituentKind:Moved
+  a plant:ConstituentKind ;
+  rdfs:label "Moved" ;
+.
+plant.ConstituentKind:PartOf
+  a plant:ConstituentKind ;
+  rdfs:label "PartOf" ;
+.
+plant.ConstituentKind:Participates
+  a plant:ConstituentKind ;
+  rdfs:label "Participates" ;
+.
+plant.ConstituentKind:Stored
+  a plant:ConstituentKind ;
+  rdfs:label "Stored" ;
+.
+plant.ConstituentKind:Within
+  a plant:ConstituentKind ;
+  rdfs:label "Within" ;
+.
+plant:Entity
+  a owl:Class ;
+  rdfs:label "Entity" ;
+  rdfs:subClassOf icore:Entity ;
+.
+plant:Heater
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Heater" ;
+.
+plant:InstanceConcept
+  a owl:Class ;
+  rdfs:label "Instances" ;
+  rdfs:subClassOf plant:Concept ;
+.
+plant:Instrumentation
+  a plant:CollectionConcept ;
+  icore:broader plant:PlantItem ;
+  rdfs:label "Instrumentation" ;
+.
+plant:InterUnitMovement
+  a plant:CollectionConcept ;
+  icore:broader plant:MaterialManagement ;
+  rdfs:label "Inter-Unit Movement" ;
+.
+plant:IntraUnitProcessFlow
+  a plant:CollectionConcept ;
+  icore:broader plant:MaterialManagement ;
+  rdfs:label "Intra-Unit ProcessFlow" ;
+.
+plant:Material
+  a plant:CollectionConcept ;
+  icore:broader plant:PlantItem ;
+  rdfs:label "Material" ;
+.
+plant:MaterialManagement
+  a plant:CollectionConcept ;
+  icore:broader plant:Planning ;
+  rdfs:label "MaterialManagement" ;
+.
+plant:Module
+  a plant:CollectionConcept ;
+  icore:broader plant:PlanningZone ;
+  rdfs:label "Module" ;
+.
+plant:MonthlyPlan
+  a plant:ProcessConcept ;
+  icore:broader plant:Plan ;
+  rdfs:label "Monthly plan" ;
+.
+plant:PartWholeRelationships
+  a plant:ConceptScheme ;
+  rdfs:comment "Meronomy" ;
+  rdfs:label "Part whole relationships" ;
+.
+plant:Parthood
+  a owl:Class ;
+  rdfs:label "Part-Whole" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:ParthoodKind
+  a owl:Class ;
+  rdfs:label "Part-Whole Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.ParthoodKind:ContainedWithin
+  a plant:ParthoodKind ;
+  rdfs:label "ContainedWithin" ;
+.
+plant.ParthoodKind:FeedTo
+  a plant:ParthoodKind ;
+  rdfs:label "FeedTo" ;
+.
+plant.ParthoodKind:ProducedFrom
+  a plant:ParthoodKind ;
+  rdfs:label "ProducedFrom" ;
+.
+plant.ParthoodKind:ReturnFrom
+  a plant:ParthoodKind ;
+  rdfs:label "ReturnFrom" ;
+.
+plant.ParthoodKind:SuppliedTo
+  a plant:ParthoodKind ;
+  rdfs:label "SuppliedTo" ;
+.
+plant:Plan
+  a plant:ProcessConcept ;
+  icore:broader plant:Planning ;
+  rdfs:label "Plan" ;
+.
+plant:Planning
+  a owl:Class ;
+  rdfs:label "Planning" ;
+  rdfs:subClassOf icore:ProcessProfile ;
+  rdfs:subClassOf plant:Entity ;
+  rdfs:subClassOf plant:ProcessConcept ;
+.
+plant:PlanningZone
+  a plant:ProcessConcept ;
+  icore:broader plant:Planning ;
+  rdfs:label "Planning zone" ;
+.
+plant:PlantItem
+  a owl:Class ;
+  rdfs:comment """Functional things or 'tags' within a plant. These appear on a PFD and P&ID diagram. However they are not necessarily a phsyical thing. For example Tank101 is a 'tag' or functional item (PlantItem) but it is materialized as a vessel, with stirrers, feed and product nozzles, level gauges and more.
+Not all functional things would have a materialization. For exzample a battery limit to an area or unit might not corrspond to anything physical. Instead it might just be a painted ring around the pipe!""" ;
+  rdfs:label "Plant Item" ;
+  rdfs:subClassOf icore:MaterialEntity ;
+  rdfs:subClassOf plant:Entity ;
+  rdfs:subClassOf plant:InstanceConcept ;
+.
+plant:Procedure
+  a owl:Class ;
+  rdfs:comment "A procedure or instruction. Note not a specific instance but a standard continuant." ;
+  rdfs:label "Procedure" ;
+  rdfs:subClassOf icore:Function ;
+.
+plant:Process
+  a owl:Class ;
+  rdfs:label "Process" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:ProcessConcept
+  a owl:Class ;
+  rdfs:label "Processes" ;
+  rdfs:subClassOf plant:Concept ;
+.
+plant:ProcessEquipment
+  a plant:CollectionConcept ;
+  icore:broader plant:PlantItem ;
+  rdfs:label "Process Equipment" ;
+.
+plant:ProcessKind
+  a owl:Class ;
+  rdfs:label "Process Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.ProcessKind:Step
+  a plant:ProcessKind ;
+  rdfs:label "Step" ;
+.
+plant:Pump
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Pump" ;
+.
+plant:Relationship
+  a owl:Class ;
+  rdfs:label "Relationship" ;
+  rdfs:subClassOf icore:Process ;
+  rdfs:subClassOf plant:Entity ;
+  rdfs:subClassOf rdf:Statement ;
+  rdfs:subClassOf [
+      a owl:Restriction ;
+      owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty <http://inova8.com/plant/def/relationship.TemporalPeriod> ;
+    ] ;
+.
+plant:RelationshipKind
+  a owl:Class ;
+  rdfs:label "Relationship Kind" ;
+  rdfs:subClassOf icore:RealizableEntity ;
+.
+plant:Routing
+  a plant:CollectionConcept ;
+  icore:broader plant:Planning ;
+  rdfs:label "Routing" ;
+.
+plant:Schedule
+  a plant:ProcessConcept ;
+  icore:broader plant:Plan ;
+  rdfs:label "Schedule" ;
+.
+plant:Script
+  a owl:Class ;
+  rdfs:label "Script" ;
+  rdfs:subClassOf icore:GenericallyDependentContinuant ;
+.
+plant.Script:MassFlow
+  a plant:Script ;
+  script:scriptCode """var result= _this.getFact(\":Attribute@AttributeKind:VolumeFlow\").floatValue()* _this.getFact(\":Attribute@AttributeKind:Density\").floatValue(); 
+ result;"""^^script:groovy ;
+  rdfs:label "MassFlow" ;
+.
+plant.Script:UnitMassBalance
+  a plant:Script ;
+  script:scriptCode """var massFlowBalance=0.0; 
+for(feed in _this.getFacts(\"^:Parthood@ParthoodKind:FeedTo\")){
+	massFlowBalance += feed.getFact(\":Attribute@AttributeKind:MassFlow\").doubleValue()
+}; 
+for(product in _this.getFacts(\"^:Parthood@ParthoodKind:ProducedFrom\")){
+	massFlowBalance -= product.getFact(\":Attribute@AttributeKind:MassFlow\").doubleValue()
+}; 
+massFlowBalance;"""^^script:groovy ;
+  rdfs:label "UnitMassFlow" ;
+.
+plant:SensingDevice
+  a plant:CollectionConcept ;
+  icore:broader plant:Instrumentation ;
+  rdfs:label "SensingDevice" ;
+.
+plant:Signal
+  a plant:CollectionConcept ;
+  icore:broader plant:Instrumentation ;
+  rdfs:label "Signal" ;
+.
+plant:Site
+  a plant:CollectionConcept ;
+  icore:broader plant:PlanningZone ;
+  rdfs:label "Site" ;
+.
+plant:State
+  a owl:Class ;
+  rdfs:label "State" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:StateKind
+  a owl:Class ;
+  rdfs:label "State Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.StateKind:Complete
+  a plant:StateKind ;
+  rdfs:label "Complete" ;
+.
+plant.StateKind:Connecting
+  a plant:StateKind ;
+  rdfs:label "Connecting" ;
+.
+plant.StateKind:Downloading
+  a plant:StateKind ;
+  rdfs:label "Downloading" ;
+.
+plant.StateKind:Held
+  a plant:StateKind ;
+  rdfs:label "Held" ;
+.
+plant.StateKind:Idle
+  a plant:StateKind ;
+  rdfs:label "Idle" ;
+.
+plant.StateKind:Ready
+  a plant:StateKind ;
+  rdfs:label "Ready" ;
+.
+plant.StateKind:Restarting
+  a plant:StateKind ;
+  rdfs:label "Restarting" ;
+.
+plant.StateKind:Running
+  a plant:StateKind ;
+  rdfs:label "Running" ;
+.
+plant.StateKind:Uploading
+  a plant:StateKind ;
+  rdfs:label "Uploading" ;
+.
+plant:Stirrer
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Stirrer" ;
+.
+plant:SubProcedure
+  a owl:Class ;
+  rdfs:label "SubProcedure" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:SubProcedureKind
+  a owl:Class ;
+  rdfs:label "SubProcedureKind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.SubProcedureKind:PartOf
+  a plant:SubProcedureKind ;
+  rdfs:label "PartOf" ;
+.
+plant:Tank
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Tank" ;
+.
+plant:TemporalPeriod
+  a owl:Class ;
+  rdfs:label "Temporal Period" ;
+  rdfs:subClassOf icore:OneDimensionalTemporalRegion ;
+.
+plant:Transference
+  a owl:Class ;
+  rdfs:label "Transfer" ;
+  rdfs:subClassOf plant:Relationship ;
+.
+plant:TransferenceKind
+  a owl:Class ;
+  rdfs:label "Transfer Kind" ;
+  rdfs:subClassOf plant:RelationshipKind ;
+.
+plant.TransferenceKind:CoolingWaterFlow
+  a plant:TransferenceKind ;
+  rdfs:label "CoolingWaterFlow" ;
+.
+plant.TransferenceKind:Feed-Tank
+  a plant:TransferenceKind ;
+  rdfs:label "Feed-Tank" ;
+.
+plant.TransferenceKind:Feed-Unit
+  a plant:TransferenceKind ;
+  rdfs:label "Feed-Unit" ;
+.
+plant.TransferenceKind:HeatTransfer
+  a plant:TransferenceKind ;
+  rdfs:label "HeatTransfer" ;
+.
+plant.TransferenceKind:MeasuredValue
+  a plant:TransferenceKind ;
+  rdfs:label "Measured value" ;
+.
+plant.TransferenceKind:MechanicalDrive
+  a plant:TransferenceKind ;
+  rdfs:label "MechanicalDrive" ;
+.
+plant.TransferenceKind:Movement
+  a plant:TransferenceKind ;
+  rdfs:label "Movement" ;
+.
+plant.TransferenceKind:Operational
+  a plant:TransferenceKind ;
+  rdfs:label "Operational" ;
+.
+plant.TransferenceKind:ProcessFlow
+  a plant:TransferenceKind ;
+  rdfs:label "ProcessFlow" ;
+.
+plant.TransferenceKind:SteamFlow
+  a plant:TransferenceKind ;
+  rdfs:label "SteamFlow" ;
+.
+plant.TransferenceKind:Tank-Product
+  a plant:TransferenceKind ;
+  rdfs:label "Tank-Product" ;
+.
+plant.TransferenceKind:Tank-Tank
+  a plant:TransferenceKind ;
+  rdfs:label "Tank-Tank" ;
+.
+plant.TransferenceKind:Tank-Unit
+  a plant:TransferenceKind ;
+  rdfs:label "Tank-Unit" ;
+.
+plant.TransferenceKind:Unit-Product
+  a plant:TransferenceKind ;
+  rdfs:label "Unit-Product" ;
+.
+plant.TransferenceKind:Unit-Tank
+  a plant:TransferenceKind ;
+  rdfs:label "Unit-Tank" ;
+.
+plant.TransferenceKind:Unit-Unit
+  a plant:TransferenceKind ;
+  rdfs:label "Unit-Unit" ;
+.
+plant:UOM
+  a owl:Class ;
+  rdfs:label "UOM" ;
+  rdfs:subClassOf icore:Quality ;
+.
+<http://inova8.com/plant/def/UOM.Attribute>
+  a owl:ObjectProperty ;
+  rdfs:label "UOM.Attribute" ;
+.
+plant.UOM:DEGC
+  a plant:UOM ;
+  rdfs:label "°C" ;
+.
+plant.UOM:KGperHour
+  a plant:UOM ;
+  rdfs:label "kg/h" ;
+.
+plant.UOM:KGperKM3
+  a plant:UOM ;
+  rdfs:label "kg/km3" ;
+.
+plant.UOM:KM3perH
+  a plant:UOM ;
+  rdfs:label "km³/h" ;
+.
+plant.UOM:KPA
+  a plant:UOM ;
+  rdfs:label "kPa" ;
+.
+plant.UOM:KW
+  a plant:UOM ;
+  rdfs:label "kW" ;
+.
+plant.UOM:M3perH
+  a plant:UOM ;
+  rdfs:label "m³/h" ;
+.
+plant.UOM:Percent
+  a plant:UOM ;
+  rdfs:label "%" ;
+.
+plant:Unit
+  a plant:CollectionConcept ;
+  icore:broader plant:PlanningZone ;
+  rdfs:label "Unit" ;
+.
+plant:Valve
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Valve" ;
+.
+plant:Vessel
+  a plant:CollectionConcept ;
+  icore:broader plant:ProcessEquipment ;
+  rdfs:label "Vessel" ;
+.
+<http://inova8.com/plant/def/attribute.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "Attribute Kind" ;
+  rdfs:range plant:AttributeKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.Attribute> ;
+.
+<http://inova8.com/plant/def/attribute.UOM>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "attribute.UOM" ;
+  rdfs:range plant:UOM ;
+  owl:inverseOf <http://inova8.com/plant/def/UOM.Attribute> ;
+.
+<http://inova8.com/plant/def/attribute.Value>
+  a rdf:Property ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "Value" ;
+  rdfs:range rdfs:Literal ;
+  rdfs:subPropertyOf rdf:object ;
+.
+<http://inova8.com/plant/def/attribute.of.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "Attribute Of" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantitem.has.Attribute> ;
+.
+<http://inova8.com/plant/def/attribute.providedBy>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Attribute ;
+  rdfs:label "Attribute Provided By" ;
+  rdfs:range plant:PlantItem ;
+  owl:inverseOf <http://inova8.com/plant/def/provides.Attribute> ;
+.
+<http://inova8.com/plant/def/command.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Command ;
+  rdfs:label "Command Kind" ;
+  rdfs:range plant:CommandKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.Command> ;
+.
+<http://inova8.com/plant/def/command.Value>
+  a rdf:Property ;
+  rdfs:domain plant:Command ;
+  rdfs:label "Value" ;
+  rdfs:range rdfs:Literal ;
+  rdfs:subPropertyOf rdf:object ;
+.
+<http://inova8.com/plant/def/command.for.Process>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Command ;
+  rdfs:label "command for" ;
+  rdfs:range plant:Process ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/process.has.Command> ;
+.
+<http://inova8.com/plant/def/constituent.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Constituent ;
+  rdfs:label "Constituent Kind" ;
+  rdfs:range plant:ConstituentKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.Constituent> ;
+.
+<http://inova8.com/plant/def/constituent.of.Transference>
+  a owl:ObjectProperty ;
+  rdfs:comment "How the constituent is being transferred" ;
+  rdfs:label "Transference" ;
+.
+<http://inova8.com/plant/def/constituent.what.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:comment "The 'what' that is stored/contained/moved etc in the 'where'" ;
+  rdfs:domain plant:Constituent ;
+  rdfs:label "What" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.isWhatOf.Constituent> ;
+.
+<http://inova8.com/plant/def/constituent.where.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:comment "The 'where' the 'what' is stored/contained/moved etc." ;
+  rdfs:domain plant:Constituent ;
+  rdfs:label "Where" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.isWhereOf.Constituent> ;
+.
+plant:isA
+  a owl:ObjectProperty ;
+  rdfs:domain plant:InstanceConcept ;
+  rdfs:label "is a" ;
+  rdfs:range plant:CollectionConcept ;
+  rdfs:subPropertyOf icore:broader ;
+.
+<http://inova8.com/plant/def/kind.Attribute>
+  a owl:ObjectProperty ;
+  rdfs:label "Attribute" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.Command>
+  a owl:ObjectProperty ;
+  rdfs:label "Command" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.Constituent>
+  a owl:ObjectProperty ;
+  rdfs:label "Constituent" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.Parthood>
+  a owl:ObjectProperty ;
+  rdfs:label "Part-Whole" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.Process>
+  a owl:ObjectProperty ;
+  rdfs:label "Process Kind" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.State>
+  a owl:ObjectProperty ;
+  rdfs:label "State" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.SubProcedure>
+  a owl:ObjectProperty ;
+  rdfs:label "SubProcedure" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+<http://inova8.com/plant/def/kind.Transference>
+  a owl:ObjectProperty ;
+  rdfs:label "Transfer" ;
+  rdfs:subPropertyOf icore:isPredicateOf ;
+.
+plant:ofType
+  a owl:ObjectProperty ;
+  rdfs:domain plant:InstanceConcept ;
+  rdfs:label "of type" ;
+  rdfs:range plant:ArchetypeConcept ;
+  rdfs:subPropertyOf icore:broader ;
+.
+<http://inova8.com/plant/def/parthood.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Parthood ;
+  rdfs:label "Part-Whole Kind" ;
+  rdfs:range plant:ParthoodKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.Parthood> ;
+.
+<http://inova8.com/plant/def/parthood.part.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Parthood ;
+  rdfs:label "Part" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.isPartOf.Parthood> ;
+.
+<http://inova8.com/plant/def/parthood.whole.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Parthood ;
+  rdfs:label "Whole" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.isWholeOf.Parthood> ;
+.
+<http://inova8.com/plant/def/plantItem.Process>
+  a owl:ObjectProperty ;
+  rdfs:label "used in Process" ;
+  rdfs:subPropertyOf icore:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.from.Transference>
+  a owl:ObjectProperty ;
+  rdfs:label "Transfers From" ;
+  rdfs:subPropertyOf icore:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.isPartOf.Parthood>
+  a owl:ObjectProperty ;
+  rdfs:label "Part Of " ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.isWhatOf.Constituent>
+  a owl:ObjectProperty ;
+  rdfs:comment "The 'where' the consitutent can be found." ;
+  rdfs:label "Is What Of" ;
+  rdfs:subPropertyOf icore:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.isWhereOf.Constituent>
+  a owl:ObjectProperty ;
+  rdfs:label "Where" ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.isWholeOf.Parthood>
+  a owl:ObjectProperty ;
+  rdfs:label "Is Whole Of" ;
+  rdfs:subPropertyOf icore:isObjectOf ;
+.
+<http://inova8.com/plant/def/plantItem.to.Transference>
+  a owl:ObjectProperty ;
+  rdfs:label "Transfers To" ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/plantitem.has.Attribute>
+  a owl:ObjectProperty ;
+  rdfs:label "Has Attribute" ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/procedure.Process>
+  a owl:ObjectProperty ;
+  rdfs:label "applied to Process" ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/procedure.isPartOf.SubProcedure>
+  a owl:ObjectProperty ;
+  rdfs:label "Part Of " ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/procedure.isWholeOf.SubProcedure>
+  a owl:ObjectProperty ;
+  rdfs:label "Is Whole Of" ;
+  rdfs:subPropertyOf icore:isObjectOf ;
+.
+<http://inova8.com/plant/def/process.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Process ;
+  rdfs:label "Process Kind" ;
+  rdfs:range plant:ProcessKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.Process> ;
+.
+<http://inova8.com/plant/def/process.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Process ;
+  rdfs:label "PlantItem" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.Process> ;
+.
+<http://inova8.com/plant/def/process.Procedure>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Process ;
+  rdfs:label "Procedure" ;
+  rdfs:range plant:Procedure ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/procedure.Process> ;
+.
+<http://inova8.com/plant/def/process.has.Command>
+  a owl:ObjectProperty ;
+  rdfs:label "Has Command" ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/process.has.State>
+  a owl:ObjectProperty ;
+  rdfs:label "Has State" ;
+  rdfs:subPropertyOf icore:isSubjectOf ;
+.
+<http://inova8.com/plant/def/provides.Attribute>
+  a owl:ObjectProperty ;
+  rdfs:label "Provides Attribute" ;
+  rdfs:subPropertyOf icore:isObjectOf ;
+.
+<http://inova8.com/plant/def/relationship.TemporalPeriod>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Relationship ;
+  rdfs:label "For Period" ;
+  rdfs:range plant:TemporalPeriod ;
+.
+<http://inova8.com/plant/def/state.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:State ;
+  rdfs:label "State Kind" ;
+  rdfs:range plant:StateKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.State> ;
+.
+<http://inova8.com/plant/def/state.Value>
+  a rdf:Property ;
+  rdfs:domain plant:State ;
+  rdfs:label "Value" ;
+  rdfs:range rdfs:Literal ;
+  rdfs:subPropertyOf rdf:object ;
+.
+<http://inova8.com/plant/def/state.of.Process>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:State ;
+  rdfs:label "state of" ;
+  rdfs:range plant:Process ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/process.has.State> ;
+.
+plant:subProcessOf
+  a owl:ObjectProperty ;
+  rdfs:comment "A relationship that expresses that one process occurremnt is organized as a subProcessOf another. This relationship is not an occurrent itslelf, nor are there any different 'types' of subProcesses" ;
+  rdfs:domain plant:Process ;
+  rdfs:label "subProcessOf" ;
+  rdfs:range plant:Process ;
+.
+<http://inova8.com/plant/def/subprocedure.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:SubProcedure ;
+  rdfs:label "Part-Whole Kind" ;
+  rdfs:range plant:SubProcedureKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.SubProcedure> ;
+.
+<http://inova8.com/plant/def/subprocedure.part.Procedure>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:SubProcedure ;
+  rdfs:label "Part" ;
+  rdfs:range plant:Procedure ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/procedure.isPartOf.SubProcedure> ;
+.
+<http://inova8.com/plant/def/subprocedure.whole.Procedure>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:SubProcedure ;
+  rdfs:label "Whole" ;
+  rdfs:range plant:Procedure ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/procedure.isWholeOf.SubProcedure> ;
+.
+<http://inova8.com/plant/def/temporalPeriod.End>
+  a owl:DatatypeProperty ;
+  rdfs:domain plant:TemporalPeriod ;
+  rdfs:label "End" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/temporalPeriod.Start>
+  a owl:DatatypeProperty ;
+  rdfs:domain plant:TemporalPeriod ;
+  rdfs:label "Start" ;
+  rdfs:range xsd:dateTime ;
+.
+<http://inova8.com/plant/def/transference.Kind>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Transference ;
+  rdfs:label "Transfer Kind" ;
+  rdfs:range plant:TransferenceKind ;
+  rdfs:subPropertyOf rdf:predicate ;
+  owl:inverseOf <http://inova8.com/plant/def/kind.Transference> ;
+.
+<http://inova8.com/plant/def/transference.from.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Transference ;
+  rdfs:label "Transfer From" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:subject ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.to.Transference> ;
+.
+<http://inova8.com/plant/def/transference.of.Constituent>
+  a owl:ObjectProperty ;
+  rdfs:comment "The constituent that is being transferred" ;
+  rdfs:domain plant:Transference ;
+  rdfs:label "Constituent" ;
+  rdfs:range plant:Constituent ;
+  owl:inverseOf <http://inova8.com/plant/def/constituent.of.Transference> ;
+.
+<http://inova8.com/plant/def/transference.to.PlantItem>
+  a owl:ObjectProperty ;
+  rdfs:domain plant:Transference ;
+  rdfs:label "Transfer To" ;
+  rdfs:range plant:PlantItem ;
+  rdfs:subPropertyOf rdf:object ;
+  owl:inverseOf <http://inova8.com/plant/def/plantItem.from.Transference> ;
+.
+script:groovy
+  a rdfs:Class ;
+  rdfs:label "groovy" ;
+  rdfs:subClassOf script:script ;
+.
+script:javascript
+  a rdfs:Class ;
+  rdfs:label "javascript" ;
+  rdfs:subClassOf script:script ;
+.
+script:script
+  a rdfs:Class ;
+  rdfs:label "script" ;
+  rdfs:subClassOf rdfs:Literal ;
+.

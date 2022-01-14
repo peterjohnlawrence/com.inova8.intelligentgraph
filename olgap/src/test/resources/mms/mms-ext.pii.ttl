@@ -1,0 +1,62 @@
+# baseURI: http://in4mium.com/masterdatakg/schema/mms-ext/pii
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext
+# imports: http://rdf.cdisc.org/mms
+
+@prefix : <http://in4mium.com/masterdatakg/schema/mms-ext> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+mms-ext:DataElementSensitivity
+  a owl:Class ;
+  rdfs:comment "Personally identifiable information (PII) can be sensitive or non-sensitive." ;
+  rdfs:label "Data Element Sensitivity" ;
+  rdfs:subClassOf <http://rdf.cdisc.org/mms#Classifier> ;
+  skos:prefLabel "Data Element Sensitivity" ;
+.
+mms-ext:NonSensitive_PII
+  a mms-ext:DataElementSensitivity ;
+  rdfs:comment """Non-sensitive or indirect PII is easily accessible from public sources like phonebooks, the Internet, and corporate directories. Examples of non-sensitive or indirect PII include:
+
+Zipcode
+Race
+Gender
+Date of birth
+Place of birth
+Religion""" ;
+  rdfs:label "Non sensitive PII" ;
+.
+mms-ext:Sensitive_PII
+  a mms-ext:DataElementSensitivity ;
+  rdfs:comment """Sensitive personal information includes legal statistics such as:
+
+Full name
+Social Security Number (SSN)
+Driver’s license
+Mailing address
+Credit card information
+Passport information
+Financial information
+Medical records""" ;
+  rdfs:label "Sensitive PII" ;
+.
+mms-ext:dataElementSensitivity
+  a owl:ObjectProperty ;
+  rdfs:domain <http://rdf.cdisc.org/mms#DataElement> ;
+  rdfs:label "data element sensitivity" ;
+  rdfs:range mms-ext:DataElementSensitivity ;
+  owl:inverseOf mms-ext:sensitivityOfDataElement ;
+.
+mms-ext:sensitivityOfDataElement
+  a owl:ObjectProperty ;
+  rdfs:label "sensitivity of data element" ;
+.
+<http://in4mium.com/masterdatakg/schema/mms-ext/pii>
+  a owl:Ontology ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext> ;
+  owl:imports <http://rdf.cdisc.org/mms> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.

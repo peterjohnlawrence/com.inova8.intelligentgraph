@@ -1,0 +1,84 @@
+# baseURI: http://in4mium.com/masterdatakg/data/fluentOne/
+# imports: http://in4mium.com/masterdatakg/data/fluentOne/fluentOnemms
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext
+# prefix: fluentOne
+
+@prefix fluentOne: <http://in4mium.com/masterdatakg/data/fluentOne/> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+fluentOne:
+  a owl:Ontology ;
+  owl:imports fluentOne:fluentOnemms ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.episode.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.episode.of_Show>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.show.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.location.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.paymentsystem.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.platform.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.Location>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.location.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.of_User>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.user.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.show.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.PaymentSystem>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.paymentsystem.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.Type>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscriptiontype.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.by_User>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.user.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscriptiontype.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.user.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.Platform>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.platform.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.by_User>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.user.id> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.id>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+.
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.of_Episode>
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/fluentOne/column.episode.id> ;
+.

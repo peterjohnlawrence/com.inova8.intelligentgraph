@@ -1,0 +1,88 @@
+# baseURI: http://in4mium.com/masterdatakg/schema/mms-ext
+# imports: http://rdf.cdisc.org/mms
+# prefix: mms-ext
+
+@prefix mms: <http://rdf.cdisc.org/mms#> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://in4mium.com/masterdatakg/schema/mms-ext>
+  a owl:Ontology ;
+  owl:imports <http://rdf.cdisc.org/mms> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+<http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey>
+  a mms-ext:DataElementRole ;
+  rdfs:label "Classifier Foreign key" ;
+  skos:prefLabel "Classifier Foreign key" ;
+.
+<http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey>
+  a mms-ext:DataElementRole ;
+  rdfs:label "Classifier.Primary key" ;
+  skos:prefLabel "Classifier.Primary key" ;
+.
+mms-ext:DataElementRole
+  a owl:Class ;
+  rdfs:label "Data element role" ;
+  rdfs:subClassOf mms:Classifier ;
+  skos:prefLabel "Data element role" ;
+.
+mms-ext:dataElementRole
+  a owl:ObjectProperty ;
+  rdfs:domain mms:DataElement ;
+  rdfs:label "data element role" ;
+  rdfs:range mms-ext:DataElementRole ;
+  skos:prefLabel "data element role" ;
+.
+mms-ext:isContextOf
+  a owl:ObjectProperty ;
+  rdfs:label "is context of" ;
+  owl:inverseOf mms:context ;
+  skos:prefLabel "is context of" ;
+.
+mms-ext:isDataElementOf
+  a owl:ObjectProperty ;
+  rdfs:label "is data element of" ;
+  skos:prefLabel "is data element of" ;
+.
+mms-ext:isDataElementRoleOf
+  a owl:ObjectProperty ;
+  rdfs:label "is data element role of" ;
+  owl:inverseOf mms-ext:dataElementRole ;
+  skos:prefLabel "is data element role of" ;
+.
+mms-ext:isDataElementValueDomainOf
+  a owl:ObjectProperty ;
+  rdfs:label "is data element value domain of" ;
+  owl:inverseOf mms:dataElementValueDomain ;
+  skos:prefLabel "is data element value domain of" ;
+.
+mms-ext:isReferencedBy
+  a owl:ObjectProperty ;
+  rdfs:label "is referenced by" ;
+  owl:inverseOf mms-ext:references ;
+  skos:prefLabel "is referenced by" ;
+.
+mms-ext:isSubsetOf
+  a owl:ObjectProperty ;
+  rdfs:label "is subset of" ;
+  owl:inverseOf mms:subsetOf ;
+  skos:prefLabel "is subset of" ;
+.
+mms-ext:isValueDomainOf
+  a owl:ObjectProperty ;
+  rdfs:label "is value domain of" ;
+  owl:inverseOf mms:inValueDomain ;
+  skos:prefLabel "is value domain of" ;
+.
+mms-ext:references
+  a owl:ObjectProperty ;
+  rdfs:domain mms:DataElement ;
+  rdfs:label "references" ;
+  rdfs:range mms:DataElement ;
+  skos:prefLabel "references" ;
+.

@@ -284,7 +284,7 @@ class PathPatternTests {
 
 			PathParser.parsePathPattern(thing, ":Location@:appearsOn][eq id:Calc2Graph2]#");
 		}catch(Exception e){
-			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, '/', '|', '>', KEY}]"
+			assertEquals ("[line 1:20 in \":Location@:appearsOn][eq id:Calc2Graph2]#\": mismatched input ']' expecting {<EOF>, KEY}]"
 					,e.getMessage() );
 		}
 	}

@@ -1,0 +1,16 @@
+# baseURI: http://in4mium.com/masterdatakg/
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext
+
+@prefix : <http://in4mium.com/masterdatakg/> .
+@prefix masterdata: <http://in4mium.com/masterdatakg/> .
+@prefix masterdata11179: <http://in4mium.com/masterdatakg/11179/id/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+masterdata:
+  a owl:Ontology ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.

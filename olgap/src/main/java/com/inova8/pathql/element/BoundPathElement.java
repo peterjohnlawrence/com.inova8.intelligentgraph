@@ -83,13 +83,13 @@ public class BoundPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing,  sourceVariable,  targetVariable,0,customQueryOptions);
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(thing,  sourceVariable,  predicateVariable,targetVariable,0,customQueryOptions);
 	}
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
-		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,targetVariable,customQueryOptions);
+		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,predicateVariable,targetVariable,customQueryOptions);
 		return rightPattern;
 	}
 	/**

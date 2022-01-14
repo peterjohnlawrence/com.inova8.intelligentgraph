@@ -33,7 +33,7 @@ public class PATHQL {
 	private static final String EDGE_TARGETSTRING = "edge.Target";
 	private static final String EDGE_SOURCESTRING = "edge.Source";
 	public static final String EDGE_REIFICATIONSTRING = "edge.Reification";
-	private static final String EDGE_PREDICATESTRING = "edge.Predicate";
+	public static final String EDGE_PREDICATESTRING = "edge.Predicate";
 	public static final String EDGE_DEREIFIEDSTRING = "edge.Dereified";
 	public static final String EDGE_DIRECTIONSTRING = "edge.Direction";
 	

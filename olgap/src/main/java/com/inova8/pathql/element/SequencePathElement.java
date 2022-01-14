@@ -83,8 +83,8 @@ public class SequencePathElement extends PathElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing, sourceVariable, targetVariable, 0,customQueryOptions);
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(thing, sourceVariable, predicateVariable,targetVariable, 0,customQueryOptions);
 	}
 	public Boolean hasNextCardinality(Integer iteration) {
 			
@@ -114,7 +114,7 @@ public class SequencePathElement extends PathElement {
 			return false;
 	 }
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
@@ -146,16 +146,16 @@ public class SequencePathElement extends PathElement {
 						intermediateTargetVariable = targetVariable;
 					}
 				}
-				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,
+				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,predicateVariable,
 						intermediateVariable, pathIteration,customQueryOptions);
 				PathTupleExpr rightPattern;
 				if (leftPattern==null){
 					intermediateVariable.setValue(intermediateSourceVariable.getValue());
 					//intermediateVariable.setName(intermediateSourceVariable.getName());
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
+					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, predicateVariable,intermediateTargetVariable,
 							pathIteration,customQueryOptions);
 				}else {
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
+					rightPattern = getRightPathElement().pathPatternQuery(thing, leftPattern.getStatementBinding().getTargetVariable(), predicateVariable, intermediateTargetVariable,
 							pathIteration,customQueryOptions);
 				}
 				
@@ -163,7 +163,7 @@ public class SequencePathElement extends PathElement {
 					if( rightPattern!=null)
 						intermediateJoinPattern = new Join(leftPattern.getTupleExpr(), rightPattern.getTupleExpr());
 					else {
-						intermediateVariable.setName(intermediateTargetVariable.getName());
+						intermediateVariable.setName(intermediateTargetVariable.getName());//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 						// Projection bindRight = new Projection((TupleExpr) intermediateVariable);
 						 intermediateJoinPattern= leftPattern.getTupleExpr();
 					}
@@ -175,12 +175,24 @@ public class SequencePathElement extends PathElement {
 				}
 				if (joinPattern == null) {
 					joinPattern = new PathTupleExpr((TupleExpr)intermediateJoinPattern);
-					if(leftPattern!=null) joinPattern.getPath().addAll( leftPattern.getPath());
-					if(rightPattern!=null) joinPattern.getPath().addAll( rightPattern.getPath());
+					if(leftPattern!=null) {
+						joinPattern.getPath().addAll( leftPattern.getPath());
+						joinPattern.setStatementBinding(leftPattern.getStatementBinding());
+					}
+					if(rightPattern!=null) {
+						joinPattern.getPath().addAll( rightPattern.getPath());
+						joinPattern.setStatementBinding(rightPattern.getStatementBinding());
+					}
 				} else {
 					joinPattern.setTupleExpr(new Join(joinPattern.getTupleExpr(), intermediateJoinPattern));
-					if(leftPattern!=null)joinPattern.getPath().addAll( leftPattern.getPath());
-					if(rightPattern!=null)joinPattern.getPath().addAll( rightPattern.getPath());
+					if(leftPattern!=null) {
+						joinPattern.getPath().addAll( leftPattern.getPath());
+						joinPattern.setStatementBinding(leftPattern.getStatementBinding());
+					}
+					if(rightPattern!=null) {
+						joinPattern.getPath().addAll( rightPattern.getPath());
+						joinPattern.setStatementBinding(rightPattern.getStatementBinding());
+					}
 				}
 			}
 			//joinPattern.setPath(getPathBindings().get(pathIteration));

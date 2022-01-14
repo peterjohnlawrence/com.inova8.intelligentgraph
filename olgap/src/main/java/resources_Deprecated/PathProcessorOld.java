@@ -25,14 +25,14 @@ import pathPatternProcessor.PathConstants.ErrorCode;
 @Deprecated
 public class PathProcessorOld {
 	private final static Logger logger = LogManager.getLogger(PathProcessorOld.class);
-	public  static pathPatternProcessor.Resources parseProcessPath(Thing thing, String pathPattern) throws PathPatternException {
+	public  static pathPatternProcessor.Resources parseProcessPath(DeprecatedThing thing, String pathPattern) throws PathPatternException {
 		PathElement pathElement = parsePathPattern(thing, pathPattern);
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		indices.add(0, 0);
 		pathElement.buildIndices(indices, null);
 		return processPathElement(thing, (PathElement)pathElement);
 	}
-	public static PathElement parsePathPattern(Thing thing, String pathPattern)
+	public static PathElement parsePathPattern(DeprecatedThing thing, String pathPattern)
 			throws RecognitionException, PathPatternException {
 		PathErrorListener errorListener = new PathErrorListener(pathPattern);
 		CharStream input = CharStreams.fromString( pathPattern);
@@ -58,14 +58,14 @@ public class PathProcessorOld {
 		}
 		return pathElement;
 	}
-	private  static Resources processPathElement(Thing thing, PathElement pathElement){
+	private  static Resources processPathElement(DeprecatedThing thing, PathElement pathElement){
 		switch (pathElement.getOperator()) {
 		case PREDICATE: 
 			return processPredicateElement(thing, (PredicateElement)pathElement) ;
 		case SEQUENCE: 
 			pathPatternProcessor.Resources leftValues = processPredicateElement(thing, (PredicateElement)pathElement.getLeftPathElement());
 			while (leftValues.hasNext()) {
-				return processPathElement((Thing) leftValues.next(), pathElement.getRightPathElement());
+				return processPathElement((DeprecatedThing) leftValues.next(), pathElement.getRightPathElement());
 			}
 			return null;
 		case ALTERNATIVE: 
@@ -78,7 +78,7 @@ public class PathProcessorOld {
 			return null;
 		}
 	}
-	private  static pathPatternProcessor.Resources processPredicateElement(Thing thing, PredicateElement predicateElement) {
+	private  static pathPatternProcessor.Resources processPredicateElement(DeprecatedThing thing, PredicateElement predicateElement) {
 		if(predicateElement.getIsInverseOf()) {
 			if( predicateElement.getIsReified()) {
 				return  getIsReifiedFactsOf(thing,predicateElement);
@@ -93,17 +93,17 @@ public class PathProcessorOld {
 			}
 		}
 	}
-	public final static Resources getFacts(Thing thing,PredicateElement predicateElement) {
+	public final static Resources getFacts(DeprecatedThing thing,PredicateElement predicateElement) {
 		thing.addTrace(new ParameterizedMessage("Seeking values {} of subject {}", predicateElement.getPathPattern(), thing.addIRI(thing.getSuperValue())));
 		Resources facts = new SimpleResources( thing,predicateElement);		
 		return facts;
 	}
-	public final static Resources getIsFactsOf(Thing thing,PredicateElement predicateElement) {
+	public final static Resources getIsFactsOf(DeprecatedThing thing,PredicateElement predicateElement) {
 		thing.addTrace(new ParameterizedMessage("Seeking subjects {} of {}", predicateElement.getPathPattern(), thing.addIRI(thing.getSuperValue())));
 		Resources isFactsOf = new IsSimpleResourcesOf( thing,predicateElement);
 		return isFactsOf;
 	}
-	public final static Resources getReifiedFacts(Thing thing, PredicateElement predicateElement) {
+	public final static Resources getReifiedFacts(DeprecatedThing thing, PredicateElement predicateElement) {
 		IRI reificationType= predicateElement.getReification();
 		IRI predicate=   predicateElement.getPredicate();
 		thing.addTrace(new ParameterizedMessage("Seeking values {} of subject {}", predicateElement.getPathPattern(), thing.addIRI(thing.getSuperValue())));
@@ -111,7 +111,7 @@ public class PathProcessorOld {
 		return  reifiedFacts;
 	}
 
-	public final static Resources getIsReifiedFactsOf(Thing thing, PredicateElement predicateElement) {
+	public final static Resources getIsReifiedFactsOf(DeprecatedThing thing, PredicateElement predicateElement) {
 		thing.addTrace(new ParameterizedMessage("Seeking values {} of subject {}",  predicateElement.getPathPattern() , thing.addIRI(thing.getSuperValue())));
 		Resources isReifiedFactsOf = new IsReifiedResourcesOf( thing,predicateElement);
 		return  isReifiedFactsOf;

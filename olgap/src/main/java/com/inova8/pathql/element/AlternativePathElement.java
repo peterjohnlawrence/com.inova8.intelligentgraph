@@ -62,8 +62,8 @@ public class AlternativePathElement extends PathElement{
 
 
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing,sourceVariable,targetVariable,0,customQueryOptions) ;
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(thing,sourceVariable,predicateVariable,targetVariable,0,customQueryOptions) ;
 	}
 	@Override
 //	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
@@ -80,7 +80,7 @@ public class AlternativePathElement extends PathElement{
 //		alternativePathPattern.setPath(leftPathPattern.getPath());
 //		return alternativePathPattern;
 //	}	
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
@@ -95,7 +95,8 @@ public class AlternativePathElement extends PathElement{
 			for (int iteration = 1; iteration <= getCardinality(pathIteration); iteration++) {
 				if (iteration == 1) {
 					intermediateSourceVariable = sourceVariable;
-					intermediateVariable=  new Variable(getLeftPathElement().getTargetVariable().getName(),getLeftPathElement().getTargetVariable().getValue());   //getLeftPathElement().getTargetVariable();
+					intermediateVariable = new Variable(sourceVariable.getName() + "_i" + iteration);
+					//intermediateVariable=  new Variable(getLeftPathElement().getTargetVariable().getName(),getLeftPathElement().getTargetVariable().getValue());   //getLeftPathElement().getTargetVariable();
 					intermediateTargetVariable=targetVariable;
 				}
 				if (iteration < getCardinality(pathIteration)) {
@@ -112,16 +113,19 @@ public class AlternativePathElement extends PathElement{
 						intermediateTargetVariable = targetVariable;
 					}
 				}
-				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,
-						intermediateVariable, pathIteration,customQueryOptions);
+				predicateVariable = deduceLeftPredicateVariable(predicateVariable);
+				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,predicateVariable, 
+						intermediateTargetVariable, pathIteration,customQueryOptions);
 				PathTupleExpr rightPattern;
 				if (leftPattern==null){
 					intermediateVariable.setValue(intermediateSourceVariable.getValue());
+					predicateVariable = deduceRightPredicateVariable(predicateVariable);
 					//intermediateVariable.setName(intermediateSourceVariable.getName());
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, intermediateTargetVariable,
+					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, predicateVariable,intermediateTargetVariable,
 							pathIteration,customQueryOptions);
 				}else {
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateSourceVariable, intermediateTargetVariable,
+					predicateVariable = deduceRightPredicateVariable(predicateVariable);
+					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateSourceVariable, predicateVariable, intermediateTargetVariable, 
 							pathIteration,customQueryOptions);
 				}
 				
@@ -145,6 +149,7 @@ public class AlternativePathElement extends PathElement{
 					//if(leftPattern!=null)alternativePathPattern.getPath().addAll( leftPattern.getPath());
 					//alternativePathPattern.getPath().addAll( rightPattern.getPath());
 				}
+				alternativePathPattern.setStatementBinding(rightPattern.getStatementBinding());
 			}
 			//joinPattern.setPath(getPathBindings().get(pathIteration));
 			return alternativePathPattern;
@@ -152,6 +157,24 @@ public class AlternativePathElement extends PathElement{
 			return null;
 		}
 
+	}
+	private Variable deduceLeftPredicateVariable(Variable predicateVariable) {
+		if(predicateVariable==null) {
+			predicateVariable = new Variable("L");
+		}else {
+			predicateVariable = new Variable(predicateVariable.getName()+"L");
+		}
+
+		return predicateVariable;
+	}
+	private Variable deduceRightPredicateVariable(Variable predicateVariable) {
+		if(predicateVariable==null) {
+			predicateVariable = new Variable("R");
+		}else {
+			predicateVariable = new Variable(predicateVariable.getName()+"R");
+		}
+
+		return predicateVariable;
 	}
 	@Override
 	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode ) {

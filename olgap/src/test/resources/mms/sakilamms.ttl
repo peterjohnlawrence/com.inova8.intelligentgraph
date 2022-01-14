@@ -1,0 +1,918 @@
+# baseURI: http://in4mium.com/masterdatakg/data/sakila/sakilamms
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext
+# imports: http://rdf.cdisc.org/mms
+
+@prefix mms: <http://rdf.cdisc.org/mms#> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sakila: <http://in4mium.com/masterdatakg/mms/id/sakila/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://in4mium.com/masterdatakg/data/sakila/sakilamms>
+  a owl:Ontology ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext> ;
+  owl:imports <http://rdf.cdisc.org/mms> ;
+  owl:versionInfo "Created By In4mium" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.actor_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.actor> ;
+  mms:dataElementLabel "actor_id" ;
+  mms:dataElementName "actor_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.actor.actor_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.first_name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.actor> ;
+  mms:dataElementLabel "first_name" ;
+  mms:dataElementName "first_name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.actor.first_name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.last_name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.actor> ;
+  mms:dataElementLabel "last_name" ;
+  mms:dataElementName "last_name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.actor.last_name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.actor> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.actor.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "address" ;
+  mms:dataElementName "address" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.address.address" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address2>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "address2" ;
+  mms:dataElementName "address2" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.address.address2" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "address_id" ;
+  mms:dataElementName "address_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.address.address_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.city_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.city.city_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "city_id" ;
+  mms:dataElementName "city_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.address.city_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.district>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "district" ;
+  mms:dataElementName "district" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.address.district" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.address.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.location>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "location" ;
+  mms:dataElementName "location" ;
+  mms:dataElementType "geometry" ;
+  rdfs:label "sakila.address.location" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.phone>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "phone" ;
+  mms:dataElementName "phone" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.address.phone" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.address.postal_code>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address> ;
+  mms:dataElementLabel "postal_code" ;
+  mms:dataElementName "postal_code" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.address.postal_code" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.category.category_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.category> ;
+  mms:dataElementLabel "category_id" ;
+  mms:dataElementName "category_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.category.category_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.category.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.category> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.category.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.category.name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.category> ;
+  mms:dataElementLabel "name" ;
+  mms:dataElementName "name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.category.name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.city.city>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.city> ;
+  mms:dataElementLabel "city" ;
+  mms:dataElementName "city" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.city.city" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.city.city_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.city> ;
+  mms:dataElementLabel "city_id" ;
+  mms:dataElementName "city_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.city.city_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.city.country_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.country.country_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.city> ;
+  mms:dataElementLabel "country_id" ;
+  mms:dataElementName "country_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.city.country_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.city.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.city> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.city.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.country.country>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.country> ;
+  mms:dataElementLabel "country" ;
+  mms:dataElementName "country" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.country.country" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.country.country_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.country> ;
+  mms:dataElementLabel "country_id" ;
+  mms:dataElementName "country_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.country.country_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.country.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.country> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.country.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.active>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "active" ;
+  mms:dataElementName "active" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.customer.active" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.address_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "address_id" ;
+  mms:dataElementName "address_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.customer.address_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.create_date>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "create_date" ;
+  mms:dataElementName "create_date" ;
+  mms:dataElementType "datetime" ;
+  rdfs:label "sakila.customer.create_date" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.customer_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "customer_id" ;
+  mms:dataElementName "customer_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.customer.customer_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.email>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "email" ;
+  mms:dataElementName "email" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.customer.email" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.first_name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "first_name" ;
+  mms:dataElementName "first_name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.customer.first_name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.last_name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "last_name" ;
+  mms:dataElementName "last_name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.customer.last_name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.customer.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.store_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.store.store_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer> ;
+  mms:dataElementLabel "store_id" ;
+  mms:dataElementName "store_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.customer.store_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.description>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "description" ;
+  mms:dataElementName "description" ;
+  mms:dataElementType "text" ;
+  rdfs:label "sakila.film.description" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.film_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "film_id" ;
+  mms:dataElementName "film_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.film.film_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.language_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.language.language_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "language_id" ;
+  mms:dataElementName "language_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.film.language_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.film.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.length>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "length" ;
+  mms:dataElementName "length" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.film.length" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.original_language_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.language.language_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "original_language_id" ;
+  mms:dataElementName "original_language_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.film.original_language_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.rating>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "rating" ;
+  mms:dataElementName "rating" ;
+  mms:dataElementType "enum" ;
+  rdfs:label "sakila.film.rating" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.release_year>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "release_year" ;
+  mms:dataElementName "release_year" ;
+  mms:dataElementType "year" ;
+  rdfs:label "sakila.film.release_year" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.rental_duration>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "rental_duration" ;
+  mms:dataElementName "rental_duration" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.film.rental_duration" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.rental_rate>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "rental_rate" ;
+  mms:dataElementName "rental_rate" ;
+  mms:dataElementType "decimal" ;
+  rdfs:label "sakila.film.rental_rate" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.replacement_cost>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "replacement_cost" ;
+  mms:dataElementName "replacement_cost" ;
+  mms:dataElementType "decimal" ;
+  rdfs:label "sakila.film.replacement_cost" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.special_features>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "special_features" ;
+  mms:dataElementName "special_features" ;
+  mms:dataElementType "set" ;
+  rdfs:label "sakila.film.special_features" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film.title>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film> ;
+  mms:dataElementLabel "title" ;
+  mms:dataElementName "title" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.film.title" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_actor.actor_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.actor_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_actor> ;
+  mms:dataElementLabel "actor_id" ;
+  mms:dataElementName "actor_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.film_actor.actor_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_actor.film_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.film_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_actor> ;
+  mms:dataElementLabel "film_id" ;
+  mms:dataElementName "film_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.film_actor.film_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_actor.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_actor> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.film_actor.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_category.category_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.category.category_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_category> ;
+  mms:dataElementLabel "category_id" ;
+  mms:dataElementName "category_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.film_category.category_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_category.film_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.film_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_category> ;
+  mms:dataElementLabel "film_id" ;
+  mms:dataElementName "film_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.film_category.film_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_category.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_category> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.film_category.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_text.description>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_text> ;
+  mms:dataElementLabel "description" ;
+  mms:dataElementName "description" ;
+  mms:dataElementType "text" ;
+  rdfs:label "sakila.film_text.description" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_text.film_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_text> ;
+  mms:dataElementLabel "film_id" ;
+  mms:dataElementName "film_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.film_text.film_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_text.title>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_text> ;
+  mms:dataElementLabel "title" ;
+  mms:dataElementName "title" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.film_text.title" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.inventory.film_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.film_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.inventory> ;
+  mms:dataElementLabel "film_id" ;
+  mms:dataElementName "film_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.inventory.film_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.inventory.inventory_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.inventory> ;
+  mms:dataElementLabel "inventory_id" ;
+  mms:dataElementName "inventory_id" ;
+  mms:dataElementType "mediumint" ;
+  rdfs:label "sakila.inventory.inventory_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.inventory.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.inventory> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.inventory.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.inventory.store_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.store.store_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.inventory> ;
+  mms:dataElementLabel "store_id" ;
+  mms:dataElementName "store_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.inventory.store_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.language.language_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.language> ;
+  mms:dataElementLabel "language_id" ;
+  mms:dataElementName "language_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.language.language_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.language.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.language> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.language.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.language.name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.language> ;
+  mms:dataElementLabel "name" ;
+  mms:dataElementName "name" ;
+  mms:dataElementType "char" ;
+  rdfs:label "sakila.language.name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.amount>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "amount" ;
+  mms:dataElementName "amount" ;
+  mms:dataElementType "decimal" ;
+  rdfs:label "sakila.payment.amount" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.customer_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.customer_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "customer_id" ;
+  mms:dataElementName "customer_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.payment.customer_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.payment.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.payment_date>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "payment_date" ;
+  mms:dataElementName "payment_date" ;
+  mms:dataElementType "datetime" ;
+  rdfs:label "sakila.payment.payment_date" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.payment_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "payment_id" ;
+  mms:dataElementName "payment_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.payment.payment_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.rental_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.rental_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "rental_id" ;
+  mms:dataElementName "rental_id" ;
+  mms:dataElementType "int" ;
+  rdfs:label "sakila.payment.rental_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.payment.staff_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.staff_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment> ;
+  mms:dataElementLabel "staff_id" ;
+  mms:dataElementName "staff_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.payment.staff_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.customer_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.customer_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "customer_id" ;
+  mms:dataElementName "customer_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.rental.customer_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.inventory_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.inventory.inventory_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "inventory_id" ;
+  mms:dataElementName "inventory_id" ;
+  mms:dataElementType "mediumint" ;
+  rdfs:label "sakila.rental.inventory_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.rental.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.rental_date>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "rental_date" ;
+  mms:dataElementName "rental_date" ;
+  mms:dataElementType "datetime" ;
+  rdfs:label "sakila.rental.rental_date" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.rental_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "rental_id" ;
+  mms:dataElementName "rental_id" ;
+  mms:dataElementType "int" ;
+  rdfs:label "sakila.rental.rental_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.return_date>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "return_date" ;
+  mms:dataElementName "return_date" ;
+  mms:dataElementType "datetime" ;
+  rdfs:label "sakila.rental.return_date" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.rental.staff_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.staff_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental> ;
+  mms:dataElementLabel "staff_id" ;
+  mms:dataElementName "staff_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.rental.staff_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.active>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "active" ;
+  mms:dataElementName "active" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.staff.active" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.address_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "address_id" ;
+  mms:dataElementName "address_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.staff.address_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.email>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "email" ;
+  mms:dataElementName "email" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.staff.email" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.first_name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "first_name" ;
+  mms:dataElementName "first_name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.staff.first_name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.last_name>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "last_name" ;
+  mms:dataElementName "last_name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.staff.last_name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.staff.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.password>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "password" ;
+  mms:dataElementName "password" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.staff.password" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.picture>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "picture" ;
+  mms:dataElementName "picture" ;
+  mms:dataElementType "blob" ;
+  rdfs:label "sakila.staff.picture" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.staff_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "staff_id" ;
+  mms:dataElementName "staff_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.staff.staff_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.store_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.store.store_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "store_id" ;
+  mms:dataElementName "store_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.staff.store_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.username>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff> ;
+  mms:dataElementLabel "username" ;
+  mms:dataElementName "username" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "sakila.staff.username" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.store.address_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.store> ;
+  mms:dataElementLabel "address_id" ;
+  mms:dataElementName "address_id" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "sakila.store.address_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.store.last_update>
+  a mms:Column ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.store> ;
+  mms:dataElementLabel "last_update" ;
+  mms:dataElementName "last_update" ;
+  mms:dataElementType "timestamp" ;
+  rdfs:label "sakila.store.last_update" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.store.manager_staff_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.ForeignKey> ;
+  mms-ext:references <http://in4mium.com/masterdatakg/mms/id/sakila/column.staff.staff_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.store> ;
+  mms:dataElementLabel "manager_staff_id" ;
+  mms:dataElementName "manager_staff_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.store.manager_staff_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.store.store_id>
+  a mms:Column ;
+  mms-ext:dataElementRole <http://in4mium.com/masterdatakg/schema/mms-ext#Classifier.PrimaryKey> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.store> ;
+  mms:dataElementLabel "store_id" ;
+  mms:dataElementName "store_id" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "sakila.store.store_id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.actor>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "actor" ;
+  mms:contextName "actor" ;
+  rdfs:label "sakila.actor" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.address>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "address" ;
+  mms:contextName "address" ;
+  rdfs:label "sakila.address" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.category>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "category" ;
+  mms:contextName "category" ;
+  rdfs:label "sakila.category" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.city>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "city" ;
+  mms:contextName "city" ;
+  rdfs:label "sakila.city" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.country>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "country" ;
+  mms:contextName "country" ;
+  rdfs:label "sakila.country" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "customer" ;
+  mms:contextName "customer" ;
+  rdfs:label "sakila.customer" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "film" ;
+  mms:contextName "film" ;
+  rdfs:label "sakila.film" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_actor>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "film_actor" ;
+  mms:contextName "film_actor" ;
+  rdfs:label "sakila.film_actor" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_category>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "film_category" ;
+  mms:contextName "film_category" ;
+  rdfs:label "sakila.film_category" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_text>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "film_text" ;
+  mms:contextName "film_text" ;
+  rdfs:label "sakila.film_text" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.inventory>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "inventory" ;
+  mms:contextName "inventory" ;
+  rdfs:label "sakila.inventory" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.language>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "language" ;
+  mms:contextName "language" ;
+  rdfs:label "sakila.language" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.payment>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "payment" ;
+  mms:contextName "payment" ;
+  rdfs:label "sakila.payment" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.rental>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "rental" ;
+  mms:contextName "rental" ;
+  rdfs:label "sakila.rental" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "staff" ;
+  mms:contextName "staff" ;
+  rdfs:label "sakila.staff" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.store>
+  a mms:Dataset ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila> ;
+  mms:contextLabel "store" ;
+  mms:contextName "store" ;
+  rdfs:label "sakila.store" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/model.sakila>
+  a mms:Model ;
+  mms:contextLabel "sakila" ;
+  mms:contextName "sakila" ;
+  rdfs:label "sakila" ;
+.

@@ -11,7 +11,6 @@ import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.impl.ContextStatement;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -33,6 +32,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 
+
+
 public  class IntelligentStatementPaths extends AbstractCloseableIteration< IntelligentStatement, SailException> {
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
 	Thing thing;
@@ -50,7 +51,6 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.resultsIterator=resultsIterator;
 		this.thing=thing;
 		this.pathElement=pathElement;
-	//	this.pathTupleExpr=pathTupleExpr;
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		simpleValueFactory= SimpleValueFactory.getInstance();
@@ -63,7 +63,6 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.pathElement=pathElement;
 		this.sortedIterations = pathElement.getIterations().sortByPathLength();
 		this.pathIteration=0;
-		//this.pathTupleExpr=pathTupleExpr;
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		this.contexts = contexts;
@@ -99,9 +98,9 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		if(resultsIterator!=null)
 			return resultsIterator;
 		else {	
-			CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
-			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
-			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
+//			CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+//			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
+//			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
 			return resultsIterator;
 		}
 	}

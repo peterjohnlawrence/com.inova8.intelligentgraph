@@ -1,0 +1,500 @@
+@base          <http://in4mium.com/masterdatakg/data/fluentOne/fluentOnemms> .
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.PaymentSystem>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.PaymentSystem" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "PaymentSystem" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "PaymentSystem" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.Agent>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.registration.Agent" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.registration> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Agent" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Agent" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.location.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.location.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.location> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.episode>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.episode"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "episode"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "episode"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.Duration>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing.Duration" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Duration" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Duration" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.Start>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.registration.Start" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.registration> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Start" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Start" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.of_User>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.registration.of_User" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.registration> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "of_User" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "of_User" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.End>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.End" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "End" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "End" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.Canceled>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.Canceled" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Canceled" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Canceled" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.platform>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.platform"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "platform"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "platform"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.Start>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing.Start" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Start" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Start" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.platform.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.platform.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.platform> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscriptiontype>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscriptiontype"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "subscriptiontype"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "subscriptiontype"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.by_User>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.by_User" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "by_User" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "by_User" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.show.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.show.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.show> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.location>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.location"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "location"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "location"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.of_Episode>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing.of_Episode" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "of_Episode" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "of_Episode" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.paymentsystem>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.paymentsystem"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "paymentsystem"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "paymentsystem"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.Location>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.registration.Location" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.registration> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Location" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Location" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.Start>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.Start" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Start" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Start" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "subscription"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "subscription"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.registration>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.registration"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "registration"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "registration"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.Platform>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing.Platform" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Platform" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Platform" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.episode.Length>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.episode.Length" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.episode> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Length" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Length" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne>
+        a       <http://rdf.cdisc.org/mms#Model> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "fluentOne"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "fluentOne"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.user.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.user.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.user> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "viewing"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "viewing"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.by_User>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing.by_User" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "by_User" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "by_User" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.user>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.user"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "user"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "user"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.registration.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.registration.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.registration> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.episode.of_Show>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.episode.of_Show" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.episode> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "of_Show" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "of_Show" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.Type>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.Type" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Type" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Type" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.Created>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.Created" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Created" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Created" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscriptiontype.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscriptiontype.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscriptiontype> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.subscription.Billing_Start>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.subscription.Billing_Start" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.subscription> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "Billing_Start" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "Billing_Start" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "TIMESTAMP" .
+
+<>      a       <http://www.w3.org/2002/07/owl#Ontology> ;
+        <http://www.w3.org/2002/07/owl#versionInfo>
+                "Created By In4mium"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.show>
+        a       <http://rdf.cdisc.org/mms#Dataset> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.show"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/model.fluentOne> ;
+        <http://rdf.cdisc.org/mms#contextLabel>
+                "show"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        <http://rdf.cdisc.org/mms#contextName>
+                "show"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.episode.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.episode.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.episode> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.paymentsystem.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.paymentsystem.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.paymentsystem> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "STRING" .
+
+<http://in4mium.com/masterdatakg/mms/id/fluentOne/column.viewing.id>
+        a       <http://rdf.cdisc.org/mms#Column> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "fluentOne.viewing.id" ;
+        <http://rdf.cdisc.org/mms#context>
+                <http://in4mium.com/masterdatakg/mms/id/fluentOne/dataset.viewing> ;
+        <http://rdf.cdisc.org/mms#dataElementLabel>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementName>
+                "id" ;
+        <http://rdf.cdisc.org/mms#dataElementType>
+                "INT64" .

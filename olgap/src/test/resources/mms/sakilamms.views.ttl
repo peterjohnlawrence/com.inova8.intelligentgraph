@@ -1,0 +1,297 @@
+# baseURI: http://in4mium.com/masterdatakg/data/sakila/sakilamms/views
+# imports: http://in4mium.com/masterdatakg/data/sakila/sakilamms
+# imports: http://in4mium.com/masterdatakg/schema/mms-ext/view
+# prefix: views
+
+@prefix : <http://in4mium.com/masterdatakg/data/sakila/sakilamms> .
+@prefix mms: <http://rdf.cdisc.org/mms#> .
+@prefix mms-ext: <http://in4mium.com/masterdatakg/schema/mms-ext#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix views: <http://in4mium.com/masterdatakg/data/sakila/sakilamms/views#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://in4mium.com/masterdatakg/data/sakila/sakilamms/views>
+  a owl:Ontology ;
+  owl:imports <http://in4mium.com/masterdatakg/data/sakila/sakilamms> ;
+  owl:imports <http://in4mium.com/masterdatakg/schema/mms-ext/view> ;
+  owl:versionInfo "Created with TopBraid Composer" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.SID>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "cu.store_id AS SID" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.store_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "SID" ;
+  mms:dataElementName "SID" ;
+  mms:dataElementType "tinyint" ;
+  rdfs:label "column.customer.SID" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.address>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "a.address AS address" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.address.address> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "address" ;
+  mms:dataElementName "address" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer_list.address" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.city>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "city.city AS city" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.city.city> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "city" ;
+  mms:dataElementName "city" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer.city" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.country>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "country.country AS country" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.country.country> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "country" ;
+  mms:dataElementName "country" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer.country" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.id>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "cu.customer_id AS ID" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.customer_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "ID" ;
+  mms:dataElementName "ID" ;
+  mms:dataElementType "smallint" ;
+  rdfs:label "column.customer list.id" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.name>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "CONCAT(cu.first_name, _utf8mb4' ', cu.last_name) AS name" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.first_name> ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.last_name> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "name" ;
+  mms:dataElementName "name" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer_list.name" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.notes>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "IF(cu.active, _utf8mb4'active',_utf8mb4'') AS notes" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.customer.active> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "notes" ;
+  mms:dataElementName "notes" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer.notes" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.phone>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "a.phone AS phone" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.address.phone> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "phone" ;
+  mms:dataElementName "phone" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer.phone" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.customer_list.zip_code>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "a.postal_code AS `zip code`" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.address.postal_code> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list> ;
+  mms:dataElementLabel "zip code" ;
+  mms:dataElementName "zip code" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.customer.zip_code" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.customer_list>
+  a mms:Dataset ;
+  mms-ext:contextDerivation """CREATE VIEW customer_list
+AS
+SELECT cu.customer_id AS ID, CONCAT(cu.first_name, _utf8mb4' ', cu.last_name) AS name, a.address AS address, a.postal_code AS `zip code`,
+	a.phone AS phone, city.city AS city, country.country AS country, IF(cu.active, _utf8mb4'active',_utf8mb4'') AS notes, cu.store_id AS SID
+FROM customer AS cu JOIN address AS a ON cu.address_id = a.address_id JOIN city ON a.city_id = city.city_id
+	JOIN country ON city.country_id = country.country_id;""" ;
+  mms:contextLabel "customer_list" ;
+  mms:contextName "customer_list" ;
+  rdfs:label "customer list" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list>
+  a mms:Dataset ;
+  mms-ext:contextDerivation """CREATE VIEW film_list
+AS
+SELECT film.film_id AS FID, film.title AS title, film.description AS description, category.name AS category, film.rental_rate AS price,
+	film.length AS length, film.rating AS rating, GROUP_CONCAT(CONCAT(actor.first_name, _utf8mb4' ', actor.last_name) SEPARATOR ', ') AS actors
+FROM category LEFT JOIN film_category ON category.category_id = film_category.category_id LEFT JOIN film ON film_category.film_id = film.film_id
+        JOIN film_actor ON film.film_id = film_actor.film_id
+	JOIN actor ON film_actor.actor_id = actor.actor_id
+GROUP BY film.film_id, category.name;""" ;
+  mms:contextLabel "film_list" ;
+  mms:contextName "film_list" ;
+  rdfs:label "sakila.film_list" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.nicer_but_slower_film_list>
+  a mms:Dataset ;
+  mms-ext:contextDerivation """CREATE VIEW nicer_but_slower_film_list
+AS
+SELECT film.film_id AS FID, film.title AS title, film.description AS description, category.name AS category, film.rental_rate AS price,
+	film.length AS length, film.rating AS rating, GROUP_CONCAT(CONCAT(CONCAT(UCASE(SUBSTR(actor.first_name,1,1)),
+	LCASE(SUBSTR(actor.first_name,2,LENGTH(actor.first_name))),_utf8mb4' ',CONCAT(UCASE(SUBSTR(actor.last_name,1,1)),
+	LCASE(SUBSTR(actor.last_name,2,LENGTH(actor.last_name)))))) SEPARATOR ', ') AS actors
+FROM category LEFT JOIN film_category ON category.category_id = film_category.category_id LEFT JOIN film ON film_category.film_id = film.film_id
+        JOIN film_actor ON film.film_id = film_actor.film_id
+	JOIN actor ON film_actor.actor_id = actor.actor_id
+GROUP BY film.film_id, category.name;""" ;
+  mms:contextLabel "nicer_but_slower_film_list" ;
+  mms:contextName "nicer_but_slower_film_list" ;
+  rdfs:label "sakila.nicer_but_slower_film_list" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.sales_by_film_category>
+  a mms:Dataset ;
+  mms-ext:contextDerivation """CREATE VIEW sales_by_film_category
+AS
+SELECT
+c.name AS category
+, SUM(p.amount) AS total_sales
+FROM payment AS p
+INNER JOIN rental AS r ON p.rental_id = r.rental_id
+INNER JOIN inventory AS i ON r.inventory_id = i.inventory_id
+INNER JOIN film AS f ON i.film_id = f.film_id
+INNER JOIN film_category AS fc ON f.film_id = fc.film_id
+INNER JOIN category AS c ON fc.category_id = c.category_id
+GROUP BY c.name
+ORDER BY total_sales DESC;""" ;
+  mms:contextLabel "sales_by_film_category" ;
+  mms:contextName "sales_by_film_category" ;
+  rdfs:label "sales_by_film_category" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.sales_by_store>
+  a mms:Dataset ;
+  mms-ext:contextDerivation """CREATE VIEW sales_by_store
+AS
+SELECT
+CONCAT(c.city, _utf8mb4',', cy.country) AS store
+, CONCAT(m.first_name, _utf8mb4' ', m.last_name) AS manager
+, SUM(p.amount) AS total_sales
+FROM payment AS p
+INNER JOIN rental AS r ON p.rental_id = r.rental_id
+INNER JOIN inventory AS i ON r.inventory_id = i.inventory_id
+INNER JOIN store AS s ON i.store_id = s.store_id
+INNER JOIN address AS a ON s.address_id = a.address_id
+INNER JOIN city AS c ON a.city_id = c.city_id
+INNER JOIN country AS cy ON c.country_id = cy.country_id
+INNER JOIN staff AS m ON s.manager_staff_id = m.staff_id
+GROUP BY s.store_id
+ORDER BY cy.country, c.city;""" ;
+  mms:contextLabel "sales_by_store" ;
+  mms:contextName "sales_by_store" ;
+  rdfs:label "sakila.sales_by_store" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/dataset.staff_list>
+  a mms:Dataset ;
+  mms-ext:contextDerivation """CREATE VIEW staff_list
+AS
+SELECT s.staff_id AS ID, CONCAT(s.first_name, _utf8mb4' ', s.last_name) AS name, a.address AS address, a.postal_code AS `zip code`, a.phone AS phone,
+	city.city AS city, country.country AS country, s.store_id AS SID
+FROM staff AS s JOIN address AS a ON s.address_id = a.address_id JOIN city ON a.city_id = city.city_id
+	JOIN country ON city.country_id = country.country_id;""" ;
+  mms:contextLabel "staff_list" ;
+  mms:contextName "staff_list" ;
+  rdfs:label "sakila.staff_list" ;
+.
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.FID>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "film.film_id AS FID" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.film_id> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "FID" ;
+  mms:dataElementName "FID" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.FID" ;
+.
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.title>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "film.title AS title" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.title> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "title" ;
+  mms:dataElementName "title" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.title" ;
+.
+
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.description>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "film.description AS description" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.description> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "description" ;
+  mms:dataElementName "description" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.description" ;
+.
+
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.category>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "category.name AS category" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.category.name> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "category" ;
+  mms:dataElementName "category" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.category" ;
+.
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.price>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "film.rental_rate AS price" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.rental_rate> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "price" ;
+  mms:dataElementName "price" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.price" ;
+.
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.length>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "film.length AS length" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.length> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "length" ;
+  mms:dataElementName "length" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.length" ;
+.
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.rating>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "film.rating AS rating" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.film.rating> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "rating" ;
+  mms:dataElementName "rating" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.rating" ;
+.
+
+<http://in4mium.com/masterdatakg/mms/id/sakila/column.film_list.actors>
+  a mms:Column ;
+  mms-ext:dataelementDerivation "GROUP_CONCAT(CONCAT(actor.first_name, _utf8mb4' ', actor.last_name) SEPARATOR ', ') AS actors" ;
+  mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.first_name> ;
+    mms-ext:isDerivedFrom <http://in4mium.com/masterdatakg/mms/id/sakila/column.actor.last_name> ;
+  mms:context <http://in4mium.com/masterdatakg/mms/id/sakila/dataset.film_list> ;
+  mms:dataElementLabel "actors" ;
+  mms:dataElementName "actors" ;
+  mms:dataElementType "varchar" ;
+  rdfs:label "column.film_list.actors" ;
+.
+

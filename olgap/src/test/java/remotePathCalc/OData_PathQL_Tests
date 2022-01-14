@@ -1,0 +1,31 @@
+
+Postman prerequest scripts to encode
+
+pm.request.url.query.each((q) => {
+     q.update(encodeURI(q.toString()))
+});
+
+OData Search
+
+http://localhost:8070/odata2sparql/calc2graph/$all?$search=Unit* NOT location OR product*&$format=json
+http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource?$search=Unit* NOT location OR product*&$format=json
+
+pathql.fact  $This
+
+http://localhost:8070/odata2sparql/calc2graph/rdfs_Resource('calc2graphData~Unit1')/pathql.fact(pathql=':hasProductBatteryLimit')?$select=*&$format=json
+http://localhost:8070/odata2sparql/calc2graph/Unit('calc2graphData~Unit1')/pathql.fact(pathql=':hasProductBatteryLimit>:massFlow')?$select=*&$format=json
+
+
+pathql.facts All members of a class
+
+http://localhost:8070/odata2sparql/calc2graph/Unit/pathql.facts(pathql=':hasProductBatteryLimit')?$select=*&$format=json
+
+pathQL Combined Query
+
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq calc2graphData~Unit1]>:hasProductBatteryLimit'&$select=*&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ eq calc2graphData~Unit1]>:hasProductBatteryLimit>:massFlow'&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit*"]'&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit* NOT (location OR product*)"]>:hasProductBatteryLimit>:massFlow'&$format=json
+http://localhost:8070/odata2sparql/calc2graph/pathQL(pathql=@p)?@p='[ like "Unit* NOT (location OR product*)"; a :Unit ]>:hasProductBatteryLimit>:massFlow'&$format=json
+
+http://localhost:8070/odata2sparql/eastman3d/pathQL(pathql=@p)?@p='[ like "Unit*"]'&$format=json&$select=*

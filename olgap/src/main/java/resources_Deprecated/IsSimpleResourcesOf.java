@@ -22,7 +22,7 @@ public class IsSimpleResourcesOf extends Resources{
 
 	private CloseableIteration<? extends Statement, QueryEvaluationException>statements;
 
-	public IsSimpleResourcesOf( Thing thing, PredicateElement predicateElement	){
+	public IsSimpleResourcesOf( DeprecatedThing thing, PredicateElement predicateElement	){
 		super( Resources.Selector.SUBJECT, thing, predicateElement.getReification(), predicateElement.getPredicate());
 		statements = Source.getTripleSource().getStatements(null, predicate, (IRI) thing.getSuperValue() );
 	}
@@ -66,7 +66,7 @@ public class IsSimpleResourcesOf extends Resources{
 	CloseableIteration<? extends Statement, QueryEvaluationException> getStatements() {
 		return statements;
 	}
-	public Thing getThing() {
+	public DeprecatedThing getThing() {
 		return thing;
 	}
 	protected Selector getSelector() {
