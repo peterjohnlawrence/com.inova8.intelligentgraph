@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph.pathQLModel;
+package com.inova8.intelligentgraph.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,7 +11,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
 import com.inova8.intelligentgraph.path.Edge.Direction;
-import com.inova8.intelligentgraph.pathQLResults.FactResults;
+import com.inova8.intelligentgraph.results.FactResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 public class Predicate extends Resource{

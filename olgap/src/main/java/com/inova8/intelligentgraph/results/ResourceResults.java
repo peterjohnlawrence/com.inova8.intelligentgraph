@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathQLResults;
+package com.inova8.intelligentgraph.results;
 
 import java.util.Iterator;
 import java.lang.Iterable;
@@ -11,11 +11,11 @@ import org.eclipse.rdf4j.common.iterator.CloseableIterationIterator;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.pathql.element.PathElement;
 
 /**

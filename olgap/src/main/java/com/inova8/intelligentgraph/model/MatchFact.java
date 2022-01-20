@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathQLModel;
+package com.inova8.intelligentgraph.model;
 
 import org.eclipse.rdf4j.model.Value;
 

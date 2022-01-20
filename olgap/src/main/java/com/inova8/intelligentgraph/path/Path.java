@@ -20,10 +20,10 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Edge.Direction;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.processor.PathPatternException;
 

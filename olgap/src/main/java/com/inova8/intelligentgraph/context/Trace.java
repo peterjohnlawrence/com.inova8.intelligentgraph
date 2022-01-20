@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph.pathCalc;
+package com.inova8.intelligentgraph.context;
 
 public class Trace {
 

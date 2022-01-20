@@ -14,11 +14,11 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.sail.SailException;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.path.StatementBinding;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;

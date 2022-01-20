@@ -1,13 +1,13 @@
-package com.inova8.intelligentgraph.pathQLResults;
+package com.inova8.intelligentgraph.results;
 
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.pathql.element.PathElement;
 
 

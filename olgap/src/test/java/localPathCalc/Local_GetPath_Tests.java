@@ -17,11 +17,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Path;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.PathResults;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
+import com.inova8.intelligentgraph.results.PathResults;
+import com.inova8.intelligentgraph.results.ResourceResults;
+
 import utilities.Query;
 
 /**

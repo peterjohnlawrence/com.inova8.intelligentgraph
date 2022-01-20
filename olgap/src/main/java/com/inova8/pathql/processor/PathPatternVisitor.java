@@ -10,9 +10,9 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.util.Values;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.pathql.context.Prefixes;
 import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.AlternativePathElement;

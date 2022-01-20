@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathQLResults;
+package com.inova8.intelligentgraph.results;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -14,10 +14,10 @@ import org.eclipse.rdf4j.repository.RepositoryException;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Path;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.element.PathElement;
 
 /**

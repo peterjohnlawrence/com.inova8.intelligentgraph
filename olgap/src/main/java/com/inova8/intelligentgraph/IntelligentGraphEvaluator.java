@@ -25,12 +25,12 @@ import org.eclipse.rdf4j.sail.SailConnection;
 
 import com.inova8.intelligentgraph.IntelligentGraphSail.ResponseType;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.context.Prefixes;
 
@@ -251,7 +251,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 						Thing subjectThing = Thing.create(source, nextBindingSet.getValue("subject"),
 								evaluationContext);
 						try {
-							com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(
+							com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(
 									(IRI) nextBindingSet.getValue("predicate"),	literalValue,customQueryOptions);
 							Binding modifiedBindingValue = new SimpleBinding("object", fact.getValue());
 							modifiedBindingSet.addBinding(modifiedBindingValue);
@@ -315,7 +315,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								case VALUE:
 									Thing subjectThing = Thing.create(getSource(), subject, evaluationContext);
 									try {
-										com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing
+										com.inova8.intelligentgraph.model.Resource fact = subjectThing
 												.getFact(predicate,	literalValue,customQueryOptions);
 										Binding modifiedBindingValue = new SimpleBinding(modifiedBindingValueName,
 												fact.getValue());
@@ -352,7 +352,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 									getCustomQueryOptions(nextBindingSet), getDataset());
 							Thing subjectThing = Thing.create(getSource(), SCRIPT.ANONTHING, evaluationContext);
 							try {
-								com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(
+								com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(
 										SCRIPT.ANONPREDICATE,literalValue,null);
 								Binding modifiedBindingValue = new SimpleBinding(bindingValue.getName(),
 										fact.getValue());

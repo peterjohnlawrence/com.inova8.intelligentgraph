@@ -14,9 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.*;
+import com.inova8.intelligentgraph.model.*;
 import com.inova8.intelligentgraph.vocabulary.*;
-import com.inova8.intelligentgraph.pathQLModel.*;
-
 
 import utilities.Query;
 

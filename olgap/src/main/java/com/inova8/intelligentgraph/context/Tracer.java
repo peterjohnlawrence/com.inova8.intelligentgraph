@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathCalc;
+package com.inova8.intelligentgraph.context;
 
 import java.util.ArrayList;
 import javax.script.ScriptException;
@@ -12,12 +12,11 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 
+import com.inova8.intelligentgraph.context.Tracer;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.path.PathBinding;
-
-import com.inova8.intelligentgraph.pathCalc.Tracer;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 import com.inova8.pathql.context.Prefixes;
 import com.inova8.pathql.element.PredicateElement;

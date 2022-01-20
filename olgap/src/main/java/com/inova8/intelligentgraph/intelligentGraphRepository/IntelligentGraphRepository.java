@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory;
 import com.inova8.intelligentgraph.FactCache;
 import com.inova8.intelligentgraph.IntelligentGraphConnection;
 import com.inova8.intelligentgraph.IntelligentGraphSail;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.exceptions.ServerException;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.context.Prefixes;
@@ -308,7 +308,7 @@ public class IntelligentGraphRepository {
 		CustomQueryOptions customQueryOptions = CustomQueryOptions.create(this, customQueryOptionsArray);
 		if (customQueryOptions != null) {
 			if (customQueryOptions.contains("service")) {
-				com.inova8.intelligentgraph.pathQLModel.Resource service = customQueryOptions.get("service");
+				com.inova8.intelligentgraph.model.Resource service = customQueryOptions.get("service");
 				String serviceURL = service.toString();
 				String serviceIRI = null;
 				if (serviceURL.indexOf('?') > 0) {
@@ -391,7 +391,7 @@ public class IntelligentGraphRepository {
 	}
 
 	@SuppressWarnings("unused")
-	private void clearServiceCache(ConcurrentHashMap<String, com.inova8.intelligentgraph.pathQLModel.Resource> customQueryOptions) {
+	private void clearServiceCache(ConcurrentHashMap<String, com.inova8.intelligentgraph.model.Resource> customQueryOptions) {
 		if (connected()) {
 			RepositoryResult<Statement> cacheStatements = cacheConnection.getStatements(null, SCRIPT.CACHE_DATE_TIME,
 					null);
@@ -415,9 +415,9 @@ public class IntelligentGraphRepository {
 	}
 
 
-	private String getBefore(ConcurrentHashMap<String, com.inova8.intelligentgraph.pathQLModel.Resource> customQueryOptions) {
+	private String getBefore(ConcurrentHashMap<String, com.inova8.intelligentgraph.model.Resource> customQueryOptions) {
 		if (customQueryOptions != null && customQueryOptions.containsKey("before")) {
-			com.inova8.intelligentgraph.pathQLModel.Resource beforeDateTime = customQueryOptions.get("before");
+			com.inova8.intelligentgraph.model.Resource beforeDateTime = customQueryOptions.get("before");
 			return beforeDateTime.getValue().toString().substring(1, 20);
 		}
 		return null;

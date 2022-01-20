@@ -11,7 +11,7 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.util.Values;
 
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.pathql.context.Prefixes;
 import com.inova8.pathql.utilities.Utilities;
 

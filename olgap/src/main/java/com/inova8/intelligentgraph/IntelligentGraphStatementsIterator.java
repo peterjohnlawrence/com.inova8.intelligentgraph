@@ -12,8 +12,8 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.sail.SailException;
 
+import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 
 /**
  * The Class IntelligentGraphStatementsIterator.

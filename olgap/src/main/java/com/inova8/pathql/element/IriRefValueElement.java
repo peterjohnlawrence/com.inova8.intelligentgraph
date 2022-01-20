@@ -5,7 +5,7 @@ package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.model.IRI;
 
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 

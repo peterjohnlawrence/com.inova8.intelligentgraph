@@ -17,11 +17,11 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.Path;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.PathResults;
+import com.inova8.intelligentgraph.results.PathResults;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.intelligentgraph.vocabulary.XSD;

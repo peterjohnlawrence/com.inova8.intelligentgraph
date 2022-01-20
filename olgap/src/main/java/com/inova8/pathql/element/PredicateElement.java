@@ -11,11 +11,11 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.algebra.Compare;
 import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.pathql.context.RepositoryContext;

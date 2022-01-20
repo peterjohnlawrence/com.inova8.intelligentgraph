@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathQLModel;
+package com.inova8.intelligentgraph.model;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
@@ -26,6 +26,10 @@ import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.FactCache;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.context.Evaluator;
+import com.inova8.intelligentgraph.context.Trace;
 import com.inova8.intelligentgraph.exceptions.CircularReferenceException;
 import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.exceptions.NullValueReturnedException;
@@ -33,13 +37,12 @@ import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.intelligentGraphRepository.SEEQSource;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.NullPath;
 import com.inova8.intelligentgraph.path.Path;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathCalc.Trace;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.results.PathResults;
+import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.results.ResourceStatementResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
@@ -48,9 +51,6 @@ import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathPatternException;
 import com.inova8.pathql.utilities.Utilities;
-import com.inova8.intelligentgraph.pathQLResults.PathResults;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
-import com.inova8.intelligentgraph.pathQLResults.ResourceStatementResults;
 
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
@@ -526,18 +526,18 @@ public class Thing extends Resource {
 				getSource().writeModelToCache(this, result, cacheContextIRI);
 				return Thing.create(getSource(), cacheContextIRI, this.getEvaluationContext());
 			case "Literal":
-				Value content = ((com.inova8.intelligentgraph.pathQLModel.Literal) result).getValue();
+				Value content = ((com.inova8.intelligentgraph.model.Literal) result).getValue();
 				switch (((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName()) {
 				case "int":
 				case "integer":
 					return Resource.create(getSource(),
-							literal((BigInteger) ((com.inova8.intelligentgraph.pathQLModel.Literal) result).bigIntegerValue()),
+							literal((BigInteger) ((com.inova8.intelligentgraph.model.Literal) result).bigIntegerValue()),
 							this.getEvaluationContext());
 				case "decimal":
-					return Resource.create(getSource(), literal(((com.inova8.intelligentgraph.pathQLModel.Literal) result).decimalValue()),
+					return Resource.create(getSource(), literal(((com.inova8.intelligentgraph.model.Literal) result).decimalValue()),
 							this.getEvaluationContext());
 				case "double":
-					return Resource.create(getSource(), literal(((com.inova8.intelligentgraph.pathQLModel.Literal) result).doubleValue()),
+					return Resource.create(getSource(), literal(((com.inova8.intelligentgraph.model.Literal) result).doubleValue()),
 							this.getEvaluationContext());
 				case "string": 
 					return Resource.create(getSource(), literal(content.stringValue()), this.getEvaluationContext());

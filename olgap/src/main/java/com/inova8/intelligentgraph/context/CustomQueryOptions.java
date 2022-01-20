@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph.pathCalc;
+package com.inova8.intelligentgraph.context;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -14,12 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Literal;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Literal;
+import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
 
 public class CustomQueryOptions extends Hashtable<String, Resource> {
 	@Override
@@ -51,7 +50,7 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 				String customQueryOptionValue = customQueryOptionsArray[customQueryOptionsArrayIndex + 1].stringValue();
 				if (customQueryOptionValue != null && !customQueryOptionValue.isEmpty())
 					customQueryOptions.put(customQueryOptionParameter,
-							com.inova8.intelligentgraph.pathQLModel.Resource.create(pathQLRepository, literal(customQueryOptionValue), null));
+							com.inova8.intelligentgraph.model.Resource.create(pathQLRepository, literal(customQueryOptionValue), null));
 			}
 			return customQueryOptions;
 		}

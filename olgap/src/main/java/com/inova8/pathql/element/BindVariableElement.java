@@ -4,8 +4,8 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.pathql.context.RepositoryContext;
 
 import org.eclipse.rdf4j.model.IRI;

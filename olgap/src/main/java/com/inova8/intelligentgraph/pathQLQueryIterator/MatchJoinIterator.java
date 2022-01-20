@@ -16,6 +16,7 @@ import org.eclipse.rdf4j.query.algebra.evaluation.EvaluationStrategy;
 /**
  * The Class MatchJoinIterator.
  */
+@Deprecated
 public class MatchJoinIterator extends LookAheadIteration<BindingSet, QueryEvaluationException>{
 	
 	/** The strategy. */

@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.pathCalc;
+package com.inova8.intelligentgraph.context;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,9 +17,9 @@ import javax.script.ScriptEngineManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import org.eclipse.rdf4j.model.IRI;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 

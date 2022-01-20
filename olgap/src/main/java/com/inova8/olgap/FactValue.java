@@ -13,11 +13,11 @@ import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
 /**
@@ -81,7 +81,7 @@ public class FactValue extends Evaluator implements Function {
 				CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 				Thing subjectThing = Thing.create(source, subject, evaluationContext);	
-				com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact("<"+predicate.stringValue()+">");// new PredicateElement(source,predicate));
+				com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact("<"+predicate.stringValue()+">");// new PredicateElement(source,predicate));
 				if( fact != null && fact.getValue()!=null) {
 					Value result = fact.getValue();
 					logger.debug("FactValue = {}",result);

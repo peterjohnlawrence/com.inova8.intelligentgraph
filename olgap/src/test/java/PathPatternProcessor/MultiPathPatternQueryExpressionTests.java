@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;

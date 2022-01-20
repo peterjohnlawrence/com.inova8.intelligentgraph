@@ -17,6 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.olgap.ClearCache;
+import com.inova8.olgap.FactValue;
+import com.inova8.olgap.ObjectValue;
+
 import utilities.Query;
 
 /**

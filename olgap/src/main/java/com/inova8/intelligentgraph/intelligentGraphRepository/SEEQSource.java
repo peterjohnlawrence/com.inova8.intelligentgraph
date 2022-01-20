@@ -12,9 +12,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.exceptions.HandledException;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Resource;
+import com.inova8.intelligentgraph.model.Resource;
 import com.seeq.ApiClient;
 import com.seeq.ApiException;
 import com.seeq.api.AuthApi;

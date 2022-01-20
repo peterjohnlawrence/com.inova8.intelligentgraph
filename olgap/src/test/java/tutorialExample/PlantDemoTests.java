@@ -15,10 +15,11 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.*;
-import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.intelligentgraph.model.*;
 import com.inova8.intelligentgraph.vocabulary.*;
-import com.inova8.intelligentgraph.pathQLModel.*;
 
 //import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 //import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
@@ -84,7 +85,7 @@ class PlantDemoTests {
 			assertEquals(60.3,feed41.getFact(":hasVolumeFlow").doubleValue());
 			//assertEquals("[http://inova8.com/intelligentgraph/plantdemo/Product.4.1;http://inova8.com/intelligentgraph/plantdemo/Product.4.2;http://inova8.com/intelligentgraph/plantdemo/Flare.4.1;]",unit4.getFacts(":hasProduct"));
 			//assertEquals(60.3,unit4.getFacts(":hasProduct|:hasFeed"));
-			for( com.inova8.intelligentgraph.pathQLModel.Resource stream : unit4.getFacts(":hasProduct|:hasFeed") ) {
+			for( com.inova8.intelligentgraph.model.Resource stream : unit4.getFacts(":hasProduct|:hasFeed") ) {
 				stream.addFact(":hasMassFlow", "<:MassFlow>",SCRIPT.GROOVY );
 			}
 			assertEquals(47.034,feed41.getFact(":hasMassFlow").doubleValue());
@@ -102,7 +103,7 @@ class PlantDemoTests {
 			Thing massYield = graph.getThing(":MassYield").addFact("<http://inova8.com/script/scriptCode>",
 					"_this.getFact(':hasMassFlow').doubleValue()/ _this.getFact('^:hasProduct/:totalProduction').doubleValue();",
 					SCRIPT.GROOVY);
-			for( com.inova8.intelligentgraph.pathQLModel.Resource product : unit4.getFacts(":hasProduct") ) {
+			for( com.inova8.intelligentgraph.model.Resource product : unit4.getFacts(":hasProduct") ) {
  				product.addFact(":hasMassYield", "<:MassYield>",SCRIPT.GROOVY );
 			}
 			
@@ -137,7 +138,7 @@ class PlantDemoTests {
 				Thing massFlow = graph.getThing(":MassFlow").addFact("<http://inova8.com/script/scriptCode>",
 						"_this.getFact(':hasVolumeFlow', _customQueryOptions).doubleValue()* _this.getFact(':hasDensity', _customQueryOptions).doubleValue();",
 						SCRIPT.GROOVY); 
-				for( com.inova8.intelligentgraph.pathQLModel.Resource stream : unit4.getFacts(":hasProduct|:hasFeed") ) {
+				for( com.inova8.intelligentgraph.model.Resource stream : unit4.getFacts(":hasProduct|:hasFeed") ) {
 					stream.addFact(":hasMassFlow", "<:MassFlow>",SCRIPT.GROOVY );
 				}
 
@@ -162,7 +163,7 @@ class PlantDemoTests {
 				Thing massYield = graph.getThing(":MassYield").addFact("<http://inova8.com/script/scriptCode>",
 						"_this.getFact(':hasMassFlow', _customQueryOptions).doubleValue()/ _this.getFact('^:hasProduct/:totalProduction', _customQueryOptions).doubleValue();",
 						SCRIPT.GROOVY);
-				for( com.inova8.intelligentgraph.pathQLModel.Resource product : unit4.getFacts(":hasProduct") ) {
+				for( com.inova8.intelligentgraph.model.Resource product : unit4.getFacts(":hasProduct") ) {
 					product.addFact(":hasMassYield", "<:MassYield>",SCRIPT.GROOVY );
 				}
 				
