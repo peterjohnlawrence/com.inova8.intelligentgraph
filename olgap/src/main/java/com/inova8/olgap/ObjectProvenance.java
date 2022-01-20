@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package olgap;
+package com.inova8.olgap;
 
 import java.util.Arrays;
 import org.eclipse.rdf4j.model.IRI;
@@ -10,6 +10,8 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
+import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
@@ -19,25 +21,24 @@ import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
-import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
-import org.slf4j.Logger;
+//import groovy.lang.GroovyShell;
 
 /**
- * The Class FactDebug.
-
+ * The Class ObjectProvenance.
  */
 @Deprecated
-public class FactDebug extends Evaluator implements Function {
+public class ObjectProvenance extends Evaluator implements Function {
 	
 	/** The logger. */
-	private static final Logger logger   = LoggerFactory.getLogger(FactDebug.class);
+	private static final Logger logger   = LoggerFactory.getLogger(ObjectProvenance.class);
+
 
 	/**
-	 * Instantiates a new fact debug.
+	 * Instantiates a new object provenance.
 	 */
-	public FactDebug() {
+	public ObjectProvenance()  {
 		super();
-		logger.info("Initiating FactDebug");
+		logger.info("Initiating ObjectProvenance");
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class FactDebug extends Evaluator implements Function {
 	 */
 	@Override
 	public String getURI() {
-		return OLGAP.FACTDEBUG;
+		return OLGAP.OBJECTPROVENANCE;
 	}
 
 	/**
@@ -60,39 +61,50 @@ public class FactDebug extends Evaluator implements Function {
 	 */
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
-		//logger.debug("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),Arrays.toString(args));
+	
+		logger.trace("Evaluate for <{}> with args <{}>",tripleSource, args);
 		if(args.length <3) {
-			String message = "At least subject, predicate, and script arguments required";
+			String message = "At least subject,predicate, and objectscript arguments required";
 			logger.error(message);
 			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
 
 			IRI subject ;
 			IRI predicate;
-			SimpleLiteral scriptLiteral;
 			try {
 				subject = (IRI) args[0];
 				predicate = (IRI) args[1];
-				scriptLiteral = (SimpleLiteral) args[2];
 			} catch(Exception e) {
-				String message ="Subject and predicate must be valid IRI, and script must be a literal";
+				String message = "Subject and predicate must be valid IRI";
 				logger.error(message);
-				return tripleSource.getValueFactory().createLiteral(message.toString());
+				return tripleSource.getValueFactory().createLiteral(message);
 			}
+			SimpleLiteral literalValue;
 			try{
-				Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
-				IntelligentGraphRepository source = sources.getSource(tripleSource,argumentArray );
-				CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
-				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
-				evaluationContext.setTracing(true);
-				Thing subjectThing = Thing.create(source, subject, evaluationContext);
-				subjectThing.getFact(predicate,//new PredicateElement(source, predicate),
-						scriptLiteral,customQueryOptions);
-				logger.debug("Trace\r\n"+evaluationContext.getTrace());
-				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());
+				literalValue = (SimpleLiteral)args[2];
+				if( isScriptEngine(literalValue.getDatatype())) {
+					Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
+					IntelligentGraphRepository source = sources.getSource(tripleSource, argumentArray );
+					CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
+					EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
+					evaluationContext.setTracing(true);
+					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
+					com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact( predicate,//new PredicateElement(source,predicate),
+							literalValue,customQueryOptions);
+					if( fact != null) {
+						fact.getValue();
+						logger.debug("Trace\r\n"+evaluationContext.getTrace());
+						return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());
+					}else {
+						return null;
+					}			
+				}else {
+					return  args[2];
+				}
 			}catch(Exception e) {
 				return tripleSource.getValueFactory().createLiteral(e.getMessage());
 			}
+			
 		}
 	}
 

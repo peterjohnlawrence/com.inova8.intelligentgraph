@@ -1,4 +1,4 @@
-package olgap;
+package com.inova8.olgap;
 
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;

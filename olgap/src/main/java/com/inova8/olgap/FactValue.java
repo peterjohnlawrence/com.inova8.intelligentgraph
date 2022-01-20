@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package olgap;
+package com.inova8.olgap;
 
 import java.util.Arrays;
 import org.eclipse.rdf4j.model.IRI;
@@ -20,24 +20,23 @@ import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class FactProvenance.
+ * The Class FactValue.
  */
 @Deprecated
-public class FactProvenance extends Evaluator implements Function {
+public class FactValue extends Evaluator implements Function {
 	
 	/** The logger. */
-	private static final Logger logger   = LoggerFactory.getLogger(FactProvenance.class);
-
-	/**
-	 * Instantiates a new fact provenance.
-	 */
-	public FactProvenance()  {
-		super();
-		logger.info("Initiating FactProvenance");
-	}
+	private static final Logger logger   = LoggerFactory.getLogger(FactValue.class);
 	
+	/**
+	 * Instantiates a new fact value.
+	 */
+	public FactValue()  {
+		super();
+		logger.info("Initiating FactValue");
+	}
+
 	/**
 	 * Gets the uri.
 	 *
@@ -45,24 +44,23 @@ public class FactProvenance extends Evaluator implements Function {
 	 */
 	@Override
 	public String getURI() {
-		return  OLGAP.FACTPROVENANCE;
+		return  OLGAP.FACTVALUE;
 	}
 
 	/**
 	 * Evaluate.
-	 * 
-	 * Returns the calculation trace (if calculated) of the value of the predicate of the subject
 	 *
 	 * @param tripleSource the triple source
-	 * @param args the args, args[0] subject, args[1] predicate 
+	 * @param args the args
 	 * @return the value
 	 * @throws ValueExprEvaluationException the value expr evaluation exception
 	 */
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
-		logger.debug("Trace Evaluate for <{}>, {} with args <{}>",tripleSource, tripleSource.getValueFactory(),args);
+	
+		logger.debug("Evaluate for {} with args <{}>", tripleSource.getValueFactory(),args);
 		if(args.length <2) {
-			String message ="At least subject, and predicate arguments required";
+			String message = "At least subject, and predicate arguments required";
 			logger.error(message);
 			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
@@ -73,21 +71,24 @@ public class FactProvenance extends Evaluator implements Function {
 				subject = (IRI) args[0];
 				predicate = (IRI) args[1];
 			} catch(Exception e) {
-				String message = "Subject and predicate must be valid IRI";
+				String message ="Subject and predicate must be valid IRI";
 				logger.error(message);
-				return tripleSource.getValueFactory().createLiteral(message);
+				return tripleSource.getValueFactory().createLiteral(message.toString());
 			}
 			try{
-				Value[] argumentArray = Arrays.copyOfRange(args,2, args.length);
+				Value[] argumentArray = Arrays.copyOfRange(args, 2, args.length);
 				IntelligentGraphRepository source = sources.getSource(tripleSource, argumentArray );
 				CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
-				evaluationContext.setTracing(true);
-				Thing subjectThing = Thing.create(source, subject, evaluationContext);
-				//olgap.Value fact = 
-				subjectThing.getFact("<"+ predicate.stringValue()+">");// PredicateElement(source,predicate));
-				logger.debug("Trace\r\n"+evaluationContext.getTrace());
-				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());		
+				Thing subjectThing = Thing.create(source, subject, evaluationContext);	
+				com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact("<"+predicate.stringValue()+">");// new PredicateElement(source,predicate));
+				if( fact != null && fact.getValue()!=null) {
+					Value result = fact.getValue();
+					logger.debug("FactValue = {}",result);
+					return  result;
+				}else {
+					return tripleSource.getValueFactory().createLiteral("");
+				}			
 
 			}catch(Exception e) {
 				return tripleSource.getValueFactory().createLiteral(e.getMessage());

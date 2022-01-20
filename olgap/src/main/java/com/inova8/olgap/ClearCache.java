@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package olgap;
+package com.inova8.olgap;
 
 import java.security.NoSuchAlgorithmException;
 

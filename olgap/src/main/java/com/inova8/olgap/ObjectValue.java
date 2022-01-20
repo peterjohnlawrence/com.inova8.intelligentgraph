@@ -1,12 +1,13 @@
 /*
  * inova8 2020
  */
-package olgap;
+package com.inova8.olgap;
 
 import java.util.Arrays;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
@@ -20,21 +21,22 @@ import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
+
 /**
- * The Class FactValue.
+ * The Class ObjectValue.
  */
-@Deprecated
-public class FactValue extends Evaluator implements Function {
+public class ObjectValue extends Evaluator implements Function {
 	
 	/** The logger. */
-	private static final Logger logger   = LoggerFactory.getLogger(FactValue.class);
-	
+	private static final Logger logger   = LoggerFactory.getLogger(ObjectValue.class);
+
 	/**
-	 * Instantiates a new fact value.
+	 * Instantiates a new object value.
 	 */
-	public FactValue()  {
+	@Deprecated
+	public ObjectValue()  {
 		super();
-		logger.info("Initiating FactValue");
+		logger.info("Initiating ObjectValue");
 	}
 
 	/**
@@ -44,7 +46,7 @@ public class FactValue extends Evaluator implements Function {
 	 */
 	@Override
 	public String getURI() {
-		return  OLGAP.FACTVALUE;
+		return OLGAP.OBJECTVALUE;
 	}
 
 	/**
@@ -58,9 +60,9 @@ public class FactValue extends Evaluator implements Function {
 	@Override
 	public Value evaluate(TripleSource tripleSource, Value... args) throws ValueExprEvaluationException {
 	
-		logger.debug("Evaluate for {} with args <{}>", tripleSource.getValueFactory(),args);
-		if(args.length <2) {
-			String message = "At least subject, and predicate arguments required";
+		logger.debug("Evaluate for <{}> ,{}> with args <{}>",tripleSource, tripleSource.getValueFactory(), args);
+		if(args.length <3) {
+			String message = "At least subject,predicate, and objectscript arguments required";
 			logger.error(message);
 			return tripleSource.getValueFactory().createLiteral(message);
 		}else {
@@ -71,28 +73,38 @@ public class FactValue extends Evaluator implements Function {
 				subject = (IRI) args[0];
 				predicate = (IRI) args[1];
 			} catch(Exception e) {
-				String message ="Subject and predicate must be valid IRI";
+				String message = String.format("Subject and predicate must be valid IRI. Subject %s, Object %s",args[0],args[1]);
 				logger.error(message);
-				return tripleSource.getValueFactory().createLiteral(message.toString());
+				return tripleSource.getValueFactory().createLiteral(message);
 			}
+			SimpleLiteral literalValue;
 			try{
-				Value[] argumentArray = Arrays.copyOfRange(args, 2, args.length);
-				IntelligentGraphRepository source = sources.getSource(tripleSource, argumentArray );
-				CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
-				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
-				Thing subjectThing = Thing.create(source, subject, evaluationContext);	
-				com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact("<"+predicate.stringValue()+">");// new PredicateElement(source,predicate));
-				if( fact != null && fact.getValue()!=null) {
-					Value result = fact.getValue();
-					logger.debug("FactValue = {}",result);
-					return  result;
+				literalValue = (SimpleLiteral)args[2];
+				if( isScriptEngine(literalValue.getDatatype()) ) {		
+					Value[] argumentArray = Arrays.copyOfRange(args, 3, args.length);
+					IntelligentGraphRepository source = IntelligentGraphRepository.create(tripleSource);//sources.getSource(tripleSource, argumentArray );
+					CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
+				
+					EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
+					//Thing subjectThing = source.thingFactory( null, subject, new Stack<String>(),customQueryOptions);	
+					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
+					com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(predicate,//new PredicateElement(source,predicate),
+							literalValue,customQueryOptions); 
+					if( fact != null) {
+						Value result = fact.getValue();
+						//source.writeModelToCache(result, cacheContext);
+						logger.debug("ObjectValue = {}",result);
+						return  result;
+					}else {
+						return null;
+					}			
 				}else {
-					return tripleSource.getValueFactory().createLiteral("");
-				}			
-
+					return args[2];
+				}
 			}catch(Exception e) {
 				return tripleSource.getValueFactory().createLiteral(e.getMessage());
 			}
+			
 		}
 	}
 
