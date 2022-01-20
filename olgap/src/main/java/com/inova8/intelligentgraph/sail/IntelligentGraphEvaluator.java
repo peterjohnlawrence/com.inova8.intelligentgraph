@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph;
+package com.inova8.intelligentgraph.sail;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.rdf4j.common.iteration.AbstractCloseableIteration;
@@ -23,7 +23,6 @@ import org.eclipse.rdf4j.query.algebra.evaluation.QueryContext;
 import org.eclipse.rdf4j.query.impl.SimpleBinding;
 import org.eclipse.rdf4j.sail.SailConnection;
 
-import com.inova8.intelligentgraph.IntelligentGraphSail.ResponseType;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
@@ -31,6 +30,7 @@ import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.sail.IntelligentGraphSail.ResponseType;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.context.Prefixes;
 

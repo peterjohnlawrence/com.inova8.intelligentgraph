@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph;
+package com.inova8.intelligentgraph.sail;
 
 /**
  * The Class CallingClass.

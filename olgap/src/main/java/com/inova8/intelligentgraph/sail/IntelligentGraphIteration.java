@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph;
+package com.inova8.intelligentgraph.sail;
 
 import org.eclipse.rdf4j.common.iteration.ExceptionConvertingIteration;
 import org.eclipse.rdf4j.common.iteration.Iteration;

@@ -21,14 +21,14 @@ import javax.script.ScriptException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.FactCache;
-import com.inova8.intelligentgraph.IntelligentGraphConnection;
-import com.inova8.intelligentgraph.IntelligentGraphSail;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.exceptions.ServerException;
 import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.sail.FactCache;
+import com.inova8.intelligentgraph.sail.IntelligentGraphConnection;
+import com.inova8.intelligentgraph.sail.IntelligentGraphSail;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.context.Prefixes;

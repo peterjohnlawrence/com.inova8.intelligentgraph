@@ -24,7 +24,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.FactCache;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
@@ -43,6 +42,7 @@ import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.results.PathResults;
 import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.results.ResourceStatementResults;
+import com.inova8.intelligentgraph.sail.FactCache;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;

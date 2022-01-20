@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph;
+package com.inova8.intelligentgraph.sail;
 
 import java.util.HashSet;
 import java.util.List;

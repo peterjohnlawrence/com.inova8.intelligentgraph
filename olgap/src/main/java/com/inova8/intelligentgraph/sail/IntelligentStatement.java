@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph;
+package com.inova8.intelligentgraph.sail;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
