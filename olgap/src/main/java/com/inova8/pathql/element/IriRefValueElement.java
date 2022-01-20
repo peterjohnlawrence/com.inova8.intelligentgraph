@@ -5,8 +5,8 @@ package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.model.IRI;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 
 /**
@@ -18,8 +18,8 @@ public class IriRefValueElement extends ObjectElement {
 	IRI iri;
 	
 
-	public IriRefValueElement(IntelligentGraphRepository source) {
-		super(source);
+	public IriRefValueElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator=PathConstants.Operator.IRIREF;
 	}
 	public IRI getIri(CustomQueryOptions customQueryOptions) {

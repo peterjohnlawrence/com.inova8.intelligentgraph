@@ -7,12 +7,11 @@ import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.path.UnionBinding;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -29,8 +28,8 @@ public class AlternativePathElement extends PathElement{
 	 *
 	 * @param source the source
 	 */
-	public AlternativePathElement(IntelligentGraphRepository source) {
-		super(source);
+	public AlternativePathElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator= PathConstants.Operator.ALTERNATIVE;
 	}
 
@@ -62,8 +61,8 @@ public class AlternativePathElement extends PathElement{
 
 
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing,sourceVariable,predicateVariable,targetVariable,0,customQueryOptions) ;
+	public PathTupleExpr pathPatternQuery(Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(sourceVariable,predicateVariable,targetVariable,0,customQueryOptions) ;
 	}
 	@Override
 //	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
@@ -80,7 +79,7 @@ public class AlternativePathElement extends PathElement{
 //		alternativePathPattern.setPath(leftPathPattern.getPath());
 //		return alternativePathPattern;
 //	}	
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
@@ -114,18 +113,18 @@ public class AlternativePathElement extends PathElement{
 					}
 				}
 				predicateVariable = deduceLeftPredicateVariable(predicateVariable);
-				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,predicateVariable, 
+				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery( intermediateSourceVariable,predicateVariable, 
 						intermediateTargetVariable, pathIteration,customQueryOptions);
 				PathTupleExpr rightPattern;
 				if (leftPattern==null){
 					intermediateVariable.setValue(intermediateSourceVariable.getValue());
 					predicateVariable = deduceRightPredicateVariable(predicateVariable);
 					//intermediateVariable.setName(intermediateSourceVariable.getName());
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, predicateVariable,intermediateTargetVariable,
+					rightPattern = getRightPathElement().pathPatternQuery( intermediateVariable, predicateVariable,intermediateTargetVariable,
 							pathIteration,customQueryOptions);
 				}else {
 					predicateVariable = deduceRightPredicateVariable(predicateVariable);
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateSourceVariable, predicateVariable, intermediateTargetVariable, 
+					rightPattern = getRightPathElement().pathPatternQuery( intermediateSourceVariable, predicateVariable, intermediateTargetVariable, 
 							pathIteration,customQueryOptions);
 				}
 				

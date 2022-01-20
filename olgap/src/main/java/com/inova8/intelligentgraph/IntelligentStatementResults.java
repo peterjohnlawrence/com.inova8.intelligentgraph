@@ -37,7 +37,6 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	IntelligentGraphConnection intelligentGraphConnection;
 	IntelligentGraphRepository source;
 	private Variable predicateVariable;
-	private String pred;
 	private String obj;
 	private String subj;
 	private SimpleValueFactory simpleValueFactory;
@@ -45,44 +44,10 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private Resource[] contexts;
 	private final Boolean trace;
 	private PathTupleExpr pathTupleExpr;
-	@Deprecated
-	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
-			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
-		this.resultsIterator=resultsIterator;
-		this.thing=thing;
-		this.pathElement=pathElement;
-		this.intelligentGraphConnection=intelligentGraphConnection;
-		this.customQueryOptions=customQueryOptions;
-		this.contexts = contexts;
-		this.trace=false;
-		subj = pathElement.getTargetSubject().toString();
-		//TODO
-		predicateVariable =pathElement.getTargetPredicate();
-		pred = pathElement.getTargetPredicate().toString();
-		obj= pathElement.getTargetVariable().toString();
-		simpleValueFactory= SimpleValueFactory.getInstance();
-	}
-	@Deprecated
-	public IntelligentStatementResults(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
-			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
-		this.resultsIterator=null;//resultsIterator;
-		this.thing=thing;
-		this.pathElement=pathElement;
-		this.sortedIterations = pathElement.getIterations().sortByPathLength();
-		this.intelligentGraphConnection=intelligentGraphConnection;
-		this.customQueryOptions=customQueryOptions;
-		this.contexts = contexts;
-		this.trace = trace;
-		subj = pathElement.getTargetSubject().toString();
-		//TODO
-		predicateVariable =pathElement.getTargetPredicate();
-		pred = pathElement.getTargetPredicate().toString();
-		obj= pathElement.getTargetVariable().toString();
-		simpleValueFactory= SimpleValueFactory.getInstance();
-	}
+
 	public IntelligentStatementResults( IntelligentGraphRepository source, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
-		this.resultsIterator=null;//intelligentGraphConnection.getResultsIterator(source, thing,pathElement, contexts);
+		this.resultsIterator=null;
 		this.source=source;
 		this.thing=thing;
 		this.pathElement=pathElement;
@@ -92,14 +57,14 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.contexts = contexts;
 		this.trace = trace;
 		subj = pathElement.getTargetSubject().toString();
-		pred = pathElement.getTargetPredicate().toString();
+		pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 
 	public IntelligentStatementResults( IntelligentGraphRepository source, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
-		this.resultsIterator=null;//intelligentGraphConnection.getResultsIterator(source, thing,pathElement, contexts);
+		this.resultsIterator=null;
 		this.source=source;
 		this.thing=thing;
 		this.pathElement=pathElement;
@@ -109,7 +74,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		this.contexts = contexts;
 		this.trace = false;
 		subj = pathElement.getTargetSubject().toString();
-		pred = pathElement.getTargetPredicate().toString();
+		pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
@@ -120,15 +85,15 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 			return true;
 		}else {
 			while(pathIteration < this.sortedIterations.size() ) {
-				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
-				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
+				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());//source.getIntelligentGraphConnection().getPrefixes());
+				pathTupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions);
 				pathIteration ++;
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr, contexts);
 				boolean hasNext = resultsIterator.hasNext();
 				if(hasNext){
 					predicateVariable =pathTupleExpr.getStatementBinding().getPredicateVariable();
 					subj = pathTupleExpr.getStatementBinding().getSourceVariable().getName();
-					pred = pathTupleExpr.getStatementBinding().getPredicateVariable().getName();
+					pathTupleExpr.getStatementBinding().getPredicateVariable().getName();
 					obj = pathTupleExpr.getStatementBinding().getTargetVariable().getName();
 					return true;
 				}

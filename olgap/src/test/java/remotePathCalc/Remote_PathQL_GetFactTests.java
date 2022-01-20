@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,17 +24,13 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.MatchResults;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
-import com.inova8.pathql.parser.Match;
-
 import olgap.ClearCache;
 
 /**
  * The Class RemoteThingTests.
  */
-@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_PathQL_GetFactTests {
 	
@@ -44,12 +39,6 @@ class Remote_PathQL_GetFactTests {
 	
 	/** The source. */
 	private static IntelligentGraphRepository source;
-	
-	/** The evaluator. */
-	private static Evaluator evaluator;
-
-	/** The match. */
-	private static Match match;
 	
 	/**
 	 * Sets the up before class.
@@ -69,7 +58,7 @@ class Remote_PathQL_GetFactTests {
 		source = IntelligentGraphRepository.create(workingRep);
 		source.prefix("<http://inova8.com/calc2graph/def/>");
 		source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
-		match = new Match(source);
+
 	}
 	
 	/**
@@ -80,32 +69,32 @@ class Remote_PathQL_GetFactTests {
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
 	void test_0() {
 		try {
-			evaluator.clearCache();
+			Evaluator.clearCache();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
 	}
 	
-	/**
-	 * Search 1.
-	 */
-	@Test
-	@Order(1)
-	void search_1() {
-		
-		try {
-			MatchResults searchResultsIterator = match.entityMatch("Unit2");
-			while(searchResultsIterator.hasNext()) {
-				 BindingSet nextSearchResultBindingSet = searchResultsIterator.nextBindingSet();
-				int i=1;
-			}
-			int i=1;
-		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
-		} 
-	}
+//	/**
+//	 * Search 1.
+//	 */
+//	@Test
+//	@Order(1)
+//	void search_1() {
+//		
+//		try {
+//			MatchResults searchResultsIterator = match.entityMatch("Unit2");
+//			while(searchResultsIterator.hasNext()) {
+//				 BindingSet nextSearchResultBindingSet = searchResultsIterator.nextBindingSet();
+//				int i=1;
+//			}
+//			int i=1;
+//		} catch (Exception e) {
+//			fail();
+//			e.printStackTrace();
+//		} 
+//	}
 	
 	/**
 	 * Test 1.
@@ -170,6 +159,7 @@ class Remote_PathQL_GetFactTests {
 			Thing $this = Thing.create(source,  iri("http://inova8.com/calc2graph/id/Unit1"), null);
 			Double fact = 0.0;
 			for( Resource batterylimit: $this.getFacts(":hasProductBatteryLimit")) {
+				@SuppressWarnings("unused")
 				Resource factValue = batterylimit.getFact(":massFlow");
 				fact += batterylimit.getFact(":massFlow").doubleValue();
 			}
@@ -212,7 +202,8 @@ class Remote_PathQL_GetFactTests {
 		
 		try {
 			Thing $this = source.getThing(  iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			$this.prefix("def","<http://inova8.com/calc2graph/def/>");
+			source.prefix("def","<http://inova8.com/calc2graph/def/>");
+			//$this.prefix("def","<http://inova8.com/calc2graph/def/>");
 			Resource result = $this.getFact("def:Attribute@def:density");
 			if(result!=null) 
 					assertEquals(".42", result.stringValue());
@@ -612,6 +603,7 @@ class Remote_PathQL_GetFactTests {
 	@Order(30)
 	void test_30() {
 		try {
+			@SuppressWarnings("unused")
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Graph graph1 = source.openGraph("<http://inova8.com/calc2graph/testGraph1>");

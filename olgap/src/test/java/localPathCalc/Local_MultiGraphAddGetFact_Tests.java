@@ -4,12 +4,9 @@
 package localPathCalc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.antlr.v4.runtime.RecognitionException;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +18,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
@@ -30,9 +26,6 @@ import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.processor.PathPatternException;
 
 import utilities.Query;
-
-import static org.eclipse.rdf4j.model.util.Values.iri;
-import static org.eclipse.rdf4j.model.util.Values.literal;
 
 /**
  * The Class RemoteThingTests.
@@ -77,6 +70,7 @@ class Local_MultiGraphAddGetFact_Tests {
  * @throws PathPatternException the path pattern exception
  */
 //	}
+	@SuppressWarnings("unused")
 	private Thing addGraph2() throws RecognitionException, PathPatternException {
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
@@ -97,6 +91,7 @@ class Local_MultiGraphAddGetFact_Tests {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
+	@SuppressWarnings("unused")
 	private Thing addGraph3() throws RecognitionException, PathPatternException {
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
@@ -116,6 +111,7 @@ class Local_MultiGraphAddGetFact_Tests {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
+	@SuppressWarnings("unused")
 	private Thing addGraph4() throws RecognitionException, PathPatternException {
 		source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph4>");

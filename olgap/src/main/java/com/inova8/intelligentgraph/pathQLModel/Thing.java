@@ -32,7 +32,6 @@ import com.inova8.intelligentgraph.exceptions.NullValueReturnedException;
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.intelligentGraphRepository.ReificationType;
 import com.inova8.intelligentgraph.intelligentGraphRepository.SEEQSource;
 import com.inova8.intelligentgraph.path.NullPath;
 import com.inova8.intelligentgraph.path.Path;
@@ -44,9 +43,11 @@ import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.pathql.context.ReificationType;
 import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathPatternException;
+import com.inova8.pathql.utilities.Utilities;
 import com.inova8.intelligentgraph.pathQLResults.PathResults;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.pathQLResults.ResourceStatementResults;
@@ -90,7 +91,7 @@ public class Thing extends Resource {
 			thing = source.getThings().get(graphThingKey);
 			thing.setSource(source);
 			if(evaluationContext!=null) {
-				if(thing.evaluationContext.getPrefixes()==null || thing.evaluationContext.getPrefixes().isEmpty())thing.evaluationContext.setPrefixes(evaluationContext.getPrefixes());
+				//if(thing.evaluationContext.getPrefixes()==null || thing.evaluationContext.getPrefixes().isEmpty())thing.evaluationContext.setPrefixes(evaluationContext.getPrefixes());
 				if(evaluationContext.getCustomQueryOptions()!=null && !evaluationContext.getCustomQueryOptions().isEmpty())thing.evaluationContext.setCustomQueryOptions(evaluationContext.getCustomQueryOptions());
 				if(evaluationContext.getTracer()!=null && evaluationContext.getTracer().isTracing())thing.evaluationContext.setTracer(evaluationContext.getTracer());
 				if(evaluationContext.getDataset()!=null )thing.evaluationContext.setDataset(evaluationContext.getDataset());
@@ -199,7 +200,6 @@ public class Thing extends Resource {
 		ResourceResults factValues =  getFacts( predicatePattern,bindValues);
 		if (factValues == null) {
 			this.getEvaluationContext().getTracer().traceFactReturnNull(this, predicatePattern);
-			//return new NullResource();
 			throw new NullValueReturnedException( String.format(
 					"No values found for pattern %s with subject %s", predicatePattern, this));
 		} else if (factValues.hasNext()) {
@@ -209,7 +209,6 @@ public class Thing extends Resource {
 		} else {
 			this.getEvaluationContext().getTracer().traceFactEmpty(this, predicatePattern);
 			factValues.close();
-		//	return new NullResource();
 			throw new NullValueReturnedException( String.format(
 					"No values found for pattern %s with subject %s", predicatePattern, this));
 		}	
@@ -298,13 +297,7 @@ public class Thing extends Resource {
 		}else
 			return new  org.eclipse.rdf4j.model.Resource[0];
 	}
-	@Deprecated
-	public void supersedeCustomQueryOptions(CustomQueryOptions customQueryOptions) {
-		if(customQueryOptions!=null && !customQueryOptions.isEmpty()) {
-			customQueryOptions.addInherited(this.getEvaluationContext().getCustomQueryOptions());
-			this.getEvaluationContext().setCustomQueryOptions(customQueryOptions);
-		}
-	}
+
 
 	@SuppressWarnings("deprecation")
 	public Resource getSignal(String signal) {		
@@ -315,7 +308,7 @@ public class Thing extends Resource {
 	public Resource getSignal(String signal, CustomQueryOptions customQueryOptions) {
 		getEvaluationContext().getTracer().incrementLevel();
 		//incrementTraceLevel();
-		signal = IntelligentGraphRepository.trimIRIString(signal);
+		signal = Utilities.trimIRIString(signal);
 		String[] elements = signal.split("/");
 		Object result;
 		switch (elements[0].toUpperCase()) {
@@ -366,8 +359,7 @@ public class Thing extends Resource {
 			scriptCode = scriptCode.trim();
 			if (scriptCode.startsWith("<")) {
 				String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
-				@SuppressWarnings("deprecation")
-				org.eclipse.rdf4j.model.Resource scriptResource = convertQName(scriptIRI);
+				org.eclipse.rdf4j.model.Resource scriptResource = getSource().getRepositoryContext().convertQName(scriptIRI, getSource().getPrefixes());//convertQName(scriptIRI);
 				Statement scriptStatement;
 				SimpleLiteral scriptCodeliteral = null;
 				try {
@@ -570,26 +562,6 @@ public class Thing extends Resource {
 		}
 	}
 
-	@Deprecated
-	public Thing prefix(String prefix, String IRI) {
-		org.eclipse.rdf4j.model.IRI iri = IntelligentGraphRepository.trimAndCheckIRIString(IRI);
-		if (iri != null) {
-			this.getEvaluationContext().getPrefixes().put(prefix, iri);
-			return this;
-		} else {
-			logger.error("Invalid IRI specified. Ensure enclosed in <...> ", IRI);
-			return null;
-		}
-	}
-
-
-	@Override
-	public ResourceResults getFacts(PredicateElement path) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 	public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
 		SimpleDataset dataset = getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
@@ -624,7 +596,7 @@ public class Thing extends Resource {
 	public Thing addFact(String property, String value, IRI dataType) {
 		try {
 			Literal literal = literal(value, dataType);
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
+			PredicateElement predicateElement = PathParser.parsePredicate(getSource().getRepositoryContext(), property);
 			addFact(predicateElement,literal );
 		} catch (Exception e) {
 		}
@@ -653,7 +625,7 @@ public class Thing extends Resource {
 		Validate.notNull(property);
 		Validate.notNull(value);
 		try {
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
+			PredicateElement predicateElement = PathParser.parsePredicate(getSource().getRepositoryContext(), property);
 			switch(value.getClass().getSimpleName() ) {
 			case "Thing":
 				addFact(predicateElement,((Thing) value).getIRI() );
@@ -673,7 +645,7 @@ public class Thing extends Resource {
 		Validate.notNull(value);
 		try {
 			Literal literal = literal(value);
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource(), property);
+			PredicateElement predicateElement = PathParser.parsePredicate(getSource().getRepositoryContext(), property);
 			addFact(predicateElement,literal );
 		} catch (Exception e) {
 
@@ -685,8 +657,7 @@ public class Thing extends Resource {
 	private void addFact( PredicateElement predicateElement,Value value) throws RepositoryException {
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
 		if (predicateElement.getIsReified()) {
-			ReificationType reificationType = this.getSource().getReifications().getReificationTypes()
-					.get(predicateElement.getReification().stringValue());
+			ReificationType reificationType = this.getSource().getRepositoryContext().getReificationTypes().get(predicateElement.getReification().stringValue());
 			if (reificationType != null) {
 				IRI reification = iri(
 						reificationType.getReificationType().stringValue() + "/" + this.getIRI().hashCode() + "."
@@ -762,9 +733,8 @@ public class Thing extends Resource {
 		}
 		return dataset;
 	}
-
 	public Thing getThing(String thing) throws RecognitionException, PathPatternException {
-		IRI thingIri = PathParser.parseIriRef(this.getSource(),thing).getIri();
+		IRI thingIri = PathParser.parseIriRef( this.getSource().getRepositoryContext(),thing).getIri();
 		return create(this.getSource(), thingIri,this.getEvaluationContext());
 	}
 

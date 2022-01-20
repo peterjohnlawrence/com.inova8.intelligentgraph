@@ -46,7 +46,7 @@ public IntelligentGraphRepository getSource() {
 }
  
 public Thing getThing(String thing) throws RecognitionException, PathPatternException {
-	IRI thingIri = PathParser.parseIriRef(source,thing).getIri();
+	IRI thingIri = PathParser.parseIriRef(source.getRepositoryContext(),thing).getIri();
 	return getThing(thingIri);
 }
  public Thing getThing(IRI thing) {
@@ -58,7 +58,7 @@ public Thing getThing(String thing) throws RecognitionException, PathPatternExce
  }
  @Deprecated
  public Thing getThing(String thing, CustomQueryOptions customQueryOptions) throws RecognitionException, PathPatternException {
-		IRI thingIri = PathParser.parseIriRef(source,thing).getIri();
+		IRI thingIri = PathParser.parseIriRef(source.getRepositoryContext(),thing).getIri();
 		return getThing(thingIri, customQueryOptions);
 	}
 

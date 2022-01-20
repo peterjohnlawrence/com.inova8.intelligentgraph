@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import org.eclipse.rdf4j.query.algebra.Compare;
 import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 import com.inova8.pathql.processor.PathConstants.FilterOperator;
@@ -30,8 +29,8 @@ public class VerbObjectList extends FactFilterElement {
 	 *
 	 * @param source the source
 	 */
-	public VerbObjectList(IntelligentGraphRepository source) {
-		super(source);
+	public VerbObjectList(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator = PathConstants.Operator.VERBOBJECTLIST;
 	}
 
@@ -300,7 +299,7 @@ public class VerbObjectList extends FactFilterElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		TupleExpr verbObjectListPattern = null;
 		if (filterOperator != null) {
 			if (filterOperator.equals(FilterOperator.EQ)) {
@@ -332,12 +331,12 @@ public class VerbObjectList extends FactFilterElement {
 					case IRIREF:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListPattern = predicate.pathPatternQuery(thing, sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListPattern = predicate.pathPatternQuery( sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case LITERAL:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
-						verbObjectListPattern = predicate.pathPatternQuery(thing, sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListPattern = predicate.pathPatternQuery( sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					default:
 					}
@@ -349,7 +348,7 @@ public class VerbObjectList extends FactFilterElement {
 		return new PathTupleExpr(verbObjectListPattern);
 
 	};
-	public QueryModelNode filterExpression(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,CustomQueryOptions customQueryOptions) {
+	public QueryModelNode filterExpression( Variable sourceVariable, Variable predicateVariable,Variable targetVariable,CustomQueryOptions customQueryOptions) {
 		QueryModelNode verbObjectListExpression = null;
 		if (filterOperator != null) {
 			if (filterOperator.equals(FilterOperator.EQ)) {
@@ -386,22 +385,22 @@ public class VerbObjectList extends FactFilterElement {
 						predicate.setObjectFilterElement((FactFilterElement) objectList.get(0));
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case IRIREF:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case LITERAL:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case OBJECT:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getValue(customQueryOptions));
-						verbObjectListExpression = predicate.pathPatternQuery(thing, sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
+						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;					
 					default:
 					}
@@ -422,7 +421,7 @@ public class VerbObjectList extends FactFilterElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		TupleExpr verbObjectListPattern = null;
 		if (filterOperator != null) {
 			if (filterOperator.equals(FilterOperator.EQ)) {
@@ -454,12 +453,12 @@ public class VerbObjectList extends FactFilterElement {
 					case IRIREF:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
-						verbObjectListPattern = predicate.boundPatternQuery(thing, sourceVariable, boundTargetVariable).getTupleExpr();
+						verbObjectListPattern = predicate.boundPatternQuery( sourceVariable, boundTargetVariable).getTupleExpr();
 						break;
 					case LITERAL:
 						boundTargetVariable = boundTargetVariable(predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
-						verbObjectListPattern = predicate.boundPatternQuery(thing, sourceVariable, boundTargetVariable).getTupleExpr();
+						verbObjectListPattern = predicate.boundPatternQuery( sourceVariable, boundTargetVariable).getTupleExpr();
 						break;
 					default:
 					}

@@ -1,16 +1,15 @@
 package com.inova8.pathql.element;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
 public class QueryOptionsPathElement extends PathElement{
 
-	public QueryOptionsPathElement(IntelligentGraphRepository source) {
-		super(source);
+	public QueryOptionsPathElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator=PathConstants.Operator.QUERYOPTIONS;
 	}
 
@@ -36,7 +35,7 @@ public class QueryOptionsPathElement extends PathElement{
 	}
 
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 
@@ -50,7 +49,7 @@ public class QueryOptionsPathElement extends PathElement{
 	}
 
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}

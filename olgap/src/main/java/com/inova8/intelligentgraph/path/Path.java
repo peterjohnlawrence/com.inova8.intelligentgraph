@@ -25,10 +25,8 @@ import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
-import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.processor.PathPatternException;
 
-//public class Path extends ArrayList<Edge>  {
 public class Path extends Resource  implements Iterable<Edge>{
 	private static final long serialVersionUID = 1L;
 	ArrayList<Edge> path = new ArrayList<Edge>();
@@ -85,12 +83,6 @@ public class Path extends Resource  implements Iterable<Edge>{
 
 	@Override
 	public ResourceResults getFacts(String predicatePattern, Value...bindValues) throws PathPatternException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResourceResults getFacts(PredicateElement path) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -19,6 +19,7 @@ import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.pathCalc.Tracer;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.Prefixes;
 import com.inova8.pathql.element.PredicateElement;
 
 /**

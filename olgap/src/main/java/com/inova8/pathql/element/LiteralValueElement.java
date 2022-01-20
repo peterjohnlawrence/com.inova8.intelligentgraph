@@ -5,8 +5,8 @@ package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.model.Literal;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 
 /**
@@ -17,8 +17,8 @@ public class LiteralValueElement extends ObjectElement {
 	Literal literal;
 
 
-	public LiteralValueElement(IntelligentGraphRepository source) {
-		super(source);
+	public LiteralValueElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator =PathConstants.Operator.LITERAL;
 	}
 	public Literal getLiteral() {

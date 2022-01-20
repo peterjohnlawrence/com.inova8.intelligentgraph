@@ -4,8 +4,6 @@
 package tutorialExample;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,14 +12,10 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
-
-import static org.eclipse.rdf4j.model.util.Values.iri;
-import static org.eclipse.rdf4j.model.util.Values.literal;
 
 /**
  * The Class RemoteThingTests.
@@ -45,8 +39,8 @@ class Remote_TutorialTests {
 	@Order(1)
 	void test_1() {
 		try {
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
 			//IntelligentGraphRepository source = IntelligentGraphRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
-			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
 			source.prefix("<http://inova8.com/intelligentgraph/example1/>");
 			source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 			source.removeGraph("<http://inova8.com/intelligentgraph/example1>");

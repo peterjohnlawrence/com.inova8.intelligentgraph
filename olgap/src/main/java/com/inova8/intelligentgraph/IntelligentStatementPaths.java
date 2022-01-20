@@ -74,8 +74,8 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 			return true;
 		}else {		
 			while(pathIteration < this.sortedIterations.size() ) {
-				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
-				pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
+				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
+				pathTupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions);
 				pathIteration ++;
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr,contexts);
 				boolean hasNext = resultsIterator.hasNext();

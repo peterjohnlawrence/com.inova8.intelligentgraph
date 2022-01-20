@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.IntelligentGraphSail;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 
 import utilities.Query;

@@ -8,13 +8,12 @@ import java.util.HashMap;
 
 import org.eclipse.rdf4j.model.IRI;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.intelligentGraphRepository.Reifications;
 import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.Reifications;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 import com.inova8.pathql.processor.PathConstants.Operator;
@@ -54,13 +53,18 @@ public abstract class PathElement {
 
 	private Integer baseIndex;
 
-	private IntelligentGraphRepository source;
+//	private IntelligentGraphRepository source;
 
 	private CustomQueryOptions customQueryOptions;
 
 	Boolean isFirstIteration =true;
-	public PathElement(IntelligentGraphRepository source) {
-		this.source = source;
+
+	private RepositoryContext repositoryContext;
+//	public PathElement(IntelligentGraphRepository source) {
+//		this.source = source;
+//	}
+	public PathElement(RepositoryContext repositoryContext) {
+		this.repositoryContext = repositoryContext;
 	}
 
 	public Operator getOperator() {
@@ -80,22 +84,22 @@ public abstract class PathElement {
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
 		return pathBinding;
 	};
-	public  PathTupleExpr pathPatternQuery(Thing thing) {
-		return pathPatternQuery(thing,(Variable)null,(Variable)null,(Variable)null,null);
+	public  PathTupleExpr pathPatternQuery() {
+		return pathPatternQuery((Variable)null,(Variable)null,(Variable)null,null);
 	};
-	public  PathTupleExpr pathPatternQuery(Thing thing, Integer pathIteration,CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing,null,null,null,pathIteration,customQueryOptions);
+	public  PathTupleExpr pathPatternQuery( Integer pathIteration,CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery(null,null,null,pathIteration,customQueryOptions);
 	};
 	public abstract Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode);
 
-	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions);
+	protected abstract PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions);
 
-	protected abstract PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
+	protected abstract PathTupleExpr pathPatternQuery(Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions);
 
-	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable) {
 		if (getIsBound())
-			return getLeftPathElement().boundPatternQuery(thing, sourceVariable, targetVariable);
+			return getLeftPathElement().boundPatternQuery( sourceVariable, targetVariable);
 		else
 			return null;
 	};
@@ -493,9 +497,9 @@ public abstract class PathElement {
 		this.targetVariable = targetVariable;
 	}
 
-	protected IntelligentGraphRepository getSource() {
-		return this.source;
-	}
+//	protected IntelligentGraphRepository getSource() {
+//		return this.source;
+//	}
 
 	public CustomQueryOptions getCustomQueryOptions() {
 		return customQueryOptions;
@@ -506,7 +510,7 @@ public abstract class PathElement {
 	}
 
 	protected Reifications getReifications() {
-		return getSource().getReifications();
+		return repositoryContext.getReifications();
 	}
 
 }

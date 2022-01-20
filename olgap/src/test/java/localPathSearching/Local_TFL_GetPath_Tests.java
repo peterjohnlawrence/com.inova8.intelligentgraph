@@ -23,7 +23,6 @@ import utilities.Query;
 /**
  * The Class ThingTests.
  */
-@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_TFL_GetPath_Tests {
 	

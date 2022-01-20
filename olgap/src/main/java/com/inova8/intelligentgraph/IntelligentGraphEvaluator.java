@@ -29,10 +29,10 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathCalc.Prefixes;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.pathql.context.Prefixes;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -247,7 +247,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 						modifiedBindingSet.addBinding(nextBindingSet.getBinding("predicate"));
 						IntelligentGraphRepository source = getSource();
 						EvaluationContext evaluationContext = new EvaluationContext(
-								customQueryOptions, getDataset(), getPrefixes());
+								customQueryOptions, getDataset());
 						Thing subjectThing = Thing.create(source, nextBindingSet.getValue("subject"),
 								evaluationContext);
 						try {
@@ -310,7 +310,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								ResponseType responseType = getResponseType(bindingValueName);
 								customQueryOptions= getCustomQueryOptions(nextBindingSet);
 								EvaluationContext evaluationContext = new EvaluationContext(
-										customQueryOptions, getDataset(), getPrefixes());
+										customQueryOptions, getDataset());
 								switch (responseType) {
 								case VALUE:
 									Thing subjectThing = Thing.create(getSource(), subject, evaluationContext);

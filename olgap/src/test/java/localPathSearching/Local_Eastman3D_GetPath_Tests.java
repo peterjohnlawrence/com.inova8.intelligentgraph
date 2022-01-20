@@ -24,7 +24,6 @@ import utilities.Query;
 /**
  * The Class ThingTests.
  */
-@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_Eastman3D_GetPath_Tests {
 	

@@ -3,7 +3,6 @@
  */
 package tutorialExample;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -18,11 +17,6 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.*;
 import com.inova8.intelligentgraph.vocabulary.*;
 import com.inova8.intelligentgraph.pathQLModel.*;
 
-//import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
-//import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-//import com.inova8.intelligentgraph.pathCalc.Thing;
-//import com.inova8.intelligentgraph.pathQLModel.Resource;
-//import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import utilities.Query;
 

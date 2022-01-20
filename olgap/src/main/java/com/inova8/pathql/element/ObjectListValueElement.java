@@ -5,7 +5,7 @@ package com.inova8.pathql.element;
 
 import java.util.ArrayList;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -22,8 +22,8 @@ public class ObjectListValueElement extends ValueElement {
 	 *
 	 * @param source the source
 	 */
-	public ObjectListValueElement(IntelligentGraphRepository source) {
-		super(source);
+	public ObjectListValueElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator=PathConstants.Operator.OBJECTLIST;
 	}
 

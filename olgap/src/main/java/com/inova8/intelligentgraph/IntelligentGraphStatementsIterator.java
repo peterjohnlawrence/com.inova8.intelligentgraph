@@ -49,7 +49,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 		this.intelligentGraphSail = intelligentGraphSail;
 		this.intelligentGraphConnection = intelligentGraphConnection;
 		this.contexts = contexts;
-		this.evaluationContext = new EvaluationContext(getSource().getPrefixes(), contexts);
+		this.evaluationContext = new EvaluationContext(null/*getSource().getPrefixes()*/, contexts);
 	}
 	
 	/**

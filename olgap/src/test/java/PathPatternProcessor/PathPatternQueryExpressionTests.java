@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -19,9 +18,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.path.PathBindings;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.parser.PathParser;
@@ -43,11 +40,8 @@ import utilities.Query;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternQueryExpressionTests {
 	
-	/** The thing. */
-	static Thing thing;
-	
-	/** The source. */
-	static IntelligentGraphRepository source;
+	/** The repositoryContext. */
+	static RepositoryContext repositoryContext;
 	
 	/** The indices. */
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -59,14 +53,14 @@ class PathPatternQueryExpressionTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source= new IntelligentGraphRepository();
-		source.getReifications().addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
-		source.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
-		source.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
-		source.getReifications().setReificationsAreLazyLoaded(true);
-		source.prefix("http://default/").prefix("local","http://local/").prefix("rdf","http://rdf/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
+		repositoryContext= new RepositoryContext();
+		repositoryContext.getReifications().addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		repositoryContext.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
+		repositoryContext.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		repositoryContext.getReifications().setReificationsAreLazyLoaded(true);
+		repositoryContext.prefix("http://default/").prefix("local","http://local/").prefix("rdf","http://rdf/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 		//Dummy
-		thing = source.getThing( "http://",null);
+		//thing = repositoryContext.getThing( "http://",null);
 		indices.add(0, 0);
 	}
 
@@ -91,7 +85,7 @@ class PathPatternQueryExpressionTests {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		PathPatternParser parser = new PathPatternParser(tokens);
 		PathPatternContext pathPatternTree = parser.pathPattern();
-		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);
+		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 		PathElement element = pathPatternVisitor.visit(pathPatternTree);
 		element.indexVisitor(null, 0,null);
 		element.setIterations(Iterations.create(element));
@@ -120,7 +114,7 @@ class PathPatternQueryExpressionTests {
 						+ "      Variable (name=n2)\r\n"
 						+ "      Variable (name=p_n2_n3, value=http://default/parent3)\r\n"
 						+ "      Variable (name=n3)\r\n"
-						+ "" , element.pathPatternQuery(thing).toString());
+						+ "" , element.pathPatternQuery().toString());
 	}
 
 
@@ -166,7 +160,7 @@ class PathPatternQueryExpressionTests {
 						+ "      Variable (name=p_n2_n3, value=http://default/parent3)\r\n"
 						+ "      Variable (name=n3)\r\n"
 						+ ""
-				 , element.pathPatternQuery(thing).toString());
+				 , element.pathPatternQuery().toString());
 	}
 
 	@Test
@@ -205,7 +199,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "         Variable (name=n1)\r\n"
 				 		+ "         Variable (name=isSubjectOf1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#subject)\r\n"
 				 		+ "         Variable (name=r1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -222,7 +216,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "   Variable (name=n0)\r\n"
 				 		+ "   Variable (name=p_n0_n1, value=http://local#volumeFlow)\r\n"
 				 		+ "   Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -244,7 +238,7 @@ class PathPatternQueryExpressionTests {
 						+ "      Variable (name=n1)\r\n"
 						+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
 						+ "      Variable (name=n2)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -265,7 +259,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "      Variable (name=n0)\r\n"
 				 		+ "      Variable (name=p_n0_n1, value=http://default/volumeFlow)\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -302,7 +296,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "      Variable (name=r1)\r\n"
 				 		+ "      Variable (name=p_r1_n2, value=http://default/lat)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -349,7 +343,7 @@ class PathPatternQueryExpressionTests {
 						+ "      Variable (name=n4)\r\n"
 						+ "      Variable (name=p_n4_n5, value=http://default/right)\r\n"
 						+ "      Variable (name=n5)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -375,7 +369,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "      Variable (name=n1, value=\"36\")\r\n"
 				 		+ "      Variable (name=p_n1_n1_1, value=http://rdfs/label)\r\n"
 				 		+ "      Variable (name=n1_1, value=\"Calc2Graph1\")\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -417,7 +411,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "      Variable (name=r1)\r\n"
 				 		+ "      Variable (name=p_r1_n2, value=http://default/lat)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -454,7 +448,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "      Variable (name=r1)\r\n"
 				 		+ "      Variable (name=p_r1_n2, value=http://default/long)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -486,7 +480,7 @@ class PathPatternQueryExpressionTests {
 				 		+ "      Variable (name=r1)\r\n"
 				 		+ "      Variable (name=p_r1_n2, value=http://default/lat)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}
 	
 	/**
@@ -507,7 +501,7 @@ class PathPatternQueryExpressionTests {
 			parser.removeErrorListeners(); 
 			parser.addErrorListener(errorListener); 
 			PathPatternContext pathPatternTree = parser.pathPattern();
-			PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);
+			PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 			PathElement element = pathPatternVisitor.visit(pathPatternTree); 
 			//Query.assertEqualsWOSpaces 
 			assertEquals
@@ -525,7 +519,7 @@ class PathPatternQueryExpressionTests {
 			 		+ "      Variable (name=rnull)\r\n"
 			 		+ "      Variable (name=objectnull, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 			 		+ "      Variable (name=nnull, value=http://id/Calc2Graph2)\r\n"
-			 		+ "" ,element.pathPatternQuery(thing).toString());
+			 		+ "" ,element.pathPatternQuery().toString());
 		}catch(Exception e){
 			Query.assertEqualsWOSpaces ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
 		}
@@ -535,7 +529,7 @@ class PathPatternQueryExpressionTests {
 	void test_12() {
 		try {
 			
-			PathElement element = PathParser.parsePathPattern(source, ":Location@:appearsOn[eq id:Calc2Graph1]#");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":Location@:appearsOn[eq id:Calc2Graph1]#");
 			assertEquals ("Join\r\n"
 					+ "   Join\r\n"
 					+ "      StatementPattern\r\n"
@@ -551,7 +545,7 @@ class PathPatternQueryExpressionTests {
 					+ "      Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 					+ "      Variable (name=n1, value=http://id/Calc2Graph1)\r\n"
 					+ ""
-					,element.pathPatternQuery(thing).toString() );
+					,element.pathPatternQuery().toString() );
 		}catch(Exception e){
 			assertEquals("", e.getMessage());
 		}
@@ -565,7 +559,7 @@ class PathPatternQueryExpressionTests {
 	void test_13() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, ":Location@:appearsOn[eq id:Calc2Graph1, id:Calc2Graph2]#");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":Location@:appearsOn[eq id:Calc2Graph1, id:Calc2Graph2]#");
 			//Query.assertEqualsWOSpaces 
 			assertEquals
 			 ("Join\r\n"
@@ -587,7 +581,7 @@ class PathPatternQueryExpressionTests {
 			 		+ "         Variable (name=r1)\r\n"
 			 		+ "         Variable (name=object1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#object)\r\n"
 			 		+ "         Variable (name=n1, value=http://id/Calc2Graph2)\r\n"
-			 		+ "" ,element.pathPatternQuery(thing).toString());
+			 		+ "" ,element.pathPatternQuery().toString());
 		}catch(Exception e){
 			assertEquals("", e.getMessage());
 		}
@@ -601,7 +595,7 @@ class PathPatternQueryExpressionTests {
 void test_14() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1, 42}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit{1, 42}/:massThroughput");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -613,7 +607,7 @@ void test_14() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -626,7 +620,7 @@ void test_14() {
 void test_15() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1,}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit{1,}/:massThroughput");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -638,7 +632,7 @@ void test_15() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -651,7 +645,7 @@ void test_15() {
 @Order(16)
 void test_16() {
 	try {
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -663,7 +657,7 @@ void test_16() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -677,7 +671,7 @@ void test_16() {
 void test_17() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
@@ -694,7 +688,7 @@ void test_17() {
 						+ "      Variable (name=n2)\r\n"
 						+ "      Variable (name=p_n2_n3, value=http://default/massThroughput)\r\n"
 						+ "      Variable (name=n3)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -708,14 +702,14 @@ void test_17() {
 void test_18() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "*");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "*");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
 				 		+ "   Variable (name=n0)\r\n"
 				 		+ "   Variable (name=p_n0_n1)\r\n"
 				 		+ "   Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -728,7 +722,7 @@ void test_18() {
 void test_19() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -745,7 +739,7 @@ void test_19() {
 				 		+ "      Variable (name=n2)\r\n"
 				 		+ "      Variable (name=p_n2_n3)\r\n"
 				 		+ "      Variable (name=n3)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -759,7 +753,7 @@ void test_19() {
 void test_20() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
@@ -776,7 +770,7 @@ void test_20() {
 						+ "      Variable (name=n2)\r\n"
 						+ "      Variable (name=p_n2_n3, value=http://default/massThroughput)\r\n"
 						+ "      Variable (name=n3)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -790,7 +784,7 @@ void test_20() {
 void test_21() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(*){1, 2}/:massThroughput");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -802,7 +796,7 @@ void test_21() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/massThroughput)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -816,7 +810,7 @@ void test_21() {
 void test_22() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/*");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit/*");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -828,7 +822,7 @@ void test_22() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -842,7 +836,7 @@ void test_22() {
 void test_23() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, ":massFlow |:volumeFlow");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, ":massFlow |:volumeFlow");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Union\r\n"
@@ -854,7 +848,7 @@ void test_23() {
 				 		+ "      Variable (name=n0)\r\n"
 				 		+ "      Variable (name=p_n0_n1_alt_LR, value=http://default/volumeFlow)\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -864,7 +858,7 @@ void test_23() {
 void test_23_1() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow)");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow)");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -881,7 +875,7 @@ void test_23_1() {
 				 		+ "         Variable (name=n1)\r\n"
 				 		+ "         Variable (name=p_n1_n2_alt_LR, value=http://default/volumeFlow)\r\n"
 				 		+ "         Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -895,7 +889,7 @@ void test_23_1() {
 void test_24() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow  |:density)");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit/(:massFlow |:volumeFlow  |:density)");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
@@ -917,7 +911,7 @@ void test_24() {
 						+ "         Variable (name=n1)\r\n"
 						+ "         Variable (name=p_n1_n2_alt_LR, value=http://default/density)\r\n"
 						+ "         Variable (name=n2)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -931,7 +925,7 @@ void test_24() {
 void test_25() {
 	try {
 		
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(:temp | (:massFlow |! :volumeFlow  |! :density))");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit/(:temp | (:massFlow |! :volumeFlow  |! :density))");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
@@ -958,7 +952,7 @@ void test_25() {
 						+ "            Variable (name=n1)\r\n"
 						+ "            Variable (name=p1_2)\r\n"
 						+ "            Variable (name=n2)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -972,7 +966,7 @@ void test_25() {
 void test_26() {
 	try {
 		/**************************************************Negation not yet supported*/
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit/(* | !(:massFlow |:volumeFlow  |:density))");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit/(* | !(:massFlow |:volumeFlow  |:density))");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
@@ -999,7 +993,7 @@ void test_26() {
 						+ "            Variable (name=n1)\r\n"
 						+ "            Variable (name=p_n1_n2_alt_LRLR, value=http://default/density)\r\n"
 						+ "            Variable (name=n2)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1013,7 +1007,7 @@ void test_26() {
 void test_27() {
 	try {
 		/**************************************************Negation not yet supported*/
-		PathElement element = PathParser.parsePathPattern(thing, "(* | !^:hasProductBatteryLimit)/(* | !(:massFlow |:volumeFlow  |:density))");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(* | !^:hasProductBatteryLimit)/(* | !(:massFlow |:volumeFlow  |:density))");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Join\r\n"
@@ -1049,7 +1043,7 @@ void test_27() {
 						+ "            Variable (name=n1)\r\n"
 						+ "            Variable (name=p_n1_n2_alt_LRLR, value=http://default/density)\r\n"
 						+ "            Variable (name=n2)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1063,7 +1057,7 @@ void test_27() {
 void test_28() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(:Attribute@:density  |:density)");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(:Attribute@:density  |:density)");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("Union\r\n"
@@ -1100,7 +1094,7 @@ void test_28() {
 						+ "      Variable (name=n0)\r\n"
 						+ "      Variable (name=p_n0_n1_alt_LR, value=http://default/density)\r\n"
 						+ "      Variable (name=n1)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1114,7 +1108,7 @@ void test_28() {
 void test_29() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "[ eq :Unit1]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ eq :Unit1]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("StatementPattern\r\n"
@@ -1122,7 +1116,7 @@ void test_29() {
 						+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 						+ "   Variable (name=n1)\r\n"
 						+ "" 
-				,element.pathPatternQuery(thing).toString());
+				,element.pathPatternQuery().toString());
 		Query.assertEqualsWOSpaces ("BIND(<http://default/Unit1> as ?n0)\n"	+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
@@ -1137,7 +1131,7 @@ void test_29() {
 void test_30() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "[ a :Unit]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ a :Unit]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
@@ -1148,7 +1142,7 @@ void test_30() {
 					 		+ "   Variable (name=n0  )\r\n"
 					 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 					 		+ "   Variable (name=n1)\r\n"
-					 		+ "" ,element.pathPatternQuery(thing).toString());
+					 		+ "" ,element.pathPatternQuery().toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
@@ -1164,14 +1158,14 @@ void test_30() {
 void test_31() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "[ like \"Unit1\"]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ like \"Unit1\"]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
 				 		+ "   Variable (name=n0  )\r\n"
 				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 				 		+ "   Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
@@ -1186,7 +1180,7 @@ void test_31() {
 void test_32() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "[ like \"Unit* NOT (location OR product*)\"]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ like \"Unit* NOT (location OR product*)\"]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
@@ -1197,7 +1191,7 @@ void test_32() {
 				 		+ "   Variable (name=n0  )\r\n"
 				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 				 		+ "   Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
@@ -1212,14 +1206,14 @@ void test_32() {
 void test_33() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "[ like \"Unit\" ; a :Unit]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ like \"Unit\" ; a :Unit]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				("StatementPattern\r\n"
 						+ "   Variable (name=n0)\r\n"
 						+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 						+ "   Variable (name=n1)\r\n"
-						+ "" ,element.pathPatternQuery(thing).toString());
+						+ "" ,element.pathPatternQuery().toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
@@ -1235,14 +1229,14 @@ void test_33() {
 void test_34() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
 				 		+ "   Variable (name=n0)\r\n"
 				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 				 		+ "   Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1254,7 +1248,7 @@ void test_34() {
 void test_35() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit[a  :BatteryLimit]");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit[a  :BatteryLimit]");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -1266,7 +1260,7 @@ void test_35() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n1_1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
 				 		+ "      Variable (name=n1_1, value=http://default/BatteryLimit)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1276,7 +1270,7 @@ void test_35() {
 void test_36() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "rdf:type[ lt '1.7' ]");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "rdf:type[ lt '1.7' ]");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Filter\r\n"
@@ -1287,7 +1281,7 @@ void test_36() {
 				 		+ "      Variable (name=n0)\r\n"
 				 		+ "      Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "      Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("",e.getMessage());
 	}
@@ -1297,7 +1291,7 @@ void test_36() {
 void test_37() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "rdf:type[:hasHeight  [ lt '1.7' ]]/:hasBMI");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "rdf:type[:hasHeight  [ lt '1.7' ]]/:hasBMI");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -1318,7 +1312,7 @@ void test_37() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/hasBMI)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("",e.getMessage());
 	}
@@ -1328,7 +1322,7 @@ void test_37() {
 void test_38() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^rdf:type[ lt '1.7' ]");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^rdf:type[ lt '1.7' ]");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Filter\r\n"
@@ -1339,7 +1333,7 @@ void test_38() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n0_n1, value=http://rdf/type)\r\n"
 				 		+ "      Variable (name=n0)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("",e.getMessage());
 	}
@@ -1349,7 +1343,7 @@ void test_38() {
 void test_39() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^rdf:type[:hasHeight  [ lt '1.7' ]]/:hasBMI");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^rdf:type[:hasHeight  [ lt '1.7' ]]/:hasBMI");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -1370,7 +1364,7 @@ void test_39() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/hasBMI)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("",e.getMessage());
 	}
@@ -1380,7 +1374,7 @@ void test_39() {
 void test_40() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^rdf:type[:hasLocation :Tideswell  ; :hasGender :Male ]");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -1397,7 +1391,7 @@ void test_40() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n0_1, value=http://default/hasGender)\r\n"
 				 		+ "      Variable (name=n0_1, value=http://default/Male)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("",e.getMessage());
 	}
@@ -1407,7 +1401,7 @@ void test_40() {
 void test_41() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:measurementOf[:hasOrdinal  %1]/:hasBMI");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:measurementOf[:hasOrdinal  %1]/:hasBMI");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("Join\r\n"
@@ -1424,7 +1418,7 @@ void test_41() {
 				 		+ "      Variable (name=n1)\r\n"
 				 		+ "      Variable (name=p_n1_n2, value=http://default/hasBMI)\r\n"
 				 		+ "      Variable (name=n2)\r\n"
-				 		+ "" ,element.pathPatternQuery(thing).toString());
+				 		+ "" ,element.pathPatternQuery().toString());
 	}catch(Exception e){
 		assertEquals("",e.getMessage());
 	}

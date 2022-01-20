@@ -4,7 +4,6 @@
 package localPathCalc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -18,8 +17,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathQLModel.Fact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
@@ -120,7 +117,8 @@ class Local_AddGetDeleteFact_Test {
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Resource averageSales = myCountry.getFact(":averageSales");
 			assertEquals(2.3333333333333335, averageSales.doubleValue());
-			Thing country3= myCountry.getThing(":Country3");
+		//	Thing country3= myCountry.getThing(":Country3");
+			Thing country3=graph.getThing(":Country3");
 			String averageSalesScript3 = "totalSales=0; count=0; myCountry=_this.getThing(\":Country2\"); for(sales in myCountry.getFacts(\":Attribute@:sales\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			country3.addFact(":averageSales", averageSalesScript3, SCRIPT.GROOVY) ;
 			Resource averageSales3 = myCountry.getFact(":averageSales");

@@ -7,11 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -19,23 +14,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathConstants;
-import com.inova8.pathql.processor.PathErrorListener;
-import com.inova8.pathql.processor.PathPatternVisitor;
-
-import PathPattern.PathPatternLexer;
-import PathPattern.PathPatternParser;
-import PathPattern.PathPatternParser.PathPatternContext;
-
 import static org.eclipse.rdf4j.model.util.Values.iri;
-
-import utilities.Query;
 
 /**
  * The Class PathPatternQueryExpressionTests.
@@ -47,7 +33,7 @@ class MultiPathPatternQueryExpressionTests {
 	static Thing thing;
 	
 	/** The source. */
-	static IntelligentGraphRepository source;
+	static RepositoryContext repositoryContext;
 	
 	/** The indices. */
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -59,14 +45,12 @@ class MultiPathPatternQueryExpressionTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source= new IntelligentGraphRepository();
-		source.getReifications().addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
-		source.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
-		source.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
-		source.getReifications().setReificationsAreLazyLoaded(true);
-		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
-		//Dummy
-		thing = source.getThing( "http://",null);
+		repositoryContext= new RepositoryContext();
+		repositoryContext.getReifications().addReificationType(PathConstants.RDF_STATEMENT_IRI, PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		repositoryContext.getReifications().addReificationType(iri("http://default/Attribute"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, PathConstants.RDF_ISSUBJECTOF_IRI, PathConstants.RDF_ISPREDICATEOF_IRI, PathConstants.RDF_ISOBJECTOF_IRI);
+		repositoryContext.getReifications().addReificationType(iri("http://default/Location"), PathConstants.RDF_SUBJECT_IRI, PathConstants.RDF_PREDICATE_IRI, PathConstants.RDF_OBJECT_IRI, null, null, null);
+		repositoryContext.getReifications().setReificationsAreLazyLoaded(true);
+		repositoryContext.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 		indices.add(0, 0);
 	}
 
@@ -85,8 +69,8 @@ class MultiPathPatternQueryExpressionTests {
 void test_1() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "^:hasProductBatteryLimit{1, 5}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "^:hasProductBatteryLimit{1, 5}/:massThroughput");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery();
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -112,11 +96,12 @@ void test_1() {
 void test_2() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit{1, 8}");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit{1, 8}");
 		Iterations iterations = Iterations.create(element);
 		assertEquals ("{0=1, 1=2, 2=3, 3=4, 4=5, 5=6, 6=7, 7=8}",iterations.toString());
+		@SuppressWarnings("unused")
 		Iterations sortedIterations = iterations.sortByPathLength();
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,2,null);
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(2,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -148,8 +133,8 @@ void test_2() {
 void test_3() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, ":Attribute@:density{1, 42}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,0,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, ":Attribute@:density{1, 42}");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(0,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -194,8 +179,8 @@ void test_3() {
 void test_4() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, ":Attribute@:density{1, 42}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext,":Attribute@:density{1, 42}");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		 ("Join\r\n"
@@ -272,8 +257,8 @@ void test_4() {
 void test_5() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,0,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(0,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -299,8 +284,8 @@ void test_5() {
 @Order(6)
 void test_6() {
 	try {
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/:massThroughput){1,2}");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -340,8 +325,8 @@ void test_6() {
 void test_7() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext,"(^:hasProductBatteryLimit/:massThroughput){1, 2}/:massThroughput");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -386,8 +371,8 @@ void test_7() {
 void test_8() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/:massThroughput){1, 2}/*");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(1,null);
 		//Query.assertEqualsWOSpaces
 		assertEquals
 		("Join\r\n"
@@ -433,8 +418,8 @@ void test_8() {
 void test_9() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(^:hasProductBatteryLimit/*){1, 2}/:massThroughput");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"
@@ -479,8 +464,8 @@ void test_9() {
 void test_10() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(thing, "(*){1, 2}/:massThroughput");
-		PathTupleExpr pathTupleExpr = element.pathPatternQuery(thing,1,null);
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "(*){1, 2}/:massThroughput");
+		PathTupleExpr pathTupleExpr = element.pathPatternQuery(1,null);
 		//Query.assertEqualsWOSpaces 
 		assertEquals
 		("Join\r\n"

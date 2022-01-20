@@ -8,8 +8,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.IriRefValueElement;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
@@ -43,12 +42,19 @@ public class PathParser {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
-	public static PathElement parsePathPattern(Thing thing, String pathPattern)
-			throws RecognitionException, PathPatternException {
-		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);		
-		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
-		return pathElement;
-	}
+//	@Deprecated
+//	public static PathElement parsePathPattern(Thing thing, String pathPattern)
+//			throws RecognitionException, PathPatternException {
+//		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);		
+//		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
+//		return pathElement;
+//	}
+//	public static PathElement parsePathPattern(String pathPattern)
+//			throws RecognitionException, PathPatternException {
+//		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor();		
+//		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
+//		return pathElement;
+//	}
 	/**
 	 * Parses the path pattern.
 	 *
@@ -58,9 +64,9 @@ public class PathParser {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
-	public static PathElement parsePathPattern(IntelligentGraphRepository source, String pathPattern)
+	public static PathElement parsePathPattern(RepositoryContext repositoryContext, String pathPattern)
 			throws RecognitionException, PathPatternException {
-		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(source);
+		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
 		return pathElement;
 	}
@@ -104,10 +110,10 @@ public class PathParser {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
-	public static IriRefValueElement parseIriRef(IntelligentGraphRepository source,String uriPattern)
+	public static IriRefValueElement parseIriRef(RepositoryContext repositoryContext,String uriPattern)
 			throws RecognitionException, PathPatternException {
 		try {
-			pathPatternVisitor = new PathPatternVisitor(source);
+			pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 			CharStream input = CharStreams.fromString( uriPattern);
 			PathPatternLexer lexer = new PathPatternLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -129,9 +135,9 @@ public class PathParser {
 	 * @throws RecognitionException the recognition exception
 	 * @throws PathPatternException the path pattern exception
 	 */
-	public static PredicateElement parsePredicate(IntelligentGraphRepository source,String uriPattern)
+	public static PredicateElement parsePredicate(RepositoryContext repositoryContext,String uriPattern)
 			throws RecognitionException, PathPatternException {
-		pathPatternVisitor = new PathPatternVisitor(source);
+		pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 		CharStream input = CharStreams.fromString( uriPattern);
 		PathPatternLexer lexer = new PathPatternLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);

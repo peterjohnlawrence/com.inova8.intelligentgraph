@@ -6,17 +6,15 @@ package com.inova8.pathql.processor;
 import static org.eclipse.rdf4j.model.util.Values.*;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.util.Values;
 
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Prefixes;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.Prefixes;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.AlternativePathElement;
 import com.inova8.pathql.element.BindVariableElement;
 import com.inova8.pathql.element.BoundPathElement;
@@ -72,14 +70,27 @@ public class PathPatternVisitor extends PathPatternBaseVisitor<PathElement> {
 	
 	Thing thing;
 	
-	private IntelligentGraphRepository source;
-
-public PathPatternVisitor(Thing thing) {
-		super();
-		this.thing = thing;
-		this.source = thing.getSource();
-	}
+//	private IntelligentGraphRepository source;
 	
+	private RepositoryContext repositoryContext;
+//   @Deprecated
+//	public PathPatternVisitor(Thing thing) {
+//		super();
+//		this.thing = thing;
+//		this.source = thing.this.repositoryContext;
+//	}
+//	public PathPatternVisitor(IntelligentGraphRepository source) {
+//		super();
+//	this.source = source;
+//	}
+	public PathPatternVisitor(RepositoryContext repositoryContext) {
+		super();
+		this.repositoryContext = repositoryContext;
+	}
+//	public PathPatternVisitor() {
+//		super();
+//	
+//	}
 	@Override
 	public PathElement visitQueryString(QueryStringContext ctx) {
 		// queryString : pathPattern queryOptions? EOF ;
@@ -107,7 +118,7 @@ public PathPatternVisitor(Thing thing) {
 				 customQueryOptions.add(key, literal.getLiteral());
 			 }
 		}
-		QueryOptionsPathElement queryOptionsPathElement = new QueryOptionsPathElement(getSource());
+		QueryOptionsPathElement queryOptionsPathElement = new QueryOptionsPathElement(this.repositoryContext);
 		queryOptionsPathElement.setCustomQueryOptions(customQueryOptions);
 		return queryOptionsPathElement;
 	}
@@ -118,31 +129,30 @@ public PathPatternVisitor(Thing thing) {
 		return visitQname(ctx.qname());
 	}
 
-	/**
-	 * Gets the source.
-	 *
-	 * @return the source
-	 */
-	public IntelligentGraphRepository getSource() {
-		return source;
-	}
+//	/**
+//	 * Gets the source.
+//	 *
+//	 * @return the source
+//	 */
+//	public IntelligentGraphRepository getSource() {
+//		return source;
+//	}
 
-	public PathPatternVisitor(IntelligentGraphRepository source) {
-		super();
-	this.source = source;
-	}
+	public RepositoryContext getRepositoryContext() {
+		return repositoryContext;
+    }
 	
-	private ConcurrentHashMap<String, IRI> getPrefixes() {
+	private  com.inova8.pathql.context.Prefixes getPrefixes() {
 		//if (thing!=null) 
 		//	return thing.getPrefixes();
 		//else
-			return getSource().getPrefixes();
+			return repositoryContext.getPrefixes();
 	}
 
 	@Override 
 	public PathElement visitBoundPattern(PathPatternParser.BoundPatternContext ctx) { 
 		// boundPattern :  binding ('/'|'>') pathPatterns EOF 
-		PathElement pathElement = new BoundPathElement(getSource());
+		PathElement pathElement = new BoundPathElement(this.repositoryContext);
 		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
 		pathElement.setRightPathElement(visit(ctx.pathPatterns()));
 		return pathElement;	
@@ -151,7 +161,7 @@ public PathPatternVisitor(Thing thing) {
 	@Override 
 	public PathElement visitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { 
 		// matchOnlyPattern: pathPattern :  binding  EOF 
-		PathElement pathElement = new BoundPathElement(getSource());
+		PathElement pathElement = new BoundPathElement(this.repositoryContext);
 		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
 		return pathElement;	
 	}
@@ -189,7 +199,7 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public CardinalityElement visitCardinality(CardinalityContext ctx) {
 		//cardinality :	  '{'  INTEGER (',' ( INTEGER )? )?  '}'  
-		CardinalityElement cardinalityElement = new CardinalityElement(getSource());
+		CardinalityElement cardinalityElement = new CardinalityElement(this.repositoryContext);
 		cardinalityElement.setMinCardinality(Integer.decode(ctx.getChild(1).getText()));
 		 String maxCardinalityText = ctx.getChild(3).getText();
 		 if(maxCardinalityText.equals("}")) {
@@ -208,7 +218,7 @@ public PathPatternVisitor(Thing thing) {
 		if (ctx.pathPatterns().size() == 1) {
 			return (SequencePathElement)visit(ctx.pathPatterns(0));
 		} else {
-			SequencePathElement pathSequenceElement = new SequencePathElement(getSource());
+			SequencePathElement pathSequenceElement = new SequencePathElement(this.repositoryContext);
 			pathSequenceElement.setLeftPathElement( visit(ctx.pathPatterns(0)));
 			pathSequenceElement.setRightPathElement( visit(ctx.pathPatterns(1)));
 			return pathSequenceElement;
@@ -221,7 +231,7 @@ public PathPatternVisitor(Thing thing) {
 		if (ctx.pathPatterns().size() == 1) {
 			return (AlternativePathElement) visit(ctx.pathPatterns(0));
 		} else {
-			AlternativePathElement pathAlternativeElement = new AlternativePathElement(getSource());
+			AlternativePathElement pathAlternativeElement = new AlternativePathElement(this.repositoryContext);
 			pathAlternativeElement.setLeftPathElement( visit(ctx.pathPatterns(0)));
 			pathAlternativeElement.setRightPathElement( visit(ctx.pathPatterns(1)));
 			return pathAlternativeElement;
@@ -272,16 +282,16 @@ public PathPatternVisitor(Thing thing) {
 			predicateElement = (PredicateElement) visit(ctx.reifiedPredicate());
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 		} else if (ctx.predicateRef() != null) {
-			predicateElement = new PredicateElement(getSource());
+			predicateElement = new PredicateElement(this.repositoryContext);
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 			IriRefValueElement predicateRef = ((IriRefValueElement) visit(ctx.predicateRef()));
 			predicateElement.setPredicate(predicateRef.getIri());
 		}else if (ctx.rdfType() != null) {
-			predicateElement = new PredicateElement(getSource());
+			predicateElement = new PredicateElement(this.repositoryContext);
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 			predicateElement.setPredicate((iri("http://rdftype")));
 		}else if (ctx.anyPredicate() != null) {
-			predicateElement = new PredicateElement(getSource());
+			predicateElement = new PredicateElement(this.repositoryContext);
 			predicateElement.setOperator(PathConstants.Operator.PREDICATE);
 			predicateElement.setAnyPredicate(true);
 		}
@@ -299,7 +309,7 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public PredicateElement visitReifiedPredicate(ReifiedPredicateContext ctx) {
 		// reifiedPredicate :  iriRef? REIFIER predicateRef  factFilterPattern?  dereifier? ; #statementFilterPattern
-		PredicateElement reifiedPredicateElement = new PredicateElement(getSource());
+		PredicateElement reifiedPredicateElement = new PredicateElement(this.repositoryContext);
 		reifiedPredicateElement.setIsReified(true);
 		if (ctx.iriRef() != null) {
 			reifiedPredicateElement.setReification(((IriRefValueElement) visit(ctx.iriRef())).getIri());
@@ -327,10 +337,10 @@ public PathPatternVisitor(Thing thing) {
 			predicateRefElement = (IriRefValueElement) visit(ctx.pname_ns());
 
 		} else if(ctx.rdfType() != null) {
-			predicateRefElement = new IriRefValueElement(getSource());
+			predicateRefElement = new IriRefValueElement(this.repositoryContext);
 			predicateRefElement.setIri(iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
 		}else {
-			predicateRefElement = new IriRefValueElement(getSource());
+			predicateRefElement = new IriRefValueElement(this.repositoryContext);
 			String iri = ctx.IRI_REF().getText();
 			iri = iri.substring(1, iri.length() - 1);
 			predicateRefElement.setIri(iri(iri));
@@ -341,7 +351,7 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public IriRefValueElement visitIriRef(IriRefContext ctx) {
 		// iriRef  : IRI_REF  |  qname | pname_ns ;  
-		IriRefValueElement iriRefElement = new IriRefValueElement(getSource());
+		IriRefValueElement iriRefElement = new IriRefValueElement(this.repositoryContext);
 		if (ctx.qname() != null) {
 			iriRefElement.setIri(((IriRefValueElement)visit(ctx.qname())).getIri());
 		} else if (ctx.pname_ns() != null) {
@@ -372,14 +382,14 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public FactFilterElement visitPropertyListNotEmpty(PropertyListNotEmptyContext ctx) {
 		// propertyListNotEmpty :   verbObjectList ( ';' ( verbObjectList )? )* ;  
-		FactFilterElement propertyListNotEmptyElement = new FactFilterElement(getSource());
+		FactFilterElement propertyListNotEmptyElement = new FactFilterElement(this.repositoryContext);
 		ArrayList<VerbObjectList> propertyListNotEmpty = new ArrayList<VerbObjectList>();
 		for (VerbObjectListContext verbObjectListContext : ctx.verbObjectList()) {
 
 			PathElement verb = visit(verbObjectListContext.verb());
 			ObjectListValueElement objectList =  (ObjectListValueElement) visit(verbObjectListContext.objectList());
 			
-			VerbObjectList verbObjectList = new VerbObjectList(getSource());
+			VerbObjectList verbObjectList = new VerbObjectList(this.repositoryContext);
 			if(verb instanceof ValueElement) {
 				verbObjectList.setFilterOperator(((FilterOperatorValueElement) verb).getFilterOperator());
 			}else if(verb instanceof PredicateElement) {
@@ -419,12 +429,12 @@ public PathPatternVisitor(Thing thing) {
 				objectList.add((ObjectElement) visit(objectContext.factFilterPattern()));
 			}else if (objectContext.BINDVARIABLE() != null) {
 				String bindVariableIndex = objectContext.BINDVARIABLE().getText().substring(1);
-				BindVariableElement bindVariableElement = new BindVariableElement(getSource());
+				BindVariableElement bindVariableElement = new BindVariableElement(this.repositoryContext);
 				bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
 				objectList.add((ObjectElement) bindVariableElement);
 			}	
 		}
-		ObjectListValueElement objectListElement = new ObjectListValueElement(getSource());
+		ObjectListValueElement objectListElement = new ObjectListValueElement(this.repositoryContext);
 		objectListElement.setObjectList(objectList);
 		return objectListElement;
 	}
@@ -441,7 +451,7 @@ public PathPatternVisitor(Thing thing) {
 			return (ValueElement) visit(ctx.factFilterPattern());
 		}else if (ctx.BINDVARIABLE() != null) {
 			String bindVariableIndex = ctx.BINDVARIABLE().getText().substring(1);
-			BindVariableElement bindVariableElement = new BindVariableElement(getSource());
+			BindVariableElement bindVariableElement = new BindVariableElement(this.repositoryContext);
 			bindVariableElement.setBindVariableIndex(Integer.parseInt(bindVariableIndex));
 			return bindVariableElement;
 		}
@@ -451,8 +461,8 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public IriRefValueElement visitQname(QnameContext ctx) {
 		//qname : PNAME_NS PN_LOCAL; 
-		IriRefValueElement qnameElement = new IriRefValueElement(getSource());
-		IRI qname = getSource().convertQName(ctx.getText(),getPrefixes());
+		IriRefValueElement qnameElement = new IriRefValueElement(this.repositoryContext);
+		IRI qname = this.repositoryContext.convertQName(ctx.getText(),getPrefixes());
 		if (qname!=null) {
 			qnameElement.setIri(qname);
 			return qnameElement;
@@ -466,11 +476,11 @@ public PathPatternVisitor(Thing thing) {
 	public IriRefValueElement visitPname_ns(Pname_nsContext ctx) {
 		// pname_ns : PNAME_NS ;   
 		
-		IriRefValueElement pname_nsElement = new IriRefValueElement(getSource());
+		IriRefValueElement pname_nsElement = new IriRefValueElement(this.repositoryContext);
 		Prefixes prefixes=null;
-		prefixes=source.getPrefixes();
+		prefixes=this.repositoryContext.getPrefixes();
 	//	if(thing!=null) prefixes=thing.getPrefixes();
-		IRI qname = getSource().convertQName(ctx.getText(),prefixes);
+		IRI qname = this.repositoryContext.convertQName(ctx.getText(),prefixes);
 		if (qname!=null) {
 			pname_nsElement.setIri(qname);
 			return pname_nsElement;
@@ -483,7 +493,7 @@ public PathPatternVisitor(Thing thing) {
 	@Override
 	public LiteralValueElement visitLiteral(LiteralContext ctx) {
 		//rdfLiteral: (DQLITERAL | SQLITERAL) ('^^' (IRI_REF |  qname) )? ;
-		LiteralValueElement literalElement = new LiteralValueElement(getSource());
+		LiteralValueElement literalElement = new LiteralValueElement(this.repositoryContext);
 		String literalValue = null;
 		if(ctx.DQLITERAL()==null) {
 			literalValue = ctx.SQLITERAL().getText() ;
@@ -518,7 +528,7 @@ public PathPatternVisitor(Thing thing) {
 	public FilterOperatorValueElement visitOperator(OperatorContext ctx) {
 		// operator : OPERATOR ;
 		// OPERATOR : 'lt'|'gt'|'le'|'ge'|'eq'|'ne'|'like';
-		FilterOperatorValueElement operatorElement = new FilterOperatorValueElement(getSource());
+		FilterOperatorValueElement operatorElement = new FilterOperatorValueElement(this.repositoryContext);
 		operatorElement.setFilterOperator(PathConstants.filterOperators.get(ctx.getText()));
 		return operatorElement;
 	}

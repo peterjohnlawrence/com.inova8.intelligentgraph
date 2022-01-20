@@ -3,11 +3,10 @@
  */
 package com.inova8.pathql.element;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -21,8 +20,8 @@ public class NegationPathElement extends PathElement{
 	 *
 	 * @param source the source
 	 */
-	public NegationPathElement(IntelligentGraphRepository source) {
-		super(source);
+	public NegationPathElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator=PathConstants.Operator.NEGATION;
 	}
 
@@ -70,11 +69,11 @@ public class NegationPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable, CustomQueryOptions customQueryOptions) {
+	public PathTupleExpr pathPatternQuery(Variable sourceVariable, Variable predicateVariable,Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}

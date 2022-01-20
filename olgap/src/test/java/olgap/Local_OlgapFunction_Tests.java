@@ -8,17 +8,8 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import org.apache.commons.io.FileUtils;
-import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -26,11 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-
-import olgap.ClearCache;
-import olgap.FactValue;
-import olgap.ObjectValue;
 import utilities.Query;
 
 /**
@@ -40,7 +26,6 @@ import utilities.Query;
 class Local_OlgapFunction_Tests {
 	
 	private static RepositoryConnection conn;
-	private static IntelligentGraphRepository source;
 	static RepositoryTripleSource repositoryTripleSource;
 	private static org.eclipse.rdf4j.repository.Repository workingRep;
 	/**
@@ -60,7 +45,7 @@ class Local_OlgapFunction_Tests {
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("id", "http://inova8.com/calc2graph/id/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
-		source = IntelligentGraphRepository.create(workingRep);
+		IntelligentGraphRepository.create(workingRep);
 		
 		repositoryTripleSource = new RepositoryTripleSource(conn);
 		//new PathQLRepository(repositoryTripleSource);

@@ -12,10 +12,9 @@ import org.eclipse.rdf4j.query.algebra.QueryModelNode;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.ValueExpr;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -33,8 +32,8 @@ public class FactFilterElement extends ObjectElement{
 	 *
 	 * @param source the source
 	 */
-	public FactFilterElement(IntelligentGraphRepository source) {
-		super(source);
+	public FactFilterElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator = PathConstants.Operator.PROPERTYLIST;
 	}
 
@@ -79,11 +78,11 @@ public class FactFilterElement extends ObjectElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {		
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {		
 		TupleExpr factFilterPattern = null;
 		if(propertyListNotEmpty!=null) {
 			for ( VerbObjectList verbObjectList: propertyListNotEmpty) {
-				TupleExpr verbObjectListPattern = verbObjectList.pathPatternQuery( thing,sourceVariable,predicateVariable,targetVariable,customQueryOptions).getTupleExpr();		
+				TupleExpr verbObjectListPattern = verbObjectList.pathPatternQuery( sourceVariable,predicateVariable,targetVariable,customQueryOptions).getTupleExpr();		
 				if(factFilterPattern == null) 
 					factFilterPattern = verbObjectListPattern;
 				else if(verbObjectListPattern == null){
@@ -97,11 +96,11 @@ public class FactFilterElement extends ObjectElement{
 
 		return new PathTupleExpr(factFilterPattern);
 	}
-	public PathTupleExpr filterExpression(Thing thing, Variable sourceVariable, Variable predicateVariable,  Variable targetVariable,TupleExpr filterExpression,CustomQueryOptions customQueryOptions) {		
+	public PathTupleExpr filterExpression( Variable sourceVariable, Variable predicateVariable,  Variable targetVariable,TupleExpr filterExpression,CustomQueryOptions customQueryOptions) {		
 		//QueryModelNode filterExpression = null;
 		if(propertyListNotEmpty!=null) {
 			for ( VerbObjectList verbObjectList: propertyListNotEmpty) {
-				QueryModelNode verbObjectListExpression = verbObjectList.filterExpression( thing,sourceVariable,predicateVariable,targetVariable,customQueryOptions);		
+				QueryModelNode verbObjectListExpression = verbObjectList.filterExpression( sourceVariable,predicateVariable,targetVariable,customQueryOptions);		
 				if(filterExpression == null) 
 					filterExpression = (TupleExpr) verbObjectListExpression;
 				else if(verbObjectListExpression == null){
@@ -140,11 +139,11 @@ public class FactFilterElement extends ObjectElement{
 	 * @param targetVariable the target variable
 	 * @return the tuple expr
 	 */
-	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {		
+	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {		
 		TupleExpr factFilterPattern = null;
 		if(propertyListNotEmpty!=null) {
 			for ( VerbObjectList verbObjectList: propertyListNotEmpty) {
-				TupleExpr verbObjectListPattern = verbObjectList.boundPatternQuery( thing,sourceVariable,targetVariable).getTupleExpr();		
+				TupleExpr verbObjectListPattern = verbObjectList.boundPatternQuery( sourceVariable,targetVariable).getTupleExpr();		
 				if(factFilterPattern == null) 
 					factFilterPattern = verbObjectListPattern;
 				else if(verbObjectListPattern == null){

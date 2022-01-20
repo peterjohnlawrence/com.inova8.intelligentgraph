@@ -5,11 +5,10 @@ package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -23,8 +22,8 @@ public class BoundPathElement extends PathElement{
 	 *
 	 * @param source the source
 	 */
-	public BoundPathElement(IntelligentGraphRepository source) {
-		super(source);
+	public BoundPathElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator=PathConstants.Operator.BINDING ;
 		setBaseIndex(0);
 	}
@@ -83,13 +82,13 @@ public class BoundPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing,  sourceVariable,  predicateVariable,targetVariable,0,customQueryOptions);
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery( sourceVariable,  predicateVariable,targetVariable,0,customQueryOptions);
 	}
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
-		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(thing,sourceVariable,predicateVariable,targetVariable,customQueryOptions);
+		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(sourceVariable,predicateVariable,targetVariable,customQueryOptions);
 		return rightPattern;
 	}
 	/**
@@ -146,10 +145,10 @@ public class BoundPathElement extends PathElement{
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr boundPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable) {
+	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable) {
 		if(sourceVariable==null)sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();
-		TupleExpr boundPattern = getLeftPathElement().boundPatternQuery(thing,sourceVariable,targetVariable).getTupleExpr() ;
+		TupleExpr boundPattern = getLeftPathElement().boundPatternQuery(sourceVariable,targetVariable).getTupleExpr() ;
 		return new PathTupleExpr(boundPattern);
 	}
 

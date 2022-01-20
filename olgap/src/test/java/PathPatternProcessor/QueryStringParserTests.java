@@ -16,16 +16,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.PathElement;
-import com.inova8.pathql.parser.PathParser;
-import com.inova8.pathql.processor.PathErrorListener;
 import com.inova8.pathql.processor.PathPatternVisitor;
 
 import PathPattern.PathPatternLexer;
 import PathPattern.PathPatternParser;
-import PathPattern.PathPatternParser.PathPatternContext;
 import PathPattern.PathPatternParser.QueryStringContext;
 
 /**
@@ -35,10 +31,8 @@ import PathPattern.PathPatternParser.QueryStringContext;
 class QueryStringParserTests {
 	
 	/** The source. */
-	static IntelligentGraphRepository source;
-	
-	/** The thing. */
-	static Thing thing;
+	static RepositoryContext repositoryContext;
+
 
 	/**
 	 * Sets the up before class.
@@ -47,9 +41,8 @@ class QueryStringParserTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source = new IntelligentGraphRepository();
-		thing = source.getThing( "http://",null);
-		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
+		repositoryContext= new RepositoryContext();
+		repositoryContext.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 
 	}
 
@@ -75,7 +68,7 @@ class QueryStringParserTests {
 		PathPatternParser parser = new PathPatternParser(tokens);
 		//PathPatternContext pathPatternTree = parser.pathPattern();
 		QueryStringContext queryStringTree = parser.queryString();
-		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(thing);
+		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 		PathElement element = pathPatternVisitor.visit(queryStringTree);
 		return element;
 	}

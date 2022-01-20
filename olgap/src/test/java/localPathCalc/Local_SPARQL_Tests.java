@@ -4,7 +4,6 @@
 package localPathCalc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;

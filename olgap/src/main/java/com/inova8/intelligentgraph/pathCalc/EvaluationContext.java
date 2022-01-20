@@ -3,14 +3,11 @@
  */
 package com.inova8.intelligentgraph.pathCalc;
 
-import static org.eclipse.rdf4j.model.util.Values.iri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
-import org.eclipse.rdf4j.model.IRI;
+import com.inova8.pathql.context.Prefixes;
 import org.eclipse.rdf4j.query.Dataset;
 
 public class EvaluationContext {
@@ -27,9 +24,6 @@ public class EvaluationContext {
 	/** The custom query options. */
 	private CustomQueryOptions customQueryOptions = new   CustomQueryOptions();	
 	
-	/** The prefixes. */
-	@Deprecated
-	private Prefixes prefixes = new Prefixes();
 	
 	/** The dataset. */
 	@Deprecated
@@ -53,7 +47,7 @@ public class EvaluationContext {
 		this.tracer = tracer;
 		this.stack = stack;
 		this.customQueryOptions = customQueryOptions;
-		this.prefixes = prefixes;
+	//	this.prefixes = prefixes;
 	}
 	
 	/**
@@ -85,36 +79,14 @@ public class EvaluationContext {
 	/**
 	 * Instantiates a new evaluation context.
 	 *
-	 * @param customQueryOptions the custom query options
-	 * @param dataset the dataset
-	 * @param prefixes the prefixes
-	 */
-	public EvaluationContext(CustomQueryOptions customQueryOptions, Dataset dataset, Prefixes prefixes) {
-		this.customQueryOptions = customQueryOptions;
-		this.dataset =dataset;
-		this.prefixes = prefixes;
-	}
-	
-	/**
-	 * Instantiates a new evaluation context.
-	 *
 	 * @param prefixes the prefixes
 	 * @param contexts the contexts
 	 */
 	public EvaluationContext(Prefixes prefixes, org.eclipse.rdf4j.model.Resource[] contexts) {
-		this.prefixes = prefixes;
+	//	this.prefixes = prefixes;
 		this.contexts = contexts;
 	}
 	
-	/**
-	 * Sets the prefixes.
-	 *
-	 * @param prefixes the prefixes
-	 */
-	@Deprecated
-	public void setPrefixes(Prefixes prefixes) {
-		this.prefixes = prefixes;
-	}
 	@Deprecated
 	public void setCustomQueryOptions(CustomQueryOptions customQueryOptions) {
 		this.customQueryOptions = customQueryOptions;
@@ -167,54 +139,6 @@ public class EvaluationContext {
 	@Deprecated
 	public  CustomQueryOptions getCustomQueryOptions() {
 		return customQueryOptions;
-	}
-	
-	/**
-	 * Gets the prefixes.
-	 *
-	 * @return the prefixes
-	 */
-	@Deprecated
-	public Prefixes getPrefixes() {
-		return prefixes;
-	}
-	
-	/**
-	 * Convert Q name.
-	 *
-	 * @param predicateIRI the predicate IRI
-	 * @return the iri
-	 */
-	public IRI convertQName(String predicateIRI) {
-		predicateIRI=IntelligentGraphRepository.trimIRIString( predicateIRI);
-		String[] predicateIRIParts = predicateIRI.split(":");
-		IRI predicate = null;
-		if(predicateIRIParts[0].equals("a")) {
-				predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-			}
-		else if(predicateIRIParts[0].equals("http")||predicateIRIParts[0].equals("urn")) {
-			predicate = iri(predicateIRI);
-		}else {
-			IRI namespace = getNamespace(predicateIRIParts[0]);
-			if(namespace==null) {
-				logger.error("Error identifying namespace of qName {}", predicateIRI);
-				getTracer().traceQNameError( predicateIRI);
-			}else {
-				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
-			}
-		}
-		return predicate;
-	}
-	
-	/**
-	 * Gets the namespace.
-	 *
-	 * @param namespaceString the namespace string
-	 * @return the namespace
-	 */
-	private IRI getNamespace(String namespaceString) {
-		IRI namespace = getPrefixes().get(namespaceString);
-		return namespace;
 	}
 
 	@Deprecated

@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph.intelligentGraphRepository;
+package com.inova8.pathql.context;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -7,7 +7,8 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,18 +18,19 @@ import com.inova8.intelligentgraph.vocabulary.RDFS;
 
 public class Reifications {
 	private static final Logger logger   = LoggerFactory.getLogger(Reifications.class);
-	private ConcurrentHashMap<String, ReificationType> reificationTypes = new ConcurrentHashMap<String, ReificationType>();
+	ConcurrentHashMap<String, ReificationType> reificationTypes = new ConcurrentHashMap<String, ReificationType>();
 	private ConcurrentHashMap<String, ReificationType> predicateReificationTypes = new ConcurrentHashMap<String, ReificationType>();
 	/** The is lazy loaded. */
 	private Boolean reificationsAreLazyLoaded = false;
-	private IntelligentGraphRepository pathQLRepository;
-	public Reifications(IntelligentGraphRepository pathQLRepository) {
-		this.pathQLRepository=pathQLRepository;
-	}
-	
-	private IntelligentGraphRepository getPathQLRepository() {
-		return pathQLRepository;
-	}
+//	private IntelligentGraphRepository pathQLRepository;
+//	public Reifications(IntelligentGraphRepository pathQLRepository) {
+//		this.pathQLRepository=pathQLRepository;
+//	}
+	public Reifications() {
+	}	
+//	private IntelligentGraphRepository getPathQLRepository() {
+//		return pathQLRepository;
+//	}
 
 	public ReificationType getPredicateReificationType(String predicate) {
 		if (getPredicateReificationTypes().containsKey(predicate)) {
@@ -97,16 +99,16 @@ public class Reifications {
 	}
 
 	private ReificationType getReificationType(String reificationType) {
-		return getReificationTypes().get(reificationType);
+		return getReificationTypes(null).get(reificationType);
 	}
 
-	public ConcurrentHashMap<String, ReificationType> getReificationTypes() {
-		if (!reificationsAreLazyLoaded && this.getPathQLRepository().getTripleSource() != null)
-			initializeReificationTypes();
+	public ConcurrentHashMap<String, ReificationType> getReificationTypes(RepositoryConnection repositoryConnection) {
+		if (!reificationsAreLazyLoaded && repositoryConnection != null)
+			initializeReificationTypes(repositoryConnection);
 		return reificationTypes;
 	}
 
-	protected void initializeReificationTypes() {
+	protected void initializeReificationTypes(RepositoryConnection repositoryConnection) {
 		StringBuilder initializedReifications = new StringBuilder(
 				" reifications initialized: <" + RDF.STATEMENT + "> ");
 		int initializedReification = 1;
@@ -122,8 +124,8 @@ public class Reifications {
 		reificationTypes.put(RDF.STATEMENT.stringValue(),
 				new ReificationType(RDFStatement, RDFsubject, RDFpredicate, RDFobject));
 	
-		CloseableIteration<? extends Statement, QueryEvaluationException> reificationPredicateStatements = 
-				this.getPathQLRepository().getTripleSource().getStatements(null, RDFSsubPropertyOf, RDFpredicate);
+		CloseableIteration<Statement, RepositoryException> reificationPredicateStatements = 
+				/*this.getPathQLRepository().getTripleSource()*/ repositoryConnection.getStatements(null, RDFSsubPropertyOf, RDFpredicate);
 		while (reificationPredicateStatements.hasNext()) {
 			Value reificationType = null;
 	
@@ -135,24 +137,24 @@ public class Reifications {
 			org.eclipse.rdf4j.model.Resource reificationIsObjectOf = null;
 			Statement reificationPredicateStatement = reificationPredicateStatements.next();
 			reificationPredicate = reificationPredicateStatement.getSubject();
-			CloseableIteration<? extends Statement, QueryEvaluationException> reificationTypeStatements = this
-					.getPathQLRepository().getTripleSource().getStatements(reificationPredicate, RDFSdomain, null);
+			CloseableIteration<Statement, RepositoryException> reificationTypeStatements = /*this	.getPathQLRepository().getTripleSource(). */
+					repositoryConnection.getStatements(reificationPredicate, RDFSdomain, null);
 			while (reificationTypeStatements.hasNext()) {
 				Statement reificationTypeStatement = reificationTypeStatements.next();
 				reificationType = reificationTypeStatement.getObject();
 				break;
 			}
-			CloseableIteration<? extends Statement, QueryEvaluationException> reificationSubjectStatements = this
-					.getPathQLRepository().getTripleSource().getStatements(null, RDFSdomain, reificationType);
+			CloseableIteration<Statement, RepositoryException> reificationSubjectStatements = /*this.getPathQLRepository().getTripleSource().*/  
+					repositoryConnection.getStatements(null, RDFSdomain, reificationType);
 			while (reificationSubjectStatements.hasNext()) {
 				Statement reificationSubjectStatement = reificationSubjectStatements.next();
 				org.eclipse.rdf4j.model.Resource reificationProperty = reificationSubjectStatement.getSubject();
-				CloseableIteration<? extends Statement, QueryEvaluationException> reificationSubPropertyOfStatements = this
-						.getPathQLRepository().getTripleSource().getStatements(reificationProperty, RDFSsubPropertyOf, null);
+				CloseableIteration<Statement, RepositoryException> reificationSubPropertyOfStatements = /*this.getPathQLRepository().getTripleSource()*/					
+						repositoryConnection.getStatements(reificationProperty, RDFSsubPropertyOf, null);
 				while (reificationSubPropertyOfStatements.hasNext()) {
 					Statement reificationSubPropertyOfStatement = reificationSubPropertyOfStatements.next();
-					CloseableIteration<? extends Statement, QueryEvaluationException> reificationInverseOfStatements = this
-							.getPathQLRepository().getTripleSource().getStatements(reificationProperty, OWLinverseOf, null);
+					CloseableIteration<Statement, RepositoryException> reificationInverseOfStatements = /*this.getPathQLRepository().getTripleSource()*/
+							repositoryConnection.getStatements(reificationProperty, OWLinverseOf, null);
 					org.eclipse.rdf4j.model.Resource reificationInverseProperty = null;
 					while (reificationInverseOfStatements.hasNext()) {
 						Statement reificationInverseOfStatement = reificationInverseOfStatements.next();

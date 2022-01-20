@@ -4,8 +4,6 @@
 package tutorialExample;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -25,7 +23,6 @@ import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.pathQLResults.PathResults;
 import com.inova8.intelligentgraph.vocabulary.RDF;
-import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.intelligentgraph.vocabulary.XSD;
 
@@ -104,6 +101,7 @@ class Local_TutorialTests {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@Test
 	@Order(2)
 	void test_2() {
@@ -115,6 +113,7 @@ class Local_TutorialTests {
 			conn.setNamespace("", "http://inova8.com/intelligentgraph/example2/");
 			conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 			conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+			conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 
 			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 
@@ -150,9 +149,11 @@ class Local_TutorialTests {
 			graph.getThing(":Another12").addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.8", XSD.DOUBLE)
 					.addFact(":hasWeight", "75", XSD.DOUBLE);
 
+			@SuppressWarnings("unused")
 			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
 					"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
 					SCRIPT.GROOVY);
+			@SuppressWarnings("unused")
 			Thing relativeBMI = graph.getThing(":RelativeBMI").addFact(SCRIPT.SCRIPTCODE,
 					"double averageBMI = _this.getFact('rdf:type/:averageBMI').doubleValue(); _this.getFact(':hasBMI').doubleValue()/averageBMI;",
 					SCRIPT.GROOVY);
@@ -178,6 +179,7 @@ class Local_TutorialTests {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@Test
 	@Order(3)
 	void test_3() {
@@ -195,12 +197,15 @@ class Local_TutorialTests {
 			Graph graph = source.addGraph("<http://inova8.com/intelligentgraph/example3>");
 			Thing Person = graph.getThing(":Person");
 
+			@SuppressWarnings("unused")
 			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
 					"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
 					SCRIPT.GROOVY);
+			@SuppressWarnings("unused")
 			Thing relativeBMI = graph.getThing(":RelativeBMI").addFact("<http://inova8.com/script/scriptCode>",
 					"double averageBMI = _this.getFact('rdf:type/:averageBMI').doubleValue(); _this.getFact(':hasBMI').doubleValue()/averageBMI;",
 					SCRIPT.GROOVY);
+			@SuppressWarnings("unused")
 			Thing locationAverageBMI = graph.getThing(":LocationAverageBMI").addFact(SCRIPT.SCRIPTCODE,
 					"_this.getFacts('^:hasLocation/:hasBMI')average()", SCRIPT.GROOVY);
 
@@ -249,6 +254,7 @@ class Local_TutorialTests {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@Test
 	@Order(4)
 	void test_4() {
@@ -266,8 +272,10 @@ class Local_TutorialTests {
 			Graph graph = source.addGraph("<http://inova8.com/intelligentgraph/example4>");
 			Thing Person = graph.getThing(":Person");
 
+			@SuppressWarnings("unused")
 			Thing locationAverageBMI = graph.getThing(":LocationAverageBMI").addFact(SCRIPT.SCRIPTCODE,
 					"_this.getFacts('^:hasLocation/:hasBMI')average()", SCRIPT.GROOVY);
+			@SuppressWarnings("unused")
 			Thing genderLocationAverageBMI = graph.getThing(":Gender_LocationAverageBMI").addFact(SCRIPT.SCRIPTCODE,
 					"gender=_this.getFact(':hasGender');\n" + "location=_this.getFact(':hasLocation');\n"
 							+ "location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()",
@@ -310,9 +318,11 @@ class Local_TutorialTests {
 			graph.getThing(":Another12").addFact(RDF.TYPE, Person).addFact(":hasHeight", "1.8", XSD.DOUBLE)
 					.addFact(":hasWeight", "75", XSD.DOUBLE).addFact(":hasLocation", Tideswell).addFact(":hasGender", Female);	
 
+			@SuppressWarnings("unused")
 			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
 					"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
 					SCRIPT.GROOVY);
+			@SuppressWarnings("unused")
 			Thing relativeBMI = graph.getThing(":RelativeBMI").addFact("<http://inova8.com/script/scriptCode>",
 					"double averageBMI = _this.getFact('rdf:type/:averageBMI').doubleValue(); _this.getFact(':hasBMI').doubleValue()/averageBMI;",
 					SCRIPT.GROOVY);
@@ -340,6 +350,7 @@ class Local_TutorialTests {
 
 			assertEquals("22.836332215431028", graph.getThing(":Male_Tideswell").getFact(":averageBMI").stringValue());
 
+			@SuppressWarnings("unused")
 			Thing genderLocationRelativeBMI = graph.getThing(":GenderLocationRelativeBMI").addFact(SCRIPT.SCRIPTCODE,
 					"BMI=_this.getFact(':hasBMI').doubleValue();\n" + "gender=_this.getFact(':hasGender');\n"
 							+ "location=_this.getFact(':hasLocation');\n"
@@ -358,6 +369,7 @@ class Local_TutorialTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	@SuppressWarnings("resource")
 	@Test
 	@Order(5)
 	void test_5() {
@@ -373,6 +385,7 @@ class Local_TutorialTests {
 
 			source.removeGraph("<http://inova8.com/intelligentgraph/example5>");
 			Graph graph = source.addGraph("<http://inova8.com/intelligentgraph/example5>");
+			@SuppressWarnings("unused")
 			Thing Person = graph.getThing(":Person");
 			Thing aPerson = graph.getThing(":aPerson");
 			Thing Measurement = graph.getThing(":Measurement");
@@ -385,6 +398,7 @@ class Local_TutorialTests {
 			graph.getThing(":aPerson_Measurement_6").addFact(RDF.TYPE, Measurement).addFact(":hasHeight", "1.75", XSD.DOUBLE).addFact(":hasWeight", "63", XSD.DOUBLE).addFact(":hasDate", "2021-08-06", XSD.DATE).addFact(":measurementOf", aPerson);
 
 
+			@SuppressWarnings("unused")
 			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
 					"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
 					SCRIPT.GROOVY);
@@ -408,6 +422,7 @@ class Local_TutorialTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	@SuppressWarnings("resource")
 	@Test
 	@Order(6)
 	void test_6() {
@@ -431,8 +446,11 @@ class Local_TutorialTests {
 			
 			Thing Observation = graph.getThing(":Observation").addFact("rdfs:subClassof", RDF.STATEMENT);
 			Thing ObservationType = graph.getThing(":ObservationType");
+			@SuppressWarnings("unused")
 			Thing observationOf = graph.getThing(":observationOf").addFact("rdfs:subPropertyOf", RDF.SUBJECT).addFact("rdfs:domain", Observation).addFact("rdfs:range", Person);
+			@SuppressWarnings("unused")
 			Thing observationType = graph.getThing(":observationType").addFact("rdfs:subPropertyOf", RDF.PREDICATE).addFact("rdfs:domain", Observation).addFact("rdfs:range", ObservationType);
+			@SuppressWarnings("unused")
 			Thing observationMeasurement = graph.getThing(":observationMeasurement").addFact("rdfs:subPropertyOf", RDF.OBJECT).addFact("rdfs:domain", Observation).addFact("rdfs:range", Measurement);
 
 			
@@ -443,6 +461,7 @@ class Local_TutorialTests {
 			Thing Measurement_5=graph.getThing(":aPerson_Observation_5").addFact(RDF.TYPE, Measurement).addFact(":hasHeight", "1.75", XSD.DOUBLE).addFact(":hasWeight", "61", XSD.DOUBLE).addFact(":hasDate", "2021-08-05", XSD.DATE);
 			Thing Measurement_6=graph.getThing(":aPerson_Observation_6").addFact(RDF.TYPE, Measurement).addFact(":hasHeight", "1.75", XSD.DOUBLE).addFact(":hasWeight", "63", XSD.DOUBLE).addFact(":hasDate", "2021-08-06", XSD.DATE);
 
+			@SuppressWarnings("unused")
 			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
 					"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
 					SCRIPT.GROOVY);
@@ -489,6 +508,7 @@ class Local_TutorialTests {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@Test
 	@Order(7)
 	void test_7() {
@@ -591,10 +611,12 @@ class Local_TutorialTests {
 					+ "[http://inova8.com/intelligentgraph/example7/Another4,http://inova8.com/intelligentgraph/example7/hasParent,http://inova8.com/intelligentgraph/example7/Another6,DIRECT]\n"
 					+ "",pathString);
 			
+			@SuppressWarnings("unused")
 			Thing BMI = graph.getThing(":BMI").addFact(SCRIPT.SCRIPTCODE,
 			"height=_this.getFact(':hasHeight').doubleValue(); _this.getFact(':hasWeight').doubleValue()/(height*height)",
 			SCRIPT.GROOVY);
 
+			@SuppressWarnings("unused")
 			Thing familialRelativeBMI = graph.getThing(":FamilialRelativeBMI").addFact(SCRIPT.SCRIPTCODE,
 			"_this.getFact(':hasBMI').doubleValue()/_this.getFacts(':hasParent{0,4}/:hasBMI').average();",
 			SCRIPT.GROOVY);

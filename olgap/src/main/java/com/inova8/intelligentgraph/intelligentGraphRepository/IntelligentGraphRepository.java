@@ -28,18 +28,20 @@ import com.inova8.intelligentgraph.exceptions.ServerException;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathCalc.Prefixes;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.pathql.context.Prefixes;
+import com.inova8.pathql.context.Reifications;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathPatternException;
+import com.inova8.pathql.utilities.Utilities;
 
 import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
@@ -53,7 +55,6 @@ import org.eclipse.rdf4j.repository.contextaware.ContextAwareConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.sail.SailException;
 import org.eclipse.rdf4j.sail.evaluation.SailTripleSource;
 import org.eclipse.rdf4j.model.Resource;
 
@@ -77,12 +78,8 @@ public class IntelligentGraphRepository {
 	private static ConcurrentHashMap<String, Thing> things = new ConcurrentHashMap<String, Thing>();
 	private static ConcurrentHashMap<String, CompiledScript> compiledScripts = new ConcurrentHashMap<String, CompiledScript>();
 	private static ConcurrentHashMap<String, SEEQSource> seeqSources = new ConcurrentHashMap<String, SEEQSource>();
-
-	private Reifications reifications = new Reifications(this);
-	/** The prefixes. */
-	@Deprecated
-	private Prefixes prefixes = new Prefixes();
-	@Deprecated
+	
+	private RepositoryContext repositoryContext = new RepositoryContext();
 	private HashSet<IRI> publicContexts = new HashSet<IRI>();
 	@Deprecated
 	private HashSet<IRI> privateContexts = new HashSet<IRI>();
@@ -92,7 +89,8 @@ public class IntelligentGraphRepository {
 	IntelligentGraphSail sail;
 	private IntelligentGraphConnection intelligentGraphConnection;
 	private static HashMap<Integer, IntelligentGraphRepository> pathQLRepositories = new HashMap<Integer, IntelligentGraphRepository>();
-	private  Boolean prefixesAreLazyLoaded=false;
+	private  Boolean repositoryContextIsLazyLoaded=false;
+	
 	public static IntelligentGraphRepository create(org.eclipse.rdf4j.repository.Repository repository, Resource... contexts) {
 		Integer key = repository.hashCode();
 		if (pathQLRepositories.containsKey(key)) {
@@ -138,13 +136,6 @@ public class IntelligentGraphRepository {
 		}
 	}
 
-	/**
-	 * Instantiates a new path QL repository.
-	 */
-	public IntelligentGraphRepository() {
-		this.modelBuilder = new ModelBuilder();
-	}
-
 	//Used via SPARQL Functions
 	private IntelligentGraphRepository(TripleSource tripleSource) {
 		this.tripleSource = tripleSource;
@@ -162,7 +153,7 @@ public class IntelligentGraphRepository {
 		this.intelligentGraphConnection = intelligentGraphConnection;
 		this.tripleSource = new SailTripleSource(intelligentGraphConnection, true, null);
 		this.modelBuilder = new ModelBuilder();
-		initializePrefixes(intelligentGraphConnection);
+	//	initializePrefixes(intelligentGraphConnection);
 	}
 
 	public IntelligentGraphRepository(org.eclipse.rdf4j.repository.Repository repository, Resource... contexts) {
@@ -171,7 +162,7 @@ public class IntelligentGraphRepository {
 		this.contextAwareConnection = publicContextAwareConnection();
 		this.tripleSource = new RepositoryTripleSource(this.contextAwareConnection);
 		this.modelBuilder = new ModelBuilder();
-		initializePrefixes(contextAwareConnection);
+	//	initializePrefixes(contextAwareConnection);
 	}
 
 	private IntelligentGraphRepository(String serverURL, String repositoryId, Resource... contexts) {
@@ -179,7 +170,7 @@ public class IntelligentGraphRepository {
 		this.contextAwareConnection = publicContextAwareConnection();
 		this.tripleSource = new RepositoryTripleSource(this.contextAwareConnection);
 		this.modelBuilder = new ModelBuilder();
-		initializePrefixes(contextAwareConnection);
+	//	initializePrefixes(contextAwareConnection);
 
 	}
 
@@ -458,113 +449,49 @@ public class IntelligentGraphRepository {
 	}
 
 	public IRI createIRI(String iri) {
-		//	return getTripleSource().getValueFactory().createIRI( iri);
 		return iri(iri);
 	}
 
 	public Prefixes getPrefixes() {
-		if(!prefixesAreLazyLoaded) {
-			if(intelligentGraphConnection!=null)
-				initializePrefixes(intelligentGraphConnection);
-			else if(contextAwareConnection!=null)
-				initializePrefixes(contextAwareConnection);
-		}
-		return prefixes;
-	}
-
-	private void initializePrefixes(IntelligentGraphConnection connection) {
-		if(!connection.isOpen()) {
-			connection = new IntelligentGraphConnection(connection.getIntelligentGraphSail().getConnection(),  connection.getIntelligentGraphSail());
-		}
-		CloseableIteration<? extends Namespace, SailException> namespaces = connection.getNamespaces();
-		while (namespaces.hasNext()) {
-			Namespace namespace = namespaces.next();
-			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
-		}
-
-	}
-
-	private void initializePrefixes(ContextAwareConnection connection)
-			throws RepositoryException, IllegalArgumentException {
-		if(!connection.isOpen()) {
-			//TODO this should be an error or a reconnection
-		}
-		RepositoryResult<Namespace> namespaces = connection.getNamespaces();
-		while (namespaces.hasNext()) {
-			Namespace namespace = namespaces.next();
-			prefixes.put(namespace.getPrefix(), iri(namespace.getName()));
-		}
-
+		return getRepositoryContext().getPrefixes();
 	}
 
 	public IntelligentGraphRepository prefix(String prefix, String IRI) {
-		org.eclipse.rdf4j.model.IRI iri = trimAndCheckIRIString(IRI);
+		org.eclipse.rdf4j.model.IRI iri = Utilities.trimAndCheckIRIString(IRI);
 		if (iri != null) {
-			if (this.getRepository() == null) {
-				//Only used for testing when not actual repository available
-				getPrefixes().put(prefix, iri);
-			} else {
+//			if (this.getRepository() == null) {
+//				//Only used for testing when not actual repository available
+//				getRepositoryContext().getPrefixes().put(prefix, iri);
+//			} else {
 				try {
 					RepositoryConnection connection = this.getRepository().getConnection();
 					connection.setNamespace(prefix, iri.stringValue());
-					getPrefixes().put(prefix, iri);
+					getRepositoryContext().getPrefixes().put(prefix, iri);
 					logger.debug("Added prefix {} for namespace {} ", prefix, iri);
 				} catch (Exception qe) {
 					throw new ServerException(FAILEDTOREMOVEGRAPH_EXCEPTION,
 							String.format("Failed to add prefix/namespace", prefix, iri), qe);
 				}
-			}
+//			}
 		} else {
 			logger.error("Invalid IRI specified. Ensure enclosed in <...> ", IRI);
 		}
 		return this;
 	}
 	public IntelligentGraphRepository prefix(String IRI) {
-		return this.prefix("", IRI);
-
+		return prefix("", IRI);
 	}
 
-	public static IRI trimAndCheckIRIString(String IRI) {
-		return iri(trimIRIString(IRI));
+	public Reifications getReifications() {
+		return getRepositoryContext().getReifications();
 	}
 
-	public static String trimIRIString(String IRI) {
-		IRI = IRI.trim();
-		if (IRI.startsWith("<") && IRI.endsWith(">")) {
-			IRI = IRI.substring(1, IRI.length() - 1);
-			return IRI;
+	public RepositoryContext getRepositoryContext() {
+		if(!repositoryContextIsLazyLoaded) {
+			repositoryContext.initialize(repository.getConnection());
+			repositoryContextIsLazyLoaded=true;
 		}
-		return IRI;
-	}
-
-	public IRI convertQName(String predicateIRI, ConcurrentHashMap<String, IRI> localPrefixes) {
-		predicateIRI = IntelligentGraphRepository.trimIRIString(predicateIRI);
-		String[] predicateIRIParts = predicateIRI.split(":|~");
-		IRI predicate = null;
-		if (predicateIRIParts[0].equals("a")) {
-			predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-		} else if (predicateIRIParts[0].equals("http") || predicateIRIParts[0].equals("urn")) {
-			predicate = iri(predicateIRI);
-		} else {
-			IRI namespace = getNamespace(predicateIRIParts[0], localPrefixes);
-			if (namespace == null) {
-				logger.error("Error identifying namespace of qName {}", predicateIRI);
-			} else {
-				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
-			}
-		}
-		return predicate;
-	}
-
-	private IRI getNamespace(String namespaceString, ConcurrentHashMap<String, IRI> localPrefixes) {
-		IRI namespace;
-		if (localPrefixes != null) {
-			namespace = localPrefixes.get(namespaceString);
-			if (namespace != null)
-				return namespace;
-		}
-		namespace = getPrefixes().get(namespaceString);
-		return namespace;
+		return repositoryContext;
 	}
 
 	public org.eclipse.rdf4j.repository.Repository getRepository() {
@@ -604,7 +531,7 @@ public class IntelligentGraphRepository {
 	}
 
 	public Thing getThing(String iri) throws RecognitionException, PathPatternException {
-		IRI thingIri = PathParser.parseIriRef(this,iri).getIri();
+		IRI thingIri = PathParser.parseIriRef(getRepositoryContext(),iri).getIri();
 		return getThing(thingIri);
 	}
 
@@ -613,7 +540,7 @@ public class IntelligentGraphRepository {
 	}
 
 	public Thing getThing(String iri, CustomQueryOptions customQueryOptions) throws RecognitionException, PathPatternException {
-		IRI thingIri = PathParser.parseIriRef(this,iri).getIri();
+		IRI thingIri = PathParser.parseIriRef(getRepositoryContext(),iri).getIri();
 		return getThing(thingIri, customQueryOptions);
 	}
 
@@ -641,7 +568,7 @@ public class IntelligentGraphRepository {
 		Model result;
 		IRI graphNameIri = null;
 		try {
-			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(getRepositoryContext(), graphName).getIri();
 			result = new LinkedHashModel();
 			((Model) result).add(graphNameIri, SCRIPT.CACHE_DATE_TIME,
 					literal(new Date()), graphNameIri);
@@ -664,7 +591,7 @@ public class IntelligentGraphRepository {
 
 		IRI graphNameIri = null;
 		try {
-			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(getRepositoryContext(), graphName).getIri();
 			@SuppressWarnings("deprecation")
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (!contextExists) {
@@ -684,7 +611,7 @@ public class IntelligentGraphRepository {
 		//RepositoryConnection connection = this.getRepository().getConnection();//.getContextAwareConnection();
 		IRI graphNameIri = null;
 		try(RepositoryConnection connection = this.getRepository().getConnection())  {
-			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(getRepositoryContext(), graphName).getIri();
 			@SuppressWarnings("deprecation")
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (contextExists) {
@@ -716,7 +643,7 @@ public class IntelligentGraphRepository {
 		RepositoryConnection connection = this.getContextAwareConnection();
 		IRI graphNameIri = null;
 		try {
-			graphNameIri = PathParser.parseIriRef(this, graphName).getIri();
+			graphNameIri = PathParser.parseIriRef(getRepositoryContext(), graphName).getIri();
 			Boolean contextExists = connection.getContextIDs().asList().contains(graphNameIri);
 			if (contextExists) {
 				getPublicContexts().remove(graphNameIri);
@@ -772,7 +699,5 @@ public class IntelligentGraphRepository {
 		}
 	}
 
-	public Reifications getReifications() {
-		return reifications;
-	}
+
 }

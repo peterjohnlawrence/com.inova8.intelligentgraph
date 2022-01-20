@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import utilities.Query;
 import org.eclipse.rdf4j.query.Update;
 public class Local_SPARQLTests {
@@ -28,7 +27,6 @@ public class Local_SPARQLTests {
 			conn.setNamespace("", "http://inova8.com/intelligentgraph/example1/");
 			conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 			conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 			
 			Update updateQuery = conn.prepareUpdate(QueryLanguage.SPARQL, 
 					"PREFIX :<http://inova8.com/intelligentgraph/example1/> "

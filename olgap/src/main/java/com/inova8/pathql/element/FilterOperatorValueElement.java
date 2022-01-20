@@ -3,7 +3,7 @@
  */
 package com.inova8.pathql.element;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 import com.inova8.pathql.processor.PathConstants.FilterOperator;
@@ -21,8 +21,8 @@ public class FilterOperatorValueElement extends ValueElement {
 	 *
 	 * @param source the source
 	 */
-	public FilterOperatorValueElement(IntelligentGraphRepository source) {
-		super(source);
+	public FilterOperatorValueElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator =PathConstants.Operator.FILTEROPERATOR;
 	}
 	

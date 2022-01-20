@@ -4,8 +4,6 @@
 package localPathCalc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.antlr.v4.runtime.RecognitionException;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,12 +12,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.pathql.processor.PathPatternException;
-
 import utilities.Query;
 
 /**
@@ -28,9 +21,6 @@ import utilities.Query;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SPARQL_To_TupleExpr {
 
-	/** The source. */
-	private static IntelligentGraphRepository source;
-	
 	/** The conn. */
 	private static RepositoryConnection conn;	
 	private static org.eclipse.rdf4j.repository.Repository workingRep ;
@@ -50,7 +40,7 @@ class SPARQL_To_TupleExpr {
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		conn.setNamespace("rdf","http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		source =  IntelligentGraphRepository.create(workingRep);
+		IntelligentGraphRepository.create(workingRep);
 
 	}
 	@AfterAll

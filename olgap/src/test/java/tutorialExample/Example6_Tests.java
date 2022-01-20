@@ -3,16 +3,11 @@
  */
 package tutorialExample;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
-import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -127,7 +122,7 @@ class Example6_Tests {
 			Thing aPerson = source.getThing(":aPerson");
 
 			Trace trace = aPerson.traceFact(":Observation@:BMIObservation[:hasDate [lt %1]]/:hasBMI",literal(LocalDate.parse("2021-08-03")));
-			assertEquals("   1. Getting facts ':Observation@:BMIObservation[:hasDate [lt %1]]/:hasBMI' of aPerson <http://inova8.com/intelligentgraph/example6/aPerson>\r\n"
+			Query.assertEqualsWOSpaces("   1. Getting facts ':Observation@:BMIObservation[:hasDate [lt %1]]/:hasBMI' of aPerson <http://inova8.com/intelligentgraph/example6/aPerson>\r\n"
 					+ "   2. ...using options: [1=\"2021-08-03\"^^<http://www.w3.org/2001/XMLSchema#date>]\r\n"
 					+ "   3. ...within contexts: [http://default, file://src/test/resources/example6.ttl]\r\n"
 					+ "   4. Returned fact 'http://inova8.com/intelligentgraph/example6/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example6/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", trace.asText());

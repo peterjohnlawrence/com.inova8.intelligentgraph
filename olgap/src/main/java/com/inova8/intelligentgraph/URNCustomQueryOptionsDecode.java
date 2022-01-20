@@ -13,9 +13,9 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.util.Values;
 
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Prefixes;
+import com.inova8.pathql.context.Prefixes;
+import com.inova8.pathql.utilities.Utilities;
 
 import static java.util.stream.Collectors.*;
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -107,7 +107,7 @@ public class URNCustomQueryOptionsDecode {
 		}
 	}
 	public static IRI convertQName(String predicateIRI, ConcurrentHashMap<String, IRI> localPrefixes) {
-		predicateIRI = IntelligentGraphRepository.trimIRIString(predicateIRI);
+		predicateIRI = Utilities.trimIRIString(predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":|~");
 		IRI predicate = null;
 		if (predicateIRIParts[0].equals("http") || predicateIRIParts[0].equals("urn")) {

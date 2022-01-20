@@ -3,11 +3,7 @@
  */
 package tutorialExample;
 
-import static org.eclipse.rdf4j.model.util.Values.literal;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;

@@ -37,7 +37,6 @@ import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Prefixes;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.element.PathElement;
@@ -59,9 +58,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	/** The intelligent graph sail. */
 	private IntelligentGraphSail intelligentGraphSail;
 	
-	/** The prefixes. */
-	private Prefixes prefixes = new Prefixes();
-	//private SimpleValueFactory simpleValueFactory;
 
 	/**
 	 * Instantiates a new intelligent graph connection.
@@ -72,7 +68,6 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	public IntelligentGraphConnection(NotifyingSailConnection wrappedCon, IntelligentGraphSail intelligentGraphSail) {
 		super(wrappedCon);
 		this.intelligentGraphSail= intelligentGraphSail;
-	//	simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 	
 	
@@ -173,10 +168,10 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		super.removeNamespace(prefix);
 	}
 
-	public Prefixes getPrefixes() {
-		return intelligentGraphSail.getPrefixes();
-		
-	}
+//	public Prefixes getPrefixes() {
+//		return  intelligentGraphSail.getPrefixes();
+//		
+//	}
 	public HashSet<IRI> getPublicContexts() {
 		return intelligentGraphSail.getPublicContexts();
 	}
@@ -246,9 +241,9 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		thing.getEvaluationContext().setTracing(true);
 		thing.getEvaluationContext().getTracer().clear();
 		
-		thing.getEvaluationContext().getTracer().traceFacts(thing, pathQLValue,getPrefixes(), contexts);
+		thing.getEvaluationContext().getTracer().traceFacts(thing, pathQLValue,source.getRepositoryContext().getPrefixes(), contexts);
 		String pathQL = toPathQLString(pathQLValue);
-		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
+		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return traceThingFacts(source, thing,pathElement, contexts );
 	}
@@ -257,7 +252,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
 		String pathQL = toPathQLString(pathQLValue);
-		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
+		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return getThingFacts(source, thing,pathElement, contexts );
 	}
@@ -265,7 +260,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
 		String pathQL = toPathQLString(pathQLValue);
-		PathElement pathElement =  PathParser.parsePathPattern(thing, pathQL);
+		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return getThingPaths(source, thing,pathElement, contexts );
 	}
@@ -295,7 +290,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
 		String pathQL = toPathQLString(pathQLValue);
-		PathElement pathElement = PathParser.parsePathPattern(thing, pathQL);
+		PathElement pathElement = PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		deleteThingFacts( modify, source, thing,  pathElement, contexts) ;
 
@@ -348,10 +343,10 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 //	}
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-//	CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+//	CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
 //		pathElement.setCustomQueryOptions(customQueryOptions);
 		TupleExpr tupleExpr = pathTupleExpr.getTupleExpr();
-		SimpleDataset dataset = prepareDataset(pathElement, contexts);
+		SimpleDataset dataset = prepareDataset(pathElement, source,contexts);
 		BindingSet bindings = new QueryBindingSet();
 		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(),dataset, null);
 		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(tupleExpr,bindings);
@@ -360,19 +355,19 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, Integer pathIteration, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-		CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
+		CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
 //		pathElement.setCustomQueryOptions(customQueryOptions);
-		TupleExpr tupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions).getTupleExpr();
-		SimpleDataset dataset = prepareDataset(pathElement, contexts);
+		TupleExpr tupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions).getTupleExpr();
+		SimpleDataset dataset = prepareDataset(pathElement, source, contexts);
 		BindingSet bindings = new QueryBindingSet();
 		EvaluationStrategy evaluationStrategy = new StrictEvaluationStrategy(source.getTripleSource(),dataset, null);
 		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = evaluationStrategy.evaluate(tupleExpr,bindings);
 		return resultsIterator;
 	}
 
-	private SimpleDataset prepareDataset(PathElement pathElement,Resource... contexts)
+	private SimpleDataset prepareDataset(PathElement pathElement,IntelligentGraphRepository source, Resource... contexts)
 			throws IllegalArgumentException {
-		CustomQueryOptions customQueryOptions = prepareCustomQueryOptions(pathElement, contexts);
+		CustomQueryOptions customQueryOptions = prepareCustomQueryOptions(pathElement, source, contexts);
 		SimpleDataset dataset = getDataset(contexts);
 		if(customQueryOptions!=null && !customQueryOptions.isEmpty()) {
 			if(dataset==null)
@@ -383,8 +378,8 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 
 
-	private CustomQueryOptions prepareCustomQueryOptions(PathElement pathElement, Resource... contexts) {
-		CustomQueryOptions customQueryOptions = URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,getPrefixes());
+	private CustomQueryOptions prepareCustomQueryOptions(PathElement pathElement, IntelligentGraphRepository source, Resource... contexts) {
+		CustomQueryOptions customQueryOptions = URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());//TODOgetPrefixes());
 		CustomQueryOptions pathQLCustomQueryOptions = pathElement.getCustomQueryOptions();
 		if( pathQLCustomQueryOptions !=null) {
 			pathQLCustomQueryOptions.addInherited(customQueryOptions);
@@ -449,7 +444,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		queryContext.setAttribute(IntelligentGraphConstants.TUPLEEXPR, tupleExpr);
 		queryContext.setAttribute(IntelligentGraphConstants.INTELLIGENTGRAPHCONNECTION, this);//this.getWrappedConnection());
 		queryContext.setAttribute(IntelligentGraphConstants.DATASET, dataset);
-		queryContext.setAttribute(IntelligentGraphConstants.PREFIXES, prefixes);
+		//queryContext.setAttribute(IntelligentGraphConstants.PREFIXES, prefixes);
 		queryContext.setAttribute(IntelligentGraphConstants.QUERYTYPE, getQueryType() );
 		return new IntelligentGraphEvaluator(super.evaluate(tupleExpr, dataset, bindings, includeInferred) ,queryContext,originalProjectionElemList);
 	}

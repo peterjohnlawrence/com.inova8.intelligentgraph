@@ -21,18 +21,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
-import com.inova8.intelligentgraph.pathQLModel.MatchFact;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
-import com.inova8.intelligentgraph.pathQLResults.MatchResults;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
-import com.inova8.pathql.parser.Match;
-
 import utilities.Query;
 
-@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetFact_Tests {
 
@@ -70,25 +64,25 @@ class Local_GetFact_Tests {
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
 
-	@Test
-	@Order(1)
-	void match_1() {
-
-		try {
-			Match match=new Match(source);
-			MatchResults matchResultsIterator = match.entityMatch("Unit1");
-			while (matchResultsIterator.hasNext()) {
-				MatchFact nextMatch = matchResultsIterator.nextResource();
-				assertEquals(
-						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.4626340866088867]",
-						nextMatch.toString());
-				break;
-			}
-		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
-		}
-	}
+//	@Test
+//	@Order(1)
+//	void match_1() {
+//
+//		try {
+//			Match match=new Match(source);
+//			MatchResults matchResultsIterator = match.entityMatch("Unit1");
+//			while (matchResultsIterator.hasNext()) {
+//				MatchFact nextMatch = matchResultsIterator.nextResource();
+//				assertEquals(
+//						"MatchFact [Fact [Resource[ object=\"Location Unit1\"], predicate=http://www.w3.org/2000/01/rdf-schema#label, subject=http://inova8.com/calc2graph/id/Location_Unit1],snippet=Location <B>Unit1</B>, score=2.4626340866088867]",
+//						nextMatch.toString());
+//				break;
+//			}
+//		} catch (Exception e) {
+//			assertEquals("", e.getMessage());
+//			e.printStackTrace();
+//		}
+//	}
 
 
 	@Test
@@ -561,7 +555,6 @@ class Local_GetFact_Tests {
 	void test_25() {
 
 		try {
-			String averageSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").average();";
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit2"), null);
 			Resource result = _this.getFact(":massThroughput");
 
@@ -726,7 +719,7 @@ class Local_GetFact_Tests {
 			source.removeGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/contextGraph>");
 			Thing myCountry = graph.getThing(":Country1");
-			//TODO myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
+			myCountry.addFact(":time", "_customQueryOptions.get(\"time\") ;", SCRIPT.GROOVY);
 			myCountry.addFact(":time", "42 ;", SCRIPT.GROOVY);
 			Literal time = literal(42);
 	

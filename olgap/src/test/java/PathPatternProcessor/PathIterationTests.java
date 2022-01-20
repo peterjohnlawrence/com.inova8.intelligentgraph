@@ -1,8 +1,6 @@
 package PathPatternProcessor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -10,8 +8,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.parser.PathParser;
@@ -20,11 +17,9 @@ import com.inova8.pathql.parser.PathParser;
 public class PathIterationTests {
 	ArrayList<Integer> spanMin = new ArrayList<Integer>();
 	ArrayList<Integer> spanMax = new ArrayList<Integer>();
-	/** The source. */
-	static IntelligentGraphRepository source;
-	
-	/** The thing. */
-	static Thing thing;
+	/** The repositoryContext. */
+	static RepositoryContext repositoryContext;
+
 
 	/**
 	 * Sets the up before class.
@@ -33,9 +28,8 @@ public class PathIterationTests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		source = new IntelligentGraphRepository();
-		thing = source.getThing( "http://",null);
-		source.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
+		repositoryContext =  new RepositoryContext();
+		repositoryContext.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 
 	}
 	@Test 
@@ -43,7 +37,7 @@ public class PathIterationTests {
 	void test_0() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit{1, 4}");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit{1, 4}");
 			assertEquals ("<http://default/hasProductBatteryLimit>{1,4}" , element.toString());;
 			assertEquals ("{0=1, 1=2, 2=3, 3=4}",element.getIterations().toString());
 			Iterations sortedIterations = element.getIterations().sortByPathLength();
@@ -59,7 +53,7 @@ public class PathIterationTests {
 	void test_2() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit{1, 4}/:massThroughput{1,2}");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit{1, 4}/:massThroughput{1,2}");
 			assertEquals ("<http://default/hasProductBatteryLimit>{1,4} / <http://default/massThroughput>{1,2}" , element.toString());
 			assertEquals ("{0=2, 1=3, 2=3, 3=4, 4=4, 5=5, 6=5, 7=6}",element.getIterations().toString());
 			Iterations sortedIterations = element.getIterations().sortByPathLength();
@@ -76,7 +70,7 @@ public class PathIterationTests {
 	void test_3() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit{1, 2}/:massThroughput{1,2}/:massThroughput{1,2}");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit{1, 2}/:massThroughput{1,2}/:massThroughput{1,2}");
 			assertEquals ("<http://default/hasProductBatteryLimit>{1,2} / <http://default/massThroughput>{1,2} / <http://default/massThroughput>{1,2}" , element.toString());
 			assertEquals ("{0=3, 1=4, 2=4, 3=5, 4=4, 5=5, 6=5, 7=6}",element.getIterations().toString());
 			Iterations sortedIterations = element.getIterations().sortByPathLength();
@@ -93,7 +87,7 @@ public class PathIterationTests {
 	void test_4() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, "((^:hasProductBatteryLimit/:hasUnit){1, 2}/:massThroughput){1,3}");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, "((^:hasProductBatteryLimit/:hasUnit){1, 2}/:massThroughput){1,3}");
 			assertEquals ("((^<http://default/hasProductBatteryLimit> / <http://default/hasUnit>){1,2} / <http://default/massThroughput>){1,3}" , element.toString());
 			assertEquals ("{0=3, 1=5, 2=6, 3=10, 4=9, 5=15}",element.getIterations().toString());
 			Iterations sortedIterations = element.getIterations().sortByPathLength();
@@ -112,7 +106,7 @@ public class PathIterationTests {
 	void test_5() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, ":hasProductBatteryLimit{0, 4}/:massThroughput{1,2}");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasProductBatteryLimit{0, 4}/:massThroughput{1,2}");
 			assertEquals ("<http://default/hasProductBatteryLimit>{0,4} / <http://default/massThroughput>{1,2}" , element.toString());
 			assertEquals ("{0=1, 1=2, 2=2, 3=3, 4=3, 5=4, 6=4, 7=5, 8=5, 9=6}",element.getIterations().toString());
 			Iterations sortedIterations = element.getIterations().sortByPathLength();
@@ -129,7 +123,7 @@ public class PathIterationTests {
 	void test_6() {
 		try {
 
-			PathElement element = PathParser.parsePathPattern(thing, ":hasParent{0,4}/:hasParent[:hasGender :Female]");
+			PathElement element = PathParser.parsePathPattern(repositoryContext, ":hasParent{0,4}/:hasParent[:hasGender :Female]");
 			assertEquals ("<http://default/hasParent>{0,4} / <http://default/hasParent>[<http://default/hasGender> <http://default/Female> ]" , element.toString());
 			assertEquals ("{0=1, 1=2, 2=3, 3=4, 4=5}",element.getIterations().toString());
 			Iterations sortedIterations = element.getIterations().sortByPathLength();

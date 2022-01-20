@@ -12,10 +12,7 @@ import org.eclipse.rdf4j.model.Value;
 
 import com.inova8.intelligentgraph.path.Edge.Direction;
 import com.inova8.intelligentgraph.pathQLResults.FactResults;
-import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
-import com.inova8.pathql.element.PredicateElement;
-
 import static org.eclipse.rdf4j.model.util.Values.iri;
 public class Predicate extends Resource{
 	private static final long serialVersionUID = 1L;
@@ -96,12 +93,6 @@ public class Predicate extends Resource{
 
 	@Override
 	public Resource addFact(String property, String value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResourceResults getFacts(PredicateElement path) {
 		// TODO Auto-generated method stub
 		return null;
 	}

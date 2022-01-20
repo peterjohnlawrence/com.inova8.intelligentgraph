@@ -4,7 +4,6 @@
 package localPathCalc;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathCalc.Trace;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
@@ -30,7 +28,6 @@ import utilities.Query;
 /**
  * The Class ThingTests.
  */
-@SuppressWarnings("deprecation")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetTraceFact_Tests {
 		
@@ -69,6 +66,7 @@ class Local_GetTraceFact_Tests {
 			try {
 				IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 				Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit2"));
+				@SuppressWarnings("unused")
 				Resource result1 = _this.getFact(":volumeFlow");
 				Trace trace = _this.traceFact(":massFlow");
 				_this =source.getThing(iri("http://inova8.com/calc2graph/id/Unit1"));

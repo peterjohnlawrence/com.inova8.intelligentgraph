@@ -4,14 +4,12 @@
 package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.query.algebra.Join;
-import org.eclipse.rdf4j.query.algebra.Projection;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
-import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
-import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.processor.PathConstants;
 import com.inova8.pathql.processor.PathConstants.EdgeCode;
 
@@ -29,8 +27,8 @@ public class SequencePathElement extends PathElement {
 	 * @param source
 	 *            the source
 	 */
-	public SequencePathElement(IntelligentGraphRepository source) {
-		super(source);
+	public SequencePathElement(RepositoryContext repositoryContext) {
+		super(repositoryContext);
 		operator = PathConstants.Operator.SEQUENCE;
 	}
 
@@ -83,8 +81,8 @@ public class SequencePathElement extends PathElement {
 	 * @return the tuple expr
 	 */
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
-		return pathPatternQuery(thing, sourceVariable, predicateVariable,targetVariable, 0,customQueryOptions);
+	public PathTupleExpr pathPatternQuery(Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
+		return pathPatternQuery( sourceVariable, predicateVariable,targetVariable, 0,customQueryOptions);
 	}
 	public Boolean hasNextCardinality(Integer iteration) {
 			
@@ -114,7 +112,7 @@ public class SequencePathElement extends PathElement {
 			return false;
 	 }
 	@Override
-	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable predicateVariable, Variable targetVariable,
+	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		if (sourceVariable == null)	sourceVariable = this.getSourceVariable();
 		if(targetVariable==null)targetVariable = this.getTargetVariable();	
@@ -146,16 +144,16 @@ public class SequencePathElement extends PathElement {
 						intermediateTargetVariable = targetVariable;
 					}
 				}
-				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery(thing, intermediateSourceVariable,predicateVariable,
+				PathTupleExpr leftPattern = getLeftPathElement().pathPatternQuery( intermediateSourceVariable,predicateVariable,
 						intermediateVariable, pathIteration,customQueryOptions);
 				PathTupleExpr rightPattern;
 				if (leftPattern==null){
 					intermediateVariable.setValue(intermediateSourceVariable.getValue());
 					//intermediateVariable.setName(intermediateSourceVariable.getName());
-					rightPattern = getRightPathElement().pathPatternQuery(thing, intermediateVariable, predicateVariable,intermediateTargetVariable,
+					rightPattern = getRightPathElement().pathPatternQuery(intermediateVariable, predicateVariable,intermediateTargetVariable,
 							pathIteration,customQueryOptions);
 				}else {
-					rightPattern = getRightPathElement().pathPatternQuery(thing, leftPattern.getStatementBinding().getTargetVariable(), predicateVariable, intermediateTargetVariable,
+					rightPattern = getRightPathElement().pathPatternQuery( leftPattern.getStatementBinding().getTargetVariable(), predicateVariable, intermediateTargetVariable,
 							pathIteration,customQueryOptions);
 				}
 				

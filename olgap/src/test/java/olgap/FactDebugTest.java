@@ -35,7 +35,7 @@ public class FactDebugTest extends OlgapTest{
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		File dataDir = new File("src/test/resources/datadir/");
+		File dataDir = new File("src/test/resources/datadir/olgap/");
 		FileUtils.deleteDirectory(dataDir);
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(new NativeStore(dataDir));
 

@@ -12,19 +12,13 @@ import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.EvaluationStack;
 import com.inova8.intelligentgraph.pathCalc.Tracer;
 import com.inova8.intelligentgraph.pathQLResults.ResourceResults;
-import com.inova8.pathql.element.PredicateElement;
 import com.inova8.pathql.processor.PathPatternException;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 import org.eclipse.rdf4j.model.Value;
 
-import static org.eclipse.rdf4j.model.util.Values.iri;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.xml.datatype.XMLGregorianCalendar;
 
 public abstract class Resource implements Value {
@@ -38,7 +32,7 @@ public abstract class Resource implements Value {
 
 	protected EvaluationContext evaluationContext;
 
-	protected ConcurrentHashMap<String, IRI> prefixes = new ConcurrentHashMap<String, IRI>();
+//	protected ConcurrentHashMap<String, IRI> prefixes = new ConcurrentHashMap<String, IRI>();
 
 	private IntelligentGraphRepository source;
 
@@ -226,8 +220,6 @@ public abstract class Resource implements Value {
 
 	public abstract ResourceResults getFacts(String predicatePattern, Value... bindValues) throws PathPatternException;
 
-	public abstract ResourceResults getFacts(PredicateElement path);
-
 	public com.inova8.intelligentgraph.pathQLModel.Resource getSignal(String signal) {
 		return null;
 	}
@@ -313,41 +305,41 @@ public abstract class Resource implements Value {
 			return (XMLGregorianCalendar) null;
 	}
 
-	@Deprecated
-	public IRI convertQName(String predicateIRI) {
-		predicateIRI = IntelligentGraphRepository.trimIRIString(predicateIRI);
-		String[] predicateIRIParts = predicateIRI.split(":");
-		IRI predicate = null;
-		if (predicateIRIParts[0].equals("a")) {
-			predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-		} else if (predicateIRIParts[0].equals("http") || predicateIRIParts[0].equals("urn")) {
-			predicate = iri(predicateIRI);
-		} else {
-			IRI namespace = getNamespace(predicateIRIParts[0]);
-			if (namespace == null) {
-				logger.error(String.format("Error identifying namespace of qName %s", predicateIRI));
-				this.getEvaluationContext().getTracer().traceQNameError(predicateIRI);
-				//	addTrace(message);
-			} else {
-				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
-			}
-		}
-		return predicate;
-	}
+//	@Deprecated
+//	public IRI convertQName(String predicateIRI) {
+//		predicateIRI = Utilities.trimIRIString(predicateIRI);
+//		String[] predicateIRIParts = predicateIRI.split(":");
+//		IRI predicate = null;
+//		if (predicateIRIParts[0].equals("a")) {
+//			predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+//		} else if (predicateIRIParts[0].equals("http") || predicateIRIParts[0].equals("urn")) {
+//			predicate = iri(predicateIRI);
+//		} else {
+//			IRI namespace = getNamespace(predicateIRIParts[0]);
+//			if (namespace == null) {
+//				logger.error(String.format("Error identifying namespace of qName %s", predicateIRI));
+//				this.getEvaluationContext().getTracer().traceQNameError(predicateIRI);
+//				//	addTrace(message);
+//			} else {
+//				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
+//			}
+//		}
+//		return predicate;
+//	}
 
-	@Deprecated
-	private IRI getNamespace(String namespaceString) {
-		IRI namespace = getPrefixes().get(namespaceString);
-		return namespace;
-	}
+//	@Deprecated
+//	private IRI getNamespace(String namespaceString) {
+//		IRI namespace = getPrefixes().get(namespaceString);
+//		return namespace;
+//	}
 
-	@Deprecated
-	public ConcurrentHashMap<String, IRI> getPrefixes() {
-		if (this.getEvaluationContext() != null)
-			return this.getEvaluationContext().getPrefixes();
-		else
-			return null;
-	}
+//	@Deprecated
+//	public Prefixes getPrefixes() {
+//		if (this.getEvaluationContext() != null)
+//			return this.getEvaluationContext().getPrefixes();
+//		else
+//			return null;
+//	}
 
 	public Value getSuperValue() {
 		return superValue;

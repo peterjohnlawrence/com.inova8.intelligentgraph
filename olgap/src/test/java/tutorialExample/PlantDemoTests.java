@@ -4,18 +4,10 @@
 package tutorialExample;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.Update;
-import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,8 +15,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.python.jline.internal.Log;
-
 import com.inova8.intelligentgraph.intelligentGraphRepository.*;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.vocabulary.*;
@@ -37,8 +27,6 @@ import com.inova8.intelligentgraph.pathQLModel.*;
 //import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
-import static org.eclipse.rdf4j.model.util.Values.iri;
-
 import utilities.Query;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -89,6 +77,7 @@ class PlantDemoTests {
 			unit4.addFact(":hasProduct", product42.addFact(":hasVolumeFlow", "34.0",XSD.DOUBLE).addFact(":hasDensity", "0.91",XSD.DOUBLE));
 			unit4.addFact(":hasProduct", flare41.addFact(":hasVolumeFlow", "12.4",XSD.DOUBLE).addFact(":hasDensity", "0.10",XSD.DOUBLE));
 			
+			@SuppressWarnings("unused")
 			Thing massFlow = graph.getThing(":MassFlow").addFact("<http://inova8.com/script/scriptCode>",
 					"_this.getFact(':hasVolumeFlow').doubleValue()* _this.getFact(':hasDensity').doubleValue();",
 					SCRIPT.GROOVY); 
@@ -109,6 +98,7 @@ class PlantDemoTests {
 			assertEquals(-1.3989999999999938,unit4.getFact(":massBalance").doubleValue());
 			assertEquals(-0.029744440192201255,unit4.getFact(":massBalanceRatio").doubleValue());
 
+			@SuppressWarnings("unused")
 			Thing massYield = graph.getThing(":MassYield").addFact("<http://inova8.com/script/scriptCode>",
 					"_this.getFact(':hasMassFlow').doubleValue()/ _this.getFact('^:hasProduct/:totalProduction').doubleValue();",
 					SCRIPT.GROOVY);
@@ -143,6 +133,7 @@ class PlantDemoTests {
 				unit4.addFact(":hasProduct", product42.addFact(":hasVolumeFlow", "_this.getSignal(\"<SEEQ://localhost:34216/api/signals/FF64D48B-B680-43E2-878F-17EA0E8DA3AA>\", _customQueryOptions).doubleValue()",SCRIPT.GROOVY).addFact(":hasDensity", "0.91",XSD.DOUBLE));
 				unit4.addFact(":hasProduct", flare41.addFact(":hasVolumeFlow", "_this.getSignal(\"<SEEQ://localhost:34216/api/signals/88A59116-DA7E-467E-B83F-7D2E130ED64D>\", _customQueryOptions).doubleValue()",SCRIPT.GROOVY).addFact(":hasDensity", "0.10",XSD.DOUBLE));
 				
+				@SuppressWarnings("unused")
 				Thing massFlow = graph.getThing(":MassFlow").addFact("<http://inova8.com/script/scriptCode>",
 						"_this.getFact(':hasVolumeFlow', _customQueryOptions).doubleValue()* _this.getFact(':hasDensity', _customQueryOptions).doubleValue();",
 						SCRIPT.GROOVY); 
@@ -167,6 +158,7 @@ class PlantDemoTests {
 				assertEquals(0.38576433333333426,unit4.getFact(":massBalance", customQueryOptions).doubleValue());
 				assertEquals(0.010609200807818594,unit4.getFact(":massBalanceRatio", customQueryOptions).doubleValue());
 
+				@SuppressWarnings("unused")
 				Thing massYield = graph.getThing(":MassYield").addFact("<http://inova8.com/script/scriptCode>",
 						"_this.getFact(':hasMassFlow', _customQueryOptions).doubleValue()/ _this.getFact('^:hasProduct/:totalProduction', _customQueryOptions).doubleValue();",
 						SCRIPT.GROOVY);
