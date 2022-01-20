@@ -1,11 +1,9 @@
-package com.inova8.intelligentgraph;
+package com.inova8.intelligentgraph.utilities;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
@@ -21,7 +19,7 @@ import static java.util.stream.Collectors.*;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
-public class URNCustomQueryOptionsDecode {
+public class CustomQueryOption {
 	public static CustomQueryOptions getCustomQueryOptions(org.eclipse.rdf4j.model.Resource[] contexts, Prefixes prefixes) {
 		CustomQueryOptions customQueryOptions= new CustomQueryOptions();
 		if(contexts!=null) {
@@ -33,7 +31,7 @@ public class URNCustomQueryOptionsDecode {
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
-					customQueryOptions = URNCustomQueryOptionsDecode.splitQuery(queryString,prefixes);
+					customQueryOptions = CustomQueryOption.splitQuery(queryString,prefixes);
 					
 					return customQueryOptions;
 				}
@@ -56,7 +54,7 @@ public class URNCustomQueryOptionsDecode {
 		else 
 			return coreContexts;
 	}
-	public static CustomQueryOptions splitQuery(String query,Prefixes prefixes) {
+	private static CustomQueryOptions splitQuery(String query,Prefixes prefixes) {
 		if (query == null || query.isEmpty()) {
 			return null;
 		}
@@ -69,7 +67,7 @@ public class URNCustomQueryOptionsDecode {
 		return customQueryOptions;
 	}
 
-	public static Pair<String, Value> splitQueryParameter(String parameter,Prefixes prefixes) {
+	private static Pair<String, Value> splitQueryParameter(String parameter,Prefixes prefixes) {
 		final String enc = "UTF-8";
 		List<String> keyValue = Arrays.stream(parameter.split("=")).map(e -> {
 			try {
@@ -106,7 +104,7 @@ public class URNCustomQueryOptionsDecode {
 			return new Pair<String,Value>(keyValue.get(0), null);
 		}
 	}
-	public static IRI convertQName(String predicateIRI, ConcurrentHashMap<String, IRI> localPrefixes) {
+	private static IRI convertQName(String predicateIRI, Prefixes localPrefixes) {
 		predicateIRI = Utilities.trimIRIString(predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":|~");
 		IRI predicate = null;
@@ -132,7 +130,7 @@ public class URNCustomQueryOptionsDecode {
 	 *            the local prefixes
 	 * @return the namespace
 	 */
-	private static IRI getNamespace(String namespaceString, ConcurrentHashMap<String, IRI> localPrefixes) {
+	private static IRI getNamespace(String namespaceString, Prefixes  localPrefixes) {
 		IRI namespace = null;
 		if (localPrefixes != null) {
 			namespace = localPrefixes.get(namespaceString);
@@ -161,7 +159,7 @@ public class URNCustomQueryOptionsDecode {
 	 * @param <V>
 	 *            second element
 	 */
-	public static class Pair<U, V> {
+	private static class Pair<U, V> {
 		U a;
 		V b;
 
@@ -170,10 +168,12 @@ public class URNCustomQueryOptionsDecode {
 			this.b = v;
 		}
 
+		@SuppressWarnings("unused")
 		public U get0() {
 			return a;
 		}
 
+		@SuppressWarnings("unused")
 		public V get1() {
 			return b;
 		}

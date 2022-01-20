@@ -38,6 +38,7 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.element.PredicateElement;
@@ -355,7 +356,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
 	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, Integer pathIteration, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
-		CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
+		CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
 //		pathElement.setCustomQueryOptions(customQueryOptions);
 		TupleExpr tupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions).getTupleExpr();
 		SimpleDataset dataset = prepareDataset(pathElement, source, contexts);
@@ -379,7 +380,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
 
 	private CustomQueryOptions prepareCustomQueryOptions(PathElement pathElement, IntelligentGraphRepository source, Resource... contexts) {
-		CustomQueryOptions customQueryOptions = URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());//TODOgetPrefixes());
+		CustomQueryOptions customQueryOptions = CustomQueryOption.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());//TODOgetPrefixes());
 		CustomQueryOptions pathQLCustomQueryOptions = pathElement.getCustomQueryOptions();
 		if( pathQLCustomQueryOptions !=null) {
 			pathQLCustomQueryOptions.addInherited(customQueryOptions);

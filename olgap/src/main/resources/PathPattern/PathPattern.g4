@@ -57,6 +57,9 @@
 */	
 
 grammar				PathPattern;
+@header {
+package com.inova8.pathql.pathPattern;
+}
 // PARSER RULES
 queryString 		:	pathPattern queryOptions? EOF ;
 queryOptions 		:	( queryOption )+;

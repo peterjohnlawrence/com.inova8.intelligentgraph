@@ -23,6 +23,7 @@ import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
@@ -74,7 +75,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 			return true;
 		}else {		
 			while(pathIteration < this.sortedIterations.size() ) {
-				CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
+				CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
 				pathTupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions);
 				pathIteration ++;
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr,contexts);

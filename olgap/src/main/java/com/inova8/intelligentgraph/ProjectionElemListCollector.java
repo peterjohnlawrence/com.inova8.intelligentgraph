@@ -13,7 +13,7 @@ import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
 /**
  * The Class ProjectionElemListCollector.
  */
-public class ProjectionElemListCollector extends AbstractQueryModelVisitor<RuntimeException> {
+class ProjectionElemListCollector extends AbstractQueryModelVisitor<RuntimeException> {
 
 	/**
 	 * Process.

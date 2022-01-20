@@ -12,13 +12,13 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 
-import com.inova8.intelligentgraph.URNCustomQueryOptionsDecode;
 import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.path.PathBinding;
 
 import com.inova8.intelligentgraph.pathCalc.Tracer;
 import com.inova8.intelligentgraph.pathQLModel.Resource;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 import com.inova8.pathql.context.Prefixes;
 import com.inova8.pathql.element.PredicateElement;
 
@@ -230,10 +230,10 @@ public class Tracer {
 		
 		addTrace(String.format("Getting facts  '%s' of %s",
 				toHTML(pathQLValue.stringValue()), addIRI(thing.getSuperValue())));
-		CustomQueryOptions customQueryOptions = URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,prefixes);
+		CustomQueryOptions customQueryOptions = CustomQueryOption.getCustomQueryOptions(contexts,prefixes);
 		
 		if(!customQueryOptions.isEmpty()) addTrace(String.format("...using options: [%s]", toHTML(customQueryOptions.toString())));
-		ArrayList<org.eclipse.rdf4j.model.Resource> coreContexts = URNCustomQueryOptionsDecode.getCoreContexts(contexts);
+		ArrayList<org.eclipse.rdf4j.model.Resource> coreContexts = CustomQueryOption.getCoreContexts(contexts);
 		if(!coreContexts.isEmpty())addTrace(String.format("...within contexts: %s",coreContexts.toString()));
 	}
 	public void traceSeeking(Thing thing, PredicateElement predicateElement, CustomQueryOptions customQueryOptions) {

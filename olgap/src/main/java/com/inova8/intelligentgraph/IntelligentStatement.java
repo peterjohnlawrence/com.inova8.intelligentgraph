@@ -14,6 +14,7 @@ import com.inova8.intelligentgraph.pathCalc.CustomQueryOptions;
 import com.inova8.intelligentgraph.pathCalc.EvaluationContext;
 import com.inova8.intelligentgraph.pathCalc.Evaluator;
 import com.inova8.intelligentgraph.pathQLModel.Thing;
+import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 
 public class IntelligentStatement extends ContextStatement {
 
@@ -47,7 +48,7 @@ public class IntelligentStatement extends ContextStatement {
 				SimpleLiteral literalValue = (SimpleLiteral)(contextStatement.getObject());
 				if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
 					Thing subjectThing = Thing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
-					CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getRepositoryContext().getPrefixes());
+					CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getRepositoryContext().getPrefixes());
 					 try {
 						 com.inova8.intelligentgraph.pathQLModel.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
 						 return fact.getSuperValue();

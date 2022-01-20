@@ -18,11 +18,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.inova8.pathql.context.RepositoryContext;
 import com.inova8.pathql.element.PathElement;
+import com.inova8.pathql.pathPattern.PathPatternLexer;
+import com.inova8.pathql.pathPattern.PathPatternParser;
+import com.inova8.pathql.pathPattern.PathPatternParser.QueryStringContext;
 import com.inova8.pathql.processor.PathPatternVisitor;
-
-import PathPattern.PathPatternLexer;
-import PathPattern.PathPatternParser;
-import PathPattern.PathPatternParser.QueryStringContext;
 
 /**
  * The Class PathPatternParserTests.
