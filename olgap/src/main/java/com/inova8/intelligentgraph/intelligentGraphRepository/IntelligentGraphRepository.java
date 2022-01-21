@@ -378,7 +378,9 @@ public class IntelligentGraphRepository {
 			}
 		}
 	}
-
+	public void clearRepositoryContext() {
+		this.repositoryContextIsLazyLoaded=false;		
+	}
 	public void clearCache(Value... args) {
 
 		if (this.getRepository() != null) {

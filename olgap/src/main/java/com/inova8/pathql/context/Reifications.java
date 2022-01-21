@@ -181,13 +181,15 @@ public class Reifications {
 					}
 				}
 			}
-			initializedReification++;
-			initializedReifications.append("<").append(((IRI) reificationType).stringValue()).append("> ");
-			ReificationType newReificationType = new ReificationType((org.eclipse.rdf4j.model.Resource) reificationType,
-					reificationSubject, reificationPredicate, reificationObject, reificationIsSubjectOf,
-					reificationIsPredicateOf, reificationIsObjectOf);
-			reificationTypes.put(((IRI) reificationType).stringValue(), newReificationType);
-			predicateReificationTypes.put(((IRI) reificationPredicate).stringValue(), newReificationType);
+			if( !(reificationType==null || ((reificationSubject==null) && (reificationIsSubjectOf==null) ) || ((reificationObject==null) && (reificationIsObjectOf==null) ) ||((reificationPredicate==null) && (reificationIsPredicateOf==null)) )) {
+				initializedReification++;
+				initializedReifications.append("<").append(((IRI) reificationType).stringValue()).append("> ");
+				ReificationType newReificationType = new ReificationType((org.eclipse.rdf4j.model.Resource) reificationType,
+						reificationSubject, reificationPredicate, reificationObject, reificationIsSubjectOf,
+						reificationIsPredicateOf, reificationIsObjectOf);
+				reificationTypes.put(((IRI) reificationType).stringValue(), newReificationType);
+				predicateReificationTypes.put(((IRI) reificationPredicate).stringValue(), newReificationType);
+			}
 		}
 		reificationsAreLazyLoaded = true;
 		logger.debug(initializedReification + initializedReifications.toString());

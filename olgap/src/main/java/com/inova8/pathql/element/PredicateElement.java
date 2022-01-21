@@ -12,6 +12,7 @@ import org.eclipse.rdf4j.query.algebra.Compare;
 import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.exceptions.QueryException;
 import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
@@ -133,18 +134,6 @@ public class PredicateElement extends PathElement {
 				.append(getCardinality(iteration))//cardinality)
 				.append(",").append(getMaxCardinality()).append("}").toString();
 	}
-//	public Boolean hasNext() {
-//		if((getPathShare() + getMinimumPathLength()) <= getMaximumPathLength())
-//			return true;
-//		else
-//			return false;	
-//	}
-//	public Boolean canIncrementMore(){
-//		return ((getPathShare() + getMinCardinality()) < getMaxCardinality());
-//	}
-//	public Boolean canDecrementMore(){
-//		return ( getPathShare() > 0 );
-//	}
 
 	/**
 	 * Sets the checks if is inverse of.
@@ -629,10 +618,13 @@ public class PredicateElement extends PathElement {
 		Variable predicateVariable = intermediatePredicateVariable;//getPredicateVariable();
 		IRI subject = getReifications().getReificationSubject(reification);
 		IRI isSubjectOf = getReifications().getReificationIsSubjectOf(reification);
+		if(subject==null && isSubjectOf==null) throw new QueryException("Undefined Reification", "No subject/isSubjectOf for reification " + reification.stringValue()) ;
 		IRI property = getReifications().getReificationPredicate(reification);
 		IRI isPropertyOf = getReifications().getReificationIsPredicateOf(reification);
+		if(property==null && isPropertyOf==null) throw new QueryException("Undefined Reification","No property/isPropertyOf for reification " + reification.stringValue()) ;
 		IRI object = getReifications().getReificationObject(reification);
 		IRI isObjectOf = getReifications().getReificationIsObjectOf(reification);
+		if(object==null && isObjectOf==null) throw new QueryException("Undefined Reification","No object/isObjectOf for reification " + reification.stringValue()) ;
 		Variable subjectVariable = new Variable("subject" + getExitIndex(),subject);
 		Variable isSubjectOfVariable = new Variable("isSubjectOf" +  getExitIndex(),isSubjectOf);
 		Variable propertyVariable = new Variable("property" +   getExitIndex(),property);

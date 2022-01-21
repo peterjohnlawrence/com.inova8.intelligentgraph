@@ -479,7 +479,7 @@ class Local_TutorialTests {
 			graph.getThing(":aPerson_Observation_6").addFact(RDF.TYPE, Observation).addFact(":observationMeasurement", Measurement_6).addFact(":observationType", BMIObservation).addFact(":observationOf", aPerson);
 
 			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]",
-					graph.getThing(":aPerson").getFacts(":Observation@:BMIObservation/:hasBMI").toString());
+  					graph.getThing(":aPerson").getFacts(":Observation@:BMIObservation/:hasBMI").toString());
 			
 			assertEquals("22.03856749311295",
 					graph.getThing(":aPerson").getFact(":Observation@:BMIObservation[:hasDate %1]/:hasBMI",

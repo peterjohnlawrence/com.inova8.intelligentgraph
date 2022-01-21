@@ -6,10 +6,15 @@ import org.eclipse.rdf4j.model.IRI;
 
 public class PATHQL {
 
-
 	private static final String PATH_EDGESTRING = "path.Edge";
 
 	public static final String NAMESPACE = "http://inova8.com/pathql/";
+	public static final String addFact =NAMESPACE+"addFact";
+	public static final IRI ADDFACT = iri(addFact);
+	public static final String removeFact =NAMESPACE+"removeFact";
+	public static final IRI REMOVEFACT = iri(removeFact);
+	public static final String removeFacts =NAMESPACE+"removeFacts";
+	public static final IRI REMOVEFACTS = iri(removeFacts);
 	public static final String getFact =NAMESPACE+"getFact";
 	public static final IRI GETFACT = iri(getFact);
 	public static final String getFacts = NAMESPACE+"getFacts";

@@ -9,6 +9,8 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,11 +46,7 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.results.ResourceStatementResults;
 import com.inova8.intelligentgraph.sail.FactCache;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
-import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
-import com.inova8.pathql.context.ReificationType;
-import com.inova8.pathql.element.PredicateElement;
-import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathPatternException;
 import com.inova8.pathql.utilities.Utilities;
 
@@ -58,6 +56,7 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
+import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -587,21 +586,12 @@ public class Thing extends Resource {
 	}
 
 	public void deleteFacts(String predicatePattern) throws Exception {		
-		//org.eclipse.rdf4j.model.Resource[] contextArray = this.getEvaluationContext().getContexts(); 
 		this.getSource().getRepository().getConnection().remove(this.getIRI(),
-							PATHQL.GETFACTS, literal(predicatePattern), this.getGraphName());
+							PATHQL.REMOVEFACTS, literal(predicatePattern), this.getGraphName());
 	}
 
 
-	public Thing addFact(String property, String value, IRI dataType) {
-		try {
-			Literal literal = literal(value, dataType);
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource().getRepositoryContext(), property);
-			addFact(predicateElement,literal );
-		} catch (Exception e) {
-		}
-		return this;
-	}
+
 	public Thing addFact(IRI property, String value, IRI dataType ) {
 		Literal literal = literal(value, dataType);
 		addFact(property,literal);
@@ -618,70 +608,39 @@ public class Thing extends Resource {
 			default:
 				connection.add(this.getIRI(), property, value, this.getGraphName());
 		}		
-		//IntelligentGraphRepository.clearCaches();
 		return this;
 	}
-	public Thing addFact(String property, Value value) {
-		Validate.notNull(property);
-		Validate.notNull(value);
+	public Thing addFact(String pathql, String value, IRI dataType) {		
+		addFact(pathql,literal(value, dataType));
+		return this;
+	}
+
+	public Thing addFact(String pathql, Value value) {
+
 		try {
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource().getRepositoryContext(), property);
-			switch(value.getClass().getSimpleName() ) {
+
+			IRI predicate = iri(
+					PATHQL.addFact + "?pathQL=" + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
+			switch (value.getClass().getSimpleName()) {
 			case "Thing":
-				addFact(predicateElement,((Thing) value).getIRI() );
+
+				this.getSource().getRepository().getConnection().add(this.getIRI(), predicate, ((Thing) value).getIRI(),
+						this.getGraphName());
 				break;
 			default:
-				addFact(predicateElement,value );
-		}
-			
-		} catch (Exception e) {
-
-		}		
-		
-		return this;
-	}
-	public Thing addFact(String property, String value) {
-		Validate.notNull(property);
-		Validate.notNull(value);
-		try {
-			Literal literal = literal(value);
-			PredicateElement predicateElement = PathParser.parsePredicate(getSource().getRepositoryContext(), property);
-			addFact(predicateElement,literal );
-		} catch (Exception e) {
-
-		}
-		return this;
-
-	}
-
-	private void addFact( PredicateElement predicateElement,Value value) throws RepositoryException {
-		RepositoryConnection connection = this.getSource().getContextAwareConnection();
-		if (predicateElement.getIsReified()) {
-			ReificationType reificationType = this.getSource().getRepositoryContext().getReificationTypes().get(predicateElement.getReification().stringValue());
-			if (reificationType != null) {
-				IRI reification = iri(
-						reificationType.getReificationType().stringValue() + "/" + this.getIRI().hashCode() + "."
-								+ predicateElement.getPredicate().hashCode() + "." + value.hashCode());
-				connection.add(reification, RDF.TYPE, predicateElement.getReification(),
+				this.getSource().getRepository().getConnection().add(this.getIRI(), predicate, value,
 						this.getGraphName());
-				connection.add(reification, reificationType.getReificationSubject(), this.getIRI(),
-						this.getGraphName());
-				connection.add(reification, reificationType.getReificationPredicate(), predicateElement.getPredicate(),
-						this.getGraphName());
-				connection.add(reification, reificationType.getReificationObject(), value,
-						this.getGraphName());
-			} else {
-				logger.error("Reified type not supported:" + predicateElement.toString());
 			}
-
-		} else {
-			IRI propertyIri = predicateElement.getPredicate();
-			
-			connection.add(this.getIRI(), propertyIri, value, this.getGraphName());
+		} catch (Exception e) {
 		}
-		//Since changed the database, we need to xclear any cache values.
-		//IntelligentGraphRepository.clearCaches();
+
+		return this;
 	}
+	public Thing addFact(String pathql, String value) {		
+		addFact(pathql,value,XSD.STRING);
+		return this;
+	}
+
 
 	/**
 	 * Gets the iri.
@@ -734,7 +693,8 @@ public class Thing extends Resource {
 		return dataset;
 	}
 	public Thing getThing(String thing) throws RecognitionException, PathPatternException {
-		IRI thingIri = PathParser.parseIriRef( this.getSource().getRepositoryContext(),thing).getIri();
+		//IRI thingIri = PathParser.parseIriRef( this.getSource().getRepositoryContext(),thing).getIri();
+		IRI thingIri = getSource().getRepositoryContext().convertQName(thing);
 		return create(this.getSource(), thingIri,this.getEvaluationContext());
 	}
 
