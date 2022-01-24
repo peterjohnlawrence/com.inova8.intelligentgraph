@@ -16,7 +16,7 @@ import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.path.StatementBinding;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
@@ -31,7 +31,7 @@ import java.net.URISyntaxException;
 
 public  class IntelligentStatementResults extends AbstractCloseableIteration< IntelligentStatement, SailException> {
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
-	Thing thing;
+	EvaluatorThing thing;
 	PathElement pathElement;
 	Iterations sortedIterations;
 	private Integer pathIteration=0;
@@ -46,7 +46,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	private final Boolean trace;
 	private PathTupleExpr pathTupleExpr;
 
-	public IntelligentStatementResults( IntelligentGraphRepository source, Thing thing,
+	public IntelligentStatementResults( IntelligentGraphRepository source, EvaluatorThing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
 		this.resultsIterator=null;
 		this.source=source;
@@ -63,7 +63,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 
-	public IntelligentStatementResults( IntelligentGraphRepository source, Thing thing,
+	public IntelligentStatementResults( IntelligentGraphRepository source, EvaluatorThing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=null;
 		this.source=source;

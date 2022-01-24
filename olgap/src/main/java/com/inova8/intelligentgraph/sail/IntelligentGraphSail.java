@@ -19,12 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
-import com.inova8.intelligentgraph.model.Thing;
+
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 
 public class IntelligentGraphSail extends NotifyingSailWrapper {
-	protected final Logger logger = LoggerFactory.getLogger(Thing.class);	
+	protected final Logger logger = LoggerFactory.getLogger(IntelligentGraphSail.class);	
 	public enum ResponseType { 
  SCRIPT, 
  TRACE, 
@@ -113,12 +113,7 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 		}
 		return publicContexts;
 	}
-//	public Prefixes getPrefixes() {
-//		if(!prefixesAreLazyLoaded) {
-//			initializePrefixes();
-//		}
-//		return prefixes;
-//	}
+
 	@Override
 	public void initialize() throws SailException {
 		super.initialize();

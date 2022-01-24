@@ -16,7 +16,7 @@ import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
@@ -85,7 +85,7 @@ public class FactDebug extends Evaluator implements Function {
 				CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 				evaluationContext.setTracing(true);
-				Thing subjectThing = Thing.create(source, subject, evaluationContext);
+				EvaluatorThing subjectThing = EvaluatorThing.create(source, subject, evaluationContext);
 				subjectThing.getFact(predicate,//new PredicateElement(source, predicate),
 						scriptLiteral,customQueryOptions);
 				logger.debug("Trace\r\n"+evaluationContext.getTrace());

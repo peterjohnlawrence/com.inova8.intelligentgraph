@@ -11,18 +11,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-
-import javax.script.CompiledScript;
 import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.antlr.v4.runtime.RecognitionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,20 +24,17 @@ import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.context.Trace;
-import com.inova8.intelligentgraph.exceptions.CircularReferenceException;
 import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.exceptions.NullValueReturnedException;
 import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.intelligentGraphRepository.SEEQSource;
-import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.NullPath;
 import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.results.PathResults;
 import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.results.ResourceStatementResults;
-import com.inova8.intelligentgraph.sail.FactCache;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.processor.PathPatternException;
@@ -55,7 +45,6 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
@@ -66,44 +55,50 @@ import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
 public class Thing extends Resource {
 
-
 	private static final long serialVersionUID = 1L;
 	/** The logger. */
 	protected final Logger logger = LoggerFactory.getLogger(Thing.class);
-	/** The cached resources. */
-	private HashMap<String, Resource> cachedResources;
-	private  IRI graphName;
+	private IRI graphName;
+
 	public Thing(org.eclipse.rdf4j.model.Value superValue) {
 		super(superValue);
 	}
+
 	public static Thing create(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
-		return Thing.create( source,  null, superValue,	 evaluationContext);
+		return Thing.create(source, null, superValue, evaluationContext);
 	}
+
 	@SuppressWarnings("deprecation")
-	public static Thing create(IntelligentGraphRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
-			EvaluationContext evaluationContext) {
+	public static Thing create(IntelligentGraphRepository source, IRI graphIri,
+			org.eclipse.rdf4j.model.Value superValue, EvaluationContext evaluationContext) {
 		Thing thing;
 
 		String graphThingKey = superValue.stringValue();//graphIri.stringValue()+"~"+ superValue.stringValue();
 		if (superValue != null && source != null && source.getThings().containsKey(graphThingKey)) {
 			thing = source.getThings().get(graphThingKey);
 			thing.setSource(source);
-			if(evaluationContext!=null) {
+			if (evaluationContext != null) {
 				//if(thing.evaluationContext.getPrefixes()==null || thing.evaluationContext.getPrefixes().isEmpty())thing.evaluationContext.setPrefixes(evaluationContext.getPrefixes());
-				if(evaluationContext.getCustomQueryOptions()!=null && !evaluationContext.getCustomQueryOptions().isEmpty())thing.evaluationContext.setCustomQueryOptions(evaluationContext.getCustomQueryOptions());
-				if(evaluationContext.getTracer()!=null && evaluationContext.getTracer().isTracing())thing.evaluationContext.setTracer(evaluationContext.getTracer());
-				if(evaluationContext.getDataset()!=null )thing.evaluationContext.setDataset(evaluationContext.getDataset());
+				if (evaluationContext.getCustomQueryOptions() != null
+						&& !evaluationContext.getCustomQueryOptions().isEmpty())
+					thing.evaluationContext.setCustomQueryOptions(evaluationContext.getCustomQueryOptions());
+				if (evaluationContext.getTracer() != null && evaluationContext.getTracer().isTracing())
+					thing.evaluationContext.setTracer(evaluationContext.getTracer());
+				if (evaluationContext.getDataset() != null)
+					thing.evaluationContext.setDataset(evaluationContext.getDataset());
 				thing.evaluationContext.setContexts(evaluationContext.getContexts());
 			}
 			//Overwrite the graphName if not null
-			if(graphIri!=null)thing.graphName= graphIri;
+			if (graphIri != null)
+				thing.graphName = graphIri;
 			return thing;
 		} else {
 			thing = new Thing(source, superValue, evaluationContext);
 			if (source != null)
 				source.getThings().put(graphThingKey, thing);
-			if(graphIri==null)graphIri= Graph.DEFAULTGRAPH;
+			if (graphIri == null)
+				graphIri = Graph.DEFAULTGRAPH;
 			thing.graphName = graphIri;
 		}
 		if (evaluationContext != null)
@@ -112,6 +107,7 @@ public class Thing extends Resource {
 			thing.evaluationContext = new EvaluationContext();
 		return thing;
 	}
+
 	/**
 	 * Instantiates a new thing.
 	 *
@@ -122,21 +118,23 @@ public class Thing extends Resource {
 	 * @param evaluationContext
 	 *            the evaluation context
 	 */
-	private Thing(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
+	protected Thing(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		super(superValue, evaluationContext);
 		this.setSource(source);
 	}
+
 	@Override
-	public 	boolean isIRI(){
+	public boolean isIRI() {
 		return true;
 	}
+
 	public IRI getGraphName() {
 		return graphName;
 	}
 
 	@SuppressWarnings("deprecation")
-	public final IRI generateCacheContext(IRI predicate) {
+	public IRI generateCacheContext(IRI predicate) {
 		String key;
 		if (predicate != null) {
 			key = getSuperValue().toString() + predicate.stringValue() + StringUtils.join(getCustomQueryOptions());
@@ -148,162 +146,152 @@ public class Thing extends Resource {
 		return cacheContextIRI;
 	}
 
-	@Deprecated
-	public HashMap<String, Resource> getCachedResources() {
-		if( cachedResources==null) {
-			cachedResources= new HashMap<String, Resource> ();
-		}
-		return cachedResources;
-	}
-
-	public final Resource getFact(IRI predicate, SimpleLiteral scriptString, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) throws HandledException {
-		Resource fact = processFactObjectValue(predicate,scriptString,  customQueryOptions ,contexts);
-		return fact;
-	}
-	public final Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions, Value...bindValues) throws PathPatternException{
+	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions, Value... bindValues)
+			throws PathPatternException {
 		logger.debug("getFact{}\n", predicatePattern);
 
-		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions,bindValues);
+		ResourceResults factValues = getFacts(predicatePattern, customQueryOptions, bindValues);
 		if (factValues == null) {
-			throw new NullValueReturnedException( String.format(
-					"No values found for pattern %s with subject %s, customQueryOptions %s, and bind variables %s", predicatePattern, this,customQueryOptions,bindValues));
+			throw new NullValueReturnedException(String.format(
+					"No values found for pattern %s with subject %s, customQueryOptions %s, and bind variables %s",
+					predicatePattern, this, customQueryOptions, bindValues));
 		} else if (factValues.hasNext()) {
 			return factValues.next();
 		} else {
 			factValues.close();
-			throw new NullValueReturnedException( String.format(
-					"No values found for pattern %s with subject %s, customQueryOptions %s, and bind variables %s", predicatePattern, this,customQueryOptions,bindValues));
+			throw new NullValueReturnedException(String.format(
+					"No values found for pattern %s with subject %s, customQueryOptions %s, and bind variables %s",
+					predicatePattern, this, customQueryOptions, bindValues));
 		}
-		
+
 	}
-	public final Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException{
+
+	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions)
+			throws PathPatternException {
 		logger.debug("getFact{}\n", predicatePattern);
 
-		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions);
+		ResourceResults factValues = getFacts(predicatePattern, customQueryOptions);
 		if (factValues == null) {
 			//return new NullResource();
-			throw new NullValueReturnedException( String.format(
-					"No values found for pattern %s with subject %s and customQueryOptions %s", predicatePattern, this,customQueryOptions));
+			throw new NullValueReturnedException(
+					String.format("No values found for pattern %s with subject %s and customQueryOptions %s",
+							predicatePattern, this, customQueryOptions));
 		} else if (factValues.hasNext()) {
 			return factValues.next();
 		} else {
 			factValues.close();
 			//return new NullResource();
-			throw new NullValueReturnedException( String.format(
-					"No values found for pattern %s with subject %s and customQueryOptions %s", predicatePattern, this,customQueryOptions));
-		}		
+			throw new NullValueReturnedException(
+					String.format("No values found for pattern %s with subject %s and customQueryOptions %s",
+							predicatePattern, this, customQueryOptions));
+		}
 	}
-	public final Resource getFact(String predicatePattern, Value...bindValues ) throws PathPatternException  {
+
+	public  Resource getFact(String predicatePattern, Value... bindValues) throws PathPatternException {
 		logger.debug("getFact{}\n", predicatePattern);
 		//this.getEvaluationContext().getTracer().traceFact(this, predicatePattern);
-		ResourceResults factValues =  getFacts( predicatePattern,bindValues);
+		ResourceResults factValues = getFacts(predicatePattern, bindValues);
 		if (factValues == null) {
-			this.getEvaluationContext().getTracer().traceFactReturnNull(this, predicatePattern);
-			throw new NullValueReturnedException( String.format(
-					"No values found for pattern %s with subject %s", predicatePattern, this));
+		//	this.getEvaluationContext().getTracer().traceFactReturnNull(this, predicatePattern);
+			throw new NullValueReturnedException(
+					String.format("No values found for pattern %s with subject %s", predicatePattern, this));
 		} else if (factValues.hasNext()) {
 			Resource nextFact = factValues.next();
-			this.getEvaluationContext().getTracer().traceFactReturnValue(this, predicatePattern,nextFact);
+		//	this.getEvaluationContext().getTracer().traceFactReturnValue(this, predicatePattern, nextFact);
 			return nextFact;
 		} else {
-			this.getEvaluationContext().getTracer().traceFactEmpty(this, predicatePattern);
+		//	this.getEvaluationContext().getTracer().traceFactEmpty(this, predicatePattern);
 			factValues.close();
-			throw new NullValueReturnedException( String.format(
-					"No values found for pattern %s with subject %s", predicatePattern, this));
-		}	
+			throw new NullValueReturnedException(
+					String.format("No values found for pattern %s with subject %s", predicatePattern, this));
+		}
 	}
 
-	public final ResourceResults getFacts(String predicatePattern, Value... bindValues ) throws PathPatternException {
-		return getFacts(predicatePattern,CustomQueryOptions.create(bindValues));
+	public  ResourceResults getFacts(String predicatePattern, Value... bindValues) throws PathPatternException {
+		return getFacts(predicatePattern, CustomQueryOptions.create(bindValues));
 	}
-	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions, Value... bindValues ) throws PathPatternException {
-		return getFacts(predicatePattern,customQueryOptions.addAll(bindValues));
+
+	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions,
+			Value... bindValues) throws PathPatternException {
+		return getFacts(predicatePattern, customQueryOptions.addAll(bindValues));
 	}
-	public final ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
+
+	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions)
+			throws PathPatternException {
 		logger.debug("getFacts{}\n", predicatePattern);
-		this.getEvaluationContext().getTracer().traceFacts(this, predicatePattern);
-		SimpleDataset dataset = getDataset( customQueryOptions);
+		this.getEvaluationContext().getTracer().traceFacts( this, predicatePattern);
+		SimpleDataset dataset = getDataset(customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
-		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs()
+				.toArray(new org.eclipse.rdf4j.model.Resource[0]);
 		ResourceStatementResults results = null;
-		if(this.getSource().getRepository()==null ) {
+		if (this.getSource().getRepository() == null) {
 			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource()
 					.getTripleSource()
-					.getStatements(this.getIRI(),
-							PATHQL.GETFACTS, literal(predicatePattern), contextArray);
-			results = new ResourceStatementResults(localStatementIterator, this, null, customQueryOptions);
-		}else {
-			CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
-					.getRepository().getConnection()
-					.getStatements(this.getIRI(),
-							PATHQL.GETFACTS, literal(predicatePattern), contextArray);
+					.getStatements(this.getIRI(), PATHQL.GETFACTS, literal(predicatePattern), contextArray);
+			results = new ResourceStatementResults(localStatementIterator, (EvaluatorThing)this, null, customQueryOptions);
+		} else {
+			CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource().getRepository()
+					.getConnection()
+					.getStatements(this.getIRI(), PATHQL.GETFACTS, literal(predicatePattern), contextArray);
 			results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
 		}
 		return results;
 
 	}
-	public final Path getPath(String predicatePattern) throws PathPatternException, RDFParseException, UnsupportedRDFormatException, IOException {
+
+	public final Path getPath(String predicatePattern)
+			throws PathPatternException, RDFParseException, UnsupportedRDFormatException, IOException {
 		logger.debug("getPath{}\n", predicatePattern);
-		PathResults pathValues =  getPaths( predicatePattern,null);
+		PathResults pathValues = getPaths(predicatePattern, null);
 		if (pathValues == null) {
-			this.getEvaluationContext().getTracer().tracePathReturnNull(this, predicatePattern);
+		//	this.getEvaluationContext().getTracer().tracePathReturnNull(this, predicatePattern);
 			return new NullPath();
 		} else if (pathValues.hasNext()) {
 			Path path = (Path) pathValues.next();
-			this.getEvaluationContext().getTracer().tracePathReturn(this, predicatePattern,path);
+		//	this.getEvaluationContext().getTracer().tracePathReturn(this, predicatePattern, path);
 			return path;
 		} else {
-			this.getEvaluationContext().getTracer().tracePathEmpty(this, predicatePattern);
+		//	this.getEvaluationContext().getTracer().tracePathEmpty(this, predicatePattern);
 			pathValues.close();
 			return new NullPath();
 		}
 	}
+
 	public final PathResults getPaths(String predicatePattern) throws PathPatternException {
-	 return  getPaths( predicatePattern, null);
+		return getPaths(predicatePattern, null);
 	}
-	public final PathResults getPaths(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
+
+	public final PathResults getPaths(String predicatePattern, CustomQueryOptions customQueryOptions)
+			throws PathPatternException {
 
 		logger.debug("getPaths{}\n", predicatePattern);
 
-		this.getEvaluationContext().getTracer().tracePaths(this, predicatePattern);
-		SimpleDataset dataset = getDataset( customQueryOptions);
+		//this.getEvaluationContext().getTracer().tracePaths(this, predicatePattern);
+		SimpleDataset dataset = getDataset(customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
-		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs()
+				.toArray(new org.eclipse.rdf4j.model.Resource[0]);
 		PathResults results = null;
-		if(this.getSource().getRepository()==null ) {
+		if (this.getSource().getRepository() == null) {
 			CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getSource()
 					.getTripleSource()
-					.getStatements(this.getIRI(),
-							PATHQL.GETPATHS, literal(predicatePattern), contextArray);
+					.getStatements(this.getIRI(), PATHQL.GETPATHS, literal(predicatePattern), contextArray);
 			results = new PathResults(localPathIterator, this, null);
-		}else {
-			CloseableIteration<Statement, RepositoryException> pathIterator = this.getSource()
-					.getRepository().getConnection()
-					.getStatements(this.getIRI(),
-							PATHQL.GETPATHS, literal(predicatePattern), contextArray);
+		} else {
+			CloseableIteration<Statement, RepositoryException> pathIterator = this.getSource().getRepository()
+					.getConnection()
+					.getStatements(this.getIRI(), PATHQL.GETPATHS, literal(predicatePattern), contextArray);
 			results = new PathResults(pathIterator, this, null, customQueryOptions);
 		}
 		return results;
 	}
 
-	@SuppressWarnings("unused")
-	private org.eclipse.rdf4j.model.Resource[] prepareDataset(CustomQueryOptions customQueryOptions) {
-		SimpleDataset dataset = getDataset( customQueryOptions);
-		if(dataset!=null) {
-			Set<IRI> contexts = dataset.getDefaultGraphs();
-			org.eclipse.rdf4j.model.Resource[] contextArray=contexts.toArray(new org.eclipse.rdf4j.model.Resource[0]);
-			return contextArray;
-		}else
-			return new  org.eclipse.rdf4j.model.Resource[0];
-	}
-
-
 	@SuppressWarnings("deprecation")
-	public Resource getSignal(String signal) {		
-		return getSignal(signal, getCustomQueryOptions());	
+	public Resource getSignal(String signal) {
+		return getSignal(signal, getCustomQueryOptions());
 	}
-	
-	
+
 	public Resource getSignal(String signal, CustomQueryOptions customQueryOptions) {
 		getEvaluationContext().getTracer().incrementLevel();
 		//incrementTraceLevel();
@@ -314,15 +302,14 @@ public class Thing extends Resource {
 		case "SEEQ:":
 			SEEQSource seeqSource = null;
 			try {
-				if(elements.length<6) {
+				if (elements.length < 6) {
 					getEvaluationContext().getTracer().decrementLevel();
 					String error = String.format("Unsupported signal source: %s", signal);
 					logger.error(error);
 					getEvaluationContext().getTracer().traceSignalError(error);
-					throw new ScriptFailedException( error);
-				}else {
-					getEvaluationContext().getTracer().traceSEEQ(elements[5],
-							customQueryOptions);
+					throw new ScriptFailedException(error);
+				} else {
+					getEvaluationContext().getTracer().traceSEEQ(elements[5], customQueryOptions);
 					seeqSource = getSource().seeqSourceFactory(elements[2]);
 					result = seeqSource.getSignal(elements[5], customQueryOptions);
 					getEvaluationContext().getTracer().decrementLevel();
@@ -330,128 +317,129 @@ public class Thing extends Resource {
 				}
 			} catch (ScriptException e) {
 				//return Resource.create(getSource(), literal("**SEEQ Source Error**"), this.getEvaluationContext());
-				throw new ScriptFailedException( e);
-				
+				throw new ScriptFailedException(e);
+
 			} catch (HandledException e) {
 				//return Resource.create(getSource(), literal(e.getCode()), this.getEvaluationContext());
-				throw new ScriptFailedException( e);
+				throw new ScriptFailedException(e);
 			}
 		case "HTTP:":
 			getEvaluationContext().getTracer().traceSEEQHTTPError(signal);
 			logger.error(String.format("HTTP not supported signal source: %s", signal));
 			//return Resource.create(getSource(), literal("**HTTP Source Error**"), this.getEvaluationContext());
-			throw new ScriptFailedException( String.format("HTTP not supported signal source: %s", signal));
+			throw new ScriptFailedException(String.format("HTTP not supported signal source: %s", signal));
 		default:
 			getEvaluationContext().getTracer().traceSEEQError(signal);
 			logger.error(String.format("Unsupported signal source: %s", signal));
 			//return Resource.create(getSource(), literal("**Unsupported Source Error**"), this.getEvaluationContext());
-			throw new ScriptFailedException( String.format("Unsupported signal source: %s", signal));
+			throw new ScriptFailedException(String.format("Unsupported signal source: %s", signal));
 
 		}
 	}
 
-	protected final Resource handleScript(SimpleLiteral scriptString, IRI predicate, CustomQueryOptions customQueryOptions,org.eclipse.rdf4j.model.Resource ... contexts) throws HandledException{
-		if (predicate.equals(SCRIPT.SCRIPTCODE)) {
-			return Resource.create(getSource(), scriptString, this.getEvaluationContext());
-		} else {
-			String scriptCode = scriptString.getLabel();
-			scriptCode = scriptCode.trim();
-			if (scriptCode.startsWith("<")) {
-				String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
-				org.eclipse.rdf4j.model.Resource scriptResource = getSource().getRepositoryContext().convertQName(scriptIRI, getSource().getPrefixes());//convertQName(scriptIRI);
-				Statement scriptStatement;
-				SimpleLiteral scriptCodeliteral = null;
-				try {
-					CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = getSource()
-							.getTripleSource().getStatements(scriptResource, SCRIPT.SCRIPTCODE, null);
-
-					while (scriptStatements.hasNext()) {
-						scriptStatement = scriptStatements.next();
-						scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
-					}
-				} catch (QueryEvaluationException qe) {
-					getEvaluationContext().getTracer().traceRedirectingFailed(this, predicate, scriptCode);
-					throw new ScriptFailedException( String.format(
-							"Reference script <%s> not found for  %s of  subject %s", scriptIRI, predicate, this), qe);
-				}
-				if (scriptCodeliteral != null) {
-					getEvaluationContext().getTracer().traceRedirecting(this, predicate, scriptCode);
-					return handleScript(scriptCodeliteral, predicate,customQueryOptions, contexts);
-				} else {
-					getEvaluationContext().getTracer().traceRedirectingFailed(this, predicate, scriptCode);
-					throw new ScriptFailedException( String.format(
-							"Reference script null <%s> for %s of subject %s", scriptIRI, predicate, this));
-				}
+	/*	protected Resource handleScript(SimpleLiteral scriptString, IRI predicate, CustomQueryOptions customQueryOptions,
+				org.eclipse.rdf4j.model.Resource... contexts) throws HandledException {
+			if (predicate.equals(SCRIPT.SCRIPTCODE)) {
+				return Resource.create(getSource(), scriptString, this.getEvaluationContext());
 			} else {
-				getEvaluationContext().getTracer().incrementLevel();
-				IRI cacheContextIRI = generateCacheContext(predicate);				
-				getEvaluationContext().getTracer().traceEvaluating(this, predicate, scriptString);
-
-				Object scriptResult = null;
-				try {
-					//Test to see if the same 'call' is on the stack
-					//If so report that circular reference encountered
-					//If not push on stack
-					String stackKey = generateStackKey(predicate);
-					if (!searchStack(stackKey)) {
-						
-						CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
-						SimpleBindings scriptBindings = new SimpleBindings();
-						Object _result = null;
-						scriptBindings.put("_result", _result);
-						scriptBindings.put("_this", this);
-						scriptBindings.put("_customQueryOptions",customQueryOptions);
-
-						Resource result;
-						try {
-							pushStack(stackKey);
-							scriptResult = compiledScriptCode.eval(scriptBindings);
-							if(scriptResult==null) {
-								//Could be Python which will not return a result by default
-								scriptResult=scriptBindings.get("_result");
-							}
-							result = returnResult(scriptResult, cacheContextIRI);
+				String scriptCode = scriptString.getLabel();
+				scriptCode = scriptCode.trim();
+				if (scriptCode.startsWith("<")) {
+					String scriptIRI = scriptCode.substring(0, scriptCode.length() - 1).substring(1);
+					org.eclipse.rdf4j.model.Resource scriptResource = getSource().getRepositoryContext()
+							.convertQName(scriptIRI, getSource().getPrefixes());//convertQName(scriptIRI);
+					Statement scriptStatement;
+					SimpleLiteral scriptCodeliteral = null;
+					try {
+						CloseableIteration<? extends Statement, QueryEvaluationException> scriptStatements = getSource()
+								.getTripleSource().getStatements(scriptResource, SCRIPT.SCRIPTCODE, null);
+	
+						while (scriptStatements.hasNext()) {
+							scriptStatement = scriptStatements.next();
+							scriptCodeliteral = (SimpleLiteral) scriptStatement.getObject();
 						}
-						finally {
-							//Since script complete, pop from stack
-							popStack();
-						}
-
-						getEvaluationContext().getTracer().decrementLevel();
-						if (result != null)
-							getEvaluationContext().getTracer().traceEvaluated(this, predicate, result);
-						else {
-							throw new NullValueReturnedException(
-									String.format("Evaluated null for %s of %s, using script %s", predicate,
-											getSuperValue(), scriptString));
-						}
-						getEvaluationContext().getTracer().decrementLevel();
-						return result;
-					} else {
-						getEvaluationContext().getTracer().traceCircularReference(this, predicate, getStack(), stackKey);
-						logger.error(
-								"Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
-								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
-								getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
-										.toString());
-						 throw new CircularReferenceException(String.format(
-								"Circular reference encountered when evaluating <%s> of <%s>.\r\n%s",
-								predicate.stringValue(), ((IRI) getSuperValue()).stringValue(), getStack()
-										.subList(getStack().size() - getStack().search(stackKey), getStack().size())));
+					} catch (QueryEvaluationException qe) {
+						getEvaluationContext().getTracer().traceRedirectingFailed(this, predicate, scriptCode);
+						throw new ScriptFailedException(String.format(
+								"Reference script <%s> not found for  %s of  subject %s", scriptIRI, predicate, this), qe);
 					}
-				} catch (ScriptException e) {
-					getEvaluationContext().getTracer().decrementLevel();
-					logger.error(String.format(
-							"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">%s</span></code >",
-							StringEscapeUtils.escapeHtml4(e.getMessage())));
-					getEvaluationContext().getTracer().traceScriptError(e);
-					throw new ScriptFailedException( e);
-
+					if (scriptCodeliteral != null) {
+						getEvaluationContext().getTracer().traceRedirecting(this, predicate, scriptCode);
+						return handleScript(scriptCodeliteral, predicate, customQueryOptions, contexts);
+					} else {
+						getEvaluationContext().getTracer().traceRedirectingFailed(this, predicate, scriptCode);
+						throw new ScriptFailedException(String.format("Reference script null <%s> for %s of subject %s",
+								scriptIRI, predicate, this));
+					}
+				} else {
+					getEvaluationContext().getTracer().incrementLevel();
+					IRI cacheContextIRI = generateCacheContext(predicate);
+					getEvaluationContext().getTracer().traceEvaluating(this, predicate, scriptString);
+	
+					Object scriptResult = null;
+					try {
+						//Test to see if the same 'call' is on the stack
+						//If so report that circular reference encountered
+						//If not push on stack
+						String stackKey = generateStackKey(predicate);
+						if (!searchStack(stackKey)) {
+	
+							CompiledScript compiledScriptCode = getSource().compiledScriptFactory(scriptString);
+							SimpleBindings scriptBindings = new SimpleBindings();
+							Object _result = null;
+							scriptBindings.put("_result", _result);
+							scriptBindings.put("_this", this);
+							scriptBindings.put("_customQueryOptions", customQueryOptions);
+	
+							Resource result;
+							try {
+								pushStack(stackKey);
+								scriptResult = compiledScriptCode.eval(scriptBindings);
+								if (scriptResult == null) {
+									//Could be Python which will not return a result by default
+									scriptResult = scriptBindings.get("_result");
+								}
+								result = returnResult(scriptResult, cacheContextIRI);
+							} finally {
+								//Since script complete, pop from stack
+								popStack();
+							}
+	
+							getEvaluationContext().getTracer().decrementLevel();
+							if (result != null)
+								getEvaluationContext().getTracer().traceEvaluated(this, predicate, result);
+							else {
+								throw new NullValueReturnedException(
+										String.format("Evaluated null for %s of %s, using script %s", predicate,
+												getSuperValue(), scriptString));
+							}
+							getEvaluationContext().getTracer().decrementLevel();
+							return result;
+						} else {
+							getEvaluationContext().getTracer().traceCircularReference(this, predicate, getStack(),
+									stackKey);
+							logger.error("Circular reference encountered when evaluating <{}> of <{}>.\r\n{}",
+									predicate.stringValue(), ((IRI) getSuperValue()).stringValue(),
+									getStack().subList(getStack().size() - getStack().search(stackKey), getStack().size())
+											.toString());
+							throw new CircularReferenceException(String.format(
+									"Circular reference encountered when evaluating <%s> of <%s>.\r\n%s",
+									predicate.stringValue(), ((IRI) getSuperValue()).stringValue(), getStack()
+											.subList(getStack().size() - getStack().search(stackKey), getStack().size())));
+						}
+					} catch (ScriptException e) {
+						getEvaluationContext().getTracer().decrementLevel();
+						logger.error(String.format(
+								"Script failed with <br/><code ><span style=\"white-space: pre-wrap\">%s</span></code >",
+								StringEscapeUtils.escapeHtml4(e.getMessage())));
+						getEvaluationContext().getTracer().traceScriptError(e);
+						throw new ScriptFailedException(e);
+	
+					}
 				}
 			}
-		}
-
-	}
+	
+		}*/
 
 	@SuppressWarnings("deprecation")
 	public String generateStackKey(IRI predicate) {
@@ -466,41 +454,45 @@ public class Thing extends Resource {
 		return stackKey;
 	}
 
-
-	public Resource processFactObjectValue(IRI predicate, Value objectValue, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) throws QueryEvaluationException {
-		Resource returnResult = null;
-		SimpleLiteral literalValue;
-		{
-			literalValue = (SimpleLiteral) objectValue;
-			if (Evaluator.isScriptEngine(literalValue.getDatatype())) {
-				org.eclipse.rdf4j.model.Resource customQueryOptionsContext;
-				if(customQueryOptions!=null)
-					customQueryOptionsContext = customQueryOptions.getContext();
-				else
-					 customQueryOptionsContext = CustomQueryOptions.getEmptyContext();
-				FactCache factCache = getSource().getIntelligentGraphConnection().getIntelligentGraphSail().getFactCache();
-				if (/*notTracing() && */factCache.contains(this.getIRI(), predicate, customQueryOptionsContext)) {
-					Value resultValue =  factCache.getFacts(this.getIRI(), predicate, customQueryOptionsContext);
-					logger.debug("Retrieved cache {} of {} = {}", predicate.stringValue(),
-							getSuperValue().stringValue(), resultValue.stringValue());
-					getEvaluationContext().getTracer().traceRetrievedCache(this,predicate, resultValue);
-					returnResult = Resource.create(getSource(), resultValue, evaluationContext);
-				} else {
-					Resource result = this.handleScript(literalValue, predicate,customQueryOptions,contexts);
-					if (result != null) {
-						//TODO validate caching
-						factCache.addFact(this.getIRI(), predicate,result.getSuperValue() ,customQueryOptionsContext);
-						getEvaluationContext().getTracer().traceCalculated(this,predicate, result);
+	/*	public Resource getFact(IRI predicate, SimpleLiteral scriptString, CustomQueryOptions customQueryOptions,
+				org.eclipse.rdf4j.model.Resource... contexts) throws HandledException {
+			Resource fact = processFactObjectValue(predicate, scriptString, customQueryOptions, contexts);
+			return fact;
+		}*/
+	/*	public Resource processFactObjectValue(IRI predicate, Value objectValue, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) throws QueryEvaluationException {
+			Resource returnResult = null;
+			SimpleLiteral literalValue;
+			{
+				literalValue = (SimpleLiteral) objectValue;
+				if (Evaluator.isScriptEngine(literalValue.getDatatype())) {
+					org.eclipse.rdf4j.model.Resource customQueryOptionsContext;
+					if(customQueryOptions!=null)
+						customQueryOptionsContext = customQueryOptions.getContext();
+					else
+						 customQueryOptionsContext = CustomQueryOptions.getEmptyContext();
+					FactCache factCache = getSource().getIntelligentGraphConnection().getIntelligentGraphSail().getFactCache();
+					if (notTracing() && factCache.contains(this.getIRI(), predicate, customQueryOptionsContext)) {
+						Value resultValue =  factCache.getFacts(this.getIRI(), predicate, customQueryOptionsContext);
+						logger.debug("Retrieved cache {} of {} = {}", predicate.stringValue(),
+								getSuperValue().stringValue(), resultValue.stringValue());
+						getEvaluationContext().getTracer().traceRetrievedCache(this,predicate, resultValue);
+						returnResult = Resource.create(getSource(), resultValue, evaluationContext);
+					} else {
+						Resource result = this.handleScript(literalValue, predicate,customQueryOptions,contexts);
+						if (result != null) {
+							//TODO validate caching
+							factCache.addFact(this.getIRI(), predicate,result.getSuperValue() ,customQueryOptionsContext);
+							getEvaluationContext().getTracer().traceCalculated(this,predicate, result);
+						}
+						returnResult = result;
 					}
-					returnResult = result;
+				} else {
+					getEvaluationContext().getTracer().traceRetrievedLiteral(this,predicate, objectValue);
+					returnResult = Resource.create(getSource(), objectValue, this.getEvaluationContext());
 				}
-			} else {
-				getEvaluationContext().getTracer().traceRetrievedLiteral(this,predicate, objectValue);
-				returnResult = Resource.create(getSource(), objectValue, this.getEvaluationContext());
 			}
-		}
-		return returnResult;
-	}
+			return returnResult;
+		}*/
 
 	public Resource returnResult(Object result, IRI cacheContextIRI) {
 		if (result != null) {
@@ -529,22 +521,24 @@ public class Thing extends Resource {
 				switch (((org.eclipse.rdf4j.model.Literal) content).getDatatype().getLocalName()) {
 				case "int":
 				case "integer":
-					return Resource.create(getSource(),
-							literal((BigInteger) ((com.inova8.intelligentgraph.model.Literal) result).bigIntegerValue()),
+					return Resource.create(getSource(), literal(
+							(BigInteger) ((com.inova8.intelligentgraph.model.Literal) result).bigIntegerValue()),
 							this.getEvaluationContext());
 				case "decimal":
-					return Resource.create(getSource(), literal(((com.inova8.intelligentgraph.model.Literal) result).decimalValue()),
+					return Resource.create(getSource(),
+							literal(((com.inova8.intelligentgraph.model.Literal) result).decimalValue()),
 							this.getEvaluationContext());
 				case "double":
-					return Resource.create(getSource(), literal(((com.inova8.intelligentgraph.model.Literal) result).doubleValue()),
+					return Resource.create(getSource(),
+							literal(((com.inova8.intelligentgraph.model.Literal) result).doubleValue()),
 							this.getEvaluationContext());
-				case "string": 
+				case "string":
 					return Resource.create(getSource(), literal(content.stringValue()), this.getEvaluationContext());
-				case "time": 
+				case "time":
 					return Resource.create(getSource(), literal(content), this.getEvaluationContext());
-				case "date": 
+				case "date":
 					return Resource.create(getSource(), literal(content), this.getEvaluationContext());
-				case "dateTime": 
+				case "dateTime":
 					return Resource.create(getSource(), literal(content), this.getEvaluationContext());
 				default:
 					logger.error("No literal handler found for result {} of class {}", result.toString(),
@@ -562,16 +556,16 @@ public class Thing extends Resource {
 	}
 
 	public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions) throws PathPatternException {
-		SimpleDataset dataset = getDataset( customQueryOptions);
+		SimpleDataset dataset = getDataset(customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
-		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs()
+				.toArray(new org.eclipse.rdf4j.model.Resource[0]);
 		ResourceStatementResults results = null;
-		CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
-					.getRepository().getConnection()
-					.getStatements(this.getIRI(),
-							PATHQL.TRACEFACTS, literal(predicatePattern), contextArray);
+		CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource().getRepository()
+				.getConnection()
+				.getStatements(this.getIRI(), PATHQL.TRACEFACTS, literal(predicatePattern), contextArray);
 		results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
-		for(Resource result:results) {
+		for (Resource result : results) {
 			String resultString = result.stringValue();
 			results.close();
 			return new Trace(resultString);
@@ -581,37 +575,37 @@ public class Thing extends Resource {
 
 	}
 
-	public Trace traceFact(String predicatePattern, Value...  bindValues) throws PathPatternException {
+	public Trace traceFact(String predicatePattern, Value... bindValues) throws PathPatternException {
 		return traceFact(predicatePattern, CustomQueryOptions.create(bindValues));
 	}
 
-	public void deleteFacts(String predicatePattern) throws Exception {		
-		this.getSource().getRepository().getConnection().remove(this.getIRI(),
-							PATHQL.REMOVEFACTS, literal(predicatePattern), this.getGraphName());
+	public void deleteFacts(String predicatePattern) throws Exception {
+		this.getSource().getRepository().getConnection().remove(this.getIRI(), PATHQL.REMOVEFACTS,
+				literal(predicatePattern), this.getGraphName());
 	}
 
-
-
-	public Thing addFact(IRI property, String value, IRI dataType ) {
+	public Thing addFact(IRI property, String value, IRI dataType) {
 		Literal literal = literal(value, dataType);
-		addFact(property,literal);
+		addFact(property, literal);
 		return this;
 	}
+
 	public Thing addFact(IRI property, Value value) {
 		Validate.notNull(property);
 		Validate.notNull(value);
 		RepositoryConnection connection = this.getSource().getContextAwareConnection();
-		switch(value.getClass().getSimpleName() ) {
-			case "Thing":
-				connection.add(this.getIRI(), property, ((Thing) value).getIRI(), this.getGraphName());
-				break;
-			default:
-				connection.add(this.getIRI(), property, value, this.getGraphName());
-		}		
+		switch (value.getClass().getSimpleName()) {
+		case "Thing":
+			connection.add(this.getIRI(), property, ((Thing) value).getIRI(), this.getGraphName());
+			break;
+		default:
+			connection.add(this.getIRI(), property, value, this.getGraphName());
+		}
 		return this;
 	}
-	public Thing addFact(String pathql, String value, IRI dataType) {		
-		addFact(pathql,literal(value, dataType));
+
+	public Thing addFact(String pathql, String value, IRI dataType) {
+		addFact(pathql, literal(value, dataType));
 		return this;
 	}
 
@@ -636,11 +630,11 @@ public class Thing extends Resource {
 
 		return this;
 	}
-	public Thing addFact(String pathql, String value) {		
-		addFact(pathql,value,XSD.STRING);
+
+	public Thing addFact(String pathql, String value) {
+		addFact(pathql, value, XSD.STRING);
 		return this;
 	}
-
 
 	/**
 	 * Gets the iri.
@@ -657,17 +651,18 @@ public class Thing extends Resource {
 		SimpleDataset dataset = (SimpleDataset) getEvaluationContext().getDataset();
 		if (dataset != null)
 			return dataset;
-		else { 
+		else {
 			HashSet<IRI> publicContexts;
-			if(this.getSource().getIntelligentGraphConnection()!=null) {
-				publicContexts = this.getSource().getIntelligentGraphConnection().getIntelligentGraphSail().getPublicContexts();
-			}else {
+			if (this.getSource().getIntelligentGraphConnection() != null) {
+				publicContexts = this.getSource().getIntelligentGraphConnection().getIntelligentGraphSail()
+						.getPublicContexts();
+			} else {
 				publicContexts = getSource().getPublicContexts();
 			}
 			if (publicContexts == null || publicContexts.isEmpty()) {
 				org.eclipse.rdf4j.model.Resource[] contexts = getEvaluationContext().getContexts();
 				if (contexts == null || contexts.length == 0) {
-					
+
 					return null;
 				} else {
 					dataset = new SimpleDataset();
@@ -685,20 +680,20 @@ public class Thing extends Resource {
 			}
 		}
 	}
+
 	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
 		SimpleDataset dataset = new SimpleDataset();//getDataset();
-		if(customQueryOptions!=null) {
-			dataset.addDefaultGraph(iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
+		if (customQueryOptions != null) {
+			dataset.addDefaultGraph(iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS + "?"
+					+ customQueryOptions.toURIEncodedString()));
 		}
 		return dataset;
 	}
+
 	public Thing getThing(String thing) throws RecognitionException, PathPatternException {
 		//IRI thingIri = PathParser.parseIriRef( this.getSource().getRepositoryContext(),thing).getIri();
 		IRI thingIri = getSource().getRepositoryContext().convertQName(thing);
-		return create(this.getSource(), thingIri,this.getEvaluationContext());
+		return create(this.getSource(), thingIri, this.getEvaluationContext());
 	}
-
-
-
 
 }

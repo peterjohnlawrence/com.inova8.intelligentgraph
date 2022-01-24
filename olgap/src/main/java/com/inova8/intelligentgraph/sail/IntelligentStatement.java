@@ -13,7 +13,7 @@ import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 
 public class IntelligentStatement extends ContextStatement {
@@ -47,7 +47,7 @@ public class IntelligentStatement extends ContextStatement {
 			if( contextStatement.getObject().isLiteral()) {
 				SimpleLiteral literalValue = (SimpleLiteral)(contextStatement.getObject());
 				if(Evaluator.getEngineNames().containsKey(literalValue.getDatatype())){
-					Thing subjectThing = Thing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
+					EvaluatorThing subjectThing = EvaluatorThing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
 					CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getRepositoryContext().getPrefixes());
 					 try {
 						 com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);

@@ -25,6 +25,7 @@ import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.exceptions.ServerException;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.sail.FactCache;
 import com.inova8.intelligentgraph.sail.IntelligentGraphConnection;
@@ -76,6 +77,7 @@ public class IntelligentGraphRepository {
 	private TripleSource tripleSource; //Not unique per call using the same underlying triplestore
 	private ModelBuilder modelBuilder;
 	private static ConcurrentHashMap<String, Thing> things = new ConcurrentHashMap<String, Thing>();
+	private static ConcurrentHashMap<String, EvaluatorThing> evaluatorThings = new ConcurrentHashMap<String, EvaluatorThing>();
 	private static ConcurrentHashMap<String, CompiledScript> compiledScripts = new ConcurrentHashMap<String, CompiledScript>();
 	private static ConcurrentHashMap<String, SEEQSource> seeqSources = new ConcurrentHashMap<String, SEEQSource>();
 	
@@ -233,31 +235,9 @@ public class IntelligentGraphRepository {
 	public ConcurrentHashMap<String, Thing> getThings() {
 		return things;
 	}
-
-//	@Deprecated
-//	public ConcurrentHashMap<String, ReificationType> getReificationTypes() {
-//		return this.getReifications().getReificationTypes();
-//	}
-//
-//	@Deprecated
-//	ConcurrentHashMap<String, ReificationType> getPredicateReificationTypes() {
-//		return this.getReifications().getPredicateReificationTypes();
-//	}
-
-//	@Deprecated
-//	private void initializeReificationTypes() {
-//		this.getReifications().initializeReificationTypes();
-//	}
-
-//	@Deprecated
-//	public org.eclipse.rdf4j.repository.Repository getCacheRep() {
-//		return this.cacheRep;
-//	}
-
-//	@Deprecated
-//	public void setCacheRep(org.eclipse.rdf4j.repository.Repository cacheRep) {
-//		this.cacheRep = cacheRep;
-//	}
+	public ConcurrentHashMap<String, EvaluatorThing> getEvaluatorThings() {
+		return evaluatorThings;
+	}
 
 	/**
 	 * Gets the cache service.

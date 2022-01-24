@@ -18,7 +18,7 @@ import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
 //import groovy.lang.GroovyShell;
@@ -88,7 +88,7 @@ public class ObjectProvenance extends Evaluator implements Function {
 					CustomQueryOptions customQueryOptions = source.getCustomQueryOptions(argumentArray);
 					EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 					evaluationContext.setTracing(true);
-					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
+					EvaluatorThing subjectThing = EvaluatorThing.create(source, subject, evaluationContext);	
 					com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact( predicate,//new PredicateElement(source,predicate),
 							literalValue,customQueryOptions);
 					if( fact != null) {

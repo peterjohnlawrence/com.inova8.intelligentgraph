@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.model.Literal;
 import com.inova8.intelligentgraph.model.Resource;
-import com.inova8.intelligentgraph.model.Thing;
 
 public class CustomQueryOptions extends Hashtable<String, Resource> {
 	@Override

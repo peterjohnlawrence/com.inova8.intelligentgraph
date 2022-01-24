@@ -12,9 +12,9 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.model.Fact;
 import com.inova8.intelligentgraph.model.Resource;
-import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.pathql.element.PathElement;
 
@@ -31,7 +31,7 @@ public class FactResults extends ResourceBindingSetResults {
 	 * @param thing the thing
 	 * @param pathElement the path element
 	 */
-	public FactResults(CloseableIteration<BindingSet, QueryEvaluationException> factSet, Thing thing,
+	public FactResults(CloseableIteration<BindingSet, QueryEvaluationException> factSet, EvaluatorThing thing,
 			PathElement pathElement,CustomQueryOptions customQueryOptions) {
 		super(factSet, thing, pathElement,customQueryOptions);
 	}
@@ -72,7 +72,7 @@ public class FactResults extends ResourceBindingSetResults {
 		if (factValue == null)
 			return null;
 		else if(factValue.isIRI()) {
-			Thing thing = Thing.create(getSource(),factValue, this.getEvaluationContext());
+			EvaluatorThing thing = EvaluatorThing.create(getSource(),factValue, this.getEvaluationContext());
 			return thing;
 		}
 		else {
@@ -82,7 +82,7 @@ public class FactResults extends ResourceBindingSetResults {
 			Value factPredicate = next.getValue(getPathElement().getTargetPredicate().getName());
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
 			//Thing thing = Thing.create(getSource(),this.getThing().getGraphName(), factThing ,this.getEvaluationContext());
-			Thing thing = Thing.create(getSource(),factThing ,this.getEvaluationContext());
+			EvaluatorThing thing = EvaluatorThing.create(getSource(),factThing ,this.getEvaluationContext());
 			return thing.processFactObjectValue((IRI) factPredicate,factValue,this.customQueryOptions);
 		}
 	}

@@ -28,8 +28,8 @@ import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.context.EvaluationContext;
 import com.inova8.intelligentgraph.context.Evaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.model.Resource;
-import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.sail.IntelligentGraphSail.ResponseType;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.context.Prefixes;
@@ -108,7 +108,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 		return ((IntelligentGraphSail) queryContext.getAttribute(IntelligentGraphConstants.SAIL)).getParameters();
 	}
 
-
+	@Deprecated
 	public Prefixes getPrefixes() {
 		return (Prefixes) queryContext.getAttribute(IntelligentGraphConstants.PREFIXES);
 	}
@@ -248,7 +248,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 						IntelligentGraphRepository source = getSource();
 						EvaluationContext evaluationContext = new EvaluationContext(
 								customQueryOptions, getDataset());
-						Thing subjectThing = Thing.create(source, nextBindingSet.getValue("subject"),
+						EvaluatorThing subjectThing = EvaluatorThing.create(source, nextBindingSet.getValue("subject"),
 								evaluationContext);
 						try {
 							com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(
@@ -313,7 +313,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 										customQueryOptions, getDataset());
 								switch (responseType) {
 								case VALUE:
-									Thing subjectThing = Thing.create(getSource(), subject, evaluationContext);
+									EvaluatorThing subjectThing = EvaluatorThing.create(getSource(), subject, evaluationContext);
 									try {
 										com.inova8.intelligentgraph.model.Resource fact = subjectThing
 												.getFact(predicate,	literalValue,customQueryOptions);
@@ -331,7 +331,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 									break;
 								case TRACE:
 									evaluationContext.setTracing(true);
-									Thing subjectThingTrace = Thing.create(getSource(), subject, evaluationContext);
+									EvaluatorThing subjectThingTrace = EvaluatorThing.create(getSource(), subject, evaluationContext);
 									try {								
 										subjectThingTrace.getFact(predicate,literalValue,customQueryOptions);
 										Binding modifiedBindingValueTrace = new SimpleBinding(modifiedBindingValueName,
@@ -350,7 +350,7 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 						} else {
 							EvaluationContext evaluationContext = new EvaluationContext(
 									getCustomQueryOptions(nextBindingSet), getDataset());
-							Thing subjectThing = Thing.create(getSource(), SCRIPT.ANONTHING, evaluationContext);
+							EvaluatorThing subjectThing = EvaluatorThing.create(getSource(), SCRIPT.ANONTHING, evaluationContext);
 							try {
 								com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(
 										SCRIPT.ANONPREDICATE,literalValue,null);

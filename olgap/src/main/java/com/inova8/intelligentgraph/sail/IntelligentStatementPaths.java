@@ -19,7 +19,7 @@ import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.path.EdgeBinding;
 import com.inova8.intelligentgraph.path.PathBinding;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
@@ -37,7 +37,7 @@ import java.io.OutputStream;
 
 public  class IntelligentStatementPaths extends AbstractCloseableIteration< IntelligentStatement, SailException> {
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
-	Thing thing;
+	EvaluatorThing thing;
 	PathElement pathElement;
 	Iterations sortedIterations;
 	private Integer pathIteration;
@@ -47,7 +47,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	private CustomQueryOptions customQueryOptions;
 	private Resource[] contexts;
 	private PathTupleExpr pathTupleExpr;
-	public IntelligentStatementPaths(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
+	public IntelligentStatementPaths(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, EvaluatorThing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
 		this.thing=thing;
@@ -56,7 +56,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.customQueryOptions=customQueryOptions;
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
-	public IntelligentStatementPaths( IntelligentGraphRepository source, Thing thing,
+	public IntelligentStatementPaths( IntelligentGraphRepository source, EvaluatorThing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=null;
 		this.source=source;

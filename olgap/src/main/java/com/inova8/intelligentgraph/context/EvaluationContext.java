@@ -25,8 +25,6 @@ public class EvaluationContext {
 	private CustomQueryOptions customQueryOptions = new   CustomQueryOptions();	
 	
 	
-	/** The dataset. */
-	@Deprecated
 	private Dataset dataset;
 	
 	/** The contexts. */
@@ -173,12 +171,11 @@ public class EvaluationContext {
 			return false;
 	}
 
-	@Deprecated
+
 	public Dataset getDataset() {
 		return dataset;
 	}
 
-	@Deprecated
 	public void setDataset(Dataset dataset) {
 		this.dataset = dataset;
 	}

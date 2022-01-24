@@ -6,8 +6,8 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.model.Resource;
-import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.pathql.element.PathElement;
 
 
@@ -19,11 +19,11 @@ public abstract class ResourceBindingSetResults extends ResourceResults {
 		super( source, pathElement,customQueryOptions);
 		this.resourceSet =resourceSet;
 	}
-	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing ){
+	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  EvaluatorThing thing ){
 		super( thing);
 		this.resourceSet =resourceSet;
 	}
-	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  Thing thing, PathElement pathElement,CustomQueryOptions customQueryOptions  ){
+	public ResourceBindingSetResults(CloseableIteration<BindingSet, QueryEvaluationException> resourceSet,  EvaluatorThing thing, PathElement pathElement,CustomQueryOptions customQueryOptions  ){
 		super( thing,pathElement,customQueryOptions);
 		this.resourceSet =resourceSet;
 	}

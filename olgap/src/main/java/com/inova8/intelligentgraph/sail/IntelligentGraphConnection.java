@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
-import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.model.EvaluatorThing;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
@@ -148,7 +148,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
 	private void addFact(Resource thingresource, String pathQL, Value value , Resource... contexts) throws RecognitionException, PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
+		EvaluatorThing thing = EvaluatorThing.create(source, thingresource, null);
 		PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		predicateElement.getSourceVariable().setValue( thing.getValue());
 
@@ -238,7 +238,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			extendedContexts.add( context);
 		}
 		for(Resource context:contexts) {
-			extendedContexts.add((IRI) context);
+			if(context!=null)	extendedContexts.add((IRI) context);
 		}
 	return 	 extendedContexts.toArray(new org.eclipse.rdf4j.model.Resource[0] );
 	}
@@ -294,7 +294,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	@SuppressWarnings("deprecation")
 	private CloseableIteration<? extends IntelligentStatement, SailException> traceFacts(Resource thingresource, Value pathQLValue,	  Resource... contexts) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
+		EvaluatorThing thing = EvaluatorThing.create(source, thingresource, null);
 		thing.getEvaluationContext().setTracing(true);
 		thing.getEvaluationContext().getTracer().clear();
 		
@@ -307,7 +307,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 
 	private CloseableIteration<? extends IntelligentStatement, SailException> getFacts(Resource thingresource, Value pathQLValue, Resource... contexts ) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
+		EvaluatorThing thing = EvaluatorThing.create(source, thingresource, null);
 		String pathQL = toPathQLString(pathQLValue);
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
@@ -315,22 +315,22 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	private CloseableIteration<? extends IntelligentStatement, SailException> getPaths(Resource thingresource, Value pathQLValue, Resource... contexts ) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
+		EvaluatorThing thing = EvaluatorThing.create(source, thingresource, null);
 		String pathQL = toPathQLString(pathQLValue);
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return getThingPaths(source, thing,pathElement, contexts );
 	}
-	private CloseableIteration<? extends IntelligentStatement, SailException> getThingFacts(IntelligentGraphRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
+	private CloseableIteration<? extends IntelligentStatement, SailException> getThingFacts(IntelligentGraphRepository source,EvaluatorThing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) 
 				new IntelligentStatementResults(source,thing, pathElement,this,customQueryOptions,contexts);
 	}
-	private CloseableIteration<? extends IntelligentStatement, SailException> traceThingFacts(IntelligentGraphRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
+	private CloseableIteration<? extends IntelligentStatement, SailException> traceThingFacts(IntelligentGraphRepository source,EvaluatorThing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) 
 				new IntelligentStatementResults(source,thing, pathElement,this,customQueryOptions,true,contexts);
 	}	
 	
-	private CloseableIteration<? extends IntelligentStatement, SailException> getThingPaths(IntelligentGraphRepository source,Thing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
+	private CloseableIteration<? extends IntelligentStatement, SailException> getThingPaths(IntelligentGraphRepository source,EvaluatorThing thing, PathElement pathElement,Resource... contexts ) throws PathPatternException {
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementPaths( source,thing, pathElement,  this,customQueryOptions,contexts);	
 	}
 
@@ -345,14 +345,14 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	}
 	private void deleteFacts(UpdateContext modify, Resource thingresource, Value pathQLValue,  Resource... contexts) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
+		EvaluatorThing thing = EvaluatorThing.create(source, thingresource, null);
 		String pathQL = toPathQLString(pathQLValue);
 		PathElement pathElement = PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		deleteThingFacts( modify, source, thing,  pathElement, contexts) ;
 
 	}
-	private void deleteThingFacts(UpdateContext modify,IntelligentGraphRepository source,Thing thing, PathElement pathElement, Resource... contexts) throws PathPatternException {
+	private void deleteThingFacts(UpdateContext modify,IntelligentGraphRepository source,EvaluatorThing thing, PathElement pathElement, Resource... contexts) throws PathPatternException {
 		CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator = getResultsIterator(source, thing,pathElement, 0,contexts);
 		if(((PredicateElement)pathElement).getIsReified()) {
 			String reified = ((PredicateElement)pathElement).getReifiedVariable().getName();
@@ -371,7 +371,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		}
 	}
 
-	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
+	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,EvaluatorThing thing, PathElement pathElement, PathTupleExpr pathTupleExpr, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
 		TupleExpr tupleExpr = pathTupleExpr.getTupleExpr();
 		SimpleDataset dataset = prepareDataset(pathElement, source,contexts);
@@ -381,7 +381,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		return resultsIterator;
 	}
 
-	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,Thing thing, PathElement pathElement, Integer pathIteration, Resource... contexts)
+	CloseableIteration<BindingSet, QueryEvaluationException> getResultsIterator(IntelligentGraphRepository source,EvaluatorThing thing, PathElement pathElement, Integer pathIteration, Resource... contexts)
 			throws IllegalArgumentException, QueryEvaluationException {
 		CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
 		TupleExpr tupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions).getTupleExpr();

@@ -12,7 +12,7 @@ public class IntelligentGraphConstants {
 	public static final String URN_CUSTOM_QUERY_OPTIONS = "urn:customQueryOptions";
 	
 	public static final String DATASET = "dataset";
-
+	@Deprecated
 	public static final String PREFIXES = "prefixes";
 	public static final String QUERYTYPE = "queryType";
 	public static final String SAIL = "sail";
