@@ -1,7 +1,7 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.context;
+package com.inova8.intelligentgraph.evaluator;
 
 import java.util.ArrayList;
 import javax.script.ScriptException;
@@ -12,7 +12,8 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 
-import com.inova8.intelligentgraph.context.Tracer;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.evaluator.Tracer;
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Path;

@@ -26,6 +26,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
  * The Class GeoFactValueTest.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Deprecated
 public class GeoFactValueTest extends OlgapTest{
 
 	/** The conn. */

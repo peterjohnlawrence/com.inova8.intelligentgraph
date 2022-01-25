@@ -42,8 +42,10 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
+import com.inova8.intelligentgraph.vocabulary.OWL;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.pathql.context.ReificationType;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.element.PredicateElement;
@@ -114,15 +116,33 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		this.intelligentGraphSail.setPrefixesAreLazyLoaded(false);
 		super.clearNamespaces();
 	}
+	@Override
+	public void addStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
+			throws SailException {
+		try {
+			String[] predicateParts;
+			if (pred != null) {
+				predicateParts= pred.stringValue().split("\\?pathQL=");
+				switch (predicateParts[0]) {
+				case PATHQL.addFact:
+					addFact(modify,subj, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , obj, contexts);
+					break;
 
+				default:
+					super.addStatement(modify, subj, pred, obj, contexts);
+					checkReificationsChanged(pred);
+				}
+			}
+			else
+				super.addStatement(modify, subj, pred, obj, contexts);
+			this.intelligentGraphSail.clearCache();
+		} catch (Exception e) {
+			throw new SailException(e);
+		}	
+	}
 	@Override
 	public void addStatement(Resource subject, IRI predicate, Value object, Resource... contexts)
 			throws SailException {
-//		this.intelligentGraphSail.clearCache();
-//		//TODO
-//		//If pred= http://inova8.com/script/isPrivate then add subject to public/private contexts
-//		//Or set lazyLoaded =false
-//		super.addStatement(subject, predicate, object, contexts);
 		try {
 			String[] predicateParts;
 			if (predicate != null) {
@@ -131,27 +151,56 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 				case PATHQL.addFact:
 					addFact(subject, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , object, contexts);
 					break;
+
 				default:
 					super.addStatement(subject, predicate, object, contexts);
+					checkReificationsChanged(predicate);
 				}
 			}
 			else
 				super.addStatement(subject, predicate, object, contexts);
 			this.intelligentGraphSail.clearCache();
-			IntelligentGraphRepository.create(this).clearRepositoryContext();
 		} catch (Exception e) {
 			throw new SailException(e);
 		}		
+	}
+	private void addFact(UpdateContext modify, Resource thingresource, String pathQL, Value value , Resource... contexts) throws RecognitionException, PathPatternException {
+		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
+		Thing thing = Thing.create(source, thingresource, null);
+		PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
+		predicateElement.getSourceVariable().setValue( thing.getValue());
 		
+		if (predicateElement.getIsReified()) {
+			ReificationType reificationType = source.getRepositoryContext().getReificationTypes().get(predicateElement.getReification().stringValue());
+			if (reificationType != null) {
+				IRI reification = iri(
+						reificationType.getReificationType().stringValue() + "/" + thing.getIRI().hashCode() + "."
+								+ predicateElement.getPredicate().hashCode() + "." + value.hashCode());
+				super.addStatement(modify,reification, RDF.TYPE, predicateElement.getReification(),
+						contexts);
+				super.addStatement(modify,reification, reificationType.getReificationSubject(), thing.getIRI(),
+						contexts);
+				super.addStatement(modify,reification, reificationType.getReificationPredicate(), predicateElement.getPredicate(),
+						contexts);
+				super.addStatement(modify,reification, reificationType.getReificationObject(), value,
+						contexts);
+			} else {
+				logger.error("Reified type not supported:" + predicateElement.toString());
+			}
+
+		} else {
+			IRI propertyIri = predicateElement.getPredicate();
+			
+			super.addStatement(modify,thing.getIRI(), propertyIri, value, contexts);
+			checkReificationsChanged(propertyIri);
+		}
 		
 	}
-
 	private void addFact(Resource thingresource, String pathQL, Value value , Resource... contexts) throws RecognitionException, PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
 		PredicateElement predicateElement = (PredicateElement) PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		predicateElement.getSourceVariable().setValue( thing.getValue());
-
 		
 		if (predicateElement.getIsReified()) {
 			ReificationType reificationType = source.getRepositoryContext().getReificationTypes().get(predicateElement.getReification().stringValue());
@@ -175,17 +224,24 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			IRI propertyIri = predicateElement.getPredicate();
 			
 			super.addStatement(thing.getIRI(), propertyIri, value, contexts);
+			checkReificationsChanged(propertyIri);
 		}
 		
 	}
 
-
-	@Override
-	public void addStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
-			throws SailException {
-		this.intelligentGraphSail.clearCache();
-		super.addStatement(modify, subj, pred, obj, contexts);
+	private void checkReificationsChanged(IRI propertyIri) {
+		switch (propertyIri.stringValue()) {
+			case RDFS.subClassOf:
+			case RDFS.subPropertyOf:
+			case RDFS.domain:
+			case RDFS.range: 
+			case OWL.inverse_of:
+				IntelligentGraphRepository.create(this).clearRepositoryContext();
+			default:	
+				
+		}
 	}
+
 	@Override
 	public void removeStatements(Resource subj, IRI pred, Value obj, Resource... contexts) throws SailException {
 		try {
@@ -197,9 +253,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 					break;
 				default:
 					super.removeStatements(subj, pred, obj, contexts);
+					checkReificationsChanged(pred);
 				}
-			else
+			else {
 				super.removeStatements(subj, pred, obj, contexts);
+			}
 		} catch (Exception e) {
 			throw new SailException(e);
 		}
@@ -216,9 +274,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 					break;
 				default:
 					super.removeStatement(modify, subj, pred, obj, contexts);
+					checkReificationsChanged(pred);
 			}
-		else
+		else {
 			super.removeStatement(modify, subj, pred, obj, contexts);
+		}
 		}catch(Exception e) {
 			throw new SailException(e);
 		}
@@ -366,7 +426,9 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			String obj = pathElement.getTargetVariable().getName();	
 			while(resultsIterator.hasNext()){
 				BindingSet bindingSet = resultsIterator.next();
+				IRI predicate = (IRI)bindingSet.getBinding(pred).getValue();
 				super.removeStatements((Resource)bindingSet.getBinding(subj).getValue(), (IRI)bindingSet.getBinding(pred).getValue(), bindingSet.getBinding(obj).getValue(), contexts);
+				checkReificationsChanged(predicate);
 			}
 		}
 	}

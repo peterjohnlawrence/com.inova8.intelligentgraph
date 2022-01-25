@@ -6,7 +6,9 @@ import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.Path;
 
 public class PathSteps extends HashMap<String, Object>{
-	
+
+	private static final long serialVersionUID = 1L;
+
 	public  PathSteps(Path path){
 		Steps steps = new Steps();
 		Boolean first =true;

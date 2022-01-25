@@ -13,8 +13,9 @@ import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
-import com.inova8.intelligentgraph.context.Evaluator;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.Evaluator;
+import com.inova8.intelligentgraph.evaluator.IntelligentEvaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
@@ -86,8 +87,8 @@ public class FactDebug extends Evaluator implements Function {
 				EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 				evaluationContext.setTracing(true);
 				Thing subjectThing = Thing.create(source, subject, evaluationContext);
-				subjectThing.getFact(predicate,//new PredicateElement(source, predicate),
-						scriptLiteral,customQueryOptions);
+				IntelligentEvaluator.processFactObjectValue(subjectThing, predicate, scriptLiteral, customQueryOptions);
+			//TODO 	subjectThing.getFact(predicate,	scriptLiteral,customQueryOptions);
 				logger.debug("Trace\r\n"+evaluationContext.getTrace());
 				return tripleSource.getValueFactory().createLiteral(evaluationContext.getTrace());
 			}catch(Exception e) {

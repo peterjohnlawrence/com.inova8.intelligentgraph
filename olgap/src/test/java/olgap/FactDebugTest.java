@@ -23,6 +23,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 /**
  * The Class FactDebugTest.
  */
+@Deprecated
 public class FactDebugTest extends OlgapTest{
 
 	/** The conn. */

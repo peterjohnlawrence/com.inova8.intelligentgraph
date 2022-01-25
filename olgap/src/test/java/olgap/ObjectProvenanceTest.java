@@ -26,6 +26,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 /**
  * The Class ObjectProvenanceTest.
  */
+@Deprecated
 public class ObjectProvenanceTest extends OlgapTest{
 	
 	/** The conn. */

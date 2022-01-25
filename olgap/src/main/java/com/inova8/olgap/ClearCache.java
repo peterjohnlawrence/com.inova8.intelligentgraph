@@ -18,7 +18,7 @@ import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.context.Evaluator;
+import com.inova8.intelligentgraph.evaluator.Evaluator;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
 
 /**

@@ -26,6 +26,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 /**
  * The Class ObjectValueTest.
  */
+@Deprecated
 public class ObjectValueTest extends OlgapTest{
 	
 	/** The conn. */
@@ -66,7 +67,7 @@ public class ObjectValueTest extends OlgapTest{
 	void test0() {
 		String queryString8 = "PREFIX olgap: <http://inova8.com/olgap/> \n";
 		queryString8 +=	 "  SELECT *\n" 
-		+ "WHERE {  VALUES(?Script_p ?Script_s){(<http://inova8.com/olgap/scriptCode> <http://inova8.com/calc2graph/id/calculateMassYield>)}.    \n"
+		+ "WHERE {  VALUES(?Script_p ?Script_s){(<http://inova8.com/script/scriptCode> <http://inova8.com/calc2graph/id/calculateMassYield>)}.    \n"
 		+ "		?Script_s ?Script_p ?Script_or .   BIND(olgap:objectValue(?Script_s , ?Script_p, ?Script_or) as ?Script_o ) \n"
 		+ "}";
 		String result = runQuery(conn, queryString8);

@@ -1,12 +1,13 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.context;
+package com.inova8.intelligentgraph.evaluator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.pathql.context.Prefixes;
 import org.eclipse.rdf4j.query.Dataset;
 

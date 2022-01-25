@@ -27,6 +27,7 @@ import utilities.Query;
  * The Class PathCalcTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Deprecated
 class Local_OlgapFunction_Tests {
 	
 	private static RepositoryConnection conn;

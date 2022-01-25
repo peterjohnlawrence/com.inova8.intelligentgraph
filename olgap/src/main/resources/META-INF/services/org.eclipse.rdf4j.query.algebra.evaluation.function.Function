@@ -1,8 +1,8 @@
-olgap.TrianglesFunction
-olgap.EccentricityFunction
-olgap.FactValue
-olgap.FactProvenance
-olgap.FactDebug
-olgap.ObjectValue
-olgap.ObjectProvenance
-olgap.ClearCache
+com.inova8.olgap.TrianglesFunction
+com.inova8.olgap.EccentricityFunction
+com.inova8.olgap.FactValue
+com.inova8.olgap.FactProvenance
+com.inova8.olgap.FactDebug
+com.inova8.olgap.ObjectValue
+com.inova8.olgap.ObjectProvenance
+com.inova8.olgap.ClearCache

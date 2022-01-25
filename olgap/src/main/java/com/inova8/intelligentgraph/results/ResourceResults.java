@@ -12,7 +12,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;

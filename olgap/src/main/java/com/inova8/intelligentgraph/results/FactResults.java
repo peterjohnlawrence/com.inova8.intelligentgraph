@@ -10,6 +10,7 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.evaluator.IntelligentEvaluator;
 import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Fact;
@@ -83,7 +84,8 @@ public class FactResults extends ResourceBindingSetResults {
 			Value factThing = next.getValue(getPathElement().getTargetSubject().getName());
 			//Thing thing = Thing.create(getSource(),this.getThing().getGraphName(), factThing ,this.getEvaluationContext());
 			Thing thing = Thing.create(getSource(),factThing ,this.getEvaluationContext());
-			return thing.processFactObjectValue((IRI) factPredicate,factValue,this.customQueryOptions);
+			//TODO return thing.processFactObjectValue((IRI) factPredicate,factValue,this.customQueryOptions);
+			return IntelligentEvaluator.processFactObjectValue(thing, (IRI) factPredicate,factValue,this.customQueryOptions);
 		}
 	}
 	

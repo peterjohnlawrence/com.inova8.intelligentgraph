@@ -7,7 +7,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.pathql.parser.PathParser;
 import com.inova8.pathql.processor.PathPatternException;

@@ -444,7 +444,7 @@ class Local_TutorialTests {
 
 			Thing Measurement = graph.getThing(":Measurement");
 			
-			Thing Observation = graph.getThing(":Observation").addFact("rdfs:subClassof", RDF.STATEMENT);
+			Thing Observation = graph.getThing(":Observation").addFact("rdfs:subClassOf", RDF.STATEMENT);
 			Thing ObservationType = graph.getThing(":ObservationType");
 			@SuppressWarnings("unused")
 			Thing observationOf = graph.getThing(":observationOf").addFact("rdfs:subPropertyOf", RDF.SUBJECT).addFact("rdfs:domain", Observation).addFact("rdfs:range", Person);

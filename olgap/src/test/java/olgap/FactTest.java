@@ -26,6 +26,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
  * The Class FactTest.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Deprecated
 public class FactTest extends OlgapTest{
 
 	/** The conn. */

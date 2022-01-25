@@ -1,7 +1,9 @@
 /*
  * inova8 2020
  */
-package com.inova8.intelligentgraph.intelligentGraphRepository;
+package com.inova8.intelligentgraph.seeq;
+
+import static org.eclipse.rdf4j.model.util.Values.literal;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,12 +11,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.ScriptException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.exceptions.HandledException;
+import com.inova8.intelligentgraph.exceptions.ScriptFailedException;
 import com.inova8.intelligentgraph.model.Resource;
+import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.pathql.utilities.Utilities;
 import com.seeq.ApiClient;
 import com.seeq.ApiException;
 import com.seeq.api.AuthApi;
@@ -106,7 +113,34 @@ public class SEEQSource {
 		formulasApi = new FormulasApi(apiClient);
 		logger.debug("Connection created at: {}",basePath);
 	}
-
+	public static Resource getSEEQSignal(Thing thing, String signal, CustomQueryOptions customQueryOptions)
+			throws ScriptFailedException {
+		signal = Utilities.trimIRIString(signal);
+		String[] elements = signal.split("/");
+		Object result;
+		SEEQSource seeqSource = null;
+		try {
+			if(elements.length<6) {
+				thing.getEvaluationContext().getTracer().decrementLevel();
+				String error = String.format("Unsupported signal source: %s", signal);
+				logger.error(error);
+				thing.getEvaluationContext().getTracer().traceSignalError(error);
+				throw new ScriptFailedException( error);
+			}else {
+				thing.getEvaluationContext().getTracer().traceSEEQ(elements[5],
+						customQueryOptions);
+				seeqSource = thing.getSource().seeqSourceFactory(elements[2]);
+				result = seeqSource.getSignal(elements[5], customQueryOptions);
+				thing.getEvaluationContext().getTracer().decrementLevel();
+				return Resource.create(thing.getSource(), literal((Double) result), thing.getEvaluationContext());
+			}
+		} catch (ScriptException e) {
+			throw new ScriptFailedException( e);
+			
+		} catch (HandledException e) {
+			throw new ScriptFailedException( e);
+		}
+	}
 	/**
 	 * Gets the signal.
 	 *

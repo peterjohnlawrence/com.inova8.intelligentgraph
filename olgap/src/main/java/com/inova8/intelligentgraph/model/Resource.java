@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
-import com.inova8.intelligentgraph.context.EvaluationStack;
-import com.inova8.intelligentgraph.context.Tracer;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.EvaluationStack;
+import com.inova8.intelligentgraph.evaluator.Tracer;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.pathql.processor.PathPatternException;

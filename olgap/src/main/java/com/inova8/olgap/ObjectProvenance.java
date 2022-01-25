@@ -15,8 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
-import com.inova8.intelligentgraph.context.Evaluator;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.Evaluator;
+import com.inova8.intelligentgraph.evaluator.IntelligentEvaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.OLGAP;
@@ -89,8 +90,8 @@ public class ObjectProvenance extends Evaluator implements Function {
 					EvaluationContext evaluationContext = new EvaluationContext(customQueryOptions);
 					evaluationContext.setTracing(true);
 					Thing subjectThing = Thing.create(source, subject, evaluationContext);	
-					com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact( predicate,//new PredicateElement(source,predicate),
-							literalValue,customQueryOptions);
+					com.inova8.intelligentgraph.model.Resource fact =  IntelligentEvaluator.processFactObjectValue(subjectThing, predicate, literalValue, customQueryOptions);
+					//TODO com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact( predicate,literalValue,customQueryOptions);
 					if( fact != null) {
 						fact.getValue();
 						logger.debug("Trace\r\n"+evaluationContext.getTrace());

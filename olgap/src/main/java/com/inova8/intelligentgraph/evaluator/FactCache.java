@@ -1,4 +1,4 @@
-package com.inova8.intelligentgraph.sail;
+package com.inova8.intelligentgraph.evaluator;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;

@@ -25,8 +25,9 @@ import org.eclipse.rdf4j.sail.SailConnection;
 
 import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
-import com.inova8.intelligentgraph.context.Evaluator;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.Evaluator;
+import com.inova8.intelligentgraph.evaluator.IntelligentEvaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
@@ -251,8 +252,8 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 						Thing subjectThing = Thing.create(source, nextBindingSet.getValue("subject"),
 								evaluationContext);
 						try {
-							com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(
-									(IRI) nextBindingSet.getValue("predicate"),	literalValue,customQueryOptions);
+							//TODOcom.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(	(IRI) nextBindingSet.getValue("predicate"),	literalValue,customQueryOptions);
+							com.inova8.intelligentgraph.model.Resource fact = IntelligentEvaluator.processFactObjectValue(subjectThing,	(IRI) nextBindingSet.getValue("predicate"),	literalValue,customQueryOptions);
 							Binding modifiedBindingValue = new SimpleBinding("object", fact.getValue());
 							modifiedBindingSet.addBinding(modifiedBindingValue);
 							return modifiedBindingSet;
@@ -315,8 +316,9 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 								case VALUE:
 									Thing subjectThing = Thing.create(getSource(), subject, evaluationContext);
 									try {
-										com.inova8.intelligentgraph.model.Resource fact = subjectThing
-												.getFact(predicate,	literalValue,customQueryOptions);
+										//TODOcom.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(predicate,	literalValue,customQueryOptions);
+										com.inova8.intelligentgraph.model.Resource fact = IntelligentEvaluator.processFactObjectValue(subjectThing,	predicate,	literalValue,customQueryOptions);
+
 										Binding modifiedBindingValue = new SimpleBinding(modifiedBindingValueName,
 												fact.getValue());
 										modifiedBindingSet.addBinding(modifiedBindingValue);
@@ -333,7 +335,8 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 									evaluationContext.setTracing(true);
 									Thing subjectThingTrace = Thing.create(getSource(), subject, evaluationContext);
 									try {								
-										subjectThingTrace.getFact(predicate,literalValue,customQueryOptions);
+										//TODO subjectThingTrace.getFact(predicate,literalValue,customQueryOptions);
+										IntelligentEvaluator.processFactObjectValue(subjectThingTrace,	predicate,	literalValue,customQueryOptions);
 										Binding modifiedBindingValueTrace = new SimpleBinding(modifiedBindingValueName,
 												literal(evaluationContext.getTracer().getTrace().asHTML()));
 										modifiedBindingSet.addBinding(modifiedBindingValueTrace);
@@ -352,8 +355,9 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 									getCustomQueryOptions(nextBindingSet), getDataset());
 							Thing subjectThing = Thing.create(getSource(), SCRIPT.ANONTHING, evaluationContext);
 							try {
-								com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(
-										SCRIPT.ANONPREDICATE,literalValue,null);
+								//TODO com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(	SCRIPT.ANONPREDICATE,literalValue,null);
+								com.inova8.intelligentgraph.model.Resource fact =IntelligentEvaluator.processFactObjectValue(subjectThing,	SCRIPT.ANONPREDICATE,	literalValue,customQueryOptions);
+								
 								Binding modifiedBindingValue = new SimpleBinding(bindingValue.getName(),
 										fact.getValue());
 								modifiedBindingSet.addBinding(modifiedBindingValue);

@@ -10,8 +10,9 @@ import org.eclipse.rdf4j.model.impl.ContextStatement;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
-import com.inova8.intelligentgraph.context.EvaluationContext;
-import com.inova8.intelligentgraph.context.Evaluator;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
+import com.inova8.intelligentgraph.evaluator.Evaluator;
+import com.inova8.intelligentgraph.evaluator.IntelligentEvaluator;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
@@ -50,7 +51,8 @@ public class IntelligentStatement extends ContextStatement {
 					Thing subjectThing = Thing.create(getSource(), (IRI)getContext(), contextStatement.getSubject(), getEvaluationContext());	
 					CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(getEvaluationContext().getContexts(),source.getRepositoryContext().getPrefixes());
 					 try {
-						 com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
+						//TODO  com.inova8.intelligentgraph.model.Resource fact = subjectThing.getFact(contextStatement.getPredicate(),literalValue,customQueryOptions, contexts);
+						com.inova8.intelligentgraph.model.Resource fact =IntelligentEvaluator.processFactObjectValue(subjectThing,	contextStatement.getPredicate(),	literalValue,customQueryOptions,contexts);
 						 return fact.getSuperValue();
 					 }catch (Exception e) {
 						 String exceptionMessage = "";
