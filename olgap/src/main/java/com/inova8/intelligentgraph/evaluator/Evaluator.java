@@ -7,8 +7,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
-import org.python.core.Options;
-
 import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -51,7 +49,8 @@ public  class Evaluator {
 			String engineNames = "";
 			String unknownEngineNames = "";
 			Integer engineFactoryCount = 0;
-			Options.importSite = false;
+//TODO Is this really required or can it be called only if Jython loaded	
+		//  Options.importSite = false;
 			for (ScriptEngineFactory engineFactory : engineFactories) {
 				if (!engineFactory.getEngineName().toLowerCase().contains("nashorn")) {
 					engineFactoryCount++;

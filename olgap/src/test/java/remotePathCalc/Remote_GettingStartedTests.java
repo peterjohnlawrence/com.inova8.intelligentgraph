@@ -53,18 +53,19 @@ class Remote_GettingStartedTests {
 	@Order(1)
 	void test_1() {
 		try {
-			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
 			source.prefix("<http://inova8.com/intelligentgraph/example1/>");
 			source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph1>");
+			source.prefix("<http://inova8.com/calc2graph/testGraph1/>");
 			Thing myCountry = graph.getThing(":Country1");
 			myCountry.addFact(":sales", "1");
 			myCountry.addFact(":sales", "2");
 			myCountry.addFact(":sales", "3");
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
-			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts('<http://inova8.com/intelligentgraph/example1/sales>')){totalSales +=  sales.doubleValue();count++}; if(count==0) return Double.POSITIVE_INFINITY else return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(':sales')){totalSales +=  sales.doubleValue();count++}; if(count==0) return Double.POSITIVE_INFINITY else return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Resource average = myCountry.getFact(":averageSales");
 			assertEquals("3.0", average.stringValue());

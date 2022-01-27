@@ -618,6 +618,7 @@ public class Thing extends Resource {
 						this.getGraphName());
 			}
 		} catch (Exception e) {
+			throw new RepositoryException(e);
 		}
 
 		return this;

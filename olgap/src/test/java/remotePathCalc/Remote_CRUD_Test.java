@@ -4,9 +4,9 @@
 package remotePathCalc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.evaluation.RepositoryTripleSource;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +19,9 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.XSD;
 /**
  * The Class PathQLTests.
  */
@@ -32,7 +35,8 @@ class Remote_CRUD_Test {
 	/** The source. */
 	private static IntelligentGraphRepository source;
 	
-
+	static org.eclipse.rdf4j.repository.Repository workingRep;
+	static RepositoryConnection conn ;
 
 	/**
 	 * Sets the up before class.
@@ -41,10 +45,11 @@ class Remote_CRUD_Test {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		org.eclipse.rdf4j.repository.Repository workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","calc2graph");
+		workingRep = new HTTPRepository("http://localhost:8080/rdf4j-server","test");
 		//org.eclipse.rdf4j.repository.Repository workingRep = new SPARQLRepository("http://localhost:8080/rdf4j-server/repositories/calc2graph");
+		 conn = workingRep.getConnection();
 		source =IntelligentGraphRepository.create(workingRep);
-		workingRep.getConnection();
+		//workingRep.getConnection();
 	}
 
 	
@@ -58,6 +63,7 @@ class Remote_CRUD_Test {
 		try {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph1>");
+			source.prefix("<http://inova8.com/calc2graph/testGraph1/>");
 			Thing myCountry = graph.getThing(":Country1");
 			myCountry.addFact(":sales", "1");
 			myCountry.addFact(":sales", "2");
@@ -72,9 +78,7 @@ class Remote_CRUD_Test {
 			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			assertEquals(true, closed);
 		} catch (Exception e) {
-
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getMessage());
 		}
 	}
 	@Test
@@ -84,7 +88,14 @@ class Remote_CRUD_Test {
 		try {
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
+			source.prefix("<http://inova8.com/calc2graph/testGraph2/>");
 			Thing myCountry = graph.getThing(":Country2");
+			Thing Attribute = graph.getThing(":Attribute").addFact("rdfs:subClassOf", RDF.STATEMENT);
+			Thing AttributeType = graph.getThing(":AttributeType");
+			graph.getThing(":attributeOf").addFact(RDFS.SUB_PROPERTY_OF, RDF.SUBJECT).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE,RDFS.RESOURCE);
+			graph.getThing(":attributeType").addFact(RDFS.SUB_PROPERTY_OF, RDF.PREDICATE).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE, AttributeType);
+			graph.getThing(":attributeMeasurement").addFact(RDFS.SUB_PROPERTY_OF, RDF.OBJECT).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE, XSD.STRING);		
+			
 			myCountry.addFact(":Attribute@:sales", "1");
 			myCountry.addFact(":Attribute@:sales", "2");
 			myCountry.addFact(":Attribute@:sales", "3");
@@ -99,9 +110,7 @@ class Remote_CRUD_Test {
 			Boolean closed =source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			assertEquals(true, closed);
 		} catch (Exception e) {
-
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getMessage());
 		}
 	}	
 }

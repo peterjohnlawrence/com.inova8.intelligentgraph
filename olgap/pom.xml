@@ -26,6 +26,7 @@
 			<groupId>org.eclipse.rdf4j</groupId>
 			<artifactId>rdf4j-runtime</artifactId>
 			<type>pom</type>
+			<scope>provided</scope>
 		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>org.apache.logging.log4j</groupId> -->
@@ -40,10 +41,12 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
@@ -57,8 +60,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.python</groupId>
-			<artifactId>jython</artifactId>
+			<artifactId>jython-standalone</artifactId>
 			<version>2.7.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.seeq</groupId>
@@ -74,6 +78,7 @@
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js</artifactId>
 			<version>21.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- log4j2 -->
 		<!-- <dependency> -->
@@ -85,6 +90,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.slf4j</groupId> -->
@@ -105,11 +111,11 @@
 		<!-- <artifactId>log4j-slf4j-impl</artifactId> -->
 		<!-- <version>2.13.3</version> -->
 		<!-- </dependency> -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
     <groupId>net.htmlparser.jericho</groupId>
     <artifactId>jericho-html</artifactId>
@@ -122,14 +128,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<release>11</release>
 					<encoding>utf8</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
+ 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
@@ -144,7 +149,7 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 				</configuration>
-			</plugin>
+			</plugin> 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -159,7 +164,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+<!--  			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.2.4</version>
@@ -194,11 +199,11 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>  -->
 		</plugins>
 	</build>
 	<properties>
-		<rdf4j.version>3.6.3</rdf4j.version>
+		<rdf4j.version>3.7.4</rdf4j.version>
 		<gpg.keyname>lusterthief</gpg.keyname>
 		<slf4j.version>1.7.30</slf4j.version>
 	</properties>
