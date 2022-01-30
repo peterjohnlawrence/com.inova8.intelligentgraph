@@ -23,12 +23,24 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 
 import utilities.Query;
 import org.eclipse.rdf4j.model.Literal;
+
+/**
+ * The Class Example2_Tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example2_Tests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
+	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
@@ -43,10 +55,20 @@ class Example2_Tests {
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
+	
+	/**
+	 * Example 2 1.
+	 */
 	@Test
 	@Order(1)
 	void example2_1() {
@@ -63,6 +85,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 2.
+	 */
 	@Test
 	@Order(2)
 	void example2_2() {
@@ -80,6 +106,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 3.
+	 */
 	@Test
 	@Order(3)
 	void example2_3() {
@@ -97,6 +127,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 4.
+	 */
 	@Test
 	@Order(4)
 	void example2_4() {
@@ -110,6 +144,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 5.
+	 */
 	@Test
 	@Order(5)
 	void example2_5() {
@@ -123,6 +161,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 6.
+	 */
 	@Test
 	@Order(6)
 	void example2_6() {
@@ -136,6 +178,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 7.
+	 */
 	@Test
 	@Order(7)
 	void example2_7() {
@@ -149,6 +195,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 8.
+	 */
 	@Test
 	@Order(8)
 	void example2_8() {
@@ -166,6 +216,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 9.
+	 */
 	@Test
 	@Order(9)
 	void example2_9() {
@@ -179,6 +233,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 10.
+	 */
 	@Test
 	@Order(10)
 	void example2_10() {
@@ -194,6 +252,10 @@ class Example2_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 2 11.
+	 */
 	@Test
 	@Order(11)
 	void example2_11() {

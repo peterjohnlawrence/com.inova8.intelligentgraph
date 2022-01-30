@@ -30,7 +30,7 @@ import org.eclipse.rdf4j.spin.function.InverseMagicProperty;
  */
 public class DegreeDistributionTupleFunction implements InverseMagicProperty{
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(DegreeDistributionTupleFunction.class);
 	
 	/**
@@ -60,14 +60,13 @@ public class DegreeDistributionTupleFunction implements InverseMagicProperty{
 	 *
 	 * @param valueFactory the value factory
 	 * @param args the args
-	 * @return the closeable iteration<? extends list<? extends value>, query evaluation exception>
+	 * @return the closeable iteration{@code<? extends list<? extends value>, query evaluation exception>}
 	 * @throws QueryEvaluationException the query evaluation exception
 	 */
 	@Override
 	public CloseableIteration<? extends List<? extends Value>, QueryEvaluationException> evaluate(
 			ValueFactory valueFactory, Value... args) throws QueryEvaluationException {
 
-		//Repository rep = new HTTPRepository(args[0].stringValue(),args[1].stringValue());//"http://localhost:8082/rdf4j-server/", "tfl");
 		org.eclipse.rdf4j.repository.Repository rep = new SPARQLRepository(args[0].stringValue());
 		rep.init();	
 		conn = rep.getConnection();

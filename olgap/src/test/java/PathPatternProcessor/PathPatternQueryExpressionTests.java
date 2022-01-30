@@ -39,7 +39,7 @@ import utilities.Query;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternQueryExpressionTests {
 	
-	/** The repositoryContext. */
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 	
 	/** The indices. */
@@ -92,6 +92,9 @@ class PathPatternQueryExpressionTests {
 		return element;
 	}	
 
+	/**
+	 * Test 05.
+	 */
 	@Test
 	@Order(0)
 	void test_05() {
@@ -117,6 +120,9 @@ class PathPatternQueryExpressionTests {
 	}
 
 
+	/**
+	 * Test 0.
+	 */
 	@Test
 	@Order(0)
 	void test_0() {
@@ -162,6 +168,9 @@ class PathPatternQueryExpressionTests {
 				 , element.pathPatternQuery().toString());
 	}
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -523,6 +532,10 @@ class PathPatternQueryExpressionTests {
 			Query.assertEqualsWOSpaces ("<http://default/Location>@<http://default/appearsOn>[eq <http://id/Calc2Graph2> ;]#","" );
 		}
 	}
+	
+	/**
+	 * Test 12.
+	 */
 	@Test 
 	@Order(12)
 	void test_12() {
@@ -549,6 +562,7 @@ class PathPatternQueryExpressionTests {
 			assertEquals("", e.getMessage());
 		}
 		}
+
 /**
  * Test 13.
  */
@@ -611,6 +625,7 @@ void test_14() {
 		assertEquals("", e.getMessage());
 	}
 }
+
 /**
  * Test 15.
  */
@@ -713,6 +728,7 @@ void test_18() {
 		assertEquals("", e.getMessage());
 	}
 }
+
 /**
  * Test 19.
  */
@@ -852,6 +868,10 @@ void test_23() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 23 1.
+ */
 @Test 
 @Order(23)
 void test_23_1() {
@@ -1242,6 +1262,9 @@ void test_34() {
 }
 
 
+/**
+ * Test 35.
+ */
 @Test 
 @Order(35)
 void test_35() {
@@ -1264,6 +1287,10 @@ void test_35() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 36.
+ */
 @Test 
 @Order(36)
 void test_36() {
@@ -1285,6 +1312,10 @@ void test_36() {
 		assertEquals("",e.getMessage());
 	}
 }
+
+/**
+ * Test 37.
+ */
 @Test 
 @Order(37)
 void test_37() {
@@ -1316,6 +1347,10 @@ void test_37() {
 		assertEquals("",e.getMessage());
 	}
 }
+
+/**
+ * Test 38.
+ */
 @Test 
 @Order(38)
 void test_38() {
@@ -1337,6 +1372,10 @@ void test_38() {
 		assertEquals("",e.getMessage());
 	}
 }
+
+/**
+ * Test 39.
+ */
 @Test 
 @Order(39)
 void test_39() {
@@ -1368,6 +1407,10 @@ void test_39() {
 		assertEquals("",e.getMessage());
 	}
 }
+
+/**
+ * Test 40.
+ */
 @Test
 @Order(40)
 void test_40() {
@@ -1395,6 +1438,10 @@ void test_40() {
 		assertEquals("",e.getMessage());
 	}
 }
+
+/**
+ * Test 41.
+ */
 @Test
 @Order(41)
 void test_41() {

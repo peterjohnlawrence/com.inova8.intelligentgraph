@@ -15,15 +15,22 @@ public class HandledException extends RDF4JException {
 	
 	/** The code. */
 	private String code;
+	
+	/**
+	 * Instantiates a new handled exception.
+	 *
+	 * @param code the code
+	 */
 	public HandledException(String code) {
         this.setCode(code);
     }
-	    /**
-    	 * Instantiates a new handled exception.
-    	 *
-    	 * @param code the code
-    	 * @param e the message
-    	 */
+	    
+    	/**
+	     * Instantiates a new handled exception.
+	     *
+	     * @param code the code
+	     * @param e the e
+	     */
     	public HandledException(String code, Throwable e) {
 	        super(e);
 	        this.setCode(code);
@@ -31,39 +38,45 @@ public class HandledException extends RDF4JException {
 
     	
 	    /**
-	     * Instantiates a new handled exception.
-	     *
-	     * @param code the code
-	     * @param parameterizedMessage the parameterized message
-	     */
+    	 * Instantiates a new handled exception.
+    	 *
+    	 * @param code the code
+    	 * @param message the message
+    	 */
 	    public HandledException(String code, String message) {
 	        super(message);
 	        this.setCode(code);
     	}
     	
 	    /**
-	     * Instantiates a new handled exception.
-	     *
-	     * @param code the code
-	     * @param parameterizedMessage the parameterized message
-	     * @param cause the cause
-	     */
+    	 * Instantiates a new handled exception.
+    	 *
+    	 * @param code the code
+    	 * @param message the message
+    	 * @param cause the cause
+    	 */
 	    public HandledException(String code, String message, Throwable cause) {
 	        super(message,cause);
 	        this.setCode(code);
     	}
 	    
 
+		/**
+		 * Gets the cause.
+		 *
+		 * @return the cause
+		 */
 		@Override
 		public synchronized Throwable getCause() {
 
 			return super.getCause();
 		}
+		
 		/**
-    	 * Gets the code.
-    	 *
-    	 * @return the code
-    	 */
+		 * Gets the code.
+		 *
+		 * @return the code
+		 */
     	public String getCode() {
 	        return code;
 	    }

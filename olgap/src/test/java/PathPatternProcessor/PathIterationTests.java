@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package PathPatternProcessor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,11 +16,19 @@ import com.inova8.pathql.element.Iterations;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.parser.PathParser;
 
+/**
+ * The Class PathIterationTests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PathIterationTests {
+	
+	/** The span min. */
 	ArrayList<Integer> spanMin = new ArrayList<Integer>();
+	
+	/** The span max. */
 	ArrayList<Integer> spanMax = new ArrayList<Integer>();
-	/** The repositoryContext. */
+	
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 
 
@@ -32,6 +43,10 @@ public class PathIterationTests {
 		repositoryContext.prefix("http://default/").prefix("local","http://local/").prefix("rdfs","http://rdfs/").prefix("id","http://id/").prefix("xsd","http://www.w3.org/2001/XMLSchema#");
 
 	}
+	
+	/**
+	 * Test 0.
+	 */
 	@Test 
 	@Order(0)
 	void test_0() {
@@ -48,6 +63,10 @@ public class PathIterationTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 2.
+	 */
 	@Test 
 	@Order(2)
 	void test_2() {
@@ -65,6 +84,10 @@ public class PathIterationTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 3.
+	 */
 	@Test 
 	@Order(3)
 	void test_3() {
@@ -82,6 +105,10 @@ public class PathIterationTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 4.
+	 */
 	@Test 
 	@Order(4)
 	void test_4() {
@@ -101,6 +128,10 @@ public class PathIterationTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 5.
+	 */
 	@Test 
 	@Order(5)
 	void test_5() {
@@ -118,6 +149,10 @@ public class PathIterationTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 6.
+	 */
 	@Test 
 	@Order(6)
 	void test_6() {

@@ -19,12 +19,23 @@ import com.inova8.intelligentgraph.vocabulary.*;
 
 import utilities.Query;
 
+/**
+ * The Class GettingStarted_Tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GettingStarted_Tests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
+	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
@@ -37,11 +48,22 @@ class GettingStarted_Tests {
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
 
+	/**
+	 * Gets the ting started 1.
+	 *
+	 * @return the ting started 1
+	 */
 	@Test
 	@Order(1)
 	void gettingStarted_1() {

@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package olgap;
 
 import java.util.List;
@@ -14,9 +17,18 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.spin.SpinSail;
 
+/**
+ * The Class Test.
+ */
 @SuppressWarnings("deprecation")
 
 public class Test {
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		
 		Repository workingRep = new SailRepository(new SpinSail(new MemoryStore()));

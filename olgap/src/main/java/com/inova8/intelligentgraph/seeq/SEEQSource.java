@@ -113,6 +113,16 @@ public class SEEQSource {
 		formulasApi = new FormulasApi(apiClient);
 		logger.debug("Connection created at: {}",basePath);
 	}
+	
+	/**
+	 * Gets the SEEQ signal.
+	 *
+	 * @param thing the thing
+	 * @param signal the signal
+	 * @param customQueryOptions the custom query options
+	 * @return the SEEQ signal
+	 * @throws ScriptFailedException the script failed exception
+	 */
 	public static Resource getSEEQSignal(Thing thing, String signal, CustomQueryOptions customQueryOptions)
 			throws ScriptFailedException {
 		signal = Utilities.trimIRIString(signal);
@@ -141,6 +151,7 @@ public class SEEQSource {
 			throw new ScriptFailedException( e);
 		}
 	}
+	
 	/**
 	 * Gets the signal.
 	 *

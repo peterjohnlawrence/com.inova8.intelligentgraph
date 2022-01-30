@@ -27,7 +27,7 @@ public class VerbObjectList extends FactFilterElement {
 	/**
 	 * Instantiates a new verb object list.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public VerbObjectList(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -175,6 +175,14 @@ public class VerbObjectList extends FactFilterElement {
 		}
 		return targetValues;
 	};
+	
+	/**
+	 * Bind target variable.
+	 *
+	 * @param targetVariable the target variable
+	 * @param customQueryOptions the custom query options
+	 * @return the array list
+	 */
 	@Override
 	/**
 	 * Bind target variable.
@@ -293,10 +301,11 @@ public class VerbObjectList extends FactFilterElement {
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
@@ -348,6 +357,16 @@ public class VerbObjectList extends FactFilterElement {
 		return new PathTupleExpr(verbObjectListPattern);
 
 	};
+	
+	/**
+	 * Filter expression.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param customQueryOptions the custom query options
+	 * @return the query model node
+	 */
 	public QueryModelNode filterExpression( Variable sourceVariable, Variable predicateVariable,Variable targetVariable,CustomQueryOptions customQueryOptions) {
 		QueryModelNode verbObjectListExpression = null;
 		if (filterOperator != null) {
@@ -412,13 +431,14 @@ public class VerbObjectList extends FactFilterElement {
 		return verbObjectListExpression;
 
 	};
+	
 	/**
 	 * Bound pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {

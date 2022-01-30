@@ -26,15 +26,16 @@ import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import utilities.Query;
 
 /**
- * The Class ThingTests.
+ * The Class Local_GetTraceFact_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetTraceFact_Tests {
 		
-	/** The source. */
+	/** The working rep. */
 //	private static PathQLRepository source;
 	
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -56,10 +57,19 @@ class Local_GetTraceFact_Tests {
 
 	}
 
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}	
+		
+		/**
+		 * Test 1.
+		 */
 		@Test
 		@Order(1)
 		void test_1() {
@@ -85,6 +95,10 @@ class Local_GetTraceFact_Tests {
 			}
 	
 		}
+		
+		/**
+		 * Test 2.
+		 */
 		@Test
 		@Order(2)
 		void test_2() {
@@ -108,6 +122,9 @@ class Local_GetTraceFact_Tests {
 	
 		}
 	
+		/**
+		 * Test 3.
+		 */
 		@Test
 		@Order(3)
 		void test_3() {
@@ -133,6 +150,10 @@ class Local_GetTraceFact_Tests {
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * Test 4.
+		 */
 		@Test
 		@Order(4)
 		void test_4() {
@@ -159,6 +180,10 @@ class Local_GetTraceFact_Tests {
 				e.printStackTrace();
 			}
 		}
+	
+	/**
+	 * Test 5.
+	 */
 	@Test
 	@Order(5)
 	void test_5() {

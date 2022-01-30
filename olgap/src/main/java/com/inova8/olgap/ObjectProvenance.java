@@ -30,7 +30,7 @@ import com.inova8.intelligentgraph.vocabulary.OLGAP;
 @Deprecated
 public class ObjectProvenance extends Evaluator implements Function {
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(ObjectProvenance.class);
 
 

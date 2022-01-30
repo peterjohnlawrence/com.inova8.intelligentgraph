@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.context;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
@@ -20,21 +23,47 @@ import com.inova8.intelligentgraph.model.Literal;
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
 
+/**
+ * The Class CustomQueryOptions.
+ */
 public class CustomQueryOptions extends Hashtable<String, Resource> {
+	
+	/**
+	 * Gets the.
+	 *
+	 * @param key the key
+	 * @return the resource
+	 */
 	@Override
 	public synchronized Resource get(Object key) {
 		// TODO Auto-generated method stub
 		return super.get(key);
 	}
+	
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(CustomQueryOptions.class);
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -5718476100009689495L;
  
+	/** The inherited custom query options list. */
 	ArrayList<CustomQueryOptions> inheritedCustomQueryOptionsList = new ArrayList<CustomQueryOptions>();
 
 	
+	/**
+	 * Instantiates a new custom query options.
+	 */
 	public CustomQueryOptions() {
 		super();
 	}
+	
+	/**
+	 * Creates the.
+	 *
+	 * @param pathQLRepository the path QL repository
+	 * @param customQueryOptionsArray the custom query options array
+	 * @return the custom query options
+	 */
 	static public CustomQueryOptions create(IntelligentGraphRepository pathQLRepository,Value[] customQueryOptionsArray) {
 
 		if (customQueryOptionsArray.length == 0) {
@@ -55,6 +84,13 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			return customQueryOptions;
 		}
 	}
+	
+	/**
+	 * Creates the.
+	 *
+	 * @param bindValues the bind values
+	 * @return the custom query options
+	 */
 	static public CustomQueryOptions create(Value... bindValues) {
 		if(bindValues.length>0) {  
 			CustomQueryOptions customQueryOptions = new CustomQueryOptions();	
@@ -71,18 +107,44 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 		}else
 			return null;		
 	}
+	
+	/**
+	 * Instantiates a new custom query options.
+	 *
+	 * @param initialCapacity the initial capacity
+	 * @param loadFactor the load factor
+	 */
 	public CustomQueryOptions(int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * Instantiates a new custom query options.
+	 *
+	 * @param initialCapacity the initial capacity
+	 */
 	public CustomQueryOptions(int initialCapacity) {
 		super(initialCapacity);
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * Instantiates a new custom query options.
+	 *
+	 * @param t the t
+	 */
 	public CustomQueryOptions(Map<? extends String, ? extends Resource> t) {
 		super(t);
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * Adds the all.
+	 *
+	 * @param bindValues the bind values
+	 * @return the custom query options
+	 */
 	public CustomQueryOptions addAll(Value[] bindValues) {
 		if(bindValues.length>0) {  
 			
@@ -99,6 +161,13 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 		}else
 			return this;	
 	}
+	
+	/**
+	 * Adds the.
+	 *
+	 * @param key the key
+	 * @param value the value
+	 */
 	public void add(String key,Object value ) {
 		if(value!=null) {
 			switch (value.getClass().getSimpleName()) {
@@ -135,6 +204,13 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 		
 		
 	}
+	
+	/**
+	 * Gets the inherited.
+	 *
+	 * @param key the key
+	 * @return the inherited
+	 */
 	public Resource getInherited(String key) {
 		if(this.contains(key)) {
 			return this.get(key);
@@ -154,6 +230,13 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			return null;
 		}
 	}
+	
+	/**
+	 * Contains inherited.
+	 *
+	 * @param key the key
+	 * @return the boolean
+	 */
 	public Boolean containsInherited(String key) {
 		if(this.contains(key)) {
 			return true;
@@ -173,6 +256,12 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 			return null;
 		}
 	}
+	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		String queryOptionsstring = "";
@@ -186,6 +275,12 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 		}
 		return queryOptionsstring;
 	}
+	
+	/**
+	 * To URI encoded string.
+	 *
+	 * @return the string
+	 */
 	public String toURIEncodedString() {
 		String queryOptionsString = "";
 		Boolean first =true;
@@ -210,22 +305,56 @@ public class CustomQueryOptions extends Hashtable<String, Resource> {
 		}
 		return queryOptionsString;
 	}
+	
+	/**
+	 * Gets the context.
+	 *
+	 * @return the context
+	 */
 	public org.eclipse.rdf4j.model.Resource getContext() {
 		return iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS + "?" + toURIEncodedString());
 		
 	}
+	
+	/**
+	 * Gets the empty context.
+	 *
+	 * @return the empty context
+	 */
 	public static  org.eclipse.rdf4j.model.Resource getEmptyContext(){
 		return iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS + "?" );
 	}
+	
+	/**
+	 * Adds the inherited.
+	 *
+	 * @param inheritedCustomQueryOptions the inherited custom query options
+	 */
 	public void addInherited(CustomQueryOptions inheritedCustomQueryOptions) {
 		this.inheritedCustomQueryOptionsList.add(inheritedCustomQueryOptions);
 	}
+	
+	/**
+	 * Clear parents.
+	 */
 	public void clearParents() {
 		this.inheritedCustomQueryOptionsList.clear();
 	}
+	
+	/**
+	 * To SPARQL.
+	 *
+	 * @return the string
+	 */
 	public String toSPARQL() {
 		return null;
 	}
+	
+	/**
+	 * To HTML.
+	 *
+	 * @return the string
+	 */
 	public String toHTML() {
 		return null;
 	}

@@ -20,8 +20,9 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import utilities.Query;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
+
 /**
- * The Class PathQLTests.
+ * The Class Remote_Sparql_IntelligentGraphTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_Sparql_IntelligentGraphTests {
@@ -56,7 +57,8 @@ class Remote_Sparql_IntelligentGraphTests {
 			String queryString1 = "select * WHERE {VALUES(?time){(41)} ?s <http://inova8.com/calc2graph/def/testProperty6> $o } limit 1";
 
 			String result = Query.runSPARQL(conn, queryString1);
-			assertEquals("time=41;s=http://inova8.com/calc2graph/id/BatteryLimit1;o=41;"
+			assertEquals("s=http://inova8.com/calc2graph/id/BatteryLimit1;o=41;time=41;\r\n"
+					+ ""
 					,result);
 //			String result = runSPARQL(conn, queryString1);
 //			assertEquals("time=41;o=41;"

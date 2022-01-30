@@ -24,8 +24,7 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Instantiates a new sequence path element.
 	 *
-	 * @param source
-	 *            the source
+	 * @param repositoryContext the repository context
 	 */
 	public SequencePathElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -72,18 +71,23 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing
-	 *            the thing
-	 * @param sourceVariable
-	 *            the source variable
-	 * @param targetVariable
-	 *            the target variable
-	 * @return the tuple expr
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery(Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return pathPatternQuery( sourceVariable, predicateVariable,targetVariable, 0,customQueryOptions);
 	}
+	
+	/**
+	 * Checks for next cardinality.
+	 *
+	 * @param iteration the iteration
+	 * @return the boolean
+	 */
 	public Boolean hasNextCardinality(Integer iteration) {
 			
 			if (getLeftPathElement() != null) {
@@ -111,6 +115,17 @@ public class SequencePathElement extends PathElement {
 			}
 			return false;
 	 }
+	
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
@@ -213,8 +228,7 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Sets the checks if is negated.
 	 *
-	 * @param isNegated
-	 *            the new checks if is negated
+	 * @param isNegated the new checks if is negated
 	 */
 	public void setIsNegated(Boolean isNegated) {
 		this.isNegated = isNegated;
@@ -223,12 +237,9 @@ public class SequencePathElement extends PathElement {
 	/**
 	 * Index visitor.
 	 *
-	 * @param baseIndex
-	 *            the base index
-	 * @param entryIndex
-	 *            the entry index
-	 * @param edgeCode
-	 *            the edge code
+	 * @param baseIndex the base index
+	 * @param entryIndex the entry index
+	 * @param edgeCode the edge code
 	 * @return the integer
 	 */
 	@Override
@@ -248,11 +259,11 @@ public class SequencePathElement extends PathElement {
 	}
 
 	/**
-	 * Visit path.
+	 * Visit path binding.
 	 *
-	 * @param path
-	 *            the path
-	 * @return the path
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {

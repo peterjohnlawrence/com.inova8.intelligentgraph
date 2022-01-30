@@ -32,16 +32,24 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import utilities.Query;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Local_TutorialTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_TutorialTests {
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
 	}
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -101,6 +109,9 @@ class Local_TutorialTests {
 		}
 	}
 
+	/**
+	 * Test 2.
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	@Order(2)
@@ -179,6 +190,9 @@ class Local_TutorialTests {
 		}
 	}
 
+	/**
+	 * Test 3.
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	@Order(3)
@@ -254,6 +268,9 @@ class Local_TutorialTests {
 		}
 	}
 
+	/**
+	 * Test 4.
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	@Order(4)
@@ -369,6 +386,10 @@ class Local_TutorialTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 5.
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	@Order(5)
@@ -422,6 +443,10 @@ class Local_TutorialTests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Test 6.
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	@Order(6)
@@ -508,6 +533,9 @@ class Local_TutorialTests {
 		}
 	}
 
+	/**
+	 * Test 7.
+	 */
 	@SuppressWarnings("resource")
 	@Test
 	@Order(7)

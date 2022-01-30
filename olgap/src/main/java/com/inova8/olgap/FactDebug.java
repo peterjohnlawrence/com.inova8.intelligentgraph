@@ -25,12 +25,11 @@ import org.slf4j.Logger;
 
 /**
  * The Class FactDebug.
-
  */
 @Deprecated
 public class FactDebug extends Evaluator implements Function {
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(FactDebug.class);
 
 	/**

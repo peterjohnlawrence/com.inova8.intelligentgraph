@@ -27,7 +27,7 @@ import com.inova8.intelligentgraph.vocabulary.OLGAP;
 @Deprecated
 public class FactProvenance extends Evaluator implements Function {
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(FactProvenance.class);
 
 	/**
@@ -50,11 +50,9 @@ public class FactProvenance extends Evaluator implements Function {
 
 	/**
 	 * Evaluate.
-	 * 
-	 * Returns the calculation trace (if calculated) of the value of the predicate of the subject
 	 *
 	 * @param tripleSource the triple source
-	 * @param args the args, args[0] subject, args[1] predicate 
+	 * @param args the args
 	 * @return the value
 	 * @throws ValueExprEvaluationException the value expr evaluation exception
 	 */

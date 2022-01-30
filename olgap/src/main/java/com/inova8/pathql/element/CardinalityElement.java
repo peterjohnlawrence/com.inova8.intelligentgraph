@@ -18,7 +18,7 @@ public class CardinalityElement extends PathElement {
 	/**
 	 * Instantiates a new cardinality element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public CardinalityElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -72,20 +72,33 @@ public class CardinalityElement extends PathElement {
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable,Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
+	
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable,Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}	
+	
 	/**
 	 * Gets the checks if is negated.
 	 *
@@ -124,10 +137,11 @@ public class CardinalityElement extends PathElement {
 	}
 
 	/**
-	 * Visit path.
+	 * Visit path binding.
 	 *
-	 * @param path the path
-	 * @return the path
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {

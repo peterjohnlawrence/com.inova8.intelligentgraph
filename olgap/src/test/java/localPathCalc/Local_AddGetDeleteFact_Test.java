@@ -23,8 +23,9 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import utilities.Query;
+
 /**
- * The Class PathQLTests.
+ * The Class Local_AddGetDeleteFact_Test.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_AddGetDeleteFact_Test {
@@ -36,9 +37,10 @@ class Local_AddGetDeleteFact_Test {
 	/** The repository triple source. */
 	static RepositoryTripleSource repositoryTripleSource;
 	
-	/** The source. */
+	/** The working rep. */
 	//private static PathQLRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -54,11 +56,20 @@ class Local_AddGetDeleteFact_Test {
 		conn.setNamespace("", "http://inova8.com/calc2graph/def/");
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
 	}
 
+	/**
+	 * Ig 0.
+	 */
 	@Test
 	@Order(0)
 	void ig_0() {
@@ -86,6 +97,10 @@ class Local_AddGetDeleteFact_Test {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Ig 1.
+	 */
 	@Test
 	@Order(1)
 	void ig_1() {

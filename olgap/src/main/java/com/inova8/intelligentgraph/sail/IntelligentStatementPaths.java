@@ -35,18 +35,54 @@ import java.io.OutputStream;
 
 
 
+/**
+ * The Class IntelligentStatementPaths.
+ */
 public  class IntelligentStatementPaths extends AbstractCloseableIteration< IntelligentStatement, SailException> {
+	
+	/** The results iterator. */
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
+	
+	/** The thing. */
 	Thing thing;
+	
+	/** The path element. */
 	PathElement pathElement;
+	
+	/** The sorted iterations. */
 	Iterations sortedIterations;
+	
+	/** The path iteration. */
 	private Integer pathIteration;
+	
+	/** The intelligent graph connection. */
 	IntelligentGraphConnection intelligentGraphConnection;
+	
+	/** The source. */
 	IntelligentGraphRepository source;
+	
+	/** The simple value factory. */
 	private SimpleValueFactory simpleValueFactory;
+	
+	/** The custom query options. */
 	private CustomQueryOptions customQueryOptions;
+	
+	/** The contexts. */
 	private Resource[] contexts;
+	
+	/** The path tuple expr. */
 	private PathTupleExpr pathTupleExpr;
+	
+	/**
+	 * Instantiates a new intelligent statement paths.
+	 *
+	 * @param resultsIterator the results iterator
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param intelligentGraphConnection the intelligent graph connection
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 */
 	public IntelligentStatementPaths(CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=resultsIterator;
@@ -56,6 +92,17 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.customQueryOptions=customQueryOptions;
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
+	
+	/**
+	 * Instantiates a new intelligent statement paths.
+	 *
+	 * @param source the source
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param intelligentGraphConnection the intelligent graph connection
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 */
 	public IntelligentStatementPaths( IntelligentGraphRepository source, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=null;
@@ -69,6 +116,13 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.contexts = contexts;
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
+	
+	/**
+	 * Checks for next.
+	 *
+	 * @return true, if successful
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
 		if(resultsIterator!=null && resultsIterator.hasNext()) {
@@ -85,6 +139,13 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 			return false;
 		}	
 	}
+	
+	/**
+	 * Next.
+	 *
+	 * @return the intelligent statement
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public IntelligentStatement next() throws QueryEvaluationException {
 		BindingSet nextBindingset = getResultsIterator().next();
@@ -95,6 +156,12 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		else
 			return new IntelligentStatement(null, null, null);
 	}
+	
+	/**
+	 * Gets the results iterator.
+	 *
+	 * @return the results iterator
+	 */
 	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
 		if(resultsIterator!=null)
 			return resultsIterator;
@@ -105,10 +172,23 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 			return resultsIterator;
 		}
 	}
+	
+	/**
+	 * Removes the.
+	 *
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public void remove() throws QueryEvaluationException {
 		getResultsIterator().remove();	
 	}
+	
+	/**
+	 * Path to literal.
+	 *
+	 * @param bindingset the bindingset
+	 * @return the literal
+	 */
 	private Literal pathToLiteral(BindingSet bindingset) {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setNamespace("",PATHQL.NAMESPACE);

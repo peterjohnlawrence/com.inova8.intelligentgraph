@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.pathql.element;
 
 import java.util.ArrayList;
@@ -6,8 +9,20 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * The Class Iterations.
+ */
 public class Iterations extends LinkedHashMap<Integer,Integer>{
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Creates the.
+	 *
+	 * @param element the element
+	 * @return the iterations
+	 */
 	public static Iterations create(PathElement element) {
 		element.resetIteration();
 		Integer iteration=0;
@@ -18,6 +33,12 @@ public class Iterations extends LinkedHashMap<Integer,Integer>{
 		}while( element.hasNextCardinality(iteration));
 		return iterations;
 	}
+	
+	/**
+	 * Sort by path length.
+	 *
+	 * @return the iterations
+	 */
 	public Iterations sortByPathLength(
 	        ) {
 	    List<Integer> mapKeys = new ArrayList<>(this.keySet());
@@ -47,6 +68,12 @@ public class Iterations extends LinkedHashMap<Integer,Integer>{
 	    }
 	    return sortedMap;
 	}
+	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		return super.toString();
 	}

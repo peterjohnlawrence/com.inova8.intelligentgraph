@@ -23,19 +23,19 @@ import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import utilities.Query;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Remote_PathQL_MultiGraphTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_PathQL_MultiGraphTests {
 	
-	/** The repository triple source. */
+	/** The source. */
 //	static RepositoryTripleSource repositoryTripleSource;
 	
 	/** The source. */
 	private static IntelligentGraphRepository source;
 	
 	/**
-	 *  The evaluator.
+	 * Sets the up before class.
 	 *
 	 * @throws Exception the exception
 	 */
@@ -55,6 +55,9 @@ class Remote_PathQL_MultiGraphTests {
 	}
 
 
+	/**
+	 * Test 10.
+	 */
 	@Test
 	@Order(10)
 	void test_10() {
@@ -78,6 +81,9 @@ class Remote_PathQL_MultiGraphTests {
 		}
 	}
 
+	/**
+	 * Test 20.
+	 */
 	@Test
 	@Order(20)
 	void test_20() {
@@ -91,7 +97,7 @@ class Remote_PathQL_MultiGraphTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			myCountry.addFact(":sales", "60");
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
@@ -103,6 +109,7 @@ class Remote_PathQL_MultiGraphTests {
 			fail();
 		}
 	}
+	
 	/**
 	 * Test 30.
 	 */
@@ -118,7 +125,7 @@ class Remote_PathQL_MultiGraphTests {
 			myCountry.addFact(":sales", "30");
 			myCountry.addFact(":sales", "40");
 			myCountry.addFact(":sales", "50");
-			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
+			String totalSalesScript = "return _this.getFacts(\":sales\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, SCRIPT.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
@@ -129,6 +136,7 @@ class Remote_PathQL_MultiGraphTests {
 			fail();
 		}
 	}
+	
 	/**
 	 * Test 40.
 	 */
@@ -144,7 +152,7 @@ class Remote_PathQL_MultiGraphTests {
 			myCountry.addFact(":sales", "300");
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
+			String averageSalesScript = "return _this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Double averageCountrySales;
 			averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
@@ -190,6 +198,7 @@ class Remote_PathQL_MultiGraphTests {
 			fail();
 		}
 	}
+	
 	/**
 	 * Ig 70.
 	 */
@@ -206,7 +215,7 @@ class Remote_PathQL_MultiGraphTests {
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
 			RepositoryConnection conn = source.getRepository().getConnection();
-			String totalSalesScript = "return $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
+			String totalSalesScript = "return _this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, SCRIPT.GROOVY) ;
 			String queryString1 = "PREFIX : <http://inova8.com/calc2graph/def/> select ?s ?o "
 					+ "FROM <http://inova8.com/calc2graph/testGraph3>\r\n"

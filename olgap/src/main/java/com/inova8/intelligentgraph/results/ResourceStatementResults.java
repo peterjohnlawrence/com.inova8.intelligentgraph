@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.results;
 
 import java.net.URISyntaxException;
@@ -15,9 +18,25 @@ import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.pathql.element.PathElement;
 
 
+/**
+ * The Class ResourceStatementResults.
+ */
 public class ResourceStatementResults extends ResourceResults {
+	
+	/** The statement set. */
 	CloseableIteration<Statement, RepositoryException> statementSet;
+	
+	/** The local statement iterator. */
 	private CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator;
+	
+	/**
+	 * Instantiates a new resource statement results.
+	 *
+	 * @param statementSet the statement set
+	 * @param source the source
+	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
+	 */
 	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,
 			IntelligentGraphRepository source, PathElement pathElement, CustomQueryOptions customQueryOptions) {
@@ -25,23 +44,52 @@ public class ResourceStatementResults extends ResourceResults {
 		super(source, pathElement, customQueryOptions);
 		this.statementSet = statementSet;
 	}
+	
+	/**
+	 * Instantiates a new resource statement results.
+	 *
+	 * @param statementSet the statement set
+	 * @param thing the thing
+	 */
 	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet, Thing thing) {
 		super(thing);
 		this.statementSet = statementSet;
 	}
 
+	/**
+	 * Instantiates a new resource statement results.
+	 *
+	 * @param statementSet the statement set
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
+	 */
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet, Thing thing,
 			PathElement pathElement, CustomQueryOptions customQueryOptions) {
 		super(thing, pathElement, customQueryOptions);
 		this.statementSet = statementSet;
 	}
+	
+	/**
+	 * Instantiates a new resource statement results.
+	 *
+	 * @param statementSet the statement set
+	 */
 	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet) {
 		super();
 		this.statementSet = statementSet;
 	}
 
+	/**
+	 * Instantiates a new resource statement results.
+	 *
+	 * @param localStatementIterator the local statement iterator
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
+	 */
 	public ResourceStatementResults(
 			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator, Thing thing,
 			Object pathElement, CustomQueryOptions customQueryOptions) {
@@ -49,19 +97,39 @@ public class ResourceStatementResults extends ResourceResults {
 		this.localStatementIterator = localStatementIterator;
 	}
 
+	/**
+	 * Next resource.
+	 *
+	 * @return the resource
+	 */
 	public Resource nextResource() {
 		return thing;
 
 	};
 
+	/**
+	 * Gets the statements.
+	 *
+	 * @return the statements
+	 */
 	protected CloseableIteration<Statement, RepositoryException> getStatements() {
 		return (CloseableIteration<Statement, RepositoryException>) statementSet;
 	}
 
+	/**
+	 * Gets the local statement iterator.
+	 *
+	 * @return the local statement iterator
+	 */
 	protected CloseableIteration<? extends Statement, QueryEvaluationException> getLocalStatementIterator() {
 		return localStatementIterator;
 	}
 
+	/**
+	 * Close.
+	 *
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public void close() throws QueryEvaluationException {
 		if (statementSet != null)
@@ -70,6 +138,11 @@ public class ResourceStatementResults extends ResourceResults {
 			localStatementIterator.close();
 	}
 
+	/**
+	 * Removes the.
+	 *
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public void remove() throws QueryEvaluationException {
 		if (statementSet != null)
@@ -78,14 +151,30 @@ public class ResourceStatementResults extends ResourceResults {
 			localStatementIterator.remove();
 	}
 
+	/**
+	 * Gets the statement set.
+	 *
+	 * @return the statement set
+	 */
 	public CloseableIteration<Statement, RepositoryException> getStatementSet() {
 		return statementSet;
 	}
 
+	/**
+	 * Next statement.
+	 *
+	 * @return the statement
+	 */
 	public Statement nextStatement() {
 		return getStatementSet().next();
 	}
 
+	/**
+	 * Checks for next.
+	 *
+	 * @return true, if successful
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
 		if (statementSet != null)
@@ -95,6 +184,12 @@ public class ResourceStatementResults extends ResourceResults {
 		return false;
 	}
 
+	/**
+	 * Next.
+	 *
+	 * @return the resource
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public Resource next() throws QueryEvaluationException {
 		if (statementSet != null) {

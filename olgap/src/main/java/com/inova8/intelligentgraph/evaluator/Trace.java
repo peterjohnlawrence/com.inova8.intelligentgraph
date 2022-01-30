@@ -1,16 +1,42 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.evaluator;
 
+/**
+ * The Class Trace.
+ */
 public class Trace {
 
+/** The trace. */
 //	private StringBuilder htmlTrace = new StringBuilder("<ol style='list-style-type:none;'>");
 	private String trace;
+	
+	/**
+	 * Instantiates a new trace.
+	 *
+	 * @param trace the trace
+	 */
 	public Trace( String trace) {
 		this.trace = trace;
 	}
+	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public	String toString() {
 		return asHTML();
 	}
+	
+	/**
+	 * To HTML.
+	 *
+	 * @param s the s
+	 * @return the string
+	 */
 	@SuppressWarnings("unused")
 	private static String toHTML(String s) {
 		StringBuilder builder = new StringBuilder();
@@ -56,9 +82,21 @@ public class Trace {
 		}
 		return builder.toString();
 	}
+	
+	/**
+	 * As HTML.
+	 *
+	 * @return the string
+	 */
 	public String asHTML() {
 		return trace;
 	}
+	
+	/**
+	 * As text.
+	 *
+	 * @return the string
+	 */
 	public String asText() {
 		return new net.htmlparser.jericho.Source(trace).getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine(null).toString();
 	}

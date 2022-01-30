@@ -39,33 +39,33 @@ public class Sources {
 	}
 	 
  	/**
- 	 * Put.
- 	 *
- 	 * @param cacheHash the cache hash
- 	 * @param source the source
- 	 * @return the path QL repository
- 	 */
+	  * Put.
+	  *
+	  * @param cacheHash the cache hash
+	  * @param source the source
+	  * @return the intelligent graph repository
+	  */
  	IntelligentGraphRepository put(Integer cacheHash,IntelligentGraphRepository source){
 		return sources.put(cacheHash,  source);
 	}
 	 
  	/**
- 	 * Gets the.
- 	 *
- 	 * @param cacheHash the cache hash
- 	 * @return the path QL repository
- 	 */
+	  * Gets the.
+	  *
+	  * @param cacheHash the cache hash
+	  * @return the intelligent graph repository
+	  */
  	IntelligentGraphRepository get(Integer cacheHash){
 		 return sources.get(cacheHash);
 	 }
 	 
  	/**
- 	 * Gets the source.
- 	 *
- 	 * @param tripleSource the triple source
- 	 * @param args the args
- 	 * @return the source
- 	 */
+	  * Gets the source.
+	  *
+	  * @param tripleSource the triple source
+	  * @param args the args
+	  * @return the source
+	  */
  	public IntelligentGraphRepository getSource(TripleSource tripleSource,Value[] args){
 		 Integer cacheHash;
 		 
@@ -89,11 +89,11 @@ public class Sources {
 	 } 
 	 
  	/**
- 	 * Locate cach hash argument.
- 	 *
- 	 * @param args the args
- 	 * @return the integer
- 	 */
+	  * Locate cach hash argument.
+	  *
+	  * @param args the args
+	  * @return the integer
+	  */
  	Integer locateCachHashArgument(Value[] args){
 		 for (int customQueryOptionsArrayIndex = 0; customQueryOptionsArrayIndex < args.length; customQueryOptionsArrayIndex += 2) {
 			 if(args[customQueryOptionsArrayIndex].stringValue().equals(IntelligentGraphConstants.CACHE_HASH)) {
@@ -108,17 +108,17 @@ public class Sources {
 	 }
 	 
  	/**
- 	 * Gets the keys.
- 	 *
- 	 * @return the keys
- 	 */
+	  * Gets the keys.
+	  *
+	  * @return the keys
+	  */
  	public Set<Integer> getKeys (){
 		 return sources.keySet(); 
 	 }
 	 
  	/**
- 	 * Clear.
- 	 */
+	  * Clear.
+	  */
  	public void clear (){
 		 sources.clear();
 	 }

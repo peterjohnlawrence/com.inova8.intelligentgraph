@@ -6,13 +6,29 @@ package com.inova8.intelligentgraph.path;
 import org.eclipse.rdf4j.model.IRI;
 
 
+/**
+ * The Class Edge.
+ */
 public class Edge {
 
 
+	/**
+	 * The Enum Direction.
+	 */
 	public enum Direction {
+		
+		/** The direct. */
 		DIRECT, 
-		 INVERSE;
-		  @Override
+		 
+ 		/** The inverse. */
+ 		INVERSE;
+		  
+  		/**
+		   * To string.
+		   *
+		   * @return the string
+		   */
+  		@Override
 		  public String toString() {
 		    switch(this) {
 		      case DIRECT: return "DIRECT";
@@ -21,13 +37,33 @@ public class Edge {
 		    }
 		  }
 	};
+	
+	/** The source. */
 	org.eclipse.rdf4j.model.Resource source;
+	
+	/** The predicate. */
 	org.eclipse.rdf4j.model.Resource predicate;
+	
+	/** The reification. */
 	IRI reification;
+	
+	/** The target. */
 	org.eclipse.rdf4j.model.Value target;
+	
+	/** The direction. */
 	Direction direction;
+	
+	/** The is dereified. */
 	Boolean isDereified;
 
+	/**
+	 * Instantiates a new edge.
+	 *
+	 * @param source the source
+	 * @param predicate the predicate
+	 * @param target the target
+	 * @param isInverseOf the is inverse of
+	 */
 	public Edge(org.eclipse.rdf4j.model.Resource source, org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf) {
 		this.source = source;
 		this.predicate = predicate;
@@ -38,6 +74,16 @@ public class Edge {
 			direction = Direction.DIRECT;
 	}
 
+	/**
+	 * Instantiates a new edge.
+	 *
+	 * @param source the source
+	 * @param reification the reification
+	 * @param predicate the predicate
+	 * @param target the target
+	 * @param isInverseOf the is inverse of
+	 * @param isDereified the is dereified
+	 */
 	public Edge(org.eclipse.rdf4j.model.Resource source, IRI reification, org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
 		this.source = source;
 		this.predicate = predicate;
@@ -50,29 +96,59 @@ public class Edge {
 		this.isDereified=isDereified;
 	}
 
+	/**
+	 * Gets the source.
+	 *
+	 * @return the source
+	 */
 	public org.eclipse.rdf4j.model.Resource getSource() {
 		return source;
 	}
 
+	/**
+	 * Gets the predicate.
+	 *
+	 * @return the predicate
+	 */
 	public org.eclipse.rdf4j.model.Resource getPredicate() {
 		return predicate;
 	}
 
+	/**
+	 * Gets the reification.
+	 *
+	 * @return the reification
+	 */
 	public IRI getReification() {
 		return reification;
 	}
 
 
+	/**
+	 * Gets the target.
+	 *
+	 * @return the target
+	 */
 	public org.eclipse.rdf4j.model.Value getTarget() {
 		return target;
 	}
 
 
+	/**
+	 * Gets the direction.
+	 *
+	 * @return the direction
+	 */
 	public Direction getDirection() {
 		return direction;
 	}
 	
 
+	/**
+	 * Checks if is inverse.
+	 *
+	 * @return the boolean
+	 */
 	public Boolean isInverse() {
 		if (direction == Direction.INVERSE)
 			return true;
@@ -81,16 +157,31 @@ public class Edge {
 	}
 	
 
+	/**
+	 * Gets the checks if is dereified.
+	 *
+	 * @return the checks if is dereified
+	 */
 	public Boolean getIsDereified() {
 		return isDereified;
 	}
 
 
+	/**
+	 * To SPARQL.
+	 *
+	 * @return the string
+	 */
 	String toSPARQL() {
 		return null;
 	};
 	
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		if(reification!=null)
 			return "[" + source.toString() +",<"+ reification.stringValue() +">@"+ predicate.toString() +","+ target.toString() +"," + direction +"," + isDereified  +"]" ;

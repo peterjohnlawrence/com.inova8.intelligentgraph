@@ -31,6 +31,7 @@ public class FactResults extends ResourceBindingSetResults {
 	 * @param factSet the fact set
 	 * @param thing the thing
 	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
 	 */
 	public FactResults(CloseableIteration<BindingSet, QueryEvaluationException> factSet, Thing thing,
 			PathElement pathElement,CustomQueryOptions customQueryOptions) {
@@ -43,6 +44,7 @@ public class FactResults extends ResourceBindingSetResults {
 	 * @param factSet the fact set
 	 * @param source the source
 	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
 	 */
 	public FactResults(CloseableIteration<BindingSet, QueryEvaluationException> factSet, IntelligentGraphRepository source,
 			PathElement pathElement,CustomQueryOptions customQueryOptions) {
@@ -50,7 +52,7 @@ public class FactResults extends ResourceBindingSetResults {
 	}
 	
 	/**
-	 * Next.  
+	 * Next.
 	 *
 	 * @return the resource
 	 * @throws QueryEvaluationException the query evaluation exception
@@ -66,7 +68,7 @@ public class FactResults extends ResourceBindingSetResults {
 	 *
 	 * @param next the next
 	 * @return the resource
-	 * @throws HandledException 
+	 * @throws QueryEvaluationException the query evaluation exception
 	 */
 	private Resource calculateValue(BindingSet next) throws QueryEvaluationException {
 		Value factValue = next.getValue(getPathElement().getTargetVariable().getName());

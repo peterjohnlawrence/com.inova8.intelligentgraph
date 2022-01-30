@@ -59,7 +59,7 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
  */
 public class EccentricityFunction  implements Function{
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(EccentricityFunction.class);
 	
 	/** The conn. */

@@ -18,33 +18,71 @@ public class IriRefValueElement extends ObjectElement {
 	IRI iri;
 	
 
+	/**
+	 * Instantiates a new iri ref value element.
+	 *
+	 * @param repositoryContext the repository context
+	 */
 	public IriRefValueElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
 		operator=PathConstants.Operator.IRIREF;
 	}
+	
+	/**
+	 * Gets the iri.
+	 *
+	 * @param customQueryOptions the custom query options
+	 * @return the iri
+	 */
 	public IRI getIri(CustomQueryOptions customQueryOptions) {
 		return iri;
 	}
 
+	/**
+	 * Gets the iri.
+	 *
+	 * @return the iri
+	 */
 	public IRI getIri() {
 		return iri;
 	}
+	
+	/**
+	 * Sets the iri.
+	 *
+	 * @param iri the new iri
+	 */
 	public void setIri(IRI iri) {
 		this.iri = iri;
 	}
 	
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		return  "<"+ iri.stringValue() +">";
 	}
 	
 
+	/**
+	 * To SPARQL.
+	 *
+	 * @return the string
+	 */
 	public String toSPARQL() {
 
 		return "<"+ iri.stringValue() +">";
 	}
 	
 
+	/**
+	 * To HTML.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toHTML() {
 

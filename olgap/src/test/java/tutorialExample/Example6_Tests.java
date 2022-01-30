@@ -24,12 +24,23 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 
 import utilities.Query;
 
+/**
+ * The Class Example6_Tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example6_Tests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
+	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
@@ -44,10 +55,20 @@ class Example6_Tests {
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
+	
+	/**
+	 * Example 6 1.
+	 */
 	@Test
 	@Order(1)
 	void example6_1() {
@@ -61,6 +82,10 @@ class Example6_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 6 2.
+	 */
 	@Test
 	@Order(2)
 	void example6_2() {
@@ -74,6 +99,10 @@ class Example6_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 6 3.
+	 */
 	@Test
 	@Order(3)
 	void example6_3() {
@@ -88,6 +117,10 @@ class Example6_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 6 5.
+	 */
 	@Test
 	@Order(5)
 	void example6_5() {
@@ -100,6 +133,10 @@ class Example6_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 6 6.
+	 */
 	@Test
 	@Order(6)
 	void example6_6() {
@@ -114,6 +151,10 @@ class Example6_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 6 7.
+	 */
 	@Test
 	@Order(7)
 	void example6_7() {

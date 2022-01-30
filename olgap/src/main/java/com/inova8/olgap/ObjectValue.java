@@ -30,7 +30,7 @@ import com.inova8.intelligentgraph.vocabulary.OLGAP;
 @Deprecated
 public class ObjectValue extends Evaluator implements Function {
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(ObjectValue.class);
 
 	/**

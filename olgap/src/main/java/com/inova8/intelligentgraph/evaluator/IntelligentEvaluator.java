@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.evaluator;
 
 import static org.eclipse.rdf4j.model.util.Values.literal;
@@ -29,21 +32,54 @@ import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.sail.IntelligentGraphSail;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
+/**
+ * The Class IntelligentEvaluator.
+ */
 public class IntelligentEvaluator {
+	
+	/** The fact cache. */
 	private final  FactCache factCache=new FactCache();
+	
+	/** The Constant logger. */
 	protected final static Logger logger = LoggerFactory.getLogger(IntelligentEvaluator.class);
 
+	/**
+	 * Instantiates a new intelligent evaluator.
+	 *
+	 * @param intelligentGraphSail the intelligent graph sail
+	 */
 	public IntelligentEvaluator(IntelligentGraphSail intelligentGraphSail) {
 	}
 
+	/**
+	 * Clear cache.
+	 *
+	 * @param args the args
+	 */
 	public  void clearCache(Value... args) {
 		factCache.setDirty(true);
 	}
 
+	/**
+	 * Gets the fact cache.
+	 *
+	 * @return the fact cache
+	 */
 	public FactCache getFactCache() {
 		return factCache;
 	}
 
+	/**
+	 * Handle script.
+	 *
+	 * @param thing the thing
+	 * @param scriptString the script string
+	 * @param predicate the predicate
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 * @return the resource
+	 * @throws HandledException the handled exception
+	 */
 	protected static  Resource handleScript(Thing thing,SimpleLiteral scriptString, IRI predicate, CustomQueryOptions customQueryOptions,org.eclipse.rdf4j.model.Resource ... contexts) throws HandledException{
 		if (predicate.equals(SCRIPT.SCRIPTCODE)) {
 			return Resource.create(thing.getSource(), scriptString, thing.getEvaluationContext());
@@ -147,6 +183,17 @@ public class IntelligentEvaluator {
 	
 	}
 
+	/**
+	 * Process fact object value.
+	 *
+	 * @param thing the thing
+	 * @param predicate the predicate
+	 * @param objectValue the object value
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 * @return the resource
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	public static Resource processFactObjectValue(Thing thing,IRI predicate, Value objectValue, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) throws QueryEvaluationException {
 		Resource returnResult = null;
 		SimpleLiteral literalValue;
@@ -182,6 +229,13 @@ public class IntelligentEvaluator {
 		return returnResult;
 	}
 
+	/**
+	 * Generate stack key.
+	 *
+	 * @param thing the thing
+	 * @param predicate the predicate
+	 * @return the string
+	 */
 	@SuppressWarnings("deprecation")
 	public static String generateStackKey(Thing thing,IRI predicate) {
 		String stackKey;
@@ -195,6 +249,14 @@ public class IntelligentEvaluator {
 		return stackKey;
 	}
 
+	/**
+	 * Return result.
+	 *
+	 * @param thing the thing
+	 * @param result the result
+	 * @param cacheContextIRI the cache context IRI
+	 * @return the resource
+	 */
 	public static Resource returnResult(Thing thing,Object result, IRI cacheContextIRI) {
 		if (result != null) {
 			switch (result.getClass().getSimpleName()) {

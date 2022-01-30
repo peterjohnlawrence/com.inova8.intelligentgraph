@@ -10,17 +10,6 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-/**
- * The listener interface for receiving pathError events.
- * The class that is interested in processing a pathError
- * event implements this interface, and the object created
- * with that class is registered with a component using the
- * component's <code>addPathErrorListener<code> method. When
- * the pathError event occurs, that object's appropriate
- * method is invoked.
- *
- * @see PathErrorEvent
- */
 public class PathErrorListener  extends BaseErrorListener {
 	 
  	/** The syntax errors. */
@@ -68,10 +57,10 @@ public class PathErrorListener  extends BaseErrorListener {
 	}
 	 
  	/**
- 	 * To string.
- 	 *
- 	 * @return the string
- 	 */
+	  * To string.
+	  *
+	  * @return the string
+	  */
  	@Override
     public String toString()
     {

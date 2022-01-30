@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.sail;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -17,15 +20,38 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.utilities.CustomQueryOption;
 
+/**
+ * The Class IntelligentStatement.
+ */
 public class IntelligentStatement extends ContextStatement {
 
+	/** The source. */
 	final IntelligentGraphRepository source;
+	
+	/** The evaluation context. */
 	final EvaluationContext evaluationContext;
+	
+	/** The custom query options. */
 	final CustomQueryOptions customQueryOptions;
+	
+	/** The context statement. */
 	final ContextStatement contextStatement;
+	
+	/** The contexts. */
 	private Resource[] contexts;
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 5600312937126282355L;
 
+	/**
+	 * Instantiates a new intelligent statement.
+	 *
+	 * @param contextStatement the context statement
+	 * @param source the source
+	 * @param evaluationContext the evaluation context
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 */
 	protected IntelligentStatement(ContextStatement contextStatement, IntelligentGraphRepository source, EvaluationContext evaluationContext, CustomQueryOptions customQueryOptions, Resource ... contexts) {
 		super(contextStatement.getSubject(), contextStatement.getPredicate(), contextStatement.getObject(),contextStatement.getContext());
 		this.contextStatement=contextStatement;
@@ -34,6 +60,15 @@ public class IntelligentStatement extends ContextStatement {
 		this.customQueryOptions = customQueryOptions;
 		this.contexts = contexts;
 	}
+	
+	/**
+	 * Instantiates a new intelligent statement.
+	 *
+	 * @param source the source
+	 * @param evaluationContext the evaluation context
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 */
 	protected IntelligentStatement( IntelligentGraphRepository source, EvaluationContext evaluationContext, CustomQueryOptions customQueryOptions, Resource ... contexts) {
 		super(iri("http://null"), iri("http://null"), iri("http://null"),null);
 		this.contextStatement=null;
@@ -42,6 +77,12 @@ public class IntelligentStatement extends ContextStatement {
 		this.customQueryOptions = customQueryOptions;
 		this.contexts = contexts;
 	}
+	
+	/**
+	 * Gets the object.
+	 *
+	 * @return the object
+	 */
 	@Override
 	public Value getObject() {
 		if(contextStatement!=null) {
@@ -74,9 +115,21 @@ public class IntelligentStatement extends ContextStatement {
 		}
 			
 	}
+	
+	/**
+	 * Gets the source.
+	 *
+	 * @return the source
+	 */
 	public IntelligentGraphRepository getSource() {
 		return source;
 	}
+	
+	/**
+	 * Gets the evaluation context.
+	 *
+	 * @return the evaluation context
+	 */
 	public EvaluationContext getEvaluationContext() {
 		return evaluationContext;
 	}

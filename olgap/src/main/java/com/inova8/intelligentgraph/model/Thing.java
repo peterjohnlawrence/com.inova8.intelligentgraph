@@ -45,22 +45,55 @@ import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
+/**
+ * The Class Thing.
+ */
 public class Thing extends Resource {
 
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+	
 	/** The logger. */
 	protected final Logger logger = LoggerFactory.getLogger(Thing.class);
+	
 	/** The cached resources. */
 	private HashMap<String, Resource> cachedResources;
+	
+	/** The graph name. */
 	private  IRI graphName;
+	
+	/**
+	 * Instantiates a new thing.
+	 *
+	 * @param superValue the super value
+	 */
 	public Thing(org.eclipse.rdf4j.model.Value superValue) {
 		super(superValue);
 	}
+	
+	/**
+	 * Creates the.
+	 *
+	 * @param source the source
+	 * @param superValue the super value
+	 * @param evaluationContext the evaluation context
+	 * @return the thing
+	 */
 	public static Thing create(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		return Thing.create( source,  null, superValue,	 evaluationContext);
 	}
+	
+	/**
+	 * Creates the.
+	 *
+	 * @param source the source
+	 * @param graphIri the graph iri
+	 * @param superValue the super value
+	 * @param evaluationContext the evaluation context
+	 * @return the thing
+	 */
 	@SuppressWarnings("deprecation")
 	public static Thing create(IntelligentGraphRepository source, IRI graphIri, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
@@ -93,29 +126,45 @@ public class Thing extends Resource {
 			thing.evaluationContext = new EvaluationContext();
 		return thing;
 	}
+	
 	/**
 	 * Instantiates a new thing.
 	 *
-	 * @param source
-	 *            the source
-	 * @param superValue
-	 *            the super value
-	 * @param evaluationContext
-	 *            the evaluation context
+	 * @param source the source
+	 * @param superValue the super value
+	 * @param evaluationContext the evaluation context
 	 */
 	private Thing(IntelligentGraphRepository source, org.eclipse.rdf4j.model.Value superValue,
 			EvaluationContext evaluationContext) {
 		super(superValue, evaluationContext);
 		this.setSource(source);
 	}
+	
+	/**
+	 * Checks if is iri.
+	 *
+	 * @return true, if is iri
+	 */
 	@Override
 	public 	boolean isIRI(){
 		return true;
 	}
+	
+	/**
+	 * Gets the graph name.
+	 *
+	 * @return the graph name
+	 */
 	public IRI getGraphName() {
 		return graphName;
 	}
 
+	/**
+	 * Generate cache context.
+	 *
+	 * @param predicate the predicate
+	 * @return the iri
+	 */
 	@SuppressWarnings("deprecation")
 	public  IRI generateCacheContext(IRI predicate) {
 		String key;
@@ -129,6 +178,11 @@ public class Thing extends Resource {
 		return cacheContextIRI;
 	}
 
+	/**
+	 * Gets the cached resources.
+	 *
+	 * @return the cached resources
+	 */
 	@Deprecated
 	public HashMap<String, Resource> getCachedResources() {
 		if( cachedResources==null) {
@@ -140,6 +194,14 @@ public class Thing extends Resource {
 //	public  Resource getFact(IRI predicate, SimpleLiteral scriptString, CustomQueryOptions customQueryOptions, org.eclipse.rdf4j.model.Resource ... contexts) throws HandledException {
 //		Resource fact = processFactObjectValue(predicate,scriptString,  customQueryOptions ,contexts);
 //		return fact;
+/**
+ * Gets the fact.
+ *
+ * @param predicatePattern the predicate pattern
+ * @param customQueryOptions the custom query options
+ * @param bindValues the bind values
+ * @return the fact
+ */
 //	}
 	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions, Value...bindValues) {
 		logger.debug("getFact{}\n", predicatePattern);
@@ -157,6 +219,14 @@ public class Thing extends Resource {
 		}
 		
 	}
+	
+	/**
+	 * Gets the fact.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param customQueryOptions the custom query options
+	 * @return the fact
+	 */
 	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions) {
 		logger.debug("getFact{}\n", predicatePattern);
 
@@ -174,6 +244,14 @@ public class Thing extends Resource {
 					"No values found for pattern %s with subject %s and customQueryOptions %s", predicatePattern, this,customQueryOptions));
 		}		
 	}
+	
+	/**
+	 * Gets the fact.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param bindValues the bind values
+	 * @return the fact
+	 */
 	public  Resource getFact(String predicatePattern, Value...bindValues )  {
 		logger.debug("getFact{}\n", predicatePattern);
 		//this.getEvaluationContext().getTracer().traceFact(this, predicatePattern);
@@ -194,12 +272,36 @@ public class Thing extends Resource {
 		}	
 	}
 
+	/**
+	 * Gets the facts.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param bindValues the bind values
+	 * @return the facts
+	 */
 	public  ResourceResults getFacts(String predicatePattern, Value... bindValues )  {
 		return getFacts(predicatePattern,CustomQueryOptions.create(bindValues));
 	}
+	
+	/**
+	 * Gets the facts.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param customQueryOptions the custom query options
+	 * @param bindValues the bind values
+	 * @return the facts
+	 */
 	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions, Value... bindValues ){
 		return getFacts(predicatePattern,customQueryOptions.addAll(bindValues));
 	}
+	
+	/**
+	 * Gets the facts.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param customQueryOptions the custom query options
+	 * @return the facts
+	 */
 	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions)  {
 		logger.debug("getFacts{}\n", predicatePattern);
 		this.getEvaluationContext().getTracer().traceFacts(this, predicatePattern);
@@ -223,6 +325,13 @@ public class Thing extends Resource {
 		return results;
 
 	}
+	
+	/**
+	 * Gets the path.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @return the path
+	 */
 	public  Path getPath(String predicatePattern) {
 		logger.debug("getPath{}\n", predicatePattern);
 		PathResults pathValues =  getPaths( predicatePattern,null);
@@ -239,9 +348,24 @@ public class Thing extends Resource {
 			return new NullPath();
 		}
 	}
+	
+	/**
+	 * Gets the paths.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @return the paths
+	 */
 	public  PathResults getPaths(String predicatePattern) {
 	 return  getPaths( predicatePattern, null);
 	}
+	
+	/**
+	 * Gets the paths.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param customQueryOptions the custom query options
+	 * @return the paths
+	 */
 	public  PathResults getPaths(String predicatePattern, CustomQueryOptions customQueryOptions)  {
 
 		logger.debug("getPaths{}\n", predicatePattern);
@@ -278,12 +402,25 @@ public class Thing extends Resource {
 //	}
 
 
-	@SuppressWarnings("deprecation")
+	/**
+ * Gets the signal.
+ *
+ * @param signal the signal
+ * @return the signal
+ */
+@SuppressWarnings("deprecation")
 	public Resource getSignal(String signal) {		
 		return getSignal(signal, getCustomQueryOptions());	
 	}
 	
 	
+	/**
+	 * Gets the signal.
+	 *
+	 * @param signal the signal
+	 * @param customQueryOptions the custom query options
+	 * @return the signal
+	 */
 	public Resource getSignal(String signal, CustomQueryOptions customQueryOptions) {
 		getEvaluationContext().getTracer().incrementLevel();
 		//incrementTraceLevel();
@@ -439,7 +576,13 @@ public class Thing extends Resource {
 //
 //	}
 
-	@SuppressWarnings("deprecation")
+	/**
+ * Generate stack key.
+ *
+ * @param predicate the predicate
+ * @return the string
+ */
+@SuppressWarnings("deprecation")
 	public String generateStackKey(IRI predicate) {
 		String stackKey;
 		if (predicate != null) {
@@ -547,7 +690,14 @@ public class Thing extends Resource {
 //		}
 //	}
 
-	public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions)  {
+	/**
+ * Trace fact.
+ *
+ * @param predicatePattern the predicate pattern
+ * @param customQueryOptions the custom query options
+ * @return the trace
+ */
+public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions)  {
 		SimpleDataset dataset = getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
@@ -567,10 +717,23 @@ public class Thing extends Resource {
 
 	}
 
+	/**
+	 * Trace fact.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param bindValues the bind values
+	 * @return the trace
+	 */
 	public Trace traceFact(String predicatePattern, Value...  bindValues) {
 		return traceFact(predicatePattern, CustomQueryOptions.create(bindValues));
 	}
 
+	/**
+	 * Delete facts.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @throws Exception the exception
+	 */
 	public void deleteFacts(String predicatePattern) throws Exception {		
 		this.getSource().getRepository().getConnection().remove(this.getIRI(),
 							PATHQL.REMOVEFACTS, literal(predicatePattern), this.getGraphName());
@@ -578,11 +741,27 @@ public class Thing extends Resource {
 
 
 
+	/**
+	 * Adds the fact.
+	 *
+	 * @param property the property
+	 * @param value the value
+	 * @param dataType the data type
+	 * @return the thing
+	 */
 	public Thing addFact(IRI property, String value, IRI dataType ) {
 		Literal literal = literal(value, dataType);
 		addFact(property,literal);
 		return this;
 	}
+	
+	/**
+	 * Adds the fact.
+	 *
+	 * @param property the property
+	 * @param value the value
+	 * @return the thing
+	 */
 	public Thing addFact(IRI property, Value value) {
 		Validate.notNull(property);
 		Validate.notNull(value);
@@ -596,11 +775,27 @@ public class Thing extends Resource {
 		}		
 		return this;
 	}
+	
+	/**
+	 * Adds the fact.
+	 *
+	 * @param pathql the pathql
+	 * @param value the value
+	 * @param dataType the data type
+	 * @return the thing
+	 */
 	public Thing addFact(String pathql, String value, IRI dataType) {		
 		addFact(pathql,literal(value, dataType));
 		return this;
 	}
 
+	/**
+	 * Adds the fact.
+	 *
+	 * @param pathql the pathql
+	 * @param value the value
+	 * @return the thing
+	 */
 	public Thing addFact(String pathql, Value value) {
 
 		try {
@@ -623,6 +818,14 @@ public class Thing extends Resource {
 
 		return this;
 	}
+	
+	/**
+	 * Adds the fact.
+	 *
+	 * @param pathql the pathql
+	 * @param value the value
+	 * @return the thing
+	 */
 	public Thing addFact(String pathql, String value) {		
 		addFact(pathql,value,XSD.STRING);
 		return this;
@@ -638,6 +841,12 @@ public class Thing extends Resource {
 		return (IRI) getSuperValue();
 	}
 
+	/**
+	 * Gets the dataset.
+	 *
+	 * @param declaredContexts the declared contexts
+	 * @return the dataset
+	 */
 	@SuppressWarnings("deprecation")
 	public SimpleDataset getDataset(org.eclipse.rdf4j.model.Resource... declaredContexts) {
 		//The graphs can be defined in three ways: as the dataset of a tuplequery, as contexts in getStatements query, or as explicitly defined graphs in a PathCalc query
@@ -672,6 +881,13 @@ public class Thing extends Resource {
 			}
 		}
 	}
+	
+	/**
+	 * Gets the dataset.
+	 *
+	 * @param customQueryOptions the custom query options
+	 * @return the dataset
+	 */
 	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
 		SimpleDataset dataset = new SimpleDataset();//getDataset();
 		if(customQueryOptions!=null) {
@@ -679,6 +895,13 @@ public class Thing extends Resource {
 		}
 		return dataset;
 	}
+	
+	/**
+	 * Gets the thing.
+	 *
+	 * @param thing the thing
+	 * @return the thing
+	 */
 	public Thing getThing(String thing){
 		//IRI thingIri = PathParser.parseIriRef( this.getSource().getRepositoryContext(),thing).getIri();
 		IRI thingIri = getSource().getRepositoryContext().convertQName(thing);

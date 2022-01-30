@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.dashjoin;
 
 import java.util.HashMap;
@@ -5,10 +8,19 @@ import java.util.HashMap;
 import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.Path;
 
+/**
+ * The Class PathSteps.
+ */
 public class PathSteps extends HashMap<String, Object>{
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Instantiates a new path steps.
+	 *
+	 * @param path the path
+	 */
 	public  PathSteps(Path path){
 		Steps steps = new Steps();
 		Boolean first =true;
@@ -21,6 +33,11 @@ public class PathSteps extends HashMap<String, Object>{
 
 	}
 
+/**
+ * To string.
+ *
+ * @return the string
+ */
 public String toString() {
 	String pathStepsString = "[\r\n";
 	for ( String key : this.keySet()) {

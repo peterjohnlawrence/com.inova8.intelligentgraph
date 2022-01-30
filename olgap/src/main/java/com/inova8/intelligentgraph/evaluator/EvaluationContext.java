@@ -11,6 +11,9 @@ import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.pathql.context.Prefixes;
 import org.eclipse.rdf4j.query.Dataset;
 
+/**
+ * The Class EvaluationContext.
+ */
 public class EvaluationContext {
 	
 	/** The logger. */
@@ -88,10 +91,16 @@ public class EvaluationContext {
 		this.contexts = contexts;
 	}
 	
+	/**
+	 * Sets the custom query options.
+	 *
+	 * @param customQueryOptions the new custom query options
+	 */
 	@Deprecated
 	public void setCustomQueryOptions(CustomQueryOptions customQueryOptions) {
 		this.customQueryOptions = customQueryOptions;
 	}
+	
 	/**
 	 * Gets the tracer.
 	 *
@@ -142,6 +151,11 @@ public class EvaluationContext {
 		return customQueryOptions;
 	}
 
+	/**
+	 * Not tracing.
+	 *
+	 * @return true, if successful
+	 */
 	@Deprecated
 	protected boolean notTracing() {
 		if (tracer != null)
@@ -152,6 +166,11 @@ public class EvaluationContext {
 
 
 	
+	/**
+	 * Gets the trace.
+	 *
+	 * @return the trace
+	 */
 	@Deprecated
 	public String getTrace() {
 		return tracer.getTraceHTML();
@@ -159,6 +178,11 @@ public class EvaluationContext {
 	}
 	
 	
+	/**
+	 * Sets the tracing.
+	 *
+	 * @param b the new tracing
+	 */
 	@Deprecated
 	public void setTracing(boolean b) {
 		if (tracer != null)
@@ -166,6 +190,11 @@ public class EvaluationContext {
 		
 	}
 
+	/**
+	 * Checks if is tracing.
+	 *
+	 * @return true, if is tracing
+	 */
 	@Deprecated
 	public boolean isTracing() {
 		if (tracer != null)
@@ -174,17 +203,32 @@ public class EvaluationContext {
 			return false;
 	}
 
+	/**
+	 * Gets the dataset.
+	 *
+	 * @return the dataset
+	 */
 	@Deprecated
 	public Dataset getDataset() {
 		return dataset;
 	}
 
+	/**
+	 * Sets the dataset.
+	 *
+	 * @param dataset the new dataset
+	 */
 	@Deprecated
 	public void setDataset(Dataset dataset) {
 		this.dataset = dataset;
 	}
 	
 
+	/**
+	 * Gets the contexts.
+	 *
+	 * @return the contexts
+	 */
 	public org.eclipse.rdf4j.model.Resource[] getContexts() {
 		if(contexts!=null)
 			return contexts;
@@ -192,6 +236,11 @@ public class EvaluationContext {
 			return new  org.eclipse.rdf4j.model.Resource[0];
 	}
 
+	/**
+	 * Sets the contexts.
+	 *
+	 * @param contexts the new contexts
+	 */
 	public void setContexts(org.eclipse.rdf4j.model.Resource[] contexts) {
 		this.contexts = contexts;
 	}

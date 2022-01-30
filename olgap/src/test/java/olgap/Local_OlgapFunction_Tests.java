@@ -24,15 +24,21 @@ import com.inova8.olgap.ObjectValue;
 import utilities.Query;
 
 /**
- * The Class PathCalcTests.
+ * The Class Local_OlgapFunction_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Deprecated
 class Local_OlgapFunction_Tests {
 	
+	/** The conn. */
 	private static RepositoryConnection conn;
+	
+	/** The repository triple source. */
 	static RepositoryTripleSource repositoryTripleSource;
+	
+	/** The working rep. */
 	private static org.eclipse.rdf4j.repository.Repository workingRep;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -117,8 +123,8 @@ class Local_OlgapFunction_Tests {
 //	}
 	
 	/**
-	 * Test stack.
-	 */
+ * Test stack.
+ */
 	@Test
 	@Order(3)
 	void test_stack() {
@@ -137,6 +143,7 @@ class Local_OlgapFunction_Tests {
 		}
 		
 	}
+	
 	/**
 	 * Test 4.
 	 */
@@ -218,6 +225,7 @@ class Local_OlgapFunction_Tests {
 			e.printStackTrace();
 		} 
 	}	
+	
 	/**
 	 * Test 4 1.
 	 */

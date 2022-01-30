@@ -18,22 +18,25 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
+import com.inova8.intelligentgraph.vocabulary.XSD;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Remote_GettingStartedTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_GettingStartedTests {
 	
-	/** The repository triple source. */
+	/** The source. */
 //	static RepositoryTripleSource repositoryTripleSource;
 	
 	/** The source. */
 	private static IntelligentGraphRepository source;
 	
 	/**
-	 *  The evaluator.
+	 * Sets the up before class.
 	 *
 	 * @throws Exception the exception
 	 */
@@ -49,12 +52,16 @@ class Remote_GettingStartedTests {
 
 
 	}
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
 		try {
 			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
-			source.prefix("<http://inova8.com/intelligentgraph/example1/>");
+			source.prefix("<http://inova8.com/calc2graph/testGraph1/>");
 			source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph1>");
@@ -70,16 +77,19 @@ class Remote_GettingStartedTests {
 			Resource average = myCountry.getFact(":averageSales");
 			assertEquals("3.0", average.stringValue());
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
+	/**
+	 * Test 10.
+	 */
 	@Test
 	@Order(10)
 	void test_10() {
 		try {
-	//		Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph>");
-	//		source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
+			source.prefix("<http://inova8.com/calc2graph/testGraph1/>");
 			Graph graph1 = source.openGraph("<http://inova8.com/calc2graph/testGraph1>");
 			Thing myCountry = graph1.getThing(":Country1");
 			String performanceCalculation = "2*3";
@@ -93,9 +103,10 @@ class Remote_GettingStartedTests {
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph1>");
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
+	
 	/**
 	 * Test 20.
 	 */
@@ -103,6 +114,8 @@ class Remote_GettingStartedTests {
 	@Order(20)
 	void test_20() {
 		try {
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
+			source.prefix("<http://inova8.com/calc2graph/testGraph2/>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
 			Thing myCountry = graph.getThing(":Country1");
@@ -112,7 +125,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "4");
 			myCountry.addFact(":sales", "5");
 			myCountry.addFact(":sales", "60");
-			String averageSalesScript = "totalSales=0; count=0;for(sales in $this.getFacts(\"<http://inova8.com/calc2graph/def/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
+			String averageSalesScript = "totalSales=0; count=0;for(sales in _this.getFacts(\"<http://inova8.com/calc2graph/testGraph2/sales>\")){totalSales +=  sales.doubleValue();count++}; return totalSales/count;";
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			
 			Double averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
@@ -121,9 +134,10 @@ class Remote_GettingStartedTests {
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph2>");
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
+	
 	/**
 	 * Test 30.
 	 */
@@ -131,6 +145,8 @@ class Remote_GettingStartedTests {
 	@Order(30)
 	void test_30() {
 		try {
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
+			source.prefix("<http://inova8.com/calc2graph/testGraph3/>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph3>");
 			Thing myCountry = graph.getThing(":Country1");
@@ -139,7 +155,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "30");
 			myCountry.addFact(":sales", "40");
 			myCountry.addFact(":sales", "50");
-			String totalSalesScript = "return $this.getFacts(\":sales\").total();";
+			String totalSalesScript = "return _this.getFacts(\":sales\").total();";
 			myCountry.addFact(":totalSales", totalSalesScript, SCRIPT.GROOVY) ;
 			
 			Double totalCountrySales = myCountry.getFact(":totalSales").doubleValue() ;
@@ -147,9 +163,10 @@ class Remote_GettingStartedTests {
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph3>");
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
+	
 	/**
 	 * Test 40.
 	 */
@@ -157,6 +174,8 @@ class Remote_GettingStartedTests {
 	@Order(40)
 	void test_40() {
 		try {
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
+			source.prefix("<http://inova8.com/calc2graph/testGraph4/>");
 			source.removeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph4>");
 			Thing myCountry = graph.getThing(":Country1");
@@ -165,7 +184,7 @@ class Remote_GettingStartedTests {
 			myCountry.addFact(":sales", "300");
 			myCountry.addFact(":sales", "400");
 			myCountry.addFact(":sales", "500");
-			String averageSalesScript = "return $this.getFacts(\":sales\").average();";
+			String averageSalesScript = "return _this.getFacts(\":sales\").average();";
 			myCountry.addFact(":averageSales", averageSalesScript, SCRIPT.GROOVY) ;
 			Double averageCountrySales;
 			averageCountrySales = myCountry.getFact(":averageSales").doubleValue() ;
@@ -178,7 +197,7 @@ class Remote_GettingStartedTests {
 			source.closeGraph("<http://inova8.com/calc2graph/testGraph4>");
 			
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 
@@ -189,9 +208,15 @@ class Remote_GettingStartedTests {
 	@Order(50)
 	void test_50() {
 		try {
-			//Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph5>");
-			//source.removeGraph("<http://inova8.com/calc2graph/testGraph1>");
+			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
+			source.prefix("<http://inova8.com/calc2graph/testGraph5/>");
 			Graph graph = source.openGraph("<http://inova8.com/calc2graph/testGraph5>");
+			Thing Attribute = graph.getThing(":Attribute").addFact(RDFS.SUBCLASSOF, RDF.STATEMENT);
+			Thing AttributeType = graph.getThing(":AttributeType");
+			graph.getThing(":attributeOf").addFact(RDFS.SUB_PROPERTY_OF, RDF.SUBJECT).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE,RDFS.RESOURCE);
+			graph.getThing(":attributeType").addFact(RDFS.SUB_PROPERTY_OF, RDF.PREDICATE).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE, AttributeType);
+			graph.getThing(":attributeMeasurement").addFact(RDFS.SUB_PROPERTY_OF, RDF.OBJECT).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE, XSD.STRING);		
+
 			Thing myCountry = graph.getThing(":Country1");
 			String performanceCalculation = "2*3";
 			myCountry.addFact(":Attribute@:salesPerformance", performanceCalculation, SCRIPT.GROOVY) ;
@@ -208,7 +233,7 @@ class Remote_GettingStartedTests {
 			//	fail();
 			//}
 		} catch (Exception e) {
-			fail();
+			assertEquals("", e.getMessage());
 		}
 	}
 

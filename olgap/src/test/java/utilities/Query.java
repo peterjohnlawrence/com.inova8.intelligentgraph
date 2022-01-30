@@ -42,7 +42,19 @@ import com.inova8.intelligentgraph.sail.IntelligentGraphSail;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
+/**
+ * The Class Query.
+ */
 public class Query {
+	
+	/**
+	 * Creates the native lucene intelligent graph repository.
+	 *
+	 * @param dir the dir
+	 * @return the org.eclipse.rdf 4 j.repository. repository
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SailConfigException the sail config exception
+	 */
 	public static org.eclipse.rdf4j.repository.Repository createNativeLuceneIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
 		File dataDir = new File(dir);
 		FileUtils.deleteDirectory(dataDir);
@@ -61,6 +73,15 @@ public class Query {
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
 		return workingRep;
 	}
+	
+	/**
+	 * Creates the native intelligent graph repository.
+	 *
+	 * @param dir the dir
+	 * @return the org.eclipse.rdf 4 j.repository. repository
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SailConfigException the sail config exception
+	 */
 	public static org.eclipse.rdf4j.repository.Repository createNativeIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
 		File dataDir = new File(dir);
 		FileUtils.deleteDirectory(dataDir);
@@ -76,6 +97,15 @@ public class Query {
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
 		return workingRep;
 	}
+	
+	/**
+	 * Creates the native repository.
+	 *
+	 * @param dir the dir
+	 * @return the org.eclipse.rdf 4 j.repository. repository
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SailConfigException the sail config exception
+	 */
 	public static org.eclipse.rdf4j.repository.Repository createNativeRepository(String dir) throws IOException, SailConfigException {
 		File dataDir = new File(dir);
 		FileUtils.deleteDirectory(dataDir);
@@ -84,6 +114,15 @@ public class Query {
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(baseSail);
 		return workingRep;
 	}
+	
+	/**
+	 * Creates the memory intelligent graph repository.
+	 *
+	 * @param dir the dir
+	 * @return the org.eclipse.rdf 4 j.repository. repository
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SailConfigException the sail config exception
+	 */
 	public static org.eclipse.rdf4j.repository.Repository createMemoryIntelligentGraphRepository(String dir) throws IOException, SailConfigException {
 		File dataDir = new File(dir);
 		FileUtils.deleteDirectory(dataDir);
@@ -98,6 +137,18 @@ public class Query {
 		org.eclipse.rdf4j.repository.Repository workingRep = new SailRepository(intelligentGraphSail);
 		return workingRep;
 	}
+	
+	/**
+	 * Adds the file.
+	 *
+	 * @param workingRep the working rep
+	 * @param dataFilename the data filename
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws RDFParseException the RDF parse exception
+	 * @throws UnsupportedRDFormatException the unsupported RD format exception
+	 * @throws RepositoryException the repository exception
+	 */
 	public static void addFile(org.eclipse.rdf4j.repository.Repository workingRep, String dataFilename)
 			throws FileNotFoundException, IOException, RDFParseException, UnsupportedRDFormatException,
 			RepositoryException {
@@ -106,6 +157,18 @@ public class Query {
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.add(dataModel.getStatements(null, null, null),iri("file://"+dataFilename));
 	}
+	
+	/**
+	 * Adds the RDF file.
+	 *
+	 * @param workingRep the working rep
+	 * @param dataFilename the data filename
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws RDFParseException the RDF parse exception
+	 * @throws UnsupportedRDFormatException the unsupported RD format exception
+	 * @throws RepositoryException the repository exception
+	 */
 	public static void addRDFFile(org.eclipse.rdf4j.repository.Repository workingRep, String dataFilename)
 			throws FileNotFoundException, IOException, RDFParseException, UnsupportedRDFormatException,
 			RepositoryException {
@@ -114,6 +177,7 @@ public class Query {
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.add(dataModel.getStatements(null, null, null),iri("file://"+dataFilename));
 	}
+	
 	/**
 	 * Run boolean.
 	 *
@@ -186,10 +250,19 @@ public class Query {
 		}
 		return aResult.toString();
 	}
+	
+	/**
+	 * Parses the SPARQL.
+	 *
+	 * @param conn the conn
+	 * @param queryString the query string
+	 * @return the string
+	 */
 	public static String parseSPARQL(RepositoryConnection conn, String queryString) {
 		TupleQuery query = conn.prepareTupleQuery(queryString);
 		return query.toString();
 	}
+	
 	/**
 	 * Run CONSTRUCT.
 	 *
@@ -225,11 +298,11 @@ public class Query {
 	}
 
 	/**
-		 * Assert equals WO spaces.
-		 *
-		 * @param actual the actual
-		 * @param expected the expected
-		 */
+	 * Assert equals WO spaces.
+	 *
+	 * @param actual the actual
+	 * @param expected the expected
+	 */
 	 public static  void assertEqualsWOSpaces(String actual, String expected){
 			assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 	}

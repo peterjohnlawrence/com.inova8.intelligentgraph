@@ -29,7 +29,7 @@ import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.olgap.ClearCache;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Remote_PathQL_GetFactTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_PathQL_GetFactTests {
@@ -97,8 +97,8 @@ class Remote_PathQL_GetFactTests {
 //	}
 	
 	/**
-	 * Test 1.
-	 */
+ * Test 1.
+ */
 	@Test
 	@Order(1)
 	//literal("$this.prefix(\"<http://inova8.com/calc2graph/def/>\");var result= $this.getFact(\":volumeFlow\").floatValue()* $this.getFact(\":Attribute@:density\").floatValue();  result;",
@@ -596,6 +596,7 @@ class Remote_PathQL_GetFactTests {
 				e.printStackTrace();
 			}
 	}
+	
 	/**
 	 * Test 30.
 	 */
@@ -622,6 +623,7 @@ class Remote_PathQL_GetFactTests {
 			fail();
 		}
 	}
+	
 	/**
 	 * Test 31.
 	 */
@@ -719,6 +721,7 @@ class Remote_PathQL_GetFactTests {
 			e.printStackTrace();
 		} 
 	}
+	
 	/**
 	 * Test 100.
 	 */

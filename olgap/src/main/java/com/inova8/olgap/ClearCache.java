@@ -26,15 +26,15 @@ import com.inova8.intelligentgraph.vocabulary.OLGAP;
  */
 public class ClearCache extends Evaluator implements Function{
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(ClearCache.class);
 //	private final Logger logger = LogManager.getLogger(ClearCache.class);
 	
 	/**
-	 * Instantiates a new clear cache.
-	 *
-	 * @throws NoSuchAlgorithmException the no such algorithm exception
-	 */
+ * Instantiates a new clear cache.
+ *
+ * @throws NoSuchAlgorithmException the no such algorithm exception
+ */
 	public ClearCache() throws NoSuchAlgorithmException {
 		super();
 		logger.info("Initiating ClearCache");

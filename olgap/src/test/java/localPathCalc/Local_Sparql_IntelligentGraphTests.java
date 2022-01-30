@@ -20,18 +20,24 @@ import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.processor.PathPatternException;
 
 import utilities.Query;
+
 /**
- * The Class PathQLTests.
+ * The Class Local_Sparql_IntelligentGraphTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_Sparql_IntelligentGraphTests {
 	
+	/** The conn. */
 	private static RepositoryConnection conn;
+	
+	/** The source. */
 	private static IntelligentGraphRepository source;
 	
 
 
+	/** The working rep. */
 	private static org.eclipse.rdf4j.repository.Repository workingRep;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -51,10 +57,17 @@ class Local_Sparql_IntelligentGraphTests {
 		conn.setNamespace("rdfs","http://www.w3.org/2000/01/rdf-schema#");
 		source = IntelligentGraphRepository.create(workingRep);
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
 	}
+	
 	/**
 	 * Adds the graph 2.
 	 *
@@ -446,6 +459,10 @@ class Local_Sparql_IntelligentGraphTests {
 		}
 
 	}		
+	
+	/**
+	 * Ig 13.
+	 */
 	@Test
 	@Order(13)
 	void ig_13() {

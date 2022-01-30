@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.pathql.element;
 
 import org.eclipse.rdf4j.model.Literal;
@@ -10,21 +13,47 @@ import com.inova8.pathql.context.RepositoryContext;
 
 import org.eclipse.rdf4j.model.IRI;
 
+/**
+ * The Class BindVariableElement.
+ */
 public class BindVariableElement extends ObjectElement {
+	
+	/** The bind variable index. */
 	Integer bindVariableIndex;
 
+	/**
+	 * Instantiates a new bind variable element.
+	 *
+	 * @param repositoryContext the repository context
+	 */
 	public BindVariableElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
 	}
 
+	/**
+	 * Gets the bind variable index.
+	 *
+	 * @return the bind variable index
+	 */
 	public Integer getBindVariableIndex() {
 		return bindVariableIndex;
 	}
 
+	/**
+	 * Sets the bind variable index.
+	 *
+	 * @param bindVariableIndex the new bind variable index
+	 */
 	public void setBindVariableIndex(Integer bindVariableIndex) {
 		this.bindVariableIndex = bindVariableIndex;
 	}
 
+	/**
+	 * Gets the literal.
+	 *
+	 * @param customQueryOptions the custom query options
+	 * @return the literal
+	 */
 	public Literal getLiteral(CustomQueryOptions customQueryOptions) {
 		if (customQueryOptions != null) {
 			Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
@@ -36,6 +65,12 @@ public class BindVariableElement extends ObjectElement {
 			return (Literal) null;
 	}
 
+	/**
+	 * Gets the iri.
+	 *
+	 * @param customQueryOptions the custom query options
+	 * @return the iri
+	 */
 	public IRI getIri(CustomQueryOptions customQueryOptions) {
 		if (customQueryOptions != null) {
 			Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
@@ -47,6 +82,12 @@ public class BindVariableElement extends ObjectElement {
 			return (IRI) null;
 	}
 
+	/**
+	 * Gets the value.
+	 *
+	 * @param customQueryOptions the custom query options
+	 * @return the value
+	 */
 	public Value getValue(CustomQueryOptions customQueryOptions) {
 		if (customQueryOptions != null) {
 			Resource rdfLiteral = customQueryOptions.get(bindVariableIndex.toString());
@@ -58,6 +99,11 @@ public class BindVariableElement extends ObjectElement {
 			return (Value) null;
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		return IntelligentGraphConstants.BINDVARIABLEPREFIX + bindVariableIndex.toString();
 	}

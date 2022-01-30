@@ -6,7 +6,7 @@ package com.inova8.intelligentgraph.path;
 import java.util.ArrayList;
 
 /**
- * The Class Path.
+ * The Class PathBinding.
  */
 public class PathBinding extends ArrayList<EdgeBinding>  {
 

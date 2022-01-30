@@ -29,23 +29,67 @@ import static org.eclipse.rdf4j.model.util.Values.literal;
 import java.net.URISyntaxException;
 
 
+/**
+ * The Class IntelligentStatementResults.
+ */
 public  class IntelligentStatementResults extends AbstractCloseableIteration< IntelligentStatement, SailException> {
+	
+	/** The results iterator. */
 	CloseableIteration<BindingSet, QueryEvaluationException> resultsIterator;
+	
+	/** The thing. */
 	Thing thing;
+	
+	/** The path element. */
 	PathElement pathElement;
+	
+	/** The sorted iterations. */
 	Iterations sortedIterations;
+	
+	/** The path iteration. */
 	private Integer pathIteration=0;
+	
+	/** The intelligent graph connection. */
 	IntelligentGraphConnection intelligentGraphConnection;
+	
+	/** The source. */
 	IntelligentGraphRepository source;
+	
+	/** The predicate variable. */
 	private Variable predicateVariable;
+	
+	/** The obj. */
 	private String obj;
+	
+	/** The subj. */
 	private String subj;
+	
+	/** The simple value factory. */
 	private SimpleValueFactory simpleValueFactory;
+	
+	/** The custom query options. */
 	private CustomQueryOptions customQueryOptions;
+	
+	/** The contexts. */
 	private Resource[] contexts;
+	
+	/** The trace. */
 	private final Boolean trace;
+	
+	/** The path tuple expr. */
 	private PathTupleExpr pathTupleExpr;
 
+	/**
+	 * Instantiates a new intelligent statement results.
+	 *
+	 * @param source the source
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param intelligentGraphConnection the intelligent graph connection
+	 * @param customQueryOptions the custom query options
+	 * @param trace the trace
+	 * @param contexts the contexts
+	 */
 	public IntelligentStatementResults( IntelligentGraphRepository source, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Boolean trace, Resource ...contexts ) {
 		this.resultsIterator=null;
@@ -63,6 +107,16 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 
+	/**
+	 * Instantiates a new intelligent statement results.
+	 *
+	 * @param source the source
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param intelligentGraphConnection the intelligent graph connection
+	 * @param customQueryOptions the custom query options
+	 * @param contexts the contexts
+	 */
 	public IntelligentStatementResults( IntelligentGraphRepository source, Thing thing,
 			PathElement pathElement, IntelligentGraphConnection intelligentGraphConnection, CustomQueryOptions customQueryOptions,Resource ...contexts ) {
 		this.resultsIterator=null;
@@ -80,6 +134,12 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		simpleValueFactory= SimpleValueFactory.getInstance();
 	}
 
+	/**
+	 * Checks for next.
+	 *
+	 * @return true, if successful
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
 		if(resultsIterator!=null && resultsIterator.hasNext()) {
@@ -103,6 +163,12 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		}	
 	}
 
+	/**
+	 * Next.
+	 *
+	 * @return the intelligent statement
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@SuppressWarnings("deprecation")
 	@Override
 	public IntelligentStatement next() throws QueryEvaluationException {
@@ -128,10 +194,21 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 			return new IntelligentStatement(null, null, null);
 	}
 
+	/**
+	 * Removes the.
+	 *
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public void remove() throws QueryEvaluationException {
 		getResultsIterator().remove();	
 	}
+	
+	/**
+	 * Gets the results iterator.
+	 *
+	 * @return the results iterator
+	 */
 	public CloseableIteration<BindingSet, QueryEvaluationException>  getResultsIterator() {
 		if(resultsIterator!=null)
 			return resultsIterator;

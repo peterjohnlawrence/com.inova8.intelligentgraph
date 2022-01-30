@@ -24,12 +24,12 @@ import com.inova8.pathql.pathPattern.PathPatternParser.QueryStringContext;
 import com.inova8.pathql.processor.PathPatternVisitor;
 
 /**
- * The Class PathPatternParserTests.
+ * The Class QueryStringParserTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class QueryStringParserTests {
 	
-	/** The source. */
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 
 
@@ -83,8 +83,9 @@ class QueryStringParserTests {
 		assertEquals ("<http://default/parent>[<http://default/gender> <http://default/female> ] / <http://default/parent>[<http://default/gender> <http://default/male> ;<http://default/birthplace> [<http://rdfs/label> Maidstone ] ] / <http://default/parent>&date=\"45\"&double=\"42\"&time=\"2019\""
 				 , element.toString()+"&"+element.getCustomQueryOptions().toString());
 	}
+	
 	/**
-	 * Test 0.
+	 * Test 1.
 	 */
 	@Test
 	@Order(1)

@@ -24,7 +24,7 @@ import com.inova8.pathql.processor.PathConstants;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
- * The Class PathPatternQueryExpressionTests.
+ * The Class MultiPathPatternQueryExpressionTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MultiPathPatternQueryExpressionTests {
@@ -32,7 +32,7 @@ class MultiPathPatternQueryExpressionTests {
 	/** The thing. */
 	static Thing thing;
 	
-	/** The source. */
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 	
 	/** The indices. */
@@ -64,6 +64,9 @@ class MultiPathPatternQueryExpressionTests {
 	}
 	
 
+/**
+ * Test 1.
+ */
 @Test 
 @Order(1)
 void test_1() {
@@ -91,6 +94,10 @@ void test_1() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 2.
+ */
 @Test 
 @Order(2)
 void test_2() {
@@ -128,6 +135,10 @@ void test_2() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 3.
+ */
 @Test 
 @Order(3)
 void test_3() {
@@ -174,6 +185,10 @@ void test_3() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 4.
+ */
 @Test 
 @Order(4)
 void test_4() {
@@ -252,6 +267,9 @@ void test_4() {
 	}
 }
 
+/**
+ * Test 5.
+ */
 @Test 
 @Order(5)
 void test_5() {
@@ -280,6 +298,9 @@ void test_5() {
 	}
 }
 
+/**
+ * Test 6.
+ */
 @Test 
 @Order(6)
 void test_6() {
@@ -320,6 +341,9 @@ void test_6() {
 }
 
 
+/**
+ * Test 7.
+ */
 @Test 
 @Order(7)
 void test_7() {
@@ -366,6 +390,9 @@ void test_7() {
 	}
 }
 
+/**
+ * Test 8.
+ */
 @Test 
 @Order(8)
 void test_8() {
@@ -413,6 +440,9 @@ void test_8() {
 }
 
 
+/**
+ * Test 9.
+ */
 @Test 
 @Order(9)
 void test_9() {
@@ -459,6 +489,9 @@ void test_9() {
 	}
 }
 
+/**
+ * Test 10.
+ */
 @Test 
 @Order(10)
 void test_10() {

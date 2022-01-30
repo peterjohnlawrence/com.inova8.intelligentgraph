@@ -19,6 +19,9 @@ import com.inova8.intelligentgraph.evaluator.Evaluator;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import org.eclipse.rdf4j.model.IRI;
+import org.python.core.Options;
+
+
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 /**
@@ -26,17 +29,23 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public  class Evaluator {
 
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(Evaluator.class);
 
+	/** The Constant sources. */
 	static protected final Sources sources = new Sources();
 
+	/** The script engine manager. */
 	static protected ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
 
+	/** The Constant scriptEngines. */
 	static protected final Properties scriptEngines=new Properties();
 
+	/** The digest. */
 	static private MessageDigest digest;
 
+	/** The trace. */
 	static protected boolean trace = false;
 
 	static {
@@ -49,8 +58,8 @@ public  class Evaluator {
 			String engineNames = "";
 			String unknownEngineNames = "";
 			Integer engineFactoryCount = 0;
-//TODO Is this really required or can it be called only if Jython loaded	
-		//  Options.importSite = false;
+//TODO #41 Is this really required or can it be called only if Jython loaded	
+		  Options.importSite = false;
 			for (ScriptEngineFactory engineFactory : engineFactories) {
 				if (!engineFactory.getEngineName().toLowerCase().contains("nashorn")) {
 					engineFactoryCount++;
@@ -85,8 +94,7 @@ public  class Evaluator {
 	/**
 	 * Bytes to hex.
 	 *
-	 * @param bytes
-	 *            the bytes
+	 * @param bytes the bytes
 	 * @return the string
 	 */
 	public static String bytesToHex(byte[] bytes) {
@@ -104,8 +112,7 @@ public  class Evaluator {
 	/**
 	 * Sets the trace.
 	 *
-	 * @param trace
-	 *            the trace
+	 * @param trace the trace
 	 * @return true, if successful
 	 */
 	public static boolean setTrace(boolean trace) {
@@ -122,8 +129,7 @@ public  class Evaluator {
 	/**
 	 * Gets the digest.
 	 *
-	 * @param key
-	 *            the key
+	 * @param key the key
 	 * @return the digest
 	 */
 	protected static byte[] getDigest(String key) {
@@ -133,8 +139,7 @@ public  class Evaluator {
 	/**
 	 * Gets the hex key.
 	 *
-	 * @param key
-	 *            the key
+	 * @param key the key
 	 * @return the hex key
 	 */
 	public static String getHexKey(String key) {
@@ -153,8 +158,7 @@ public  class Evaluator {
 	/**
 	 * Gets the script engine.
 	 *
-	 * @param engineIRI
-	 *            the engine IRI
+	 * @param engineIRI the engine IRI
 	 * @return the script engine
 	 */
 
@@ -165,8 +169,7 @@ public  class Evaluator {
 	/**
 	 * Checks if is script engine.
 	 *
-	 * @param engineIRI
-	 *            the engine IRI
+	 * @param engineIRI the engine IRI
 	 * @return the boolean
 	 */
 
@@ -189,6 +192,10 @@ public  class Evaluator {
 	public static Properties getEngineNames() {
 		return scriptEngines;
 	}
+	
+	/**
+	 * Finalize.
+	 */
 	public void finalize() {
 		scriptEngines.clear();
 	}

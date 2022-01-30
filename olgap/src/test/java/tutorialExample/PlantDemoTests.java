@@ -30,14 +30,29 @@ import com.inova8.intelligentgraph.vocabulary.*;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 import utilities.Query;
 
+/**
+ * The Class PlantDemoTests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PlantDemoTests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
+	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
+	/** The conn. */
 	static RepositoryConnection conn;
+	
+	/** The conn 1. */
 	static RepositoryConnection conn1;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
@@ -55,11 +70,20 @@ class PlantDemoTests {
 		 conn1 = source.getRepository().getConnection();
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
 
+	/**
+	 * Plant demo path QL.
+	 */
 	@Test
 	@Order(1)
 	void plantDemo_PathQL() {
@@ -114,6 +138,10 @@ class PlantDemoTests {
 			e.printStackTrace();
 		}
 	}
+		
+		/**
+		 * Plant I io T demo path QL.
+		 */
 		@Test
 		@Order(2)
 		void plantIIoTDemo_PathQL() {
@@ -189,6 +217,10 @@ class PlantDemoTests {
 				assertEquals("",e.getMessage());
 			}
 	}
+		
+		/**
+		 * Plant I io T demo SPARQL.
+		 */
 		@Test
 		@Order(3)
 		void plantIIoTDemo_SPARQL() {

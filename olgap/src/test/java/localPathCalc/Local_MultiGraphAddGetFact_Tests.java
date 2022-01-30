@@ -28,7 +28,7 @@ import com.inova8.pathql.processor.PathPatternException;
 import utilities.Query;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Local_MultiGraphAddGetFact_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_MultiGraphAddGetFact_Tests {
@@ -38,6 +38,8 @@ class Local_MultiGraphAddGetFact_Tests {
 	
 	/** The conn. */
 	private static RepositoryConnection conn;	
+	
+	/** The working rep. */
 	private static org.eclipse.rdf4j.repository.Repository workingRep ;
 	
 	/**
@@ -58,10 +60,17 @@ class Local_MultiGraphAddGetFact_Tests {
 		source =  IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
 	}
+
 /**
  * Adds the graph 2.
  *
@@ -123,6 +132,7 @@ class Local_MultiGraphAddGetFact_Tests {
 		myCountry.addFact(":sales", "500");
 		return myCountry;
 	}
+	
 	/**
 	 * Test 10.
 	 */
@@ -146,6 +156,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
 	/**
 	 * Test 20.
 	 */
@@ -176,8 +187,9 @@ class Local_MultiGraphAddGetFact_Tests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
 	/**
-	 * Test 20.
+	 * Test 25.
 	 */
 	@Test
 	@Order(25)
@@ -209,6 +221,7 @@ class Local_MultiGraphAddGetFact_Tests {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
 	/**
 	 * Test 30.
 	 */

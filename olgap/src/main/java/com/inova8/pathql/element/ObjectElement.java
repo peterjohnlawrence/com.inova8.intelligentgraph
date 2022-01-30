@@ -33,7 +33,7 @@ public class ObjectElement extends PathElement{
 	/**
 	 * Instantiates a new object element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public ObjectElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -43,6 +43,7 @@ public class ObjectElement extends PathElement{
 	/**
 	 * Gets the iri.
 	 *
+	 * @param customQueryOptions the custom query options
 	 * @return the iri
 	 */
 	public IRI getIri(CustomQueryOptions customQueryOptions) {
@@ -61,14 +62,23 @@ public class ObjectElement extends PathElement{
 	/**
 	 * Gets the literal.
 	 *
+	 * @param customQueryOptions the custom query options
 	 * @return the literal
 	 */
 	public Literal getLiteral(CustomQueryOptions customQueryOptions) {
 		return literal;
 	}
+	
+	/**
+	 * Gets the value.
+	 *
+	 * @param customQueryOptions the custom query options
+	 * @return the value
+	 */
 	public Value getValue(CustomQueryOptions customQueryOptions) {
 		return literal;
 	}	
+	
 	/**
 	 * Sets the literal.
 	 *
@@ -146,20 +156,33 @@ public class ObjectElement extends PathElement{
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
+	
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		return null;
 	}
+	
 	/**
 	 * Index visitor.
 	 *
@@ -204,10 +227,11 @@ public class ObjectElement extends PathElement{
 	}
 	
 	/**
-	 * Visit path.
+	 * Visit path binding.
 	 *
-	 * @param path the path
-	 * @return the path
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {

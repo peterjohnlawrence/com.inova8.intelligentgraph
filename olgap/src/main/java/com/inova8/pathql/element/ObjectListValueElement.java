@@ -20,7 +20,7 @@ public class ObjectListValueElement extends ValueElement {
 	/**
 	 * Instantiates a new object list value element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public ObjectListValueElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);

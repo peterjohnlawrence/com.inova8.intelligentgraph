@@ -24,12 +24,32 @@ import com.inova8.pathql.element.PathElement;
  * The Class PathResults.
  */
 public class PathResults implements CloseableIteration<Path, QueryEvaluationException> , Iterable<Path>{
+	
+	/** The custom query options. */
 	protected CustomQueryOptions customQueryOptions; 
+	
+	/** The path element. */
 	protected PathElement pathElement; 
+	
+	/** The thing. */
 	protected Thing thing;
+	
+	/** The source. */
 	protected IntelligentGraphRepository source;
+	
+	/** The path iterator. */
 	private CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator;
+	
+	/** The path set. */
 	private CloseableIteration<Statement, RepositoryException> pathSet;
+	
+	/**
+	 * Instantiates a new path results.
+	 *
+	 * @param pathIterator the path iterator
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 */
 	public PathResults(CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator,Thing thing, PathElement pathElement ) {
 		this.thing=thing;
 		this.pathElement = pathElement;
@@ -37,12 +57,25 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	}
 
 
+	/**
+	 * Instantiates a new path results.
+	 *
+	 * @param pathSet the path set
+	 * @param thing the thing
+	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
+	 */
 	public PathResults(CloseableIteration<Statement, RepositoryException> pathSet, Thing thing,	PathElement pathElement, CustomQueryOptions customQueryOptions) {
 		this.thing=thing;
 		this.pathElement = pathElement;
 		this.pathSet=pathSet;
 	}
 
+	/**
+	 * Gets the path set.
+	 *
+	 * @return the path set
+	 */
 	public CloseableIteration<Statement, RepositoryException> getPathSet() {
 		return pathSet;
 	}
@@ -54,13 +87,24 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 
 
 
-	@Override
+	/**
+ * Close.
+ *
+ * @throws QueryEvaluationException the query evaluation exception
+ */
+@Override
 	public void close() throws QueryEvaluationException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
+	/**
+	 * Checks for next.
+	 *
+	 * @return true, if successful
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public boolean hasNext() throws QueryEvaluationException {
 		if (pathSet != null)
@@ -72,6 +116,12 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	}
 
 
+	/**
+	 * Next.
+	 *
+	 * @return the path
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public Path next() throws QueryEvaluationException {
 		if (pathSet != null) {
@@ -95,6 +145,11 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	}
 
 
+	/**
+	 * Removes the.
+	 *
+	 * @throws QueryEvaluationException the query evaluation exception
+	 */
 	@Override
 	public void remove() throws QueryEvaluationException {
 		// TODO Auto-generated method stub
@@ -102,6 +157,11 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	}
 
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		String toString="";
 		while( hasNext()) {
@@ -111,6 +171,11 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	}
 
 
+	/**
+	 * Iterator.
+	 *
+	 * @return the iterator
+	 */
 	@Override
 	public Iterator<Path> iterator() {
 		return new CloseableIterationIterator<>(this);

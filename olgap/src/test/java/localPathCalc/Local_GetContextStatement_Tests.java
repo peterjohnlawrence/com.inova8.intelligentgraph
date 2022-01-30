@@ -27,8 +27,9 @@ import utilities.Query;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
+
 /**
- * The Class PathQLTests.
+ * The Class Local_GetContextStatement_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetContextStatement_Tests {
@@ -40,9 +41,10 @@ class Local_GetContextStatement_Tests {
 	/** The repository triple source. */
 	static RepositoryTripleSource repositoryTripleSource;
 	
-	/** The source. */
+	/** The working rep. */
 	//private static PathQLRepository source;
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -61,10 +63,20 @@ class Local_GetContextStatement_Tests {
 		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
 		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
 	}
+	
+	/**
+	 * Ig 1.
+	 */
 	@Test
 	@Order(1)
 	void ig_1() {
@@ -82,6 +94,10 @@ class Local_GetContextStatement_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 2.
+	 */
 	@Test
 	@Order(2)
 	void ig_2() {
@@ -98,6 +114,10 @@ class Local_GetContextStatement_Tests {
 			e.printStackTrace();
 		}
 	}	
+	
+	/**
+	 * Ig 3.
+	 */
 	@Test
 	@Order(3)
 	void ig_3() {
@@ -118,6 +138,10 @@ class Local_GetContextStatement_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 4.
+	 */
 	@Test
 	@Order(4)
 	void ig_4() {
@@ -134,6 +158,10 @@ class Local_GetContextStatement_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 5.
+	 */
 	@Test
 	@Order(5)
 	void ig_5() {
@@ -151,6 +179,9 @@ class Local_GetContextStatement_Tests {
 		}
 	}
 
+	/**
+	 * Ig 6.
+	 */
 	@Test
 	@Order(6)
 	void ig_6() {
@@ -173,6 +204,10 @@ class Local_GetContextStatement_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 7.
+	 */
 	@Test
 	@Order(7)
 	void ig_7() {
@@ -196,6 +231,10 @@ class Local_GetContextStatement_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 8.
+	 */
 	@Test
 	@Order(8)
 	void ig_8() {

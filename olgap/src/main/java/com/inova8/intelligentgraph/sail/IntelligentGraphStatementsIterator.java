@@ -29,7 +29,10 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	
 	/** The intelligent graph connection. */
 	private IntelligentGraphConnection intelligentGraphConnection;
+	
+	/** The evaluation context. */
 	private EvaluationContext evaluationContext;
+	
 	/** The contexts. */
 	private Resource[] contexts;
 	
@@ -100,6 +103,12 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 
 	 return	getStatementsIterator().hasNext();
 	}
+	
+	/**
+	 * Gets the evaluation context.
+	 *
+	 * @return the evaluation context
+	 */
 	private EvaluationContext getEvaluationContext() {
 
 	 return  evaluationContext;
@@ -108,7 +117,7 @@ public class IntelligentGraphStatementsIterator extends AbstractCloseableIterati
 	/**
 	 * Next.
 	 *
-	 * @return the statement
+	 * @return the intelligent statement
 	 * @throws SailException the sail exception
 	 */
 	@Override

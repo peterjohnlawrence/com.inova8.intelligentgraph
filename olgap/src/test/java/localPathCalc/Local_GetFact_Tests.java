@@ -27,14 +27,24 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import utilities.Query;
 
+/**
+ * The Class Local_GetFact_Tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_GetFact_Tests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
 	
 
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_GetFact_Tests/");
@@ -49,17 +59,35 @@ class Local_GetFact_Tests {
 
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}	
 
+	/**
+	 * Removes the white spaces.
+	 *
+	 * @param input the input
+	 * @return the string
+	 */
 	String removeWhiteSpaces(String input) {
 	    return input.replaceAll("\\s+", "");
 	    //return input;
 	}
 	
 
+	/**
+	 * Assert equals WO spaces.
+	 *
+	 * @param actual the actual
+	 * @param expected the expected
+	 */
 	void assertEqualsWOSpaces(String actual, String expected){
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
@@ -85,7 +113,10 @@ class Local_GetFact_Tests {
 //	}
 
 
-	@Test
+	/**
+ * Test 1.
+ */
+@Test
 	@Order(1)
 	void test_1() {
 		try {
@@ -100,6 +131,9 @@ class Local_GetFact_Tests {
 		}
 	}
 
+	/**
+	 * Test 2.
+	 */
 	@Test
 	@Order(2)
 	void test_2() {
@@ -115,6 +149,9 @@ class Local_GetFact_Tests {
 	}
 
 
+	/**
+	 * Test 2 1.
+	 */
 	@Test
 	@Order(21)
 	void test_2_1() {
@@ -129,6 +166,9 @@ class Local_GetFact_Tests {
 
 	}
 
+	/**
+	 * Test 2 2.
+	 */
 	@Test
 	@Order(22)
 	void test_2_2() {
@@ -142,6 +182,7 @@ class Local_GetFact_Tests {
 		}
 
 	}
+	
 	/**
 	 * Test 3.
 	 */
@@ -655,6 +696,7 @@ class Local_GetFact_Tests {
 			e.printStackTrace();
 		} 
 	}
+	
 	/**
 	 * Test 35.
 	 */
@@ -679,6 +721,7 @@ class Local_GetFact_Tests {
 			e.printStackTrace();
 		} 
 	}
+	
 	/**
 	 * Test 36.
 	 */
@@ -707,6 +750,7 @@ class Local_GetFact_Tests {
 			assertEquals("", e.getMessage());
 		} 
 	}
+	
 	/**
 	 * Test 37.
 	 */

@@ -19,7 +19,7 @@ public class FilterOperatorValueElement extends ValueElement {
 	/**
 	 * Instantiates a new filter operator value element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public FilterOperatorValueElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);

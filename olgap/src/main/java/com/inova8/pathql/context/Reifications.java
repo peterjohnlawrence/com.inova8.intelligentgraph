@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.pathql.context;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,15 +19,28 @@ import com.inova8.intelligentgraph.vocabulary.OWL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.RDFS;
 
+/**
+ * The Class Reifications.
+ */
 public class Reifications {
+	
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(Reifications.class);
+	
+	/** The reification types. */
 	ConcurrentHashMap<String, ReificationType> reificationTypes = new ConcurrentHashMap<String, ReificationType>();
+	
+	/** The predicate reification types. */
 	private ConcurrentHashMap<String, ReificationType> predicateReificationTypes = new ConcurrentHashMap<String, ReificationType>();
-	/** The is lazy loaded. */
+	
+	/** The reifications are lazy loaded. */
 	private Boolean reificationsAreLazyLoaded = false;
 //	private IntelligentGraphRepository pathQLRepository;
 //	public Reifications(IntelligentGraphRepository pathQLRepository) {
 //		this.pathQLRepository=pathQLRepository;
+/**
+ * Instantiates a new reifications.
+ */
 //	}
 	public Reifications() {
 	}	
@@ -32,65 +48,160 @@ public class Reifications {
 //		return pathQLRepository;
 //	}
 
-	public ReificationType getPredicateReificationType(String predicate) {
+	/**
+ * Gets the predicate reification type.
+ *
+ * @param predicate the predicate
+ * @return the predicate reification type
+ */
+public ReificationType getPredicateReificationType(String predicate) {
 		if (getPredicateReificationTypes().containsKey(predicate)) {
 			return getPredicateReificationTypes().get(predicate);
 		} else {
 			return null;
 		}
 	}
+	
+	/**
+	 * Gets the predicate reification types.
+	 *
+	 * @return the predicate reification types
+	 */
 	ConcurrentHashMap<String, ReificationType> getPredicateReificationTypes() {
 		return predicateReificationTypes;
 	}
+	
+	/**
+	 * Gets the reification is object of.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification is object of
+	 */
 	public IRI getReificationIsObjectOf(IRI reificationType) {
 		return getReificationIsObjectOf(reificationType.stringValue());
 	}
+	
+	/**
+	 * Gets the reification is object of.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification is object of
+	 */
 	public IRI getReificationIsObjectOf(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationIsObjectOf();
 		else
 			return null;
 	}
+	
+	/**
+	 * Gets the reification is predicate of.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification is predicate of
+	 */
 	public IRI getReificationIsPredicateOf(IRI reificationType) {
 		return getReificationIsPredicateOf(reificationType.stringValue());
 	}
+	
+	/**
+	 * Gets the reification is predicate of.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification is predicate of
+	 */
 	public IRI getReificationIsPredicateOf(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationIsPredicateOf();
 		else
 			return null;
 	}
+	
+	/**
+	 * Gets the reification is subject of.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification is subject of
+	 */
 	public IRI getReificationIsSubjectOf(IRI reificationType) {
 		return getReificationIsSubjectOf(reificationType.stringValue());
 	}
+	
+	/**
+	 * Gets the reification is subject of.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification is subject of
+	 */
 	public IRI getReificationIsSubjectOf(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationIsSubjectOf();
 		else
 			return null;
 	}
+	
+	/**
+	 * Gets the reification object.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification object
+	 */
 	public IRI getReificationObject(IRI reificationType) {
 		return getReificationObject(reificationType.stringValue());
 	}
+	
+	/**
+	 * Gets the reification object.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification object
+	 */
 	public IRI getReificationObject(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationObject();
 		else
 			return null;
 	}
+	
+	/**
+	 * Gets the reification predicate.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification predicate
+	 */
 	public IRI getReificationPredicate(IRI reificationType) {
 		return getReificationPredicate(reificationType.stringValue());
 	}
+	
+	/**
+	 * Gets the reification predicate.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification predicate
+	 */
 	public IRI getReificationPredicate(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationPredicate();
 		else
 			return null;
 	}
+	
+	/**
+	 * Gets the reification subject.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification subject
+	 */
 	public IRI getReificationSubject(IRI reificationType) {
 		return getReificationSubject(reificationType.stringValue());
 	}
 
+	/**
+	 * Gets the reification subject.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification subject
+	 */
 	public IRI getReificationSubject(String reificationType) {
 		if (getReificationType(reificationType) != null)
 			return getReificationType(reificationType).getReificationSubject();
@@ -98,16 +209,33 @@ public class Reifications {
 			return null;
 	}
 
+	/**
+	 * Gets the reification type.
+	 *
+	 * @param reificationType the reification type
+	 * @return the reification type
+	 */
 	private ReificationType getReificationType(String reificationType) {
 		return getReificationTypes(null).get(reificationType);
 	}
 
+	/**
+	 * Gets the reification types.
+	 *
+	 * @param repositoryConnection the repository connection
+	 * @return the reification types
+	 */
 	public ConcurrentHashMap<String, ReificationType> getReificationTypes(RepositoryConnection repositoryConnection) {
 		if (!reificationsAreLazyLoaded && repositoryConnection != null)
 			initializeReificationTypes(repositoryConnection);
 		return reificationTypes;
 	}
 
+	/**
+	 * Initialize reification types.
+	 *
+	 * @param repositoryConnection the repository connection
+	 */
 	protected void initializeReificationTypes(RepositoryConnection repositoryConnection) {
 		StringBuilder initializedReifications = new StringBuilder(
 				" reifications initialized: <" + RDF.STATEMENT + "> ");
@@ -194,10 +322,27 @@ public class Reifications {
 		reificationsAreLazyLoaded = true;
 		logger.debug(initializedReification + initializedReifications.toString());
 	}
+	
+	/**
+	 * Sets the reifications are lazy loaded.
+	 *
+	 * @param reificationsAreLazyLoaded the new reifications are lazy loaded
+	 */
 	public void setReificationsAreLazyLoaded(Boolean reificationsAreLazyLoaded) {
 		this.reificationsAreLazyLoaded = reificationsAreLazyLoaded;
 	}
 
+	/**
+	 * Adds the reification type.
+	 *
+	 * @param reificationType the reification type
+	 * @param reificationSubject the reification subject
+	 * @param reificationPredicate the reification predicate
+	 * @param reificationObject the reification object
+	 * @param reificationIsSubjectOf the reification is subject of
+	 * @param reificationIsPredicateOf the reification is predicate of
+	 * @param reificationIsObjectOf the reification is object of
+	 */
 	public void addReificationType(Resource reificationType, Resource reificationSubject, Resource reificationPredicate,
 			Resource reificationObject, Resource reificationIsSubjectOf, Resource reificationIsPredicateOf,
 			Resource reificationIsObjectOf) {

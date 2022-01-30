@@ -1,14 +1,33 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.pathql.utilities;
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
 
 import org.eclipse.rdf4j.model.IRI;
 
+/**
+ * The Class Utilities.
+ */
 public class Utilities {
+	
+	/**
+	 * Trim and check IRI string.
+	 *
+	 * @param IRI the iri
+	 * @return the iri
+	 */
 	public static IRI trimAndCheckIRIString(String IRI) {
 		return iri(trimIRIString(IRI));
 	}
 
+	/**
+	 * Trim IRI string.
+	 *
+	 * @param IRI the iri
+	 * @return the string
+	 */
 	public static String trimIRIString(String IRI) {
 		IRI = IRI.trim();
 		if (IRI.startsWith("<") && IRI.endsWith(">")) {

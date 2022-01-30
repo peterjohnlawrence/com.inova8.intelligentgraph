@@ -57,8 +57,10 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	
 	/** The query context. */
 	private final QueryContext queryContext;
-	/** The query context. */
+	
+	/** The custom query options. */
 	private  CustomQueryOptions  customQueryOptions = new CustomQueryOptions();	
+	
 	/** The original target names. */
 	private Set<String> originalTargetNames;
 	
@@ -110,6 +112,11 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 	}
 
 
+	/**
+	 * Gets the prefixes.
+	 *
+	 * @return the prefixes
+	 */
 	public Prefixes getPrefixes() {
 		return (Prefixes) queryContext.getAttribute(IntelligentGraphConstants.PREFIXES);
 	}
@@ -499,6 +506,13 @@ public class IntelligentGraphEvaluator extends AbstractCloseableIteration<Bindin
 			return customQueryOptions;
 		}
 	}
+	
+	/**
+	 * Locate custom query options.
+	 *
+	 * @param nextBindingSet the next binding set
+	 * @return the binding set
+	 */
 	private BindingSet locateCustomQueryOptions(BindingSet nextBindingSet) {
 		if(nextBindingSet.getValue("subject").equals(iri("http://inova8.com/context"))) {
 			String customQueryOptionParameter = ((IRI)(nextBindingSet.getValue("predicate"))).getLocalName();

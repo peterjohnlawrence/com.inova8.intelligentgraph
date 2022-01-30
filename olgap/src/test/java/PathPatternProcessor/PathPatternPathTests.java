@@ -30,12 +30,18 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternPathTests {
 
-	/** The repositoryContext. */
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 	
+	/** The indices. */
 	static ArrayList<Integer> indices = new ArrayList<Integer>();
 	
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		repositoryContext= new RepositoryContext( );
@@ -46,11 +52,22 @@ class PathPatternPathTests {
 	//	thing = repositoryContext.getThing( "http://",null);
 	}
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeEach
 	void setUp() throws Exception {
 	}
 	
 
+	/**
+	 * Test 1.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(1)
 	void test_1() throws RecognitionException, PathPatternException {
@@ -64,6 +81,12 @@ class PathPatternPathTests {
 	}
 
 
+	/**
+	 * Test 2.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(2)
 	void test_2() throws RecognitionException, PathPatternException {
@@ -78,6 +101,12 @@ class PathPatternPathTests {
 	}
 
 
+	/**
+	 * Test 3.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(3)
 	void test_3()  throws RecognitionException, PathPatternException{
@@ -90,6 +119,12 @@ class PathPatternPathTests {
 	}	
 	
 
+	/**
+	 * Test 4.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(4)
 	void test_4()  throws RecognitionException, PathPatternException{
@@ -103,6 +138,13 @@ class PathPatternPathTests {
 				+ "[n4,http://default/right,n5,DIRECT]\r\n"
 				+ "" , pathBinding.toString());
 	}
+	
+	/**
+	 * Test 5.
+	 *
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	@Test
 	@Order(5)
 	void test_5()  throws RecognitionException, PathPatternException{

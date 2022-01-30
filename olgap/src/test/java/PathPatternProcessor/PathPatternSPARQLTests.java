@@ -30,7 +30,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
 class PathPatternSPARQLTests {
 	
 	
-	/** The source. */
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 	
 	/** The indices. */
@@ -417,6 +417,7 @@ void test_18() {
 		assertEquals("", e.getMessage());
 	}
 }
+
 /**
  * Test 19.
  */
@@ -709,6 +710,9 @@ void test_33() {
 }
 
 
+/**
+ * Test 34.
+ */
 @Test 
 @Order(34)
 void test_34() {
@@ -723,6 +727,9 @@ void test_34() {
 }
 
 
+/**
+ * Test 35.
+ */
 @Test 
 @Order(35)
 void test_35() {
@@ -736,6 +743,10 @@ void test_35() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 36.
+ */
 @Test 
 @Order(36)
 void test_36() {

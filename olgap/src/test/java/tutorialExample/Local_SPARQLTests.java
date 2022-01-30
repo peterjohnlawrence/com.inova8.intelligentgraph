@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package tutorialExample;
 
 import static org.junit.Assert.assertEquals;
@@ -11,11 +14,25 @@ import org.junit.jupiter.api.Test;
 
 import utilities.Query;
 import org.eclipse.rdf4j.query.Update;
+
+/**
+ * The Class Local_SPARQLTests.
+ */
 public class Local_SPARQLTests {
+	
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
 	}
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {

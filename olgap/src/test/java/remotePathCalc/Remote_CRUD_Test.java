@@ -22,8 +22,9 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.XSD;
+
 /**
- * The Class PathQLTests.
+ * The Class Remote_CRUD_Test.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_CRUD_Test {
@@ -35,7 +36,10 @@ class Remote_CRUD_Test {
 	/** The source. */
 	private static IntelligentGraphRepository source;
 	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep;
+	
+	/** The conn. */
 	static RepositoryConnection conn ;
 
 	/**
@@ -81,6 +85,10 @@ class Remote_CRUD_Test {
 			assertEquals("", e.getMessage());
 		}
 	}
+	
+	/**
+	 * Ig 1.
+	 */
 	@Test
 	@Order(1)
 	void ig_1() {
@@ -90,7 +98,7 @@ class Remote_CRUD_Test {
 			Graph graph = source.addGraph("<http://inova8.com/calc2graph/testGraph2>");
 			source.prefix("<http://inova8.com/calc2graph/testGraph2/>");
 			Thing myCountry = graph.getThing(":Country2");
-			Thing Attribute = graph.getThing(":Attribute").addFact("rdfs:subClassOf", RDF.STATEMENT);
+			Thing Attribute = graph.getThing(":Attribute").addFact(RDFS.SUBCLASSOF, RDF.STATEMENT);
 			Thing AttributeType = graph.getThing(":AttributeType");
 			graph.getThing(":attributeOf").addFact(RDFS.SUB_PROPERTY_OF, RDF.SUBJECT).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE,RDFS.RESOURCE);
 			graph.getThing(":attributeType").addFact(RDFS.SUB_PROPERTY_OF, RDF.PREDICATE).addFact(RDFS.DOMAIN, Attribute).addFact(RDFS.RANGE, AttributeType);

@@ -22,7 +22,7 @@ import com.inova8.pathql.processor.PathPatternException;
 import utilities.Query;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Local_SPARQL_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_SPARQL_Tests {
@@ -32,6 +32,8 @@ class Local_SPARQL_Tests {
 	
 	/** The conn. */
 	private static RepositoryConnection conn;	
+	
+	/** The working rep. */
 	private static org.eclipse.rdf4j.repository.Repository workingRep ;
 	
 	/**
@@ -51,10 +53,17 @@ class Local_SPARQL_Tests {
 		source =  IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
 	}
+
 /**
  * Adds the graph 2.
  *
@@ -144,6 +153,10 @@ class Local_SPARQL_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Ig 65.
+	 */
 	@Test
 	@Order(65)
 	void ig_65() {
@@ -200,6 +213,7 @@ class Local_SPARQL_Tests {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Ig 70.
 	 */

@@ -20,7 +20,7 @@ import com.inova8.intelligentgraph.results.PathResults;
 import utilities.Query;
 
 /**
- * The Class ThingTests.
+ * The Class Local_MMS_GetPath_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_MMS_GetPath_Tests {
@@ -31,7 +31,9 @@ class Local_MMS_GetPath_Tests {
 	private static IntelligentGraphRepository source;
 	
 
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -72,10 +74,17 @@ class Local_MMS_GetPath_Tests {
 
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}	
+	
 	/**
 	 * Removes the white spaces.
 	 *
@@ -97,6 +106,9 @@ class Local_MMS_GetPath_Tests {
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -112,6 +124,9 @@ class Local_MMS_GetPath_Tests {
 		}
 	}
 
+	/**
+	 * Test 2.
+	 */
 	@Test
 	@Order(2)
 	void test_2() {

@@ -20,12 +20,26 @@ import com.inova8.intelligentgraph.model.Thing;
 
 import utilities.Query;
 
+/**
+ * The Class ExampleLanguageTest_Tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ExampleLanguageTest_Tests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
+	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
+	/** The conn. */
 	static RepositoryConnection conn; 
+	
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
@@ -40,10 +54,20 @@ class ExampleLanguageTest_Tests {
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
+	
+	/**
+	 * Example 1 1.
+	 */
 	@Test
 	@Order(1)
 	void example1_1() {
@@ -57,6 +81,10 @@ class ExampleLanguageTest_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 1 2.
+	 */
 	@Test
 	@Order(2)
 	void example1_2() {
@@ -70,6 +98,10 @@ class ExampleLanguageTest_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 1 3.
+	 */
 	@Test
 	@Order(3)
 	void example1_3() {
@@ -83,6 +115,10 @@ class ExampleLanguageTest_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 1 4.
+	 */
 	@Test
 	@Order(4)
 	void example1_4() {
@@ -96,6 +132,10 @@ class ExampleLanguageTest_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 1 5.
+	 */
 	@Test
 	@Order(5)
 	void example1_5() {
@@ -114,6 +154,10 @@ class ExampleLanguageTest_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 1 6.
+	 */
 	@Test
 	@Order(6)
 	void example1_6() {

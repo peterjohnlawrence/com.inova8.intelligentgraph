@@ -18,7 +18,7 @@ import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Remote_TutorialTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Remote_TutorialTests {
@@ -35,6 +35,10 @@ class Remote_TutorialTests {
 
 
 	}
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {

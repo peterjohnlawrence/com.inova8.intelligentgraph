@@ -22,6 +22,8 @@ import com.inova8.pathql.element.PathElement;
  * The Class ResourceResults.
  */
 public abstract class ResourceResults implements CloseableIteration<Resource, QueryEvaluationException> , Iterable<Resource>{
+	
+	/** The custom query options. */
 	protected CustomQueryOptions customQueryOptions; 
 	
 	/** The path element. */
@@ -36,8 +38,6 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 
 	/**
 	 * Instantiates a new resource results.
-	 *
-	 * @param resourceSet the resource set
 	 */
 	public ResourceResults() {
 	}
@@ -46,7 +46,6 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	/**
 	 * Instantiates a new resource results.
 	 *
-	 * @param resourceSet the resource set
 	 * @param thing the thing
 	 */
 	public ResourceResults( Thing thing ){
@@ -56,9 +55,9 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	/**
 	 * Instantiates a new resource results.
 	 *
-	 * @param resourceSet the resource set
 	 * @param thing the thing
 	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
 	 */
 	public ResourceResults( Thing thing, PathElement pathElement, CustomQueryOptions customQueryOptions ){
 
@@ -70,9 +69,9 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 	/**
 	 * Instantiates a new resource results.
 	 *
-	 * @param resourceSet the resource set
 	 * @param source the source
 	 * @param pathElement the path element
+	 * @param customQueryOptions the custom query options
 	 */
 	public ResourceResults( IntelligentGraphRepository source,  PathElement pathElement ,CustomQueryOptions customQueryOptions ){
 		this.source = source; 
@@ -94,6 +93,12 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		this.thing = thing; 
 
 	}
+	
+	/**
+	 * Gets the source.
+	 *
+	 * @return the source
+	 */
 	public IntelligentGraphRepository getSource() {
 		if(source!=null)
 			return source;
@@ -119,13 +124,23 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 //			return null;
 //	}
 
-	protected EvaluationContext getEvaluationContext() {
+	/**
+ * Gets the evaluation context.
+ *
+ * @return the evaluation context
+ */
+protected EvaluationContext getEvaluationContext() {
 		if(thing!=null)
 			return thing.getEvaluationContext();
 		else 
 			return null;
 	}
 
+	/**
+	 * Gets the stack.
+	 *
+	 * @return the stack
+	 */
 	protected Stack<String> getStack() {
 		if(thing!=null)
 			return thing.getStack();
@@ -133,6 +148,11 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 			return null;
 	}
 
+	/**
+	 * Gets the custom query options.
+	 *
+	 * @return the custom query options
+	 */
 	protected CustomQueryOptions getCustomQueryOptions() {
 		return this.customQueryOptions;
 	}
@@ -157,14 +177,19 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		return new CloseableIterationIterator<>(this);
 	}
 
+	/**
+	 * Next resource.
+	 *
+	 * @return the resource
+	 */
 	public abstract Resource nextResource();
 //	public abstract Fact nextFact();	
 //	public abstract IRI nextReifiedValue();
 	/**
-	 * Count.
-	 *
-	 * @return the integer
-	 */
+ * Count.
+ *
+ * @return the integer
+ */
 	public Integer count() {
 		Integer count = 0;
 		while( hasNext()) {
@@ -202,6 +227,12 @@ public abstract class ResourceResults implements CloseableIteration<Resource, Qu
 		return total;
 	 
 	}
+	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		String toString="[";
 		while( hasNext()) {

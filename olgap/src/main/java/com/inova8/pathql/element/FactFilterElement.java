@@ -30,7 +30,7 @@ public class FactFilterElement extends ObjectElement{
 	/**
 	 * Instantiates a new fact filter element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public FactFilterElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -72,10 +72,11 @@ public class FactFilterElement extends ObjectElement{
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {		
@@ -96,6 +97,17 @@ public class FactFilterElement extends ObjectElement{
 
 		return new PathTupleExpr(factFilterPattern);
 	}
+	
+	/**
+	 * Filter expression.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param filterExpression the filter expression
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	public PathTupleExpr filterExpression( Variable sourceVariable, Variable predicateVariable,  Variable targetVariable,TupleExpr filterExpression,CustomQueryOptions customQueryOptions) {		
 		//QueryModelNode filterExpression = null;
 		if(propertyListNotEmpty!=null) {
@@ -134,10 +146,10 @@ public class FactFilterElement extends ObjectElement{
 	/**
 	 * Bound pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {		
 		TupleExpr factFilterPattern = null;
@@ -223,6 +235,7 @@ public class FactFilterElement extends ObjectElement{
 	 * Bind target variable.
 	 *
 	 * @param targetVariable the target variable
+	 * @param customQueryOptions the custom query options
 	 * @return the array list
 	 */
 	public ArrayList<Variable> bindTargetVariable(Variable targetVariable, CustomQueryOptions customQueryOptions) {

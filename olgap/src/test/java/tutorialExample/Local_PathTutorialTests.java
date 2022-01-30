@@ -25,16 +25,24 @@ import com.inova8.intelligentgraph.vocabulary.RDF;
 import utilities.Query;
 
 /**
- * The Class RemoteThingTests.
+ * The Class Local_PathTutorialTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_PathTutorialTests {
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
 	}
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {

@@ -5,7 +5,23 @@
 	<groupId>com.inova8</groupId>
 	<artifactId>intelligentgraph</artifactId>
 	<version>0.9.0</version>
-	<name>rdf4j</name>
+	<name>com.inova8:intelligentgraph</name>
+	<licenses>
+  <license>
+    <name>The Apache License, Version 2.0</name>
+    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+  </license>
+</licenses>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -28,100 +44,70 @@
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.logging.log4j</groupId> -->
-		<!-- <artifactId>log4j-api</artifactId> -->
-		<!-- <version>2.13.3</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.logging.log4j</groupId> -->
-		<!-- <artifactId>log4j-core</artifactId> -->
-		<!-- <version>2.13.3</version> -->
-		<!-- </dependency> -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<scope>provided</scope>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>${antlr.version}</version>
+		</dependency>
+ 		<dependency>
+			<groupId>com.seeq</groupId>
+			<artifactId>sdk</artifactId>
+			<version>0.49.04-v202009240029</version>
+		</dependency> 
+		<dependency>
+           <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+             <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>provided</scope>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+            <version>${junit.jupiter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+    		<groupId>net.htmlparser.jericho</groupId>
+    		<artifactId>jericho-html</artifactId>
+  			<version>${jericho.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-jsr223</artifactId>
-			<version>3.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr4-runtime</artifactId>
-			<version>4.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.python</groupId>
-			<artifactId>jython-standalone</artifactId>
-			<version>2.7.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.seeq</groupId>
-			<artifactId>sdk</artifactId>
-			<version>0.49.04-v202009240029</version>
+			<version>${groovy.version}</version>
+			<scope>${groovy.compile}</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js-scriptengine</artifactId>
-			<version>21.1.0</version>
+			<version>${graalvm.version}</version>
+			<scope>${graaljs.compile}</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js</artifactId>
-			<version>21.1.0</version>
-			<scope>provided</scope>
+			<version>${graalvm.version}</version>
+			<scope>${graaljs.compile}</scope>
 		</dependency>
-		<!-- log4j2 -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.logging.log4j</groupId> -->
-		<!-- <artifactId>log4j</artifactId> -->
-		<!-- <version>2.14.1</version> -->
-		<!-- <type>pom</type> -->
-		<!-- </dependency> -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
+			<groupId>org.python</groupId>
+			<artifactId>jython-standalone</artifactId>
+			<version>${jython.version}</version>
+			<scope>${jython.compile}</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-simple</artifactId> -->
-<!-- 		</dependency> -->
-		<!-- SLF4J Bridge -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.logging.log4j</groupId> -->
-		<!-- <artifactId>log4j-slf4j-impl</artifactId> -->
-		<!-- <version>2.14.1</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.slf4j</groupId> -->
-		<!-- <artifactId>jcl-over-slf4j</artifactId> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.logging.log4j</groupId> -->
-		<!-- <artifactId>log4j-slf4j-impl</artifactId> -->
-		<!-- <version>2.13.3</version> -->
-		<!-- </dependency> -->
-<!-- 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency> -->
-		<dependency>
-    <groupId>net.htmlparser.jericho</groupId>
-    <artifactId>jericho-html</artifactId>
-    <version>3.4</version>
-</dependency>
-		
 	</dependencies>
 	<build>
 		<plugins>
@@ -151,6 +137,48 @@
 				</configuration>
 			</plugin> 
 			<plugin>
+			    <groupId>org.sonatype.plugins</groupId>
+			    <artifactId>nexus-staging-maven-plugin</artifactId>
+			    <version>1.6.7</version>
+			    <extensions>true</extensions>
+			    <configuration>
+			        <serverId>ossrh</serverId>
+			        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+			        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+			    </configuration>
+			</plugin> 
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-source-plugin</artifactId>
+			    <version>2.2.1</version>
+			    <executions>
+			        <execution>
+			            <id>attach-sources</id>
+			            <goals>
+			                <goal>jar-no-fork</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin> 
+ 			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-javadoc-plugin</artifactId>
+			    <version>2.9.1</version>
+			    <configuration> 
+			    	<source>${java.version}</source> 
+			    	<detectJavaApiLink>false</detectJavaApiLink>
+			    	<excludePackageNames>com.inova8.pathql.pathPattern</excludePackageNames>
+			    </configuration>
+			    <executions>
+			        <execution>
+			            <id>attach-javadocs</id>
+			            <goals>
+			                <goal>jar</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.6</version>
@@ -164,7 +192,7 @@
 					</execution>
 				</executions>
 			</plugin>
-<!--  			<plugin>
+  <!-- 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.2.4</version>
@@ -199,19 +227,65 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>  -->
-		</plugins>
+			</plugin>  
+ -->		</plugins>
 	</build>
 	<properties>
+	    <java.version>11</java.version>
 		<rdf4j.version>3.7.4</rdf4j.version>
-		<gpg.keyname>lusterthief</gpg.keyname>
-		<slf4j.version>1.7.30</slf4j.version>
+		<antlr.version>4.9.3</antlr.version>
+		<jericho.version>3.4</jericho.version>
+		<junit.jupiter.version>5.7.2</junit.jupiter.version>
+        <junit.platform.version>1.8.1</junit.platform.version>
+        
+        <groovy.version>3.0.9</groovy.version>
+		<graalvm.version>21.1.0</graalvm.version>
+		<jython.version>2.7.2</jython.version>
+
+         <groovy.compile>compile</groovy.compile>
+         <graaljs.compile>provided</graaljs.compile>
+         <jython.compile>provided</jython.compile>
 	</properties>
 	<repositories>
+	    <repository>
+      		<id>local</id>
+      		<name>local Repository</name>
+			<url>file://c:/Users/peter/.m2/repository</url>
+        </repository>
 		<repository>
 			<id>ICM</id>
 			<name>ICM</name>
 			<url>http://maven.icm.edu.pl/artifactory/repo/</url>
 		</repository>
 	</repositories>
+	<organization>
+		<name>inova8</name>
+		<url>https://www.inova8.com</url>
+	</organization>
+	  <developers>
+    <developer>
+      <name>Peter Lawrence</name>
+      <email>peter.lawrence@inova8.com</email>
+      <url>https://www.linkedin.com/in/peterjohnlawrence</url>
+      <organization>inova8</organization>
+      <organizationUrl>https://www.inova8.com</organizationUrl>
+    </developer>
+  </developers>
+	<url>https://www.inova8.com</url>
+	<description>The IntelligentGraph SAIL offers an extended capability for embedded calculation support within any RDF graph. When enabled as an RDF4J SAIL, it offers calculation functionality as part of the RDF4J engine, on top of any RDF4J repository, using a variety of script engines including JavaScript, Jython, and Groovy. It preserves the SPARQL capability of RDF4J, but with additional capabilities for calculation debugging and tracing. 
+
+IntelligentGraph includes the PathQL query language. Just as a spreadsheet cell calculation needs to access other cells, an IntelligentGraph calculation needs to access other nodes within the graph. Although full access to the underlying graph is available to any of the scripts, PathQL provides a succinct, and efficient method to access directly or indirectly related nodes. PathQL can either return just the contents of the referenced nodes, or the contents and the path to the referenced nodes.
+
+PathQL can also be used standalone to query the IntelligentGraph-enabled RDF database. This supplements, rather than replaces, SPARQL and GraphQL, as it provides graph-path querying rather than graph-pattern querying capabilities to any IntelligentGraph-enabled RDF database.
+
+The principles of IntelligentGraph are described here: https://inova8.com/bg_inova8.com/intelligent-graph-knowledge-graph-embedded-analysis/
+The full PathQL syntax is described here: https://inova8.com/bg_inova8.com/pathpatternql-intelligently-finding-knowledge-as-a-path-through-a-maze-of-facts/
+Using Jupyter as an IDE to IntelligentGraph and RDF4J, shown here: https://inova8.com/bg_inova8.com/intelligentgraph-getting-started/
+IntelligentGraph source is here in GitHub: https://github.com/peterjohnlawrence/com.inova8.intelligentgraph
+IntelligentGraph Docker containers are available here: https://hub.docker.com/repository/docker/inova8/intelligentgraph</description>
+	<scm>
+		<url>https://github.com/peterjohnlawrence/com.inova8.intelligentgraph</url>
+		<connection>scm:git:git://github.com/peterjohnlawrence/com.inova8.intelligentgraph.git</connection>
+		<developerConnection>scm:git:ssh://github.com/peterjohnlawrence/com.inova8.intelligentgraph.git</developerConnection>
+	</scm>
 </project>

@@ -16,13 +16,15 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import utilities.Query;
 
 /**
- * The Class RemoteThingTests.
+ * The Class SPARQL_To_TupleExpr.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SPARQL_To_TupleExpr {
 
 	/** The conn. */
 	private static RepositoryConnection conn;	
+	
+	/** The working rep. */
 	private static org.eclipse.rdf4j.repository.Repository workingRep ;
 	
 	/**
@@ -43,12 +45,21 @@ class SPARQL_To_TupleExpr {
 		IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		conn.close();
 	}
 
 
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -94,6 +105,9 @@ class SPARQL_To_TupleExpr {
 		}
 	}
 
+	/**
+	 * Test 2.
+	 */
 	@Test
 	@Order(2)
 	void test_2() {

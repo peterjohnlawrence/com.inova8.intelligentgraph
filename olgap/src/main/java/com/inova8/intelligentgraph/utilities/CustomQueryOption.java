@@ -1,3 +1,6 @@
+/*
+ * inova8 2020
+ */
 package com.inova8.intelligentgraph.utilities;
 
 import java.io.UnsupportedEncodingException;
@@ -19,7 +22,18 @@ import static java.util.stream.Collectors.*;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
+/**
+ * The Class CustomQueryOption.
+ */
 public class CustomQueryOption {
+	
+	/**
+	 * Gets the custom query options.
+	 *
+	 * @param contexts the contexts
+	 * @param prefixes the prefixes
+	 * @return the custom query options
+	 */
 	public static CustomQueryOptions getCustomQueryOptions(org.eclipse.rdf4j.model.Resource[] contexts, Prefixes prefixes) {
 		CustomQueryOptions customQueryOptions= new CustomQueryOptions();
 		if(contexts!=null) {
@@ -41,6 +55,13 @@ public class CustomQueryOption {
 		else 
 			return null;
 	}
+	
+	/**
+	 * Gets the core contexts.
+	 *
+	 * @param contexts the contexts
+	 * @return the core contexts
+	 */
 	public static ArrayList<Resource> getCoreContexts(org.eclipse.rdf4j.model.Resource[] contexts) {	
 		ArrayList<Resource> coreContexts = new ArrayList<Resource>() ;
 		if(contexts!=null) {
@@ -54,6 +75,14 @@ public class CustomQueryOption {
 		else 
 			return coreContexts;
 	}
+	
+	/**
+	 * Split query.
+	 *
+	 * @param query the query
+	 * @param prefixes the prefixes
+	 * @return the custom query options
+	 */
 	private static CustomQueryOptions splitQuery(String query,Prefixes prefixes) {
 		if (query == null || query.isEmpty()) {
 			return null;
@@ -67,6 +96,13 @@ public class CustomQueryOption {
 		return customQueryOptions;
 	}
 
+	/**
+	 * Split query parameter.
+	 *
+	 * @param parameter the parameter
+	 * @param prefixes the prefixes
+	 * @return the pair
+	 */
 	private static Pair<String, Value> splitQueryParameter(String parameter,Prefixes prefixes) {
 		final String enc = "UTF-8";
 		List<String> keyValue = Arrays.stream(parameter.split("=")).map(e -> {
@@ -104,6 +140,14 @@ public class CustomQueryOption {
 			return new Pair<String,Value>(keyValue.get(0), null);
 		}
 	}
+	
+	/**
+	 * Convert Q name.
+	 *
+	 * @param predicateIRI the predicate IRI
+	 * @param localPrefixes the local prefixes
+	 * @return the iri
+	 */
 	private static IRI convertQName(String predicateIRI, Prefixes localPrefixes) {
 		predicateIRI = Utilities.trimIRIString(predicateIRI);
 		String[] predicateIRIParts = predicateIRI.split(":|~");
@@ -124,10 +168,8 @@ public class CustomQueryOption {
 	/**
 	 * Gets the namespace.
 	 *
-	 * @param namespaceString
-	 *            the namespace string
-	 * @param localPrefixes
-	 *            the local prefixes
+	 * @param namespaceString the namespace string
+	 * @param localPrefixes the local prefixes
 	 * @return the namespace
 	 */
 	private static IRI getNamespace(String namespaceString, Prefixes  localPrefixes) {
@@ -139,40 +181,65 @@ public class CustomQueryOption {
 		}
 		return namespace;
 	}
+	
 	/**
-	 * Runtime exception (instead of checked exception) to denote unsupported
-	 * enconding
+	 * The Class RuntimeUnsupportedEncodingException.
 	 */
 	public static class RuntimeUnsupportedEncodingException extends RuntimeException {
+		
+		/** The Constant serialVersionUID. */
 		private static final long serialVersionUID = 5437438619565978536L;
 
+		/**
+		 * Instantiates a new runtime unsupported encoding exception.
+		 *
+		 * @param cause the cause
+		 */
 		public RuntimeUnsupportedEncodingException(Throwable cause) {
 			super(cause);
 		}
 	}
 
 	/**
-	 * A simple pair of two elements
-	 * 
-	 * @param <U>
-	 *            first element
-	 * @param <V>
-	 *            second element
+	 * The Class Pair.
+	 *
+	 * @param <U> the generic type
+	 * @param <V> the value type
 	 */
 	private static class Pair<U, V> {
+		
+		/** The a. */
 		U a;
+		
+		/** The b. */
 		V b;
 
+		/**
+		 * Instantiates a new pair.
+		 *
+		 * @param u the u
+		 * @param v the v
+		 */
 		public Pair(U u, V v) {
 			this.a = u;
 			this.b = v;
 		}
 
+		/**
+		 * Gets the 0.
+		 *
+		 * @return the 0
+		 */
 		@SuppressWarnings("unused")
 		public U get0() {
 			return a;
 		}
 
+		/**
+		 * Gets the 1.
+		 *
+		 * @return the 1
+		 */
 		@SuppressWarnings("unused")
 		public V get1() {
 			return b;

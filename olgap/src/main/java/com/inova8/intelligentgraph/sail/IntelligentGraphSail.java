@@ -25,32 +25,66 @@ import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 
+/**
+ * The Class IntelligentGraphSail.
+ */
 public class IntelligentGraphSail extends NotifyingSailWrapper {
+	
+	/** The logger. */
 	protected final Logger logger = LoggerFactory.getLogger(Thing.class);	
+	
+	/**
+	 * The Enum ResponseType.
+	 */
 	public enum ResponseType { 
+ 
+ /** The script. */
  SCRIPT, 
+ 
+ /** The trace. */
  TRACE, 
+ 
+ /** The value. */
  VALUE};
 
+	/** The Constant INTELLIGENTGRAPH_DEBUG. */
 	public static final String INTELLIGENTGRAPH_DEBUG = "DEBUG";
 	
+	/** The Constant SCRIPT_POSTFIX. */
 	public static final String SCRIPT_POSTFIX = "_SCRIPT";
 	
+	/** The Constant TRACE_POSTFIX. */
 	public static final String TRACE_POSTFIX = "_TRACE";
 
+	/** The closed. */
 	private final AtomicBoolean closed = new AtomicBoolean(false);
 
+	/** The parameters. */
 	protected final Properties parameters = new Properties();
 	
+	/** The public contexts. */
 	private final HashSet<IRI> publicContexts=new HashSet<IRI>();
+	
+	/** The private contexts. */
 	private final HashSet<IRI> privateContexts=new HashSet<IRI>();	
+	
+	/** The contexts are lazy loaded. */
 	private  Boolean contextsAreLazyLoaded=false;
+	
+	/** The intelligent evaluator. */
 	private final  IntelligentEvaluator intelligentEvaluator;
 
+	/**
+	 * Instantiates a new intelligent graph sail.
+	 */
 	public IntelligentGraphSail() {
 		super();
 		intelligentEvaluator=new IntelligentEvaluator(this);
 	}
+	
+	/**
+	 * Initialize contexts.
+	 */
 	public void initializeContexts() {
 		publicContexts.clear();
 		privateContexts.clear();
@@ -74,7 +108,8 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 				}
 			}
 		}
-		setContextsAreLazyLoaded(true);
+	//	IntelligentGraphRepository.create(this).clearRepositoryNamespaceContext();
+	//	IntelligentGraphRepository.create(this).clearRepositoryNamespaceContext();
 	}
 //	public void initializePrefixes() {
 //		IntelligentGraphConnection connection = this.getConnection();
@@ -86,11 +121,11 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 //		prefixesAreLazyLoaded=true;
 //	}
 	/**
-	 * Sets the parameter.
-	 *
-	 * @param key the key
-	 * @param value the value
-	 */
+ * Sets the parameter.
+ *
+ * @param key the key
+ * @param value the value
+ */
 	public void setParameter(String key, String value) {
 		parameters.setProperty(key, value);
 	}
@@ -103,12 +138,24 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 	public Properties getParameters() {
 		return parameters;
 	}
+	
+	/**
+	 * Gets the private contexts.
+	 *
+	 * @return the private contexts
+	 */
 	public HashSet<IRI>  getPrivateContexts() {
 		if(!contextsAreLazyLoaded) {
 			initializeContexts();
 		}
 		return privateContexts;
 	}
+	
+	/**
+	 * Gets the public contexts.
+	 *
+	 * @return the public contexts
+	 */
 	public HashSet<IRI>  getPublicContexts() {
 		if(!contextsAreLazyLoaded) {
 			initializeContexts();
@@ -120,12 +167,23 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 //			initializePrefixes();
 //		}
 //		return prefixes;
+/**
+ * Initialize.
+ *
+ * @throws SailException the sail exception
+ */
 //	}
 	@Override
 	public void initialize() throws SailException {
 		super.initialize();
 	}
 
+	/**
+	 * Gets the connection.
+	 *
+	 * @return the connection
+	 * @throws SailException the sail exception
+	 */
 	@Override
 	public IntelligentGraphConnection getConnection() throws SailException {
 		if (!closed.get()) {
@@ -135,17 +193,38 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 		}
 	}
 	
+	/**
+	 * Gets the value factory.
+	 *
+	 * @return the value factory
+	 */
 	@Override
 	public ValueFactory getValueFactory() {
 		return getBaseSail().getValueFactory();
 	}
+	
+	/**
+	 * Clear cache.
+	 */
 	public void clearCache() {
 		intelligentEvaluator.clearCache();
 		
 	}
+	
+	/**
+	 * Clear cache.
+	 *
+	 * @param obj the obj
+	 */
 	public void clearCache(Value obj) {
 		intelligentEvaluator.clearCache(obj);
 	}
+	
+	/**
+	 * Gets the fact cache.
+	 *
+	 * @return the fact cache
+	 */
 	public FactCache getFactCache() {
 		return intelligentEvaluator.getFactCache();
 	}
@@ -175,10 +254,10 @@ public class IntelligentGraphSail extends NotifyingSailWrapper {
 //		IRI namespace = getPrefixes().get(namespaceString);
 //		return namespace;
 //	}
-	public void setContextsAreLazyLoaded(Boolean contextsAreLazyLoaded) {
-		this.contextsAreLazyLoaded = contextsAreLazyLoaded;
-	}
-	public void setPrefixesAreLazyLoaded(Boolean prefixesAreLazyLoaded) {
-	}
+//	public void setContextsAreLazyLoaded(Boolean contextsAreLazyLoaded) {
+//		this.contextsAreLazyLoaded = contextsAreLazyLoaded;
+//	}
+//	public void setPrefixesAreLazyLoaded(Boolean prefixesAreLazyLoaded) {
+//	}
 	
 }

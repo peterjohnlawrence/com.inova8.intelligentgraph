@@ -31,16 +31,10 @@ public class PathParser {
 	/** The path pattern visitor. */
 	//private final static Logger logger = LogManager.getLogger(PathParser.class);
 	static PathPatternVisitor pathPatternVisitor ;
+	
+	/** The query string visitor. */
 	static PathPatternVisitor queryStringVisitor ;
-	/**
-	 * Parses the path pattern.
-	 *
-	 * @param thing the thing
-	 * @param pathPattern the path pattern
-	 * @return the path element
-	 * @throws RecognitionException the recognition exception
-	 * @throws PathPatternException the path pattern exception
-	 */
+	
 //	@Deprecated
 //	public static PathElement parsePathPattern(Thing thing, String pathPattern)
 //			throws RecognitionException, PathPatternException {
@@ -55,20 +49,30 @@ public class PathParser {
 //		return pathElement;
 //	}
 	/**
-	 * Parses the path pattern.
-	 *
-	 * @param source the source
-	 * @param pathPattern the path pattern
-	 * @return the path element
-	 * @throws RecognitionException the recognition exception
-	 * @throws PathPatternException the path pattern exception
-	 */
+ * Parses the path pattern.
+ *
+ * @param repositoryContext the repository context
+ * @param pathPattern the path pattern
+ * @return the path element
+ * @throws RecognitionException the recognition exception
+ * @throws PathPatternException the path pattern exception
+ */
 	public static PathElement parsePathPattern(RepositoryContext repositoryContext, String pathPattern)
 			throws RecognitionException, PathPatternException {
 		PathPatternVisitor pathPatternVisitor = new PathPatternVisitor(repositoryContext);
 		PathElement pathElement = pathPatternParser(pathPattern, pathPatternVisitor);	
 		return pathElement;
 	}
+	
+	/**
+	 * Path pattern parser.
+	 *
+	 * @param pathPattern the path pattern
+	 * @param pathPatternVisitor the path pattern visitor
+	 * @return the path element
+	 * @throws RecognitionException the recognition exception
+	 * @throws PathPatternException the path pattern exception
+	 */
 	private static PathElement pathPatternParser(String pathPattern, PathPatternVisitor pathPatternVisitor)
 			throws RecognitionException, PathPatternException {
 		PathErrorListener errorListener = new PathErrorListener(pathPattern);
@@ -103,7 +107,7 @@ public class PathParser {
 	/**
 	 * Parses the iri ref.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 * @param uriPattern the uri pattern
 	 * @return the iri ref value element
 	 * @throws RecognitionException the recognition exception
@@ -128,7 +132,7 @@ public class PathParser {
 	/**
 	 * Parses the predicate.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 * @param uriPattern the uri pattern
 	 * @return the predicate element
 	 * @throws RecognitionException the recognition exception

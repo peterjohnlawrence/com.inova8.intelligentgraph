@@ -21,12 +21,23 @@ import com.inova8.intelligentgraph.model.Thing;
 
 import utilities.Query;
 
+/**
+ * The Class Example3_Tests.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Example3_Tests {
 
+	/** The source. */
 	private static IntelligentGraphRepository source;
+	
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
 
+	/**
+	 * Sets the up before class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
@@ -41,10 +52,20 @@ class Example3_Tests {
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}
+	
+	/**
+	 * Example 3 1.
+	 */
 	@Test
 	@Order(1)
 	void example3_1() {
@@ -58,6 +79,10 @@ class Example3_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 3 2.
+	 */
 	@Test
 	@Order(2)
 	void example3_2() {
@@ -76,6 +101,10 @@ class Example3_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 3 3.
+	 */
 	@Test
 	@Order(3)
 	void example3_3() {
@@ -95,6 +124,10 @@ class Example3_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Example 3 4.
+	 */
 	@Test
 	@Order(4)
 	void example3_4() {

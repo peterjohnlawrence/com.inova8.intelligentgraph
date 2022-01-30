@@ -26,7 +26,7 @@ import com.inova8.intelligentgraph.vocabulary.OLGAP;
 @Deprecated
 public class FactValue extends Evaluator implements Function {
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(FactValue.class);
 	
 	/**

@@ -26,7 +26,7 @@ public class AlternativePathElement extends PathElement{
 	/**
 	 * Instantiates a new alternative path element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public AlternativePathElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -34,6 +34,11 @@ public class AlternativePathElement extends PathElement{
 	}
 
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		String toString="";
@@ -44,6 +49,11 @@ public class AlternativePathElement extends PathElement{
 	}
 
 
+	/**
+	 * To SPARQL.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public
 	String toSPARQL() {
@@ -53,6 +63,11 @@ public class AlternativePathElement extends PathElement{
 	}
 
 
+	/**
+	 * To HTML.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public
 	String toHTML() {
@@ -60,10 +75,30 @@ public class AlternativePathElement extends PathElement{
 	}
 
 
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery(Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return pathPatternQuery(sourceVariable,predicateVariable,targetVariable,0,customQueryOptions) ;
 	}
+	
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 //	public PathTupleExpr pathPatternQuery(Thing thing, Variable sourceVariable, Variable targetVariable,
 //			Integer pathIteration, CustomQueryOptions customQueryOptions) {
@@ -157,6 +192,13 @@ public class AlternativePathElement extends PathElement{
 		}
 
 	}
+	
+	/**
+	 * Deduce left predicate variable.
+	 *
+	 * @param predicateVariable the predicate variable
+	 * @return the variable
+	 */
 	private Variable deduceLeftPredicateVariable(Variable predicateVariable) {
 		if(predicateVariable==null) {
 			predicateVariable = new Variable("L");
@@ -166,6 +208,13 @@ public class AlternativePathElement extends PathElement{
 
 		return predicateVariable;
 	}
+	
+	/**
+	 * Deduce right predicate variable.
+	 *
+	 * @param predicateVariable the predicate variable
+	 * @return the variable
+	 */
 	private Variable deduceRightPredicateVariable(Variable predicateVariable) {
 		if(predicateVariable==null) {
 			predicateVariable = new Variable("R");
@@ -175,6 +224,15 @@ public class AlternativePathElement extends PathElement{
 
 		return predicateVariable;
 	}
+	
+	/**
+	 * Index visitor.
+	 *
+	 * @param baseIndex the base index
+	 * @param entryIndex the entry index
+	 * @param edgeCode the edge code
+	 * @return the integer
+	 */
 	@Override
 	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode ) {
 		setBaseIndex(baseIndex);
@@ -204,16 +262,24 @@ public class AlternativePathElement extends PathElement{
 	}
 
 	/**
-	 * Visit path.
+	 * Visit path binding.
 	 *
-	 * @param path the path
-	 * @return the path
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	/**
+	 * Gets the path length.
+	 *
+	 * @param iteration the iteration
+	 * @return the path length
+	 */
 	@Override
 	public Integer getPathLength(Integer iteration) {
 		Integer pathLength = null;

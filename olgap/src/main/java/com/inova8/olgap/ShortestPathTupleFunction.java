@@ -189,7 +189,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class ShortestPathTupleFunction implements InverseMagicProperty {
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(ShortestPathTupleFunction.class);
 	
 	/**
@@ -317,7 +317,7 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 	 *
 	 * @param valueFactory the value factory
 	 * @param args the args
-	 * @return the closeable iteration<? extends list<? extends value>, query evaluation exception>
+	 * @return the closeable iteration{@code<? extends list<? extends value>, query evaluation exception>}
 	 * @throws QueryEvaluationException the query evaluation exception
 	 */
 	@Override
@@ -620,6 +620,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		workingConn.commit();
 	}
 
+	/**
+	 * Increment back.
+	 *
+	 * @param workingConn the working conn
+	 * @param backIndex the back index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	private ArrayList<BindingSet> incrementBack(RepositoryConnection workingConn, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
 		String graphB = LT +HTTP_BACK + (backIndex - 1) + GT;
@@ -659,6 +668,15 @@ public class ShortestPathTupleFunction implements InverseMagicProperty {
 		return path;
 	}
 	
+	/**
+	 * Increment back using service.
+	 *
+	 * @param workingConn the working conn
+	 * @param backIndex the back index
+	 * @param HTTP_FRONT the http front
+	 * @param HTTP_BACK the http back
+	 * @return the array list
+	 */
 	private ArrayList<BindingSet> incrementBackUsingService(RepositoryConnection workingConn, int backIndex, String HTTP_FRONT,String HTTP_BACK) {
 		String graphA = LT+ HTTP_BACK + backIndex + GT;
 		String graphB = LT +HTTP_BACK + (backIndex - 1) + GT;

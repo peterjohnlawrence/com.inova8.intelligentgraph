@@ -20,7 +20,7 @@ public class BoundPathElement extends PathElement{
 	/**
 	 * Instantiates a new bound path element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repository context
 	 */
 	public BoundPathElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
@@ -76,21 +76,34 @@ public class BoundPathElement extends PathElement{
 	/**
 	 * Path pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return pathPatternQuery( sourceVariable,  predicateVariable,targetVariable,0,customQueryOptions);
 	}
+	
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(sourceVariable,predicateVariable,targetVariable,customQueryOptions);
 		return rightPattern;
 	}
+	
 	/**
 	 * Gets the checks if is negated.
 	 *
@@ -139,10 +152,9 @@ public class BoundPathElement extends PathElement{
 	/**
 	 * Bound pattern query.
 	 *
-	 * @param thing the thing
 	 * @param sourceVariable the source variable
 	 * @param targetVariable the target variable
-	 * @return the tuple expr
+	 * @return the path tuple expr
 	 */
 	@Override
 	public PathTupleExpr boundPatternQuery( Variable sourceVariable, Variable targetVariable) {
@@ -163,10 +175,11 @@ public class BoundPathElement extends PathElement{
 	}
 
 	/**
-	 * Visit path.
+	 * Visit path binding.
 	 *
-	 * @param path the path
-	 * @return the path
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {

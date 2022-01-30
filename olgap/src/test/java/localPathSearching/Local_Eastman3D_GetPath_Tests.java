@@ -23,7 +23,7 @@ import com.inova8.intelligentgraph.results.ResourceResults;
 import utilities.Query;
 
 /**
- * The Class ThingTests.
+ * The Class Local_Eastman3D_GetPath_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Local_Eastman3D_GetPath_Tests {
@@ -34,7 +34,9 @@ class Local_Eastman3D_GetPath_Tests {
 	private static IntelligentGraphRepository source;
 	
 
+	/** The working rep. */
 	static org.eclipse.rdf4j.repository.Repository workingRep ;
+	
 	/**
 	 * Sets the up before class.
 	 *
@@ -58,10 +60,17 @@ class Local_Eastman3D_GetPath_Tests {
 
 
 	}
+	
+	/**
+	 * Close class.
+	 *
+	 * @throws Exception the exception
+	 */
 	@AfterAll
 	static void closeClass() throws Exception {
 		//conn.close();
 	}	
+	
 	/**
 	 * Removes the white spaces.
 	 *
@@ -82,6 +91,10 @@ class Local_Eastman3D_GetPath_Tests {
 	void assertEqualsWOSpaces(String actual, String expected){
 		assertEquals(removeWhiteSpaces(actual), removeWhiteSpaces(expected));
 }	
+	
+	/**
+	 * Test 0.
+	 */
 	@Test
 	@Order(0)
 	void test_0() {
@@ -94,6 +107,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 01.
+	 */
 	@Test
 	@Order(0)
 	void test_01() {
@@ -115,6 +132,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 1.
+	 */
 	@Test
 	@Order(1)
 	void test_1() {
@@ -129,6 +150,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 2.
+	 */
 	@Test
 	@Order(2)
 	void test_2() {
@@ -165,6 +190,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 3.
+	 */
 	@Test
 	@Order(3)
 	void test_3() {
@@ -192,6 +221,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 4.
+	 */
 	@Test
 	@Order(4)
 	void test_4() {
@@ -205,6 +238,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 5.
+	 */
 	@Test
 	@Order(5)
 	void test_5() {
@@ -217,6 +254,10 @@ class Local_Eastman3D_GetPath_Tests {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test 6.
+	 */
 	@Test
 	@Order(6)
 	void test_6() {

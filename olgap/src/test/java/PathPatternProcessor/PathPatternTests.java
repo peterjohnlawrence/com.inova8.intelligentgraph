@@ -26,12 +26,12 @@ import com.inova8.pathql.processor.PathErrorListener;
 import com.inova8.pathql.processor.PathPatternVisitor;
 
 /**
- * The Class PathPatternParserTests.
+ * The Class PathPatternTests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PathPatternTests {
 	
-	/** The source. */
+	/** The repository context. */
 	static RepositoryContext repositoryContext;
 
 	/**
@@ -505,6 +505,10 @@ void test_27() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 28.
+ */
 @Test 
 @Order(28)
 void test_28() {
@@ -516,6 +520,10 @@ void test_28() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 29.
+ */
 @Test 
 @Order(29)
 void test_29() {
@@ -527,6 +535,10 @@ void test_29() {
 		assertEquals("", e.getMessage());
 	}
 }
+
+/**
+ * Test 30.
+ */
 @Test
 @Order(30)
 void test_30() {

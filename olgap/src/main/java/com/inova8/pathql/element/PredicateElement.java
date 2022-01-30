@@ -29,6 +29,7 @@ import org.eclipse.rdf4j.query.algebra.StatementPattern;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.Union;
 import static org.eclipse.rdf4j.model.util.Values.iri;
+
 /**
  * The Class PredicateElement.
  */
@@ -61,14 +62,22 @@ public class PredicateElement extends PathElement {
 	/** The statement filter element. */
 	private FactFilterElement statementFilterElement;
 	
-	/** The target object. */
+	/**
+	 * Instantiates a new predicate element.
+	 *
+	 * @param repositoryContext the repository context
+	 * @param isInverseOf the is inverse of
+	 * @param isReified the is reified
+	 * @param predicate the predicate
+	 * @param reification the reification
+	 */
 //	private Variable targetObject = new Variable();
 
 
 	/**
 	 * Instantiates a new predicate element.
 	 *
-	 * @param source the source
+	 * @param repositoryContext the repositoryContext
 	 * @param isInverseOf the is inverse of
 	 * @param isReified the is reified
 	 * @param predicate the predicate
@@ -83,6 +92,14 @@ public class PredicateElement extends PathElement {
 		this.reification = reification;
 
 	}
+	
+	/**
+	 * Gets the parameterized predicate.
+	 *
+	 * @param predicate the predicate
+	 * @return the parameterized predicate
+	 * @throws URISyntaxException the URI syntax exception
+	 */
 	public IRI  getParameterizedPredicate(IRI predicate ) throws URISyntaxException {
 		URIBuilder builder = new URIBuilder(predicate.stringValue());
 		if(isInverseOf)builder.addParameter(PATHQL.EDGE_DIRECTIONSTRING, Edge.Direction.INVERSE.toString());
@@ -96,27 +113,63 @@ public class PredicateElement extends PathElement {
 		}
 		return iri(builder.toString());
 	}
+	
+	/**
+	 * Instantiates a new predicate element.
+	 *
+	 * @param repositoryContext the repository context
+	 */
 	public PredicateElement(RepositoryContext repositoryContext) {
 		super(repositoryContext);
 		operator = PathConstants.Operator.PREDICATE;
 	}
 
 
+	/**
+	 * Instantiates a new predicate element.
+	 *
+	 * @param repositoryContext the repository context
+	 * @param predicate the predicate
+	 */
 	public PredicateElement(RepositoryContext repositoryContext,IRI predicate) {
 		super(repositoryContext);
 		operator = PathConstants.Operator.PREDICATE;
 		setPredicate(predicate);
 	}
-	 public Integer getMaximumPathLength() {
+	 
+ 	/**
+	  * Gets the maximum path length.
+	  *
+	  * @return the maximum path length
+	  */
+ 	public Integer getMaximumPathLength() {
 		 return getMaxCardinality();
 	 }
-	 public Integer getMinimumPathLength() {
+	 
+ 	/**
+	  * Gets the minimum path length.
+	  *
+	  * @return the minimum path length
+	  */
+ 	public Integer getMinimumPathLength() {
 		 return getMinCardinality();
 	 }
 
+	/**
+	 * Gets the checks if is inverse of.
+	 *
+	 * @return the checks if is inverse of
+	 */
 	public Boolean getIsInverseOf() {
 		return isInverseOf;
 	}
+	
+	/**
+	 * Checks for next cardinality.
+	 *
+	 * @param iteration the iteration
+	 * @return the boolean
+	 */
 	public Boolean hasNextCardinality(Integer iteration) {
 		 Integer cardinality = getCardinality(iteration-1);
 		 if( cardinality < getMaxCardinality()) { 
@@ -128,6 +181,13 @@ public class PredicateElement extends PathElement {
 			return false;
 		 }
 	 }
+	
+	/**
+	 * Gets the path share string.
+	 *
+	 * @param iteration the iteration
+	 * @return the path share string
+	 */
 	public String getPathShareString(Integer iteration) {
 		StringBuilder pathShareString = new StringBuilder("");
 		return  pathShareString.append("{").append(getMinCardinality()).append(",")
@@ -365,6 +425,11 @@ public class PredicateElement extends PathElement {
 
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 
 		String predicateString = "";
@@ -398,6 +463,11 @@ public class PredicateElement extends PathElement {
 
 	}
 
+	/**
+	 * To SPARQL.
+	 *
+	 * @return the string
+	 */
 	public String toSPARQL() {
 		return unboundPredicateToSPARQL();
 	}
@@ -408,7 +478,14 @@ public class PredicateElement extends PathElement {
 //		return targetObject;
 //	}
 
-	protected String boundPredicateToSPARQL(String sourceValue, String targetValue) {
+	/**
+ * Bound predicate to SPARQL.
+ *
+ * @param sourceValue the source value
+ * @param targetValue the target value
+ * @return the string
+ */
+protected String boundPredicateToSPARQL(String sourceValue, String targetValue) {
 		String predicateString = "";
 
 		predicateString += getMinCardinalityString();
@@ -551,6 +628,16 @@ public class PredicateElement extends PathElement {
 		return boundPredicateToSPARQL(sourceValue, targetValue);
 	}
 
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable, Integer pathIteration, CustomQueryOptions customQueryOptions) {
 		if(sourceVariable==null)sourceVariable = this.getSourceVariable();
@@ -562,11 +649,31 @@ public class PredicateElement extends PathElement {
 		}
 	}
 
+	/**
+	 * Path pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, CustomQueryOptions customQueryOptions) {
 		return pathPatternQuery( sourceVariable, predicateVariable, targetVariable,0,customQueryOptions);
 	}
 
+	/**
+	 * Path reified predicate pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param reificationVariable the reification variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	private PathTupleExpr pathReifiedPredicatePatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, Variable reificationVariable,
 			Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		PathTupleExpr predicatePattern = null;
@@ -607,6 +714,18 @@ public class PredicateElement extends PathElement {
 			return null;
 		}
 	}
+	
+	/**
+	 * Path reified predicate pattern tuple expr.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param sourceVariable the source variable
+	 * @param intermediatePredicateVariable the intermediate predicate variable
+	 * @param targetVariable the target variable
+	 * @param reificationVariable the reification variable
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	private PathTupleExpr pathReifiedPredicatePatternTupleExpr( PathTupleExpr predicatePattern, Variable sourceVariable, Variable intermediatePredicateVariable, Variable targetVariable,Variable reificationVariable,CustomQueryOptions customQueryOptions) {
 		ArrayList<Variable> targetVariables = new ArrayList<Variable>();
 		if (objectFilterElement != null)
@@ -769,6 +888,16 @@ public class PredicateElement extends PathElement {
 		return predicatePattern;
 	}
 
+	/**
+	 * Path predicate pattern query.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @param pathIteration the path iteration
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	private PathTupleExpr pathPredicatePatternQuery( Variable sourceVariable, Variable predicateVariable, Variable targetVariable, Integer pathIteration,CustomQueryOptions customQueryOptions) {
 		PathTupleExpr predicatePattern = null;
 		if(getCardinality(pathIteration)>0) {
@@ -798,6 +927,15 @@ public class PredicateElement extends PathElement {
 			return null;
 		}
 	}
+	
+	/**
+	 * Deduce predicate variable.
+	 *
+	 * @param sourceVariable the source variable
+	 * @param predicateVariable the predicate variable
+	 * @param targetVariable the target variable
+	 * @return the variable
+	 */
 	private Variable deducePredicateVariable(Variable sourceVariable, Variable predicateVariable, Variable targetVariable) {
 		Variable intermediatePredicateVariable;
 		String predicatePostfix;
@@ -808,6 +946,17 @@ public class PredicateElement extends PathElement {
 		intermediatePredicateVariable = new Variable("p_"+ sourceVariable.getName()+"_"+targetVariable.getName()+predicatePostfix);
 		return intermediatePredicateVariable;
 	}
+	
+	/**
+	 * Path predicate pattern tuple expr.
+	 *
+	 * @param predicatePattern the predicate pattern
+	 * @param intermediateSourceVariable the intermediate source variable
+	 * @param intermediatePredicateVariable the intermediate predicate variable
+	 * @param intermediateTargetVariable the intermediate target variable
+	 * @param customQueryOptions the custom query options
+	 * @return the path tuple expr
+	 */
 	private PathTupleExpr pathPredicatePatternTupleExpr( PathTupleExpr predicatePattern,
 			Variable intermediateSourceVariable, Variable intermediatePredicateVariable, Variable intermediateTargetVariable,CustomQueryOptions customQueryOptions) {
 		TupleExpr intermediatePredicatePattern;
@@ -854,6 +1003,7 @@ public class PredicateElement extends PathElement {
 		predicatePattern.getPath().add(statementBinding);
 		return predicatePattern;
 	}
+	
 	/**
 	 * Gets the predicate variable.
 	 *
@@ -870,6 +1020,11 @@ public class PredicateElement extends PathElement {
 	}
 
 
+	/**
+	 * Gets the any predicate.
+	 *
+	 * @return the any predicate
+	 */
 	public Boolean getAnyPredicate() {
 		if (anyPredicate != null) {
 			return anyPredicate;
@@ -880,10 +1035,23 @@ public class PredicateElement extends PathElement {
 		}
 	}
 
+	/**
+	 * Sets the any predicate.
+	 *
+	 * @param anyPredicate the new any predicate
+	 */
 	public void setAnyPredicate(Boolean anyPredicate) {
 		this.anyPredicate = anyPredicate;
 	}
 
+	/**
+	 * Index visitor.
+	 *
+	 * @param baseIndex the base index
+	 * @param entryIndex the entry index
+	 * @param edgeCode the edge code
+	 * @return the integer
+	 */
 	@Override
 	public Integer indexVisitor(Integer baseIndex, Integer entryIndex, EdgeCode edgeCode) {
 		setBaseIndex(baseIndex);
@@ -909,6 +1077,13 @@ public class PredicateElement extends PathElement {
 		return getExitIndex();
 	}
 
+	/**
+	 * Visit path binding.
+	 *
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
+	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
 		if( getIsReified())
@@ -917,6 +1092,14 @@ public class PredicateElement extends PathElement {
 			pathBinding = visitPredicatePathBinding( pathBinding,pathIteration );
 		return pathBinding;
 	}
+	
+	/**
+	 * Visit reified predicate path binding.
+	 *
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
+	 */
 	private PathBinding visitReifiedPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
 		StatementBinding predicateEdge;
 		Variable sourceVariable = this.getSourceVariable();
@@ -948,6 +1131,14 @@ public class PredicateElement extends PathElement {
 		}
 		return pathBinding;
 	}
+	
+	/**
+	 * Visit predicate path binding.
+	 *
+	 * @param pathBinding the path binding
+	 * @param pathIteration the path iteration
+	 * @return the path binding
+	 */
 	private PathBinding visitPredicatePathBinding(PathBinding pathBinding, Integer pathIteration) {
 		StatementBinding predicateEdge;
 		Variable sourceVariable = this.getSourceVariable();

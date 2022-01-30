@@ -32,7 +32,7 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  */
 public class TrianglesFunction  implements Function{
 	
-	/** The logger. */
+	/** The Constant logger. */
 	private static final Logger logger   = LoggerFactory.getLogger(TrianglesFunction.class);
 	
 	/** The conn. */
