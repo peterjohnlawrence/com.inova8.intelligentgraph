@@ -1,8 +1,4 @@
-# IntelligentGraph
-
-IntelligentGraph is ready-to-go IntelligentGraph sever based on Tomcat (v9) with  IntelligentGraph (v0.9.0) enabled RDF4j-Server and RDF4J-Workbench (v3.7.4) preinstalled. 
-
-## What Is IntelligentGraph?
+# What Is IntelligentGraph?
 
 The IntelligentGraph SAIL offers an extended capability for embedded calculation support within any RDF graph. When enabled as an RDF4J SAIL, it offers calculation functionality as part of the RDF4J engine, on top of any RDF4J repository, using a variety of script engines including JavaScript, Jython, and Groovy. It preserves the SPARQL capability of RDF4J, but with additional capabilities for calculation debugging and tracing. 
 
@@ -15,6 +11,25 @@ PathQL can also be used standalone to query the IntelligentGraph-enabled RDF dat
 + Using Jupyter as an IDE to IntelligentGraph and RDF4J, shown [here:](https://inova8.com/bg_inova8.com/intelligentgraph-getting-started/)
 + IntelligentGraph source is here in [GitHub:](https://github.com/peterjohnlawrence/com.inova8.intelligentgraph)
 + IntelligentGraph Docker containers are available [here:](https://hub.docker.com/repository/docker/inova8/intelligentgraph)
+
+## Creating an IntelligentGraph-enabled RDF4J Server
+
+### Download
+
+The project is located here in Github, from where the intelligentgraph-0.9.0.jar can be downloaded from [here](https://github.com/peterjohnlawrence/com.inova8.olgap/tree/master/olgap/target).
+
+### Install
+
+- Copy `intelligentgraph-0.9.0.jar` (or the latest version)
+- To `/usr/local/tomcat/webapps/rdf4j-server/WEB-INF/lib/intelligentgraph-0.9.0.jar`
+
+The RDF4J server will need to be restarted for it to recognize this new JAR and initiate the scripting engine.
+
+### Installation Notes 
+
++ IntelligentGraph will work only with RDF4J version 3.3.0 and above. The jar is compiled using RDF4J 3.7.4
++ The IntelligentGraph.jar should include all dependencies. However, if you want to use another scripting language,  you would have to be certain all dependencies are already available.
+
 
 ## Using IntelligentGraph Docker Image
 
