@@ -11,7 +11,6 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.evaluator.IntelligentEvaluator;
-import com.inova8.intelligentgraph.exceptions.HandledException;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Fact;
 import com.inova8.intelligentgraph.model.Resource;
