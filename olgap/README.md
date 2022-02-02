@@ -78,6 +78,9 @@ The following summarises the essential steps:
 #### You now have an IntelligentGraph enabled, but empty, repository
 
 - Use **Add** to load a model file (eg example1.ttl, shown below)
+    - It is best to assume a quad store, so set a context (aka graph) into which to load the triples
+    - For the example1.ttl set the baseURI within the **Add** dialog to `http://inova8.com/intelligentgraph/example1/`
+    - Then paste the TTL text into the RDF Content text box before **Upload**
     - We now see that there are 10 statements
 - Verify **Contexts** exists 
     - View contexts, including calculated values (:hasBMI in this case), by clickling on context id 
