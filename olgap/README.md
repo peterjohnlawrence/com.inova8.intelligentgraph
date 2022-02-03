@@ -28,7 +28,10 @@ The RDF4J server will need to be restarted for it to recognize this new JAR and 
 ### Installation Notes 
 
 + IntelligentGraph will work only with RDF4J version 3.3.0 and above. The jar is compiled using RDF4J 3.7.4
-+ The IntelligentGraph.jar should include all dependencies. However, if you want to use another scripting language,  you would have to be certain all dependencies are already available.
++ The following IntelligentGraph*.jar are created
+    + IntelligentGraph.jar: without dependencies, so need to be available at runtime
+    + IntelligentGraph-with-dependecies.jar: with dependencies  including Groovy, Graal js, and Jython, but jython will not be discovered at runtime
+    + IntelligentGraph-with-shading.jar: with shaded dependencies, allowing all engines to be discovered
 
 
 ## Using IntelligentGraph Docker Image
