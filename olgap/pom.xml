@@ -192,11 +192,12 @@
 					</execution>
 				</executions>
 			</plugin>
- 			<plugin>
+  			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.2.4</version>
 				<configuration>
+					<!-- <outputFile>${dir}/${project.artifactId}-shaded.jar</outputFile> -->
 					<filters>
 						<filter>
 							<artifact>*:*</artifact>
@@ -216,6 +217,8 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>jar-with-shading</shadedClassifierName>
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
@@ -227,7 +230,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>  
+			</plugin>   
 		</plugins>
 	</build>
 	<properties>
