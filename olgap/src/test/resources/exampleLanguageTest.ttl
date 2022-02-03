@@ -2,23 +2,19 @@
 # prefix: exampleLanguageTest
 
 @prefix exampleLanguageTest: <http://inova8.com/intelligentgraph/exampleLanguageTest/> .
+@prefix : <http://inova8.com/intelligentgraph/exampleLanguageTest/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix script: <http://inova8.com/script/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-exampleLanguageTest:
-  a owl:Ontology ;
-.
-exampleLanguageTest:Person
-  a owl:Class ;
-  rdfs:label "Person" ;
-.
+
 exampleLanguageTest:aPerson
   a exampleLanguageTest:Person ;
-  exampleLanguageTest:hasBMI "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
-  exampleLanguageTest:hasBMIjs "var height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:javascript ;
+  exampleLanguageTest:hasBMIgroovy "double height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:groovy ;
+  exampleLanguageTest:hasBMIjs "var height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:js ;
+  exampleLanguageTest:hasBMIjavascript "var height=_this.getFact(':hasHeight').doubleValue();  _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:javascript ;
   exampleLanguageTest:hasBMIpy "_this.getFact(':hasWeight').doubleValue()/( _this.getFact(':hasHeight').doubleValue()* _this.getFact(':hasHeight').doubleValue())"^^script:python ;
   exampleLanguageTest:hasBMIpytest "height = _this.getFact(':hasHeight').doubleValue(); _result = _this.getFact(':hasWeight').doubleValue()/(height*height)"^^script:python ;
   exampleLanguageTest:hasCustomQueryOptionTest "_customQueryOptions.get(\"aOption\")"^^script:groovy ;
@@ -33,4 +29,11 @@ exampleLanguageTest:hasHeight
 .
 exampleLanguageTest:hasWeight
   a owl:DatatypeProperty ;
+.
+exampleLanguageTest:
+  a owl:Ontology ;
+.
+exampleLanguageTest:Person
+  a owl:Class ;
+  rdfs:label "Person" ;
 .

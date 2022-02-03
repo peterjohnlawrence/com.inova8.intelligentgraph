@@ -104,7 +104,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.python</groupId>
-			<artifactId>jython-standalone</artifactId>
+			<artifactId>jython-slim</artifactId>
 			<version>${jython.version}</version>
 			<scope>${jython.compile}</scope>
 		</dependency>
@@ -192,7 +192,7 @@
 					</execution>
 				</executions>
 			</plugin>
-  <!-- 			<plugin>
+ 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.2.4</version>
@@ -228,7 +228,7 @@
 					</execution>
 				</executions>
 			</plugin>  
- -->		</plugins>
+		</plugins>
 	</build>
 	<properties>
 	    <java.version>11</java.version>
@@ -243,8 +243,8 @@
 		<jython.version>2.7.2</jython.version>
 
          <groovy.compile>compile</groovy.compile>
-         <graaljs.compile>provided</graaljs.compile>
-         <jython.compile>provided</jython.compile>
+         <graaljs.compile>compile</graaljs.compile>
+         <jython.compile>compile</jython.compile>
 	</properties>
 	<repositories>
 	    <repository>

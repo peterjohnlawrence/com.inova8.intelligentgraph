@@ -19,7 +19,7 @@ import com.inova8.intelligentgraph.evaluator.Evaluator;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 import org.eclipse.rdf4j.model.IRI;
-import org.python.core.Options;
+//import org.python.core.Options;
 
 
 import static org.eclipse.rdf4j.model.util.Values.iri;
@@ -59,9 +59,9 @@ public  class Evaluator {
 			String unknownEngineNames = "";
 			Integer engineFactoryCount = 0;
 //TODO #41 Is this really required or can it be called only if Jython loaded	
-		  Options.importSite = false;
+//		  Options.importSite = false;
 			for (ScriptEngineFactory engineFactory : engineFactories) {
-				if (!engineFactory.getEngineName().toLowerCase().contains("nashorn")) {
+			//	if (!engineFactory.getEngineName().toLowerCase().contains("nashorn")) {
 					engineFactoryCount++;
 					for (String engineName : engineFactory.getNames()) {
 						ScriptEngine engine = scriptEngineManager.getEngineByName(engineName);
@@ -71,13 +71,14 @@ public  class Evaluator {
 							bindings.put("polyglot.js.allowHostAccess", true);
 							bindings.put("polyglot.js.nashorn-compat", true);
 							bindings.put("polyglot.js.allowHostClassLookup", true);
+							bindings.put("python.import.site", "false");
 							scriptEngines.put(iri(SCRIPT.NAMESPACE + engineName), engine);
 							engineNames = engineNames + engineName + ";";
 						} else {
 							unknownEngineNames = unknownEngineNames + engineName + ";";
 						}
 					}
-				}
+			//	}
 			}
 			logger.info(
 					engineFactoryCount + " scripting engines were found with the following short names:" + engineNames);
