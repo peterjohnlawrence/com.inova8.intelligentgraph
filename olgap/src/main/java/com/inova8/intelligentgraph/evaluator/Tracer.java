@@ -403,11 +403,11 @@ public class Tracer {
 	 * @param prefixes the prefixes
 	 * @param contexts the contexts
 	 */
-	public void traceFacts(Thing thing, Value pathQLValue, Prefixes prefixes, org.eclipse.rdf4j.model.Resource ... contexts) {
+	public void traceFacts(Thing thing, String pathQLValue, Prefixes prefixes, org.eclipse.rdf4j.model.Resource ... contexts) {
 		if(!tracing)return;
 		
 		addTrace(String.format("Getting facts  '%s' of %s",
-				toHTML(pathQLValue.stringValue()), addIRI(thing.getSuperValue())));
+				toHTML(pathQLValue), addIRI(thing.getSuperValue())));
 		CustomQueryOptions customQueryOptions = CustomQueryOption.getCustomQueryOptions(contexts,prefixes);
 		
 		if(!customQueryOptions.isEmpty()) addTrace(String.format("...using options: [%s]", toHTML(customQueryOptions.toString())));

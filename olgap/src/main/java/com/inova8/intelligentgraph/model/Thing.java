@@ -51,6 +51,8 @@ import org.eclipse.rdf4j.repository.RepositoryException;
 public class Thing extends Resource {
 
 
+	private static final String PATH_QL = "?pathQL=";
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 	
@@ -203,7 +205,7 @@ public class Thing extends Resource {
  * @return the fact
  */
 //	}
-	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions, Value...bindValues) {
+	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions, Value...bindValues)  {
 		logger.debug("getFact{}\n", predicatePattern);
 
 		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions,bindValues);
@@ -227,7 +229,7 @@ public class Thing extends Resource {
 	 * @param customQueryOptions the custom query options
 	 * @return the fact
 	 */
-	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions) {
+	public  Resource getFact(String predicatePattern, CustomQueryOptions customQueryOptions)  {
 		logger.debug("getFact{}\n", predicatePattern);
 
 		ResourceResults factValues =  getFacts( predicatePattern,customQueryOptions);
@@ -252,7 +254,7 @@ public class Thing extends Resource {
 	 * @param bindValues the bind values
 	 * @return the fact
 	 */
-	public  Resource getFact(String predicatePattern, Value...bindValues )  {
+	public  Resource getFact(String predicatePattern, Value...bindValues ) {
 		logger.debug("getFact{}\n", predicatePattern);
 		//this.getEvaluationContext().getTracer().traceFact(this, predicatePattern);
 		ResourceResults factValues =  getFacts( predicatePattern,bindValues);
@@ -291,7 +293,7 @@ public class Thing extends Resource {
 	 * @param bindValues the bind values
 	 * @return the facts
 	 */
-	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions, Value... bindValues ){
+	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions, Value... bindValues ) {
 		return getFacts(predicatePattern,customQueryOptions.addAll(bindValues));
 	}
 	
@@ -302,24 +304,25 @@ public class Thing extends Resource {
 	 * @param customQueryOptions the custom query options
 	 * @return the facts
 	 */
-	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions)  {
+	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) {
 		logger.debug("getFacts{}\n", predicatePattern);
 		this.getEvaluationContext().getTracer().traceFacts(this, predicatePattern);
 		SimpleDataset dataset = getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
 		ResourceStatementResults results = null;
+		IRI predicate =preparePredicate(PATHQL.getFacts,predicatePattern);
 		if(this.getSource().getRepository()==null ) {
 			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource()
 					.getTripleSource()
 					.getStatements(this.getIRI(),
-							PATHQL.GETFACTS, literal(predicatePattern), contextArray);
+							predicate, null, contextArray);
 			results = new ResourceStatementResults(localStatementIterator, this, null, customQueryOptions);
 		}else {
 			CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
 					.getRepository().getConnection()
 					.getStatements(this.getIRI(),
-							PATHQL.GETFACTS, literal(predicatePattern), contextArray);
+							predicate, null, contextArray);
 			results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
 		}
 		return results;
@@ -375,17 +378,18 @@ public class Thing extends Resource {
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
 		PathResults results = null;
+		IRI predicate =preparePredicate(PATHQL.getPaths,predicatePattern);
 		if(this.getSource().getRepository()==null ) {
 			CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getSource()
 					.getTripleSource()
 					.getStatements(this.getIRI(),
-							PATHQL.GETPATHS, literal(predicatePattern), contextArray);
+							predicate,null, contextArray);
 			results = new PathResults(localPathIterator, this, null);
 		}else {
 			CloseableIteration<Statement, RepositoryException> pathIterator = this.getSource()
 					.getRepository().getConnection()
 					.getStatements(this.getIRI(),
-							PATHQL.GETPATHS, literal(predicatePattern), contextArray);
+							predicate,null, contextArray);
 			results = new PathResults(pathIterator, this, null, customQueryOptions);
 		}
 		return results;
@@ -466,10 +470,11 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
 		ResourceStatementResults results = null;
+		IRI predicate =preparePredicate(PATHQL.traceFacts,predicatePattern);
 		CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
 					.getRepository().getConnection()
 					.getStatements(this.getIRI(),
-							PATHQL.TRACEFACTS, literal(predicatePattern), contextArray);
+							predicate,null, contextArray);
 		results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
 		for(Resource result:results) {
 			String resultString = result.stringValue();
@@ -498,9 +503,10 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 	 * @param predicatePattern the predicate pattern
 	 * @throws Exception the exception
 	 */
-	public void deleteFacts(String predicatePattern) throws Exception {		
+	public void deleteFacts(String predicatePattern) throws Exception {	
+		IRI predicate =preparePredicate(PATHQL.removeFacts,predicatePattern);
 		this.getSource().getRepository().getConnection().remove(this.getIRI(),
-							PATHQL.REMOVEFACTS, literal(predicatePattern), this.getGraphName());
+				predicate, null, this.getGraphName());
 	}
 
 
@@ -564,8 +570,8 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 
 		try {
 
-			IRI predicate = iri(
-					PATHQL.addFact + "?pathQL=" + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
+			IRI predicate =preparePredicate(PATHQL.addFact,pathql);
+			//iri(	PATHQL.addFact + PATH_QL + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
 			switch (value.getClass().getSimpleName()) {
 			case "Thing":
 
@@ -583,6 +589,16 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 		return this;
 	}
 	
+	private IRI preparePredicate(String operation, String pathql) throws RepositoryException {
+		IRI predicate;
+		try{
+			predicate = iri(	operation + PATH_QL + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
+			return predicate;
+		} catch (Exception e) {
+			throw new RepositoryException(e);
+		}
+		
+	}
 	/**
 	 * Adds the fact.
 	 *

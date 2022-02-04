@@ -74,7 +74,7 @@ class ExampleLanguageTest_Tests {
 
 		try {
 			Thing peter = source.getThing(":aPerson");
-			Resource bmi = peter.getFact(":hasBMI");
+			Resource bmi = peter.getFact(":hasBMIgroovy");
 			assertEquals("21.453287197231838", bmi.stringValue());
 		} catch (Exception e) {
 			assertEquals("", e.getMessage());

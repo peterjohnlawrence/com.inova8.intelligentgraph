@@ -3,6 +3,7 @@
  */
 package com.inova8.intelligentgraph.sail;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -60,6 +61,8 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  * The Class IntelligentGraphConnection.
  */
 public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
+
+	private static final String PATH_QL_REGEX = "\\?pathQL=";
 
 	/** The custom query options. */
 	public static CustomQueryOptions customQueryOptions;
@@ -178,7 +181,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split("\\?pathQL=");
+				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
 				switch (predicateParts[0]) {
 				case PATHQL.addFact:
 					addFact(modify,subj, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , obj, contexts);
@@ -212,7 +215,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (predicate != null) {
-				predicateParts= predicate.stringValue().split("\\?pathQL=");
+				predicateParts= predicate.stringValue().split(PATH_QL_REGEX);
 				switch (predicateParts[0]) {
 				case PATHQL.addFact:
 					addFact(subject, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , object, contexts);
@@ -348,16 +351,20 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	@Override
 	public void removeStatements(Resource subj, IRI pred, Value obj, Resource... contexts) throws SailException {
 		try {
-			if (pred != null)
-				switch (pred.stringValue()) {
+			String[] predicateParts;
+			if (pred != null) {
+				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+			//if (pred != null)
+				switch (predicateParts[0]) {
 				case PATHQL.removeFact:
 				case PATHQL.removeFacts:
-					deleteFacts(null, subj, obj, contexts);
+					deleteFacts(null, subj, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()),obj, contexts);
 					break;
 				default:
 					super.removeStatements(subj, pred, obj, contexts);
 					checkReificationsChanged(pred);
 				}
+			}
 			else {
 				super.removeStatements(subj, pred, obj, contexts);
 			}
@@ -380,18 +387,22 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	public void removeStatement(UpdateContext modify, Resource subj, IRI pred, Value obj, Resource... contexts)
 			throws SailException {
 		try {
-		if(pred!=null)
-			switch (pred.stringValue()){
-				case PATHQL.removeFact: 					
-				case PATHQL.removeFacts: 
-					deleteFacts(modify, subj,  obj,  contexts);
-					break;
-				default:
-					super.removeStatement(modify, subj, pred, obj, contexts);
-					checkReificationsChanged(pred);
-			}
+			String[] predicateParts;
+			if (pred != null) {
+				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+				switch (predicateParts[0]){
+					case PATHQL.removeFact: 					
+					case PATHQL.removeFacts: 
+						deleteFacts(modify, subj,  URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()),obj,  contexts);
+						break;
+					default:
+						super.removeStatement(modify, subj, pred, obj, contexts);
+						checkReificationsChanged(pred);
+				}
+		}
 		else {
 			super.removeStatement(modify, subj, pred, obj, contexts);
+			
 		}
 		}catch(Exception e) {
 			throw new SailException(e);
@@ -463,21 +474,23 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			if(pred!=null && !pred.stringValue().equals("http://inova8.com/script/isPrivate")) {
 					extendedContexts = getContexts(contexts);
 			}
-			if(pred!=null) {
-				switch (pred.stringValue()){
+			String[] predicateParts;
+			if (pred != null) {
+				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+				switch (predicateParts[0]){
 					case PATHQL.getFact: 						
 					case PATHQL.getFacts: 
-						return  getFacts( subj,  obj,  extendedContexts);
+						return  getFacts( subj, decodePathQL(predicateParts,obj), obj,  extendedContexts);
 					case PATHQL.getPath: 						
 					case PATHQL.getPaths: 
-						return  getPaths( subj,  obj,  extendedContexts);
+						return  getPaths( subj, decodePathQL(predicateParts,obj), obj,  extendedContexts);
 					case PATHQL.traceFact: 						
 					case PATHQL.traceFacts: 
-						return  traceFacts( subj,  obj,  extendedContexts); 						
+						return  traceFacts( subj, decodePathQL(predicateParts,obj), obj,  extendedContexts); 						
 					case PATHQL.clearCache: 
 						return  clearCache( subj,  pred, obj,  extendedContexts);
 					case PATHQL.getScript: 						
-						return  getScript( subj,  obj,  extendedContexts);
+						return  getScript( subj,  decodePathQL(predicateParts,obj), obj,  extendedContexts);
 					default:
 						return new IntelligentGraphStatementsIterator( super.getStatements(subj, pred, obj, includeInferred, extendedContexts),intelligentGraphSail,this,extendedContexts); 
 				}
@@ -489,6 +502,23 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		}
 	}
 	
+	private String decodePathQL(String[] predicateParts, Value obj ) throws UnsupportedEncodingException {
+		if(predicateParts.length>1) {
+			return URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString());
+		}else {
+			return toPathQLString(obj);
+		}
+	}
+
+	private String toPathQLString(Value pathQLValue) {
+		String pathQL;
+		if( pathQLValue.isIRI()) {
+			 pathQL = "<"+ pathQLValue.stringValue()+">";
+		}else {
+			 pathQL = pathQLValue.stringValue();
+		}
+		return pathQL;
+	}
 	/**
 	 * Clear cache.
 	 *
@@ -513,7 +543,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 * @param contexts the contexts
 	 * @return the script
 	 */
-	private CloseableIteration<? extends IntelligentStatement, SailException> getScript(Resource subj, Value pathQLValue,	 Resource... contexts) {
+	private CloseableIteration<? extends IntelligentStatement, SailException> getScript(Resource subj, String pathQLValue, Value obj,  Resource... contexts) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -529,14 +559,14 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 * @throws PathPatternException the path pattern exception
 	 */
 	@SuppressWarnings("deprecation")
-	private CloseableIteration<? extends IntelligentStatement, SailException> traceFacts(Resource thingresource, Value pathQLValue,	  Resource... contexts) throws PathPatternException {
+	private CloseableIteration<? extends IntelligentStatement, SailException> traceFacts(Resource thingresource, String pathQLValue, Value obj,  Resource... contexts) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
 		thing.getEvaluationContext().setTracing(true);
 		thing.getEvaluationContext().getTracer().clear();
 		
 		thing.getEvaluationContext().getTracer().traceFacts(thing, pathQLValue,source.getRepositoryContext().getPrefixes(), contexts);
-		String pathQL = toPathQLString(pathQLValue);
+		String pathQL = pathQLValue;
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return traceThingFacts(source, thing,pathElement, contexts );
@@ -551,10 +581,10 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 * @return the facts
 	 * @throws PathPatternException the path pattern exception
 	 */
-	private CloseableIteration<? extends IntelligentStatement, SailException> getFacts(Resource thingresource, Value pathQLValue, Resource... contexts ) throws PathPatternException {
+	private CloseableIteration<? extends IntelligentStatement, SailException> getFacts(Resource thingresource, String pathQLValue, Value obj, Resource... contexts ) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
-		String pathQL = toPathQLString(pathQLValue);
+		String pathQL =pathQLValue;
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return getThingFacts(source, thing,pathElement, contexts );
@@ -569,10 +599,10 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 * @return the paths
 	 * @throws PathPatternException the path pattern exception
 	 */
-	private CloseableIteration<? extends IntelligentStatement, SailException> getPaths(Resource thingresource, Value pathQLValue, Resource... contexts ) throws PathPatternException {
+	private CloseableIteration<? extends IntelligentStatement, SailException> getPaths(Resource thingresource,   String pathQLValue, Value obj, Resource... contexts ) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
-		String pathQL = toPathQLString(pathQLValue);
+		String pathQL = pathQLValue;
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		return getThingPaths(source, thing,pathElement, contexts );
@@ -622,21 +652,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		return (CloseableIteration<? extends IntelligentStatement, SailException>) new IntelligentStatementPaths( source,thing, pathElement,  this,customQueryOptions,contexts);	
 	}
 
-	/**
-	 * To path QL string.
-	 *
-	 * @param pathQLValue the path QL value
-	 * @return the string
-	 */
-	private String toPathQLString(Value pathQLValue) {
-		String pathQL;
-		if( pathQLValue.isIRI()) {
-			 pathQL = "<"+ pathQLValue.stringValue()+">";
-		}else {
-			 pathQL = pathQLValue.stringValue();
-		}
-		return pathQL;
-	}
+
 	
 	/**
 	 * Delete facts.
@@ -647,10 +663,10 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 * @param contexts the contexts
 	 * @throws PathPatternException the path pattern exception
 	 */
-	private void deleteFacts(UpdateContext modify, Resource thingresource, Value pathQLValue,  Resource... contexts) throws PathPatternException {
+	private void deleteFacts(UpdateContext modify, Resource thingresource, String pathQLValue, Value obj, Resource... contexts) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
 		Thing thing = Thing.create(source, thingresource, null);
-		String pathQL = toPathQLString(pathQLValue);
+		String pathQL = pathQLValue;//TODO toPathQLString(pathQLValue);
 		PathElement pathElement = PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
 		pathElement.getSourceVariable().setValue( thing.getValue());
 		deleteThingFacts( modify, source, thing,  pathElement, contexts) ;

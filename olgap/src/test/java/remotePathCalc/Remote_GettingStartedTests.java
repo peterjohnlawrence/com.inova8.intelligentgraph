@@ -4,7 +4,6 @@
 package remotePathCalc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -32,8 +31,7 @@ class Remote_GettingStartedTests {
 	/** The source. */
 //	static RepositoryTripleSource repositoryTripleSource;
 	
-	/** The source. */
-	private static IntelligentGraphRepository source;
+	
 	
 	/**
 	 * Sets the up before class.

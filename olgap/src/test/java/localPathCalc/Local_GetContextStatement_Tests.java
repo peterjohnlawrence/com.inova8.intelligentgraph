@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
@@ -147,7 +148,9 @@ class Local_GetContextStatement_Tests {
 	void ig_4() {
 
 		try {
-			RepositoryResult<Statement> statements = conn.getStatements((org.eclipse.rdf4j.model.Resource)iri("http://inova8.com/calc2graph/id/Unit1"), iri("http://inova8.com/pathql/getFacts"), literal("<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>"));
+//			RepositoryResult<Statement> statements = conn.getStatements((org.eclipse.rdf4j.model.Resource)iri("http://inova8.com/calc2graph/id/Unit1"), iri("http://inova8.com/pathql/getFacts"), literal("<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>"));
+			IRI predicate = iri("http://inova8.com/pathql/getFacts?pathQL=" + URLEncoder.encode("<http://inova8.com/calc2graph/def/hasFeedBatteryLimit>", StandardCharsets.UTF_8.toString()));
+			RepositoryResult<Statement> statements = conn.getStatements((org.eclipse.rdf4j.model.Resource)iri("http://inova8.com/calc2graph/id/Unit1"), predicate, null);
 			for(Statement statement: statements) {
 				Value object = statement.getObject();
 				assertEquals("http://inova8.com/calc2graph/id/BatteryLimit1",  object.stringValue());
