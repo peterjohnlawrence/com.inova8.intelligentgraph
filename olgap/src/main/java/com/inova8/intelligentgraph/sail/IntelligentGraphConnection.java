@@ -47,6 +47,7 @@ import com.inova8.intelligentgraph.vocabulary.OWL;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
 import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.pathql.context.ReificationType;
 import com.inova8.pathql.element.PathElement;
 import com.inova8.pathql.element.PredicateElement;
@@ -61,8 +62,6 @@ import static org.eclipse.rdf4j.model.util.Values.iri;
  * The Class IntelligentGraphConnection.
  */
 public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
-
-	private static final String PATH_QL_REGEX = "\\?pathQL=";
 
 	/** The custom query options. */
 	public static CustomQueryOptions customQueryOptions;
@@ -181,7 +180,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
 				switch (predicateParts[0]) {
 				case PATHQL.addFact:
 					addFact(modify,subj, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , obj, contexts);
@@ -215,7 +214,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (predicate != null) {
-				predicateParts= predicate.stringValue().split(PATH_QL_REGEX);
+				predicateParts= predicate.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
 				switch (predicateParts[0]) {
 				case PATHQL.addFact:
 					addFact(subject, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , object, contexts);
@@ -353,7 +352,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
 			//if (pred != null)
 				switch (predicateParts[0]) {
 				case PATHQL.removeFact:
@@ -389,7 +388,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
 				switch (predicateParts[0]){
 					case PATHQL.removeFact: 					
 					case PATHQL.removeFacts: 
@@ -471,12 +470,12 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			boolean includeInferred, Resource... contexts) throws SailException {
 		try {
 			Resource[] extendedContexts=contexts;
-			if(pred!=null && !pred.stringValue().equals("http://inova8.com/script/isPrivate")) {
+			if(pred!=null && !pred.stringValue().equals(SCRIPT.isprivate)) {
 					extendedContexts = getContexts(contexts);
 			}
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(PATH_QL_REGEX);
+				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
 				switch (predicateParts[0]){
 					case PATHQL.getFact: 						
 					case PATHQL.getFacts: 

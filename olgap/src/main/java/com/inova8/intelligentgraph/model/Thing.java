@@ -51,8 +51,6 @@ import org.eclipse.rdf4j.repository.RepositoryException;
 public class Thing extends Resource {
 
 
-	private static final String PATH_QL = "?pathQL=";
-
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 	
@@ -592,7 +590,7 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 	private IRI preparePredicate(String operation, String pathql) throws RepositoryException {
 		IRI predicate;
 		try{
-			predicate = iri(	operation + PATH_QL + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
+			predicate = iri(	operation + IntelligentGraphConstants.PATH_QL + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
 			return predicate;
 		} catch (Exception e) {
 			throw new RepositoryException(e);

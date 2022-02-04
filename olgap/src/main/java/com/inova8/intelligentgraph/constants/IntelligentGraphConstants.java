@@ -42,6 +42,10 @@ public class IntelligentGraphConstants {
 	public static final String TUPLEEXPR = "tupleExpr";
 	
 	/** The Constant INTELLIGENTGRAPHCONNECTION. */
-	public static final String INTELLIGENTGRAPHCONNECTION = "intelligentGraphConnection";	
+	public static final String INTELLIGENTGRAPHCONNECTION = "intelligentGraphConnection";
+
+	public static final String PATH_QL = "?pathQL=";
+
+	public static final String PATH_QL_REGEX = "\\?pathQL=";	
 
 }
