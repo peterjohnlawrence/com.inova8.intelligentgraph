@@ -138,7 +138,6 @@ public class Path extends Resource  implements Iterable<Edge>{
 	 */
 	@Override
 	public ResourceResults getFacts(String predicatePattern, Value...bindValues) throws PathPatternException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -217,6 +216,5 @@ public class Path extends Resource  implements Iterable<Edge>{
 	public Resource addFact(String property, String value) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
+	}	
 } 

@@ -590,7 +590,7 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 	private IRI preparePredicate(String operation, String pathql) throws RepositoryException {
 		IRI predicate;
 		try{
-			predicate = iri(	operation + IntelligentGraphConstants.PATH_QL + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
+			predicate = iri(operation +	URLEncoder.encode( IntelligentGraphConstants.PATH_QL + pathql, StandardCharsets.UTF_8.toString()));
 			return predicate;
 		} catch (Exception e) {
 			throw new RepositoryException(e);

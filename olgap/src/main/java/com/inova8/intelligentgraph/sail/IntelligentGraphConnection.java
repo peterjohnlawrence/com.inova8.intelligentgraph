@@ -180,10 +180,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				//predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				predicateParts=  decodePredicate(pred);
 				switch (predicateParts[0]) {
 				case PATHQL.addFact:
-					addFact(modify,subj, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , obj, contexts);
+					addFact(modify,subj, predicateParts[1] , obj, contexts);
 					break;
 
 				default:
@@ -214,10 +215,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (predicate != null) {
-				predicateParts= predicate.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				//predicateParts= predicate.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				predicateParts=  decodePredicate(predicate);
 				switch (predicateParts[0]) {
 				case PATHQL.addFact:
-					addFact(subject, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()) , object, contexts);
+					addFact(subject, predicateParts[1] , object, contexts);
 					break;
 
 				default:
@@ -352,12 +354,11 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
-			//if (pred != null)
+				predicateParts=  decodePredicate(pred);
 				switch (predicateParts[0]) {
 				case PATHQL.removeFact:
 				case PATHQL.removeFacts:
-					deleteFacts(null, subj, URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()),obj, contexts);
+					deleteFacts(null, subj, predicateParts[1],obj, contexts);
 					break;
 				default:
 					super.removeStatements(subj, pred, obj, contexts);
@@ -388,11 +389,12 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 		try {
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				//predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				predicateParts=  decodePredicate(pred);
 				switch (predicateParts[0]){
 					case PATHQL.removeFact: 					
 					case PATHQL.removeFacts: 
-						deleteFacts(modify, subj,  URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString()),obj,  contexts);
+						deleteFacts(modify, subj, predicateParts[1],obj,  contexts);
 						break;
 					default:
 						super.removeStatement(modify, subj, pred, obj, contexts);
@@ -475,7 +477,7 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			}
 			String[] predicateParts;
 			if (pred != null) {
-				predicateParts= pred.stringValue().split(IntelligentGraphConstants.PATH_QL_REGEX);
+				predicateParts=  decodePredicate(pred);
 				switch (predicateParts[0]){
 					case PATHQL.getFact: 						
 					case PATHQL.getFacts: 
@@ -500,10 +502,15 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 			throw new SailException(e.getMessage(),e);
 		}
 	}
+
+
+	private String[] decodePredicate(IRI pred) throws UnsupportedEncodingException {
+		return URLDecoder.decode(pred.stringValue(),StandardCharsets.UTF_8.toString()).split(IntelligentGraphConstants.PATH_QL_REGEX);
+	}
 	
 	private String decodePathQL(String[] predicateParts, Value obj ) throws UnsupportedEncodingException {
 		if(predicateParts.length>1) {
-			return URLDecoder.decode(predicateParts[1],StandardCharsets.UTF_8.toString());
+			return predicateParts[1];
 		}else {
 			return toPathQLString(obj);
 		}

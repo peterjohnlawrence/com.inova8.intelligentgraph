@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.inova8.intelligentgraph.dashjoin.PathSteps;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Path;
@@ -265,39 +264,11 @@ class Local_Eastman3D_GetPath_Tests {
 			Thing _this =source.getThing("eastman.BatteryLimit:Stripper.Bottoms");
 			PathResults paths =  _this.getPaths("^plant:Transference@plant.TransferenceKind:ProcessFlow{3,3}");
 			for(Path path: paths) {
-					assertEquals("[\r\n"
-							+ "start:http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms;\r\n"
-							+ "steps:[\r\n"
-							+ "\r\n"
-							+ "	[	end:http://inova8.com/eastman/id/Valve/U8;\r\n"
-							+ "		edge:[\r\n"
-							+ "			edge.Reification:http://inova8.com/plant/def/Transference;\r\n"
-							+ "			edge.Dereified:false;\r\n"
-							+ "			edge.Predicate:http://inova8.com/plant/def/TransferenceKind/ProcessFlow;\r\n"
-							+ "			edge.Direction:INVERSE;\r\n"
-							+ "		]\r\n"
-							+ "	]\r\n"
-							+ "	,\r\n"
-							+ "	[	end:http://inova8.com/eastman/id/Pump/G103;\r\n"
-							+ "		edge:[\r\n"
-							+ "			edge.Reification:http://inova8.com/plant/def/Transference;\r\n"
-							+ "			edge.Dereified:false;\r\n"
-							+ "			edge.Predicate:http://inova8.com/plant/def/TransferenceKind/ProcessFlow;\r\n"
-							+ "			edge.Direction:INVERSE;\r\n"
-							+ "		]\r\n"
-							+ "	]\r\n"
-							+ "	,\r\n"
-							+ "	[	end:http://inova8.com/eastman/id/Vessel/V103;\r\n"
-							+ "		edge:[\r\n"
-							+ "			edge.Reification:http://inova8.com/plant/def/Transference;\r\n"
-							+ "			edge.Dereified:false;\r\n"
-							+ "			edge.Predicate:http://inova8.com/plant/def/TransferenceKind/ProcessFlow;\r\n"
-							+ "			edge.Direction:INVERSE;\r\n"
-							+ "		]\r\n"
-							+ "	]\r\n"
-							+ "	];\r\n"
+					assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+							+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+							+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
 							+ "]\r\n"
-							+ "", (new PathSteps(path)).toString());
+							+ "", path.toString());
 				break;	
 			}
 
