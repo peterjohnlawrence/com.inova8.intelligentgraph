@@ -102,6 +102,9 @@ public class PATHQL {
 	/** The Constant EDGE_REIFICATIONSTRING. */
 	public static final String EDGE_REIFICATIONSTRING = "edge.Reification";
 	
+	/** The Constant EDGE_REIFICATIONSTRING. */
+	public static final String EDGE_REIFIEDSTRING = "edge.Reified";
+	
 	/** The Constant EDGE_PREDICATESTRING. */
 	public static final String EDGE_PREDICATESTRING = "edge.Predicate";
 	
@@ -140,6 +143,12 @@ public class PATHQL {
 	
 	/** The Constant EDGE_REIFICATION. */
 	public static final IRI EDGE_REIFICATION = iri(edge_Reification);
+
+	/** The Constant edge_Reified. */
+	public static final String edge_Reified =NAMESPACE+EDGE_REIFIEDSTRING;
+	
+	/** The Constant EDGE_REIFICATION. */
+	public static final IRI EDGE_REIFIED = iri(edge_Reified);	
 	
 	/** The Constant edge_Source. */
 	public static final String edge_Source =NAMESPACE+EDGE_SOURCESTRING;

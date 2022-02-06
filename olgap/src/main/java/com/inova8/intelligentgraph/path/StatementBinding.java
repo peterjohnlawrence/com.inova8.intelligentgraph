@@ -34,6 +34,9 @@ Variable sourceVariable;
 	/** The reification. */
 	IRI reification;
 	
+	/** The reificationVariable. */
+	Variable reificationVariable;	
+	
 	/** The target variable. */
 	Variable targetVariable;
 	
@@ -42,6 +45,8 @@ Variable sourceVariable;
 	
 	/** The is dereified. */
 	Boolean isDereified;
+
+
 
 	/**
 	 * Instantiates a new statement binding.
@@ -71,10 +76,11 @@ Variable sourceVariable;
 	 * @param isInverseOf the is inverse of
 	 * @param isDereified the is dereified
 	 */
-	public StatementBinding(Variable sourceVariable, IRI reification, Variable predicateVariable, Variable targetVariable, Boolean isInverseOf, Boolean isDereified) {
+	public StatementBinding(Variable sourceVariable, IRI reification, Variable reificationVariable, Variable predicateVariable, Variable targetVariable, Boolean isInverseOf, Boolean isDereified) {
 		this.sourceVariable = sourceVariable;
 		this.predicateVariable = predicateVariable;
 		this.reification = reification;
+		this.reificationVariable = reificationVariable;
 		this.targetVariable = targetVariable;
 		if (isInverseOf)
 			direction = Edge.Direction.INVERSE;
@@ -109,7 +115,14 @@ Variable sourceVariable;
 	public IRI getReification() {
 		return reification;
 	}
-
+	/**
+	 * Gets the reificationVariable.
+	 *
+	 * @return the reificationVariable
+	 */
+	public Variable getReificationVariable() {
+		return reificationVariable;
+	}
 	/**
 	 * Gets the target variable.
 	 *
@@ -170,7 +183,7 @@ Variable sourceVariable;
 	 */
 	public String toString() {
 		if(reification!=null)
-			return "[" + sourceVariable.toString() +",<"+ reification.stringValue() +">@"+ predicateVariable.toString() +","+ targetVariable.toString() +"," + direction +"," + isDereified  +"]" ;
+			return "[" + sourceVariable.toString() +","+ reificationVariable.toString()+ ":<"+ reification.stringValue() +">@"+ predicateVariable.toString() +","+ targetVariable.toString() +"," + direction +"," + isDereified  +"]" ;
 		else
 			return "[" + sourceVariable.toString() +","+ predicateVariable.toString() +","+ targetVariable.toString() +"," + direction +"]" ;
 	};	
@@ -192,7 +205,10 @@ Variable sourceVariable;
 		subject.add(PATHQL.edge_Target , bindingset.getBinding(this.getTargetVariable().getName()).getValue());
 		subject.add(PATHQL.edge_Direction ,this.getDirection());
 		if(this.getIsDereified()!=null) subject.add(PATHQL.edge_Dereified , this.getIsDereified());
-		if(this.getReification()!=null) subject.add(PATHQL.edge_Reification , this.getReification());	
+		if(this.getReification()!=null) {
+			subject.add(PATHQL.edge_Reification , this.getReification());	
+			subject.add(PATHQL.edge_Reified , bindingset.getBinding(this.getReificationVariable().getName()).getValue());	
+		}
 	}
 	
 	/**

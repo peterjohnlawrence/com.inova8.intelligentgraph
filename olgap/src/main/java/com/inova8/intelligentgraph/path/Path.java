@@ -63,7 +63,8 @@ public class Path extends Resource  implements Iterable<Edge>{
 			if(reification.isPresent()) {
 				Optional<org.eclipse.rdf4j.model.Literal> dereified = Models.getPropertyLiteral( pathModel , edge, PATHQL.EDGE_DEREIFIED);  
 				boolean isDereified= dereified.get().booleanValue();
-				pathEdge = new Edge(source.get(), reification.get(), predicate.get(), target.get(), isDirect,isDereified);
+				Optional<org.eclipse.rdf4j.model.IRI> reified = Models.getPropertyIRI( pathModel , edge, PATHQL.EDGE_REIFIED);  
+				pathEdge = new Edge(source.get(),reified.get(), reification.get(),  predicate.get(), target.get(), isDirect,isDereified);
 			}else {
 				pathEdge = new Edge(source.get(), predicate.get(), target.get(), isDirect);
 			}

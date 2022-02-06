@@ -877,7 +877,7 @@ protected String boundPredicateToSPARQL(String sourceValue, String targetValue) 
 		if (statementFilterElement != null) {
 			reifiedPredicatePattern =   statementFilterElement.filterExpression( reificationVariable,intermediatePredicateVariable,null,reifiedPredicatePattern,customQueryOptions).getTupleExpr(); 
 		}
-		StatementBinding statementBinding = new StatementBinding(sourceVariable,getReification(), predicateVariable,  getIsDereified()?reificationVariable :targetVariable, getIsInverseOf(), getIsDereified());	
+		StatementBinding statementBinding = new StatementBinding(sourceVariable,getReification(), reificationVariable, predicateVariable,  getIsDereified()?reificationVariable :targetVariable, getIsInverseOf(), getIsDereified());	
 		if(predicatePattern==null) {
 			predicatePattern= new PathTupleExpr(reifiedPredicatePattern); 
 		}else{
@@ -1104,12 +1104,12 @@ protected String boundPredicateToSPARQL(String sourceValue, String targetValue) 
 		StatementBinding predicateEdge;
 		Variable sourceVariable = this.getSourceVariable();
 		Variable targetVariable = this.getTargetVariable();	
-		//Variable reificationVariable= this.getReifiedVariable();
+		Variable reificationVariable= this.getReifiedVariable();
 		
 		Variable intermediateSourceVariable = null ;
 		Variable intermediateTargetVariable = null;
 		Variable priorIntermediateTargetVariable = null ;
-		//Variable intermediateReificationVariable  = null ;
+		Variable intermediateReificationVariable  = null ;
 		for( int iteration = 1; iteration<=getCardinality(pathIteration);iteration++ ) {
 			if( iteration==1) {
 				intermediateSourceVariable = sourceVariable;
@@ -1122,11 +1122,11 @@ protected String boundPredicateToSPARQL(String sourceValue, String targetValue) 
 			if( iteration==getCardinality(pathIteration)) {
 				if( iteration>1)intermediateSourceVariable = priorIntermediateTargetVariable;
 				intermediateTargetVariable = targetVariable;
-			//	intermediateReificationVariable  = reificationVariable;
+				intermediateReificationVariable  = reificationVariable;
 			}else {
-			//	intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
+				intermediateReificationVariable = new Variable(reificationVariable.getName()+"_i"+iteration);
 			}
-			predicateEdge = new StatementBinding( intermediateSourceVariable, this.reification, getPredicateVariable(), getIsDereified()?this.getReifiedVariable() :intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
+			predicateEdge = new StatementBinding( intermediateSourceVariable, this.reification, intermediateReificationVariable, getPredicateVariable(), getIsDereified()?this.getReifiedVariable() :intermediateTargetVariable ,getIsInverseOf(),getIsDereified());
 			pathBinding.add(predicateEdge);
 		}
 		return pathBinding;

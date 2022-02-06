@@ -131,7 +131,7 @@ class PathPatternPathTests {
 		PathElement element = PathParser.parsePathPattern(repositoryContext,":Location@:appearsOn[ eq [ rdfs:label \"Calc2Graph1\"] ]#/^:lat/:long/^:left/:right");
 		PathBinding pathBinding = new PathBinding();
 		pathBinding = element.visitPathBinding(pathBinding,0);
-		assertEquals ("[n0,<http://default/Location>@http://default/appearsOn,r1,DIRECT,true]\r\n"
+		assertEquals ("[n0,r1:<http://default/Location>@http://default/appearsOn,r1,DIRECT,true]\r\n"
 				+ "[r1,http://default/lat,n2,INVERSE]\r\n"
 				+ "[n2,http://default/long,n3,DIRECT]\r\n"
 				+ "[n3,http://default/left,n4,INVERSE]\r\n"

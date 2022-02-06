@@ -179,7 +179,7 @@ void test_3() {
 				+ "         Variable (name=r1)\r\n"
 				+ "" ,pathTupleExpr.toString());
 		assertEquals
-		("[n0,<http://default/Attribute>@http://default/density,n1,DIRECT,false]\r\n"
+		("[n0,r1:<http://default/Attribute>@http://default/density,n1,DIRECT,false]\r\n"
 				+ "" ,pathTupleExpr.pathToString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
@@ -259,8 +259,8 @@ void test_4() {
 		 		+ "            Variable (name=r1)\r\n"
 		 		+ "" ,pathTupleExpr.toString());
 		assertEquals
-		("[n0,<http://default/Attribute>@http://default/density,n1_i1,DIRECT,false]\r\n"
-				+ "[n1_i1,<http://default/Attribute>@http://default/density,n1,DIRECT,false]\r\n"
+		("[n0,r1_i1:<http://default/Attribute>@http://default/density,n1_i1,DIRECT,false]\r\n"
+				+ "[n1_i1,r1:<http://default/Attribute>@http://default/density,n1,DIRECT,false]\r\n"
 				+ "" ,pathTupleExpr.pathToString());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());

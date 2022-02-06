@@ -46,7 +46,8 @@ public class Edge {
 	
 	/** The reification. */
 	IRI reification;
-	
+	/** The reified. */
+	IRI reified;	
 	/** The target. */
 	org.eclipse.rdf4j.model.Value target;
 	
@@ -55,6 +56,8 @@ public class Edge {
 	
 	/** The is dereified. */
 	Boolean isDereified;
+
+	
 
 	/**
 	 * Instantiates a new edge.
@@ -84,10 +87,11 @@ public class Edge {
 	 * @param isInverseOf the is inverse of
 	 * @param isDereified the is dereified
 	 */
-	public Edge(org.eclipse.rdf4j.model.Resource source, IRI reification, org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
+	public Edge(org.eclipse.rdf4j.model.Resource source, IRI reified, IRI reification,  org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
 		this.source = source;
 		this.predicate = predicate;
 		this.reification = reification;
+		this.reified = reified;
 		this.target = target;
 		if (isInverseOf)
 			direction = Direction.INVERSE;
@@ -184,7 +188,7 @@ public class Edge {
 	 */
 	public String toString() {
 		if(reification!=null)
-			return "[" + source.toString() +",<"+ reification.stringValue() +">@"+ predicate.toString() +","+ target.toString() +"," + direction +"," + isDereified  +"]" ;
+			return "[" + source.toString() +",<"+ reified.stringValue() + ">:<"+ reification.stringValue() +">@"+ predicate.toString() +","+ target.toString() +"," + direction +"," + isDereified  +"]" ;
 		else
 			return "[" + source.toString() +","+ predicate.toString() +","+ target.toString() +"," + direction +"]" ;
 	};	

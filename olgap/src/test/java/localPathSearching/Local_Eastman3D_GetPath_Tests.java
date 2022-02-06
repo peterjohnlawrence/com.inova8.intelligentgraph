@@ -116,14 +116,14 @@ class Local_Eastman3D_GetPath_Tests {
 		try {
 			Thing _this =source.getThing("eastman.BatteryLimit:Stripper.Bottoms");
 			PathResults paths = _this.getPaths("^plant:Transference@plant.TransferenceKind:ProcessFlow{1,3}");//
-			assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+			assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -141,7 +141,7 @@ class Local_Eastman3D_GetPath_Tests {
 		try {
 			Thing _this =source.getThing("eastman.Valve:U8");
 			PathResults paths =  _this.getPaths("plant:Transference@plant.TransferenceKind:ProcessFlow{1,3}");//
-			assertEquals("Path=[[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,DIRECT,false]\r\n"
+			assertEquals("Path=[[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,DIRECT,false]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -159,29 +159,29 @@ class Local_Eastman3D_GetPath_Tests {
 		try {
 			Thing _this =source.getThing("eastman.BatteryLimit:Stripper.Bottoms");
 			PathResults paths =  _this.getPaths("^plant:Transference@plant.TransferenceKind:ProcessFlow{1,4}");//
-			assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+			assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Vessel/V103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Boiler/B103,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Vessel/V103,<http://inova8.com/eastman/id/ProcessFlow/B103-processFlow-V103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Boiler/B103,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Vessel/V103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/BatteryLimit/Stripper.Condensate,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Vessel/V103,<http://inova8.com/eastman/id/ProcessFlow/Stripper.Condensate-processFlow-V103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/BatteryLimit/Stripper.Condensate,INVERSE,false]\r\n"
 					+ "]\r\n"
-					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Vessel/V103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/BatteryLimit/Stripper.Feed,INVERSE,false]\r\n"
+					+ "Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Vessel/V103,<http://inova8.com/eastman/id/ProcessFlow/Stripper.Feed-processFlow-V103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/BatteryLimit/Stripper.Feed,INVERSE,false]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -201,18 +201,18 @@ class Local_Eastman3D_GetPath_Tests {
 			PathResults paths =  _this.getPaths("^plant:attribute.providedBy/plant:attribute.of.PlantItem/^plant:Transference@plant.TransferenceKind:ProcessFlow{1,3}");//
 			assertEquals("Path=[[http://inova8.com/eastman/id/Signal/XMEAS17,http://inova8.com/plant/def/attribute.providedBy,http://inova8.com/eastman/id/Attribute/Stripper.Bottoms.volumeFlow.XMEAS17,INVERSE]\r\n"
 					+ "[http://inova8.com/eastman/id/Attribute/Stripper.Bottoms.volumeFlow.XMEAS17,http://inova8.com/plant/def/attribute.of.PlantItem,http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,DIRECT]\r\n"
-					+ "[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
 					+ "]\r\n"
 					+ "Path=[[http://inova8.com/eastman/id/Signal/XMEAS17,http://inova8.com/plant/def/attribute.providedBy,http://inova8.com/eastman/id/Attribute/Stripper.Bottoms.volumeFlow.XMEAS17,INVERSE]\r\n"
 					+ "[http://inova8.com/eastman/id/Attribute/Stripper.Bottoms.volumeFlow.XMEAS17,http://inova8.com/plant/def/attribute.of.PlantItem,http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,DIRECT]\r\n"
-					+ "[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
 					+ "]\r\n"
 					+ "Path=[[http://inova8.com/eastman/id/Signal/XMEAS17,http://inova8.com/plant/def/attribute.providedBy,http://inova8.com/eastman/id/Attribute/Stripper.Bottoms.volumeFlow.XMEAS17,INVERSE]\r\n"
 					+ "[http://inova8.com/eastman/id/Attribute/Stripper.Bottoms.volumeFlow.XMEAS17,http://inova8.com/plant/def/attribute.of.PlantItem,http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,DIRECT]\r\n"
-					+ "[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+					+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
 					+ "]\r\n"
 					+ "", paths.toString());
 		} catch (Exception e) {
@@ -264,9 +264,9 @@ class Local_Eastman3D_GetPath_Tests {
 			Thing _this =source.getThing("eastman.BatteryLimit:Stripper.Bottoms");
 			PathResults paths =  _this.getPaths("^plant:Transference@plant.TransferenceKind:ProcessFlow{3,3}");
 			for(Path path: paths) {
-					assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
-							+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
-							+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
+					assertEquals("Path=[[http://inova8.com/eastman/id/BatteryLimit/Stripper.Bottoms,<http://inova8.com/eastman/id/ProcessFlow/U8-processFlow-Stripper.Bottoms>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Valve/U8,INVERSE,false]\r\n"
+							+ "[http://inova8.com/eastman/id/Valve/U8,<http://inova8.com/eastman/id/ProcessFlow/G103-processFlow-U8>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Pump/G103,INVERSE,false]\r\n"
+							+ "[http://inova8.com/eastman/id/Pump/G103,<http://inova8.com/eastman/id/ProcessFlow/V103-processFlow-G103>:<http://inova8.com/plant/def/Transference>@http://inova8.com/plant/def/TransferenceKind/ProcessFlow,http://inova8.com/eastman/id/Vessel/V103,INVERSE,false]\r\n"
 							+ "]\r\n"
 							+ "", path.toString());
 				break;	
