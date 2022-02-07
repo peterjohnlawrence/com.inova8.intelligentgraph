@@ -47,7 +47,7 @@ public class Edge {
 	/** The reification. */
 	IRI reification;
 	/** The reified. */
-	IRI reified;	
+	org.eclipse.rdf4j.model.Resource reified;	
 	/** The target. */
 	org.eclipse.rdf4j.model.Value target;
 	
@@ -87,7 +87,7 @@ public class Edge {
 	 * @param isInverseOf the is inverse of
 	 * @param isDereified the is dereified
 	 */
-	public Edge(org.eclipse.rdf4j.model.Resource source, IRI reified, IRI reification,  org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
+	public Edge(org.eclipse.rdf4j.model.Resource source, org.eclipse.rdf4j.model.Resource reified, IRI reification,  org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
 		this.source = source;
 		this.predicate = predicate;
 		this.reification = reification;
@@ -126,7 +126,14 @@ public class Edge {
 	public IRI getReification() {
 		return reification;
 	}
-
+	/**
+	 * Gets the reification.
+	 *
+	 * @return the reification
+	 */
+	public org.eclipse.rdf4j.model.Resource getReified() {
+		return reified;
+	}
 
 	/**
 	 * Gets the target.
