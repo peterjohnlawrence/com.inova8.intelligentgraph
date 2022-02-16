@@ -34,6 +34,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
+
 		<dependency>
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
@@ -42,7 +43,6 @@
 			<groupId>org.eclipse.rdf4j</groupId>
 			<artifactId>rdf4j-runtime</artifactId>
 			<type>pom</type>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -53,7 +53,8 @@
 			<groupId>com.seeq</groupId>
 			<artifactId>sdk</artifactId>
 			<version>0.49.04-v202009240029</version>
-		</dependency> 
+			<scope>provided</scope>
+ 		</dependency> 
 		<dependency>
            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -102,9 +103,10 @@
 			<version>${graalvm.version}</version>
 			<scope>${graaljs.compile}</scope>
 		</dependency>
+			<!-- using -standalone instead of -slim to fix maven dependency convergence error within -slim  -->
 		<dependency>
 			<groupId>org.python</groupId>
-			<artifactId>jython-slim</artifactId>
+			<artifactId>jython-standalone</artifactId>
 			<version>${jython.version}</version>
 			<scope>${jython.compile}</scope>
 		</dependency>
@@ -230,7 +232,25 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>   
+			</plugin> 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce</id>
+						<configuration>
+							<rules>
+								<dependencyConvergence />
+							</rules>
+						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>  
 		</plugins>
 	</build>
 	<properties>
@@ -242,12 +262,12 @@
         <junit.platform.version>1.8.1</junit.platform.version>
         
         <groovy.version>3.0.9</groovy.version>
-		<graalvm.version>21.1.0</graalvm.version>
+		<graalvm.version>22.0.0.2</graalvm.version>
 		<jython.version>2.7.2</jython.version>
 
          <groovy.compile>compile</groovy.compile>
-         <graaljs.compile>compile</graaljs.compile>
-         <jython.compile>compile</jython.compile>
+         <graaljs.compile>test</graaljs.compile>
+         <jython.compile>test</jython.compile>
 	</properties>
 	<repositories>
 	    <repository>
