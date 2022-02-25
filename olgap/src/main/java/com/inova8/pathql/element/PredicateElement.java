@@ -884,6 +884,7 @@ protected String boundPredicateToSPARQL(String sourceValue, String targetValue) 
 			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), reifiedPredicatePattern));
 		}
 		predicatePattern.setStatementBinding(statementBinding);
+		predicatePattern.setBoundVariable(predicatePattern.getStatementBinding().getSourceVariable());
 		predicatePattern.getPath().add(statementBinding);
 		return predicatePattern;
 	}
@@ -1000,6 +1001,7 @@ protected String boundPredicateToSPARQL(String sourceValue, String targetValue) 
 			predicatePattern.setTupleExpr(new Join(predicatePattern.getTupleExpr(), intermediatePredicatePattern));
 		}
 		predicatePattern.setStatementBinding(statementBinding);
+		predicatePattern.setBoundVariable(predicatePattern.getStatementBinding().getSourceVariable());
 		predicatePattern.getPath().add(statementBinding);
 		return predicatePattern;
 	}

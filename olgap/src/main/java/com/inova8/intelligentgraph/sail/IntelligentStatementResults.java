@@ -7,6 +7,7 @@ import org.eclipse.rdf4j.common.iteration.AbstractCloseableIteration;
 import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.ContextStatement;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.Binding;
@@ -15,6 +16,7 @@ import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
@@ -79,6 +81,10 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 	/** The path tuple expr. */
 	private PathTupleExpr pathTupleExpr;
 
+	private EvaluationContext evaluationContext;
+
+	private String boundVariableName;
+
 	/**
 	 * Instantiates a new intelligent statement results.
 	 *
@@ -105,6 +111,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
+		if(thing!=null)this.evaluationContext= thing.getEvaluationContext();
 	}
 
 	/**
@@ -132,6 +139,7 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		pathElement.getTargetPredicate().toString();
 		obj= pathElement.getTargetVariable().toString();
 		simpleValueFactory= SimpleValueFactory.getInstance();
+		if(thing!=null)this.evaluationContext= thing.getEvaluationContext();
 	}
 
 	/**
@@ -148,6 +156,11 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 			while(pathIteration < this.sortedIterations.size() ) {
 				CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());//source.getIntelligentGraphConnection().getPrefixes());
 				pathTupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions);
+				if( this.thing==null && pathTupleExpr.getBoundVariable()==null) {
+					throw new QueryEvaluationException("Facts query unbound");
+				}else {
+					this.boundVariableName = pathTupleExpr.getBoundVariable().getName();
+				}				
 				pathIteration ++;
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr, contexts);
 				boolean hasNext = resultsIterator.hasNext();
@@ -183,11 +196,12 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 			} catch (URISyntaxException e) {
 				 parameterizedPredicate =(IRI)predBinding.getValue();
 			}	
-			if(trace) {
+			Value boundValue = nextBindingset.getBinding(this.boundVariableName).getValue() ;
+			if(trace && this.evaluationContext!=null) {
 				thing.getEvaluationContext().getTracer().traceFactReturnValue(thing, predBinding.getValue().stringValue(), objBinding.getValue());
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), parameterizedPredicate, literal(thing.getEvaluationContext().getTrace()),null),null,thing.getEvaluationContext(), customQueryOptions);
-			}else {
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource)subjBinding.getValue(), parameterizedPredicate, objBinding.getValue(),null),null,thing.getEvaluationContext(), customQueryOptions);
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) boundValue, parameterizedPredicate, literal(thing.getEvaluationContext().getTrace()),null),null,this.evaluationContext, customQueryOptions);
+			}else {				
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) boundValue, parameterizedPredicate, objBinding.getValue(),null),source,this.evaluationContext, customQueryOptions);
 			}
 		}
 		else
@@ -213,7 +227,6 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 		if(resultsIterator!=null)
 			return resultsIterator;
 		else {
-	//		this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathIteration, contexts);
 			return resultsIterator;
 		}
 	}

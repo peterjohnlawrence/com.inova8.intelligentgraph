@@ -3,7 +3,7 @@
  */
 package tutorialExample;
 
-import static org.junit.Assert.fail;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -74,8 +74,7 @@ class Example7_Tests {
 			Resource femaleParent = aPerson.getFact(":hasParent{0,4}/:hasParent[:hasGender :Female]");
 			assertEquals("http://inova8.com/intelligentgraph/example7/Another3", femaleParent.stringValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -91,8 +90,7 @@ class Example7_Tests {
 			Resource maidstoneParent = aPerson.getFact(":hasParent[:hasLocation :Maidstone]");
 			assertEquals("http://inova8.com/intelligentgraph/example7/Another3", maidstoneParent.stringValue());
 		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -107,8 +105,7 @@ class Example7_Tests {
 			Thing aPerson = source.getThing(":aPerson");
 			assertEquals("[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another5;]",  aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
 		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -123,8 +120,7 @@ class Example7_Tests {
 			Thing aPerson = source.getThing(":aPerson");
 			assertEquals("[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another2;http://inova8.com/intelligentgraph/example7/Another4;http://inova8.com/intelligentgraph/example7/Another5;http://inova8.com/intelligentgraph/example7/Another6;]",  aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasLocation :Maidstone]").toString());
 		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -144,8 +140,7 @@ class Example7_Tests {
 					+ "]\r\n"
 					+ "",  aPerson.getPaths(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
 		} catch (Exception e) {
-			fail();
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 
@@ -161,7 +156,7 @@ class Example7_Tests {
 			Resource femaleParent = aPerson.getFact(":hasFamilialRelativeBMI");
 			assertEquals(1.006889937409004, femaleParent.doubleValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 }

@@ -589,10 +589,13 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 */
 	private CloseableIteration<? extends IntelligentStatement, SailException> getFacts(Resource thingresource, String pathQLValue, Value obj, Resource... contexts ) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
 		String pathQL =pathQLValue;
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
-		pathElement.getSourceVariable().setValue( thing.getValue());
+		Thing thing=null;
+		if(thingresource!=null) {
+			thing = Thing.create(source, thingresource, null);
+			pathElement.getSourceVariable().setValue( thing.getValue());
+		}	
 		return getThingFacts(source, thing,pathElement, contexts );
 	}
 	
@@ -607,10 +610,13 @@ public class IntelligentGraphConnection extends NotifyingSailConnectionWrapper {
 	 */
 	private CloseableIteration<? extends IntelligentStatement, SailException> getPaths(Resource thingresource,   String pathQLValue, Value obj, Resource... contexts ) throws PathPatternException {
 		IntelligentGraphRepository source = IntelligentGraphRepository.create(this);
-		Thing thing = Thing.create(source, thingresource, null);
 		String pathQL = pathQLValue;
 		PathElement pathElement =  PathParser.parsePathPattern(source.getRepositoryContext(), pathQL);
-		pathElement.getSourceVariable().setValue( thing.getValue());
+		Thing thing=null;
+		if(thingresource!=null) {
+			thing = Thing.create(source, thingresource, null);
+			pathElement.getSourceVariable().setValue( thing.getValue());
+		}
 		return getThingPaths(source, thing,pathElement, contexts );
 	}
 	

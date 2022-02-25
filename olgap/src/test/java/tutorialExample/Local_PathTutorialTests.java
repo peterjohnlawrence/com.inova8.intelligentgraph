@@ -129,7 +129,7 @@ class Local_PathTutorialTests {
 							+ "]\r\n"
 							+ "", paths.toString());	
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
+			assertEquals("", e.getCause().getMessage());
 			fail();
 		}
 	}

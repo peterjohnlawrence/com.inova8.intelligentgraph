@@ -6,6 +6,8 @@ package com.inova8.intelligentgraph.intelligentGraphRepository;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,12 +23,19 @@ import javax.script.ScriptException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.evaluator.Evaluator;
 import com.inova8.intelligentgraph.evaluator.FactCache;
+import com.inova8.intelligentgraph.exceptions.NullValueReturnedException;
 import com.inova8.intelligentgraph.exceptions.ServerException;
 import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.path.NullPath;
+import com.inova8.intelligentgraph.path.Path;
+import com.inova8.intelligentgraph.results.PathResults;
+import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.results.ResourceStatementResults;
 import com.inova8.intelligentgraph.sail.IntelligentGraphConnection;
 import com.inova8.intelligentgraph.sail.IntelligentGraphSail;
 import com.inova8.intelligentgraph.seeq.SEEQSource;
@@ -48,7 +57,9 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.algebra.evaluation.TripleSource;
+import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
 import org.eclipse.rdf4j.repository.RepositoryResult;
@@ -973,6 +984,107 @@ public class IntelligentGraphRepository {
 			return intelligentGraphConnection;
 		}
 	}
+	public com.inova8.intelligentgraph.model.Resource getFact(String boundPredicatePattern) {
+		return getFact(boundPredicatePattern,null);
+	}
+	public com.inova8.intelligentgraph.model.Resource getFact(String boundPredicatePattern, CustomQueryOptions customQueryOptions) {
+		logger.debug("getFact{}\n", boundPredicatePattern);
 
+		ResourceResults factValues =  getFacts( boundPredicatePattern,customQueryOptions);
+		if (factValues == null) {
+			//return new NullResource();
+			throw new NullValueReturnedException( String.format(
+					"No values found for pattern %s with customQueryOptions %s", boundPredicatePattern, customQueryOptions));
+		} else if (factValues.hasNext()) {
+			return factValues.next();
+		} else {
+			factValues.close();
+			//return new NullResource();
+			throw new NullValueReturnedException( String.format(
+					"No values found for pattern %s with customQueryOptions %s", boundPredicatePattern,customQueryOptions));
+		}	
+	}
+	public ResourceResults getFacts(String boundPredicatePattern) {
+		return getFacts(boundPredicatePattern,null);
+	}
+	public ResourceResults getFacts(String boundPredicatePattern, CustomQueryOptions customQueryOptions) {
+		logger.debug("getFacts{}\n", boundPredicatePattern);
+	//	this.getEvaluationContext().getTracer().traceFacts(this, queryPattern);
+		SimpleDataset dataset = getDataset( customQueryOptions);
+	 //   dataset.addDefaultGraph(this.graphName);
+ 	     org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		ResourceStatementResults results = null;
+		IRI predicate =preparePredicate(PATHQL.getFacts,boundPredicatePattern);
+		if(this.getRepository()==null ) {
+			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getTripleSource()
+					.getStatements(null,predicate, null);
+			results = new ResourceStatementResults(localStatementIterator, this, null, customQueryOptions);
+		}else {
+			CloseableIteration<Statement, RepositoryException> statementIterator = this.getRepository().getConnection()
+					.getStatements(null,predicate, null, contextArray);
+			results = new ResourceStatementResults(statementIterator, this, null, customQueryOptions);
+		}
+		return results;
+	}
+	public Path getPath(String boundPredicatePattern) {
+		return getPath(boundPredicatePattern,null);
+	}
+	public Path getPath(String boundPredicatePattern, CustomQueryOptions customQueryOptions) {
+		logger.debug("getPath{}\n", boundPredicatePattern);
+		PathResults pathValues =  getPaths( boundPredicatePattern,null);
+		if (pathValues == null) {
+		//	this.getEvaluationContext().getTracer().tracePathReturnNull(this, boundPredicatePattern);
+			return new NullPath();
+		} else if (pathValues.hasNext()) {
+			Path path = (Path) pathValues.next();
+		//	this.getEvaluationContext().getTracer().tracePathReturn(this, boundPredicatePattern,path);
+			return path;
+		} else {
+		//	this.getEvaluationContext().getTracer().tracePathEmpty(this, boundPredicatePattern);
+			pathValues.close();
+			return new NullPath();
+		}
+	}
+	public PathResults getPaths(String boundPredicatePattern) {
+		return getPaths(boundPredicatePattern,null);
+	}
+	public PathResults getPaths(String boundPredicatePattern, CustomQueryOptions customQueryOptions) {
+		logger.debug("getPaths{}\n", boundPredicatePattern);
 
+	//	this.getEvaluationContext().getTracer().tracePaths(this, boundPredicatePattern);
+		SimpleDataset dataset = IntelligentGraphRepository.getDataset( customQueryOptions);
+	//	dataset.addDefaultGraph(this.graphName);
+		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
+		PathResults results = null;
+		IRI predicate =IntelligentGraphRepository.preparePredicate(PATHQL.getPaths,boundPredicatePattern);
+		if(this.getRepository()==null ) {
+			CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getTripleSource()
+					.getStatements(null,
+							predicate,null, contextArray);
+			results = new PathResults(localPathIterator, this, null);
+		}else {
+			CloseableIteration<Statement, RepositoryException> pathIterator = this.getRepository().getConnection()
+					.getStatements(null,
+							predicate,null, contextArray);
+			results = new PathResults(pathIterator, this, null, customQueryOptions);
+		}
+		return results;
+	}	
+	public static IRI preparePredicate(String operation, String pathql) throws RepositoryException {
+		IRI predicate;
+		try{
+			predicate = iri(operation +	URLEncoder.encode( IntelligentGraphConstants.PATH_QL + pathql, StandardCharsets.UTF_8.toString()));
+			return predicate;
+		} catch (Exception e) {
+			throw new RepositoryException(e);
+		}
+		
+	}
+	public static SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
+		SimpleDataset dataset = new SimpleDataset();//getDataset();
+		if(customQueryOptions!=null) {
+			dataset.addDefaultGraph(iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
+		}
+		return dataset;
+	}
 }

@@ -37,7 +37,6 @@ public class ResourceStatementResults extends ResourceResults {
 	 * @param pathElement the path element
 	 * @param customQueryOptions the custom query options
 	 */
-	@Deprecated
 	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet,
 			IntelligentGraphRepository source, PathElement pathElement, CustomQueryOptions customQueryOptions) {
 
@@ -51,11 +50,11 @@ public class ResourceStatementResults extends ResourceResults {
 	 * @param statementSet the statement set
 	 * @param thing the thing
 	 */
-	@Deprecated
-	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet, Thing thing) {
-		super(thing);
-		this.statementSet = statementSet;
-	}
+//	@Deprecated
+//	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet, Thing thing) {
+//		super(thing);
+//		this.statementSet = statementSet;
+//	}
 
 	/**
 	 * Instantiates a new resource statement results.
@@ -76,11 +75,18 @@ public class ResourceStatementResults extends ResourceResults {
 	 *
 	 * @param statementSet the statement set
 	 */
-	@Deprecated
-	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet) {
-		super();
-		this.statementSet = statementSet;
+//	@Deprecated
+//	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet) {
+//		super();
+//		this.statementSet = statementSet;
+//	}
+	public ResourceStatementResults(
+			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator, IntelligentGraphRepository source,
+			Object pathElement, CustomQueryOptions customQueryOptions) {
+		super(source, (PathElement) pathElement, customQueryOptions);
+		this.localStatementIterator = localStatementIterator;
 	}
+
 
 	/**
 	 * Instantiates a new resource statement results.
@@ -197,19 +203,20 @@ public class ResourceStatementResults extends ResourceResults {
 
 			//return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
 			//Resource predicate, Boolean direction, IRI reification, Boolean isDereified,
-			Resource subject = Resource.create(thing.getSource(),next.getSubject(), getEvaluationContext());
+
+			Resource subject = Resource.create(getSource(),next.getSubject(), getEvaluationContext());
 			Predicate predicate;
 			try {
 				predicate = new Predicate(next.getPredicate());
 			} catch (URISyntaxException e) {
 				throw new QueryEvaluationException(e);
 			}
-			thing.getEvaluationContext().getTracer().traceFactNext(thing,predicate, next.getObject());
-			return Resource.create(thing.getSource(), subject, predicate, next.getObject(), getEvaluationContext());
+			if(getEvaluationContext()!=null) getEvaluationContext().getTracer().traceFactNext(thing,predicate, next.getObject());
+			return Resource.create(getSource(), subject, predicate, next.getObject(), getEvaluationContext());
 		}
 		if (localStatementIterator != null) {
 			Statement next = localStatementIterator.next();
-			return Resource.create(thing.getSource(), next.getObject(), getEvaluationContext());
+			return Resource.create(getSource(), next.getObject(), getEvaluationContext());
 		}
 		return null;
 	}

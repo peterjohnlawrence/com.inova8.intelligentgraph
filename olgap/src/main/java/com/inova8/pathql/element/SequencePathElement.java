@@ -208,7 +208,7 @@ public class SequencePathElement extends PathElement {
 					}
 				}
 			}
-			//joinPattern.setPath(getPathBindings().get(pathIteration));
+			joinPattern.setBoundVariable(joinPattern.getStatementBinding().getSourceVariable());
 			return joinPattern;
 		} else {
 			return null;

@@ -6,8 +6,6 @@ package com.inova8.intelligentgraph.model;
 import static org.eclipse.rdf4j.model.util.Values.iri;
 import static org.eclipse.rdf4j.model.util.Values.literal;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +13,6 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.inova8.intelligentgraph.constants.IntelligentGraphConstants;
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.evaluator.Evaluator;
@@ -305,11 +302,11 @@ public class Thing extends Resource {
 	public  ResourceResults getFacts(String predicatePattern, CustomQueryOptions customQueryOptions) {
 		logger.debug("getFacts{}\n", predicatePattern);
 		this.getEvaluationContext().getTracer().traceFacts(this, predicatePattern);
-		SimpleDataset dataset = getDataset( customQueryOptions);
+		SimpleDataset dataset = IntelligentGraphRepository.getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
 		ResourceStatementResults results = null;
-		IRI predicate =preparePredicate(PATHQL.getFacts,predicatePattern);
+		IRI predicate =IntelligentGraphRepository.preparePredicate(PATHQL.getFacts,predicatePattern);
 		if(this.getSource().getRepository()==null ) {
 			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator = this.getSource()
 					.getTripleSource()
@@ -372,11 +369,11 @@ public class Thing extends Resource {
 		logger.debug("getPaths{}\n", predicatePattern);
 
 		this.getEvaluationContext().getTracer().tracePaths(this, predicatePattern);
-		SimpleDataset dataset = getDataset( customQueryOptions);
+		SimpleDataset dataset = IntelligentGraphRepository.getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
 		PathResults results = null;
-		IRI predicate =preparePredicate(PATHQL.getPaths,predicatePattern);
+		IRI predicate =IntelligentGraphRepository.preparePredicate(PATHQL.getPaths,predicatePattern);
 		if(this.getSource().getRepository()==null ) {
 			CloseableIteration<? extends Statement, QueryEvaluationException> localPathIterator = this.getSource()
 					.getTripleSource()
@@ -464,11 +461,11 @@ public class Thing extends Resource {
  * @return the trace
  */
 public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOptions)  {
-		SimpleDataset dataset = getDataset( customQueryOptions);
+		SimpleDataset dataset = IntelligentGraphRepository.getDataset( customQueryOptions);
 		dataset.addDefaultGraph(this.graphName);
 		org.eclipse.rdf4j.model.Resource[] contextArray = dataset.getDefaultGraphs().toArray(new org.eclipse.rdf4j.model.Resource[0] );
 		ResourceStatementResults results = null;
-		IRI predicate =preparePredicate(PATHQL.traceFacts,predicatePattern);
+		IRI predicate =IntelligentGraphRepository.preparePredicate(PATHQL.traceFacts,predicatePattern);
 		CloseableIteration<Statement, RepositoryException> statementIterator = this.getSource()
 					.getRepository().getConnection()
 					.getStatements(this.getIRI(),
@@ -502,7 +499,7 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 	 * @throws Exception the exception
 	 */
 	public void deleteFacts(String predicatePattern) throws Exception {	
-		IRI predicate =preparePredicate(PATHQL.removeFacts,predicatePattern);
+		IRI predicate =IntelligentGraphRepository.preparePredicate(PATHQL.removeFacts,predicatePattern);
 		this.getSource().getRepository().getConnection().remove(this.getIRI(),
 				predicate, null, this.getGraphName());
 	}
@@ -568,7 +565,7 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 
 		try {
 
-			IRI predicate =preparePredicate(PATHQL.addFact,pathql);
+			IRI predicate =IntelligentGraphRepository.preparePredicate(PATHQL.addFact,pathql);
 			//iri(	PATHQL.addFact + PATH_QL + URLEncoder.encode(pathql, StandardCharsets.UTF_8.toString()));
 			switch (value.getClass().getSimpleName()) {
 			case "Thing":
@@ -587,16 +584,16 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 		return this;
 	}
 	
-	private IRI preparePredicate(String operation, String pathql) throws RepositoryException {
-		IRI predicate;
-		try{
-			predicate = iri(operation +	URLEncoder.encode( IntelligentGraphConstants.PATH_QL + pathql, StandardCharsets.UTF_8.toString()));
-			return predicate;
-		} catch (Exception e) {
-			throw new RepositoryException(e);
-		}
-		
-	}
+//	private IRI preparePredicate(String operation, String pathql) throws RepositoryException {
+//		IRI predicate;
+//		try{
+//			predicate = iri(operation +	URLEncoder.encode( IntelligentGraphConstants.PATH_QL + pathql, StandardCharsets.UTF_8.toString()));
+//			return predicate;
+//		} catch (Exception e) {
+//			throw new RepositoryException(e);
+//		}
+//		
+//	}
 	/**
 	 * Adds the fact.
 	 *
@@ -666,13 +663,13 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 	 * @param customQueryOptions the custom query options
 	 * @return the dataset
 	 */
-	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
-		SimpleDataset dataset = new SimpleDataset();//getDataset();
-		if(customQueryOptions!=null) {
-			dataset.addDefaultGraph(iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
-		}
-		return dataset;
-	}
+//	public SimpleDataset getDataset(CustomQueryOptions customQueryOptions) {
+//		SimpleDataset dataset = new SimpleDataset();//getDataset();
+//		if(customQueryOptions!=null) {
+//			dataset.addDefaultGraph(iri(IntelligentGraphConstants.URN_CUSTOM_QUERY_OPTIONS+"?"+customQueryOptions.toURIEncodedString()));
+//		}
+//		return dataset;
+//	}
 	
 	/**
 	 * Gets the thing.

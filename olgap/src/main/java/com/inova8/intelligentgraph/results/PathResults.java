@@ -15,6 +15,7 @@ import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Path;
@@ -42,6 +43,16 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	
 	/** The path set. */
 	private CloseableIteration<Statement, RepositoryException> pathSet;
+	public PathResults(CloseableIteration<? extends Statement, QueryEvaluationException> pathIterator,IntelligentGraphRepository source, PathElement pathElement ) {
+		this.source=source;
+		this.pathElement = pathElement;
+		this.pathIterator=pathIterator;
+	}
+	public PathResults(CloseableIteration<Statement, RepositoryException> pathSet, IntelligentGraphRepository source,	PathElement pathElement, CustomQueryOptions customQueryOptions) {
+		this.source=source;
+		this.pathElement = pathElement;
+		this.pathSet=pathSet;
+	}
 	
 	/**
 	 * Instantiates a new path results.
@@ -85,7 +96,12 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 //		return null;
 //	}
 
-
+	protected EvaluationContext getEvaluationContext() {
+		if(thing!=null)
+			return thing.getEvaluationContext();
+		else 
+			return null;
+	}
 
 	/**
  * Close.
@@ -126,9 +142,9 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 	public Path next() throws QueryEvaluationException {
 		if (pathSet != null) {
 			Statement next = getPathSet().next();
-			if(thing !=null) thing.getEvaluationContext().getTracer().traceFactNext(thing,next.getPredicate(), next.getObject());
+			if(getEvaluationContext() !=null) getEvaluationContext().getTracer().traceFactNext(thing,next.getPredicate(), next.getObject());
 			try {
-				return Path.create(thing, next.getObject());
+				return Path.create(next.getSubject(), next.getObject());
 			} catch (RDFParseException | UnsupportedRDFormatException | IOException e) {
 				e.printStackTrace();
 			}
@@ -136,7 +152,7 @@ public class PathResults implements CloseableIteration<Path, QueryEvaluationExce
 		if (pathIterator != null) {
 			Statement next = pathIterator.next();
 			try {
-				return Path.create(thing, next.getObject());
+				return Path.create(next.getSubject(), next.getObject());
 			} catch (RDFParseException | UnsupportedRDFormatException | IOException e) {
 				e.printStackTrace();
 			}

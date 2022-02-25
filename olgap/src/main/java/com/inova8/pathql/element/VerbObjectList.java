@@ -6,8 +6,6 @@ package com.inova8.pathql.element;
 import java.util.ArrayList;
 
 import org.eclipse.rdf4j.query.algebra.Compare;
-import org.eclipse.rdf4j.query.algebra.Compare.CompareOp;
-
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
 import com.inova8.intelligentgraph.path.PathTupleExpr;
 import com.inova8.pathql.context.RepositoryContext;
@@ -16,9 +14,10 @@ import com.inova8.pathql.processor.PathConstants.EdgeCode;
 import com.inova8.pathql.processor.PathConstants.FilterOperator;
 
 import org.eclipse.rdf4j.query.algebra.QueryModelNode;
+import org.eclipse.rdf4j.query.algebra.Regex;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 import org.eclipse.rdf4j.query.algebra.ValueConstant;
-
+import static org.eclipse.rdf4j.model.util.Values.literal;
 /**
  * The Class VerbObjectList.
  */
@@ -297,7 +296,15 @@ public class VerbObjectList extends FactFilterElement {
 		return boundTargetVariable;
 
 	}
+	private Variable boundTargetVariable(Variable predicateVariable, PredicateElement predicate) {
+		if(predicateVariable==null)
+			return  boundTargetVariable( predicate);
+		else {
+			return predicateVariable;
+		}
 
+
+	}
 	/**
 	 * Path pattern query.
 	 *
@@ -325,6 +332,20 @@ public class VerbObjectList extends FactFilterElement {
 				default:
 				}
 			} else {
+//				switch (filterOperator) {
+//				case LIKE:
+//					Regex regex = new Regex(sourceVariable, new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)),new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)));
+//					break;
+//				case GT:
+//				case GE:
+//				case LT:
+//				case LE:
+//				case NE:
+//					Compare comparison = new Compare(sourceVariable, new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)) ,PathConstants.compareOperators.get(filterOperator));
+//					break;
+//				default:
+//					break;
+//				}
 
 			}
 
@@ -336,14 +357,16 @@ public class VerbObjectList extends FactFilterElement {
 					Variable boundTargetVariable;
 					switch (objectList.get(0).getOperator()) {
 					case PROPERTYLIST:
+						boundTargetVariable = boundTargetVariable(targetVariable, predicate);
+						verbObjectListPattern = objectList.get(0).pathPatternQuery( sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case IRIREF:
-						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable = boundTargetVariable(targetVariable, predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
 						verbObjectListPattern = predicate.pathPatternQuery( sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case LITERAL:
-						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable = boundTargetVariable(targetVariable, predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
 						verbObjectListPattern = predicate.pathPatternQuery( sourceVariable, predicateVariable,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
@@ -385,11 +408,26 @@ public class VerbObjectList extends FactFilterElement {
 				}
 			} else {
 			//	verbObjectListPattern;
-				CompareOp compareOperator = PathConstants.compareOperators.get(filterOperator);
-				if(compareOperator!=null){
-					Compare filterExpression = new Compare(sourceVariable, new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)), compareOperator);
+				switch (filterOperator) {
+				case LIKE:
+					Regex regex = new Regex(sourceVariable, new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)),new ValueConstant(literal("i")));				
+					return regex;
+				case GT:
+				case GE:
+				case LT:
+				case LE:
+				case NE:
+					Compare filterExpression = new Compare(sourceVariable, new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)),  PathConstants.compareOperators.get(filterOperator));
 					return filterExpression;
-				}
+				default:
+					break;
+				}				
+								
+//				CompareOp compareOperator = PathConstants.compareOperators.get(filterOperator);
+//				if(compareOperator!=null){
+//					Compare filterExpression = new Compare(sourceVariable, new ValueConstant(objectList.get(0).getLiteral(customQueryOptions)), compareOperator);
+//					return filterExpression;
+//				}
 
 			}
 
@@ -402,22 +440,22 @@ public class VerbObjectList extends FactFilterElement {
 					case PROPERTYLIST:
 						//objectList.get(0);
 						predicate.setObjectFilterElement((FactFilterElement) objectList.get(0));
-						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable = boundTargetVariable(targetVariable,predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
 						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case IRIREF:
-						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable = boundTargetVariable(targetVariable,predicate);
 						boundTargetVariable.setValue(objectList.get(0).getIri(customQueryOptions));
 						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case LITERAL:
-						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable = boundTargetVariable(targetVariable,predicate);
 						boundTargetVariable.setValue(objectList.get(0).getLiteral(customQueryOptions));
 						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable, null/*predicateVariable*/,boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;
 					case OBJECT:
-						boundTargetVariable = boundTargetVariable(predicate);
+						boundTargetVariable = boundTargetVariable(targetVariable,predicate);
 						boundTargetVariable.setValue(objectList.get(0).getValue(customQueryOptions));
 						verbObjectListExpression = predicate.pathPatternQuery( sourceVariable,null/*predicateVariable*/, boundTargetVariable,customQueryOptions).getTupleExpr();
 						break;					

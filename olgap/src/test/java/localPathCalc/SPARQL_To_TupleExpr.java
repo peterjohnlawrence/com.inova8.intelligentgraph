@@ -138,4 +138,189 @@ class SPARQL_To_TupleExpr {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	@Order(3)
+	void test_3() {
+		
+		try {
+			// *[rdf:label [ like "Unit" ; a :Unit]/:hasProductBatteryLimit
+			String queryString1 = "PREFIX : <http://default> SELECT * \r\n"
+					+ "{?bind rdfs:label ?b1 . FILTER REGEX (?b1 , 'Unit1') .\r\n"
+					+ "?bind a  :Unit  .\r\n"
+					+ "BIND(?bind  as ?n0)\r\n"
+				 	+ "?n0 :hasProductBatteryLimit ?n1\r\n"
+					+ "}";
+			String result = Query.parseSPARQL(conn, queryString1);
+			assertEquals("Projection\r\n"
+					+ "   ProjectionElemList\r\n"
+					+ "      ProjectionElem \"bind\"\r\n"
+					+ "      ProjectionElem \"b1\"\r\n"
+					+ "      ProjectionElem \"n0\"\r\n"
+					+ "      ProjectionElem \"n1\"\r\n"
+					+ "   Join\r\n"
+					+ "      Filter\r\n"
+					+ "         Regex\r\n"
+					+ "            Var (name=b1)\r\n"
+					+ "            ValueConstant (value=\"Unit1\")\r\n"
+					+ "         Extension\r\n"
+					+ "            Join\r\n"
+					+ "               StatementPattern\r\n"
+					+ "                  Var (name=bind)\r\n"
+					+ "                  Var (name=_const_9285ccfc_uri, value=http://www.w3.org/2000/01/rdf-schema#label, anonymous)\r\n"
+					+ "                  Var (name=b1)\r\n"
+					+ "               StatementPattern\r\n"
+					+ "                  Var (name=bind)\r\n"
+					+ "                  Var (name=_const_f5e5585a_uri, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, anonymous)\r\n"
+					+ "                  Var (name=_const_3433d213_uri, value=http://defaultUnit, anonymous)\r\n"
+					+ "            ExtensionElem (n0)\r\n"
+					+ "               Var (name=bind)\r\n"
+					+ "      StatementPattern\r\n"
+					+ "         Var (name=n0)\r\n"
+					+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
+					+ "         Var (name=n1)\r\n"
+					+ "",result);
+
+		} catch (Exception e) {
+			assertEquals("", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(4)
+	void test_4() {
+		
+		try {
+			// *[rdf:label [ like "Unit" ; a :Unit]/:hasProductBatteryLimit
+			String queryString1 = "PREFIX : <http://default> SELECT * \r\n"
+					+ "{?bind rdfs:label ?b1 . FILTER(?b1 = 'Unit1') .\r\n"
+					+ "?bind a  :Unit  .\r\n"
+					+ "BIND(?bind  as ?n0)\r\n"
+				 	+ "?n0 :hasProductBatteryLimit ?n1\r\n"
+					+ "}";
+			String result = Query.parseSPARQL(conn, queryString1);
+			assertEquals("Projection\r\n"
+					+ "   ProjectionElemList\r\n"
+					+ "      ProjectionElem \"bind\"\r\n"
+					+ "      ProjectionElem \"b1\"\r\n"
+					+ "      ProjectionElem \"n0\"\r\n"
+					+ "      ProjectionElem \"n1\"\r\n"
+					+ "   Join\r\n"
+					+ "      Filter\r\n"
+					+ "         Compare (=)\r\n"
+					+ "            Var (name=b1)\r\n"
+					+ "            ValueConstant (value=\"Unit1\")\r\n"
+					+ "         Extension\r\n"
+					+ "            Join\r\n"
+					+ "               StatementPattern\r\n"
+					+ "                  Var (name=bind)\r\n"
+					+ "                  Var (name=_const_9285ccfc_uri, value=http://www.w3.org/2000/01/rdf-schema#label, anonymous)\r\n"
+					+ "                  Var (name=b1)\r\n"
+					+ "               StatementPattern\r\n"
+					+ "                  Var (name=bind)\r\n"
+					+ "                  Var (name=_const_f5e5585a_uri, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, anonymous)\r\n"
+					+ "                  Var (name=_const_3433d213_uri, value=http://defaultUnit, anonymous)\r\n"
+					+ "            ExtensionElem (n0)\r\n"
+					+ "               Var (name=bind)\r\n"
+					+ "      StatementPattern\r\n"
+					+ "         Var (name=n0)\r\n"
+					+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
+					+ "         Var (name=n1)\r\n"
+					+ "",result);
+
+		} catch (Exception e) {
+			assertEquals("", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(5)
+	void test_5() {
+		
+		try {
+			// *[rdf:label [ like "Unit" ; a :Unit]/:hasProductBatteryLimit
+			String queryString1 = "PREFIX : <http://default> SELECT * \r\n"
+					+ "{?bind rdfs:label ?b1 .\r\n"
+					+ "?bind a  :Unit  .\r\n"
+					+ "BIND(?bind  as ?n0)\r\n"
+				 	+ "?n0 :hasProductBatteryLimit ?n1\r\n"
+					+ "}";
+			String result = Query.parseSPARQL(conn, queryString1);
+			assertEquals("Projection\r\n"
+					+ "   ProjectionElemList\r\n"
+					+ "      ProjectionElem \"bind\"\r\n"
+					+ "      ProjectionElem \"b1\"\r\n"
+					+ "      ProjectionElem \"n0\"\r\n"
+					+ "      ProjectionElem \"n1\"\r\n"
+					+ "   Join\r\n"
+					+ "      Extension\r\n"
+					+ "         Join\r\n"
+					+ "            StatementPattern\r\n"
+					+ "               Var (name=bind)\r\n"
+					+ "               Var (name=_const_9285ccfc_uri, value=http://www.w3.org/2000/01/rdf-schema#label, anonymous)\r\n"
+					+ "               Var (name=b1)\r\n"
+					+ "            StatementPattern\r\n"
+					+ "               Var (name=bind)\r\n"
+					+ "               Var (name=_const_f5e5585a_uri, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, anonymous)\r\n"
+					+ "               Var (name=_const_3433d213_uri, value=http://defaultUnit, anonymous)\r\n"
+					+ "         ExtensionElem (n0)\r\n"
+					+ "            Var (name=bind)\r\n"
+					+ "      StatementPattern\r\n"
+					+ "         Var (name=n0)\r\n"
+					+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
+					+ "         Var (name=n1)\r\n"
+					+ "",result);
+
+		} catch (Exception e) {
+			assertEquals("", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	@Test
+	@Order(6)
+	void test_6() {
+		
+		try {
+			// *[rdf:label [ like "Unit" ; a :Unit]/:hasProductBatteryLimit
+			String queryString1 = "PREFIX : <http://default> SELECT * \r\n"
+					+ "{?bind a  :Unit  .\r\n"
+					+ "?bind rdfs:label ?b1 . FILTER(?b1 = 'Unit1') .\r\n"
+					+ "BIND(?bind  as ?n0)\r\n"
+				 	+ "?n0 :hasProductBatteryLimit ?n1\r\n"
+					+ "}";
+			String result = Query.parseSPARQL(conn, queryString1);
+			assertEquals("Projection\r\n"
+					+ "   ProjectionElemList\r\n"
+					+ "      ProjectionElem \"bind\"\r\n"
+					+ "      ProjectionElem \"b1\"\r\n"
+					+ "      ProjectionElem \"n0\"\r\n"
+					+ "      ProjectionElem \"n1\"\r\n"
+					+ "   Join\r\n"
+					+ "      Filter\r\n"
+					+ "         Compare (=)\r\n"
+					+ "            Var (name=b1)\r\n"
+					+ "            ValueConstant (value=\"Unit1\")\r\n"
+					+ "         Extension\r\n"
+					+ "            Join\r\n"
+					+ "               StatementPattern\r\n"
+					+ "                  Var (name=bind)\r\n"
+					+ "                  Var (name=_const_f5e5585a_uri, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, anonymous)\r\n"
+					+ "                  Var (name=_const_3433d213_uri, value=http://defaultUnit, anonymous)\r\n"
+					+ "               StatementPattern\r\n"
+					+ "                  Var (name=bind)\r\n"
+					+ "                  Var (name=_const_9285ccfc_uri, value=http://www.w3.org/2000/01/rdf-schema#label, anonymous)\r\n"
+					+ "                  Var (name=b1)\r\n"
+					+ "            ExtensionElem (n0)\r\n"
+					+ "               Var (name=bind)\r\n"
+					+ "      StatementPattern\r\n"
+					+ "         Var (name=n0)\r\n"
+					+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
+					+ "         Var (name=n1)\r\n"
+					+ "",result);
+
+		} catch (Exception e) {
+			assertEquals("", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 }

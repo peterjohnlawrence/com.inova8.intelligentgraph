@@ -3,7 +3,7 @@
  */
 package tutorialExample;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.junit.jupiter.api.BeforeAll;
@@ -80,7 +80,7 @@ class Remote_TutorialTests {
 					+ "   4. Retrieved cached value hasBMI <http://inova8.com/intelligentgraph/example1/hasBMI> of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>\n"
 					+ "   5. Returned fact 'http://inova8.com/intelligentgraph/example1/hasBMI' of aPerson <http://inova8.com/intelligentgraph/example1/aPerson> = 21.453287197231838^^double <http://www.w3.org/2001/XMLSchema#double>", aPerson.traceFact(":hasBMI").asText());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 

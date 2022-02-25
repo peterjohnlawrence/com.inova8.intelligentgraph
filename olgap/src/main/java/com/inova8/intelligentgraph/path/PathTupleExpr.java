@@ -5,6 +5,8 @@ package com.inova8.intelligentgraph.path;
 
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
+import com.inova8.pathql.element.Variable;
+
 /**
  * The Class PathTupleExpr.
  */
@@ -18,6 +20,8 @@ public class PathTupleExpr {
 	
 	/** The statement binding. */
 	private StatementBinding statementBinding ;	
+	
+	private Variable boundVariable;
 
 	/**
 	 * Instantiates a new path tuple expr.
@@ -100,4 +104,13 @@ public class PathTupleExpr {
 	public StatementBinding getStatementBinding() {
 		return statementBinding;
 	}
+
+	public Variable getBoundVariable() {
+		return boundVariable;
+	}
+
+	public void setBoundVariable(Variable boundVariable) {
+		this.boundVariable = boundVariable;
+	}
+	
 }

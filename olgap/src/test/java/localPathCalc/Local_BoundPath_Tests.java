@@ -29,7 +29,7 @@ import utilities.Query;
  * The Class Local_GetPath_Tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class Local_GetPath_Tests {
+class Local_BoundPath_Tests {
 	
 
 	
@@ -47,7 +47,7 @@ class Local_GetPath_Tests {
 	 */
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_getPath_Tests/");
+		workingRep = Query.createNativeLuceneIntelligentGraphRepository("src/test/resources/datadir/Local_BoundPath_Tests/");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.data.ttl");
 		Query.addFile(workingRep, "src/test/resources/calc2graph.def.ttl");
 		RepositoryConnection conn = workingRep.getConnection();
@@ -98,8 +98,7 @@ class Local_GetPath_Tests {
 	@Order(1)
 	void test_1() {
 		try {
-			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Equipment_1"), null);
-			PathResults paths =  _this.getPaths(":connectedTo/:connectedTo/:connectedTo");
+			PathResults paths =  source.getPaths("[ eq <http://inova8.com/calc2graph/id/Equipment_1>]/:connectedTo/:connectedTo/:connectedTo");
 			assertEquals("Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,DIRECT]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Equipment_3,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_4,DIRECT]\r\n"
@@ -122,8 +121,7 @@ class Local_GetPath_Tests {
 	@Order(2)
 	void test_2() {
 		try {
-			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Continuant_1"), null);
-			PathResults paths =  _this.getPaths(":Connection@:connectedTo/:Connection@:connectedTo/:Connection@:connectedTo");
+			PathResults paths =  source.getPaths("[ eq <http://inova8.com/calc2graph/id/Continuant_1>]/:Connection@:connectedTo/:Connection@:connectedTo/:Connection@:connectedTo");
 			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/id/Connection_1_2>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,DIRECT,false]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/id/Connection_2_3>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_3,DIRECT,false]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/id/Connection_3_4>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_4,DIRECT,false]\r\n"
@@ -144,8 +142,7 @@ class Local_GetPath_Tests {
 	@Order(3)
 	void test_3() {
 		try {
-			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Continuant_1"), null);
-			PathResults paths =  _this.getPaths(":Connection@:connectedTo/:Connection@:connectedTo/:Connection@:connectedTo#");
+			PathResults paths =  source.getPaths("[ eq <http://inova8.com/calc2graph/id/Continuant_1>]/:Connection@:connectedTo/:Connection@:connectedTo/:Connection@:connectedTo#");
 			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/id/Connection_1_2>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,DIRECT,false]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/id/Connection_2_3>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_3,DIRECT,false]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Continuant_3,<http://inova8.com/calc2graph/id/Connection_3_4>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Connection_3_4,DIRECT,true]\r\n"
@@ -166,8 +163,7 @@ class Local_GetPath_Tests {
 	@Order(4)
 	void test_4() {
 		try {
-			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Continuant_1"), null);
-			PathResults paths =  _this.getPaths(":Connection@:connectedTo/:Connection@:connectedTo#/:connection.to.Continuant/:Connection@:connectedTo");
+			PathResults paths =  source.getPaths("[ eq <http://inova8.com/calc2graph/id/Continuant_1>]/:Connection@:connectedTo/:Connection@:connectedTo#/:connection.to.Continuant/:Connection@:connectedTo");
 			assertEquals("Path=[[http://inova8.com/calc2graph/id/Continuant_1,<http://inova8.com/calc2graph/id/Connection_1_2>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Continuant_2,DIRECT,false]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Continuant_2,<http://inova8.com/calc2graph/id/Connection_2_3>:<http://inova8.com/calc2graph/def/Connection>@http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Connection_2_3,DIRECT,true]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Connection_2_3,http://inova8.com/calc2graph/def/connection.to.Continuant,http://inova8.com/calc2graph/id/Continuant_3,DIRECT]\r\n"
@@ -189,8 +185,7 @@ class Local_GetPath_Tests {
 	void test_5() {
 
 		try {
-			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Path path = _this.getPath(":Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
+			Path path = source.getPath("[ eq <http://inova8.com/calc2graph/id/BatteryLimit1>]/:Location@:appearsOn[eq id:Calc2Graph1]#/:lat");
 
 			assertEquals("Path=[[http://inova8.com/calc2graph/id/BatteryLimit1,<http://inova8.com/calc2graph/id/Location_BL1>:<http://inova8.com/calc2graph/def/Location>@http://inova8.com/calc2graph/def/appearsOn,http://inova8.com/calc2graph/id/Location_BL1,DIRECT,true]\r\n"
 					+ "[http://inova8.com/calc2graph/id/Location_BL1,http://inova8.com/calc2graph/def/lat,\"400\"^^<http://www.w3.org/2001/XMLSchema#integer>,DIRECT]\r\n"
@@ -210,8 +205,7 @@ class Local_GetPath_Tests {
 	void test_6() {
 
 		try {
-			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
-			Path path  = _this.getPath(":Location@:appearsOn[eq id:Calc2Graph2]#"); //""
+			Path path  = source.getPath("[ eq <http://inova8.com/calc2graph/id/BatteryLimit1>]/:Location@:appearsOn[eq id:Calc2Graph2]#"); //""
 
 			if (path != null)
 				assertEquals("Path=[[http://inova8.com/calc2graph/id/BatteryLimit1,<http://inova8.com/calc2graph/id/Location_BL1_2>:<http://inova8.com/calc2graph/def/Location>@http://inova8.com/calc2graph/def/appearsOn,http://inova8.com/calc2graph/id/Location_BL1_2,DIRECT,true]\r\n"

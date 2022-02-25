@@ -184,8 +184,8 @@ public class AlternativePathElement extends PathElement{
 					//alternativePathPattern.getPath().addAll( rightPattern.getPath());
 				}
 				alternativePathPattern.setStatementBinding(rightPattern.getStatementBinding());
+				alternativePathPattern.setBoundVariable(alternativePathPattern.getStatementBinding().getSourceVariable());
 			}
-			//joinPattern.setPath(getPathBindings().get(pathIteration));
 			return alternativePathPattern;
 		} else {
 			return null;

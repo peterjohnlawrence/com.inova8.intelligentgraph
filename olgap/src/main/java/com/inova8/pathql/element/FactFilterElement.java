@@ -111,8 +111,13 @@ public class FactFilterElement extends ObjectElement{
 	public PathTupleExpr filterExpression( Variable sourceVariable, Variable predicateVariable,  Variable targetVariable,TupleExpr filterExpression,CustomQueryOptions customQueryOptions) {		
 		//QueryModelNode filterExpression = null;
 		if(propertyListNotEmpty!=null) {
+			int verbObjectListCount = 0;
 			for ( VerbObjectList verbObjectList: propertyListNotEmpty) {
-				QueryModelNode verbObjectListExpression = verbObjectList.filterExpression( sourceVariable,predicateVariable,targetVariable,customQueryOptions);		
+				verbObjectListCount++;
+				Variable verbObjectListTargetVariable =null;
+				if(targetVariable!=null)
+					verbObjectListTargetVariable = new Variable(targetVariable.getName()+verbObjectListCount);
+				QueryModelNode verbObjectListExpression = verbObjectList.filterExpression( sourceVariable,predicateVariable,verbObjectListTargetVariable,customQueryOptions);		
 				if(filterExpression == null) 
 					filterExpression = (TupleExpr) verbObjectListExpression;
 				else if(verbObjectListExpression == null){

@@ -8,6 +8,7 @@ import org.eclipse.rdf4j.common.iteration.CloseableIteration;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.ContextStatement;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
@@ -18,6 +19,7 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.sail.SailException;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
+import com.inova8.intelligentgraph.evaluator.EvaluationContext;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.EdgeBinding;
@@ -73,6 +75,9 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	/** The path tuple expr. */
 	private PathTupleExpr pathTupleExpr;
 	
+	private EvaluationContext evaluationContext;
+
+	private String boundVariableName;
 	/**
 	 * Instantiates a new intelligent statement paths.
 	 *
@@ -91,6 +96,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.intelligentGraphConnection=intelligentGraphConnection;
 		this.customQueryOptions=customQueryOptions;
 		simpleValueFactory= SimpleValueFactory.getInstance();
+		if(thing!=null)this.evaluationContext= thing.getEvaluationContext();
 	}
 	
 	/**
@@ -115,6 +121,7 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		this.customQueryOptions=customQueryOptions;
 		this.contexts = contexts;
 		simpleValueFactory= SimpleValueFactory.getInstance();
+		if(thing!=null)this.evaluationContext= thing.getEvaluationContext();
 	}
 	
 	/**
@@ -131,6 +138,11 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 			while(pathIteration < this.sortedIterations.size() ) {
 				CustomQueryOptions customQueryOptions= CustomQueryOption.getCustomQueryOptions(contexts,source.getRepositoryContext().getPrefixes());
 				pathTupleExpr = pathElement.pathPatternQuery(pathIteration,customQueryOptions);
+				if( this.thing==null && pathTupleExpr.getBoundVariable()==null) {
+					throw new QueryEvaluationException("Paths query unbound");
+				}else {
+					this.boundVariableName = pathTupleExpr.getBoundVariable().getName();
+				}
 				pathIteration ++;
 				this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement, pathTupleExpr,contexts);
 				boolean hasNext = resultsIterator.hasNext();
@@ -150,9 +162,10 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 	public IntelligentStatement next() throws QueryEvaluationException {
 		BindingSet nextBindingset = getResultsIterator().next();
 		//Binding predBinding =nextBindingset.getBinding("n0");
+		Value boundValue = nextBindingset.getBinding(this.boundVariableName).getValue() ;
 		Literal obj = pathToLiteral(nextBindingset);
 		if(obj!=null )
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement(this.thing.getIRI(), PATHQL.HASPATH, obj,null),null,thing.getEvaluationContext(), customQueryOptions);
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) boundValue, PATHQL.HASPATH, obj,null),null,this.evaluationContext, customQueryOptions);
 		else
 			return new IntelligentStatement(null, null, null);
 	}
@@ -166,9 +179,6 @@ public  class IntelligentStatementPaths extends AbstractCloseableIteration< Inte
 		if(resultsIterator!=null)
 			return resultsIterator;
 		else {	
-//			CustomQueryOptions customQueryOptions= URNCustomQueryOptionsDecode.getCustomQueryOptions(contexts,source.getIntelligentGraphConnection().getPrefixes());
-//			pathTupleExpr = pathElement.pathPatternQuery(thing,pathIteration,customQueryOptions);
-//			this.resultsIterator=intelligentGraphConnection.getResultsIterator(source, thing,pathElement,pathTupleExpr, contexts);
 			return resultsIterator;
 		}
 	}

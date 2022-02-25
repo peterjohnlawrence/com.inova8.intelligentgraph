@@ -3,6 +3,9 @@
  */
 package com.inova8.pathql.element;
 
+import org.eclipse.rdf4j.query.algebra.Extension;
+import org.eclipse.rdf4j.query.algebra.ExtensionElem;
+import org.eclipse.rdf4j.query.algebra.Join;
 import org.eclipse.rdf4j.query.algebra.TupleExpr;
 
 import com.inova8.intelligentgraph.context.CustomQueryOptions;
@@ -100,8 +103,31 @@ public class BoundPathElement extends PathElement{
 	@Override
 	public PathTupleExpr pathPatternQuery( Variable sourceVariable,Variable predicateVariable, Variable targetVariable,
 			Integer pathIteration, CustomQueryOptions customQueryOptions) {
-		PathTupleExpr rightPattern = getRightPathElement().pathPatternQuery(sourceVariable,predicateVariable,targetVariable,customQueryOptions);
-		return rightPattern;
+		// Extend(rightPatern(?s,?p,?o),
+		Variable bindSourceVariable = new Variable("bind");
+		Variable bindPredicateVariable = null;//new Variable("b0_b1");
+		Variable bindTargetVariable =new Variable("b");
+		
+		PathTupleExpr bindPattern =  ((FactFilterElement)getLeftPathElement()).filterExpression( bindSourceVariable,bindPredicateVariable,bindTargetVariable, null,customQueryOptions);
+
+		
+//		PathTupleExpr bindPattern = getLeftPathElement().pathPatternQuery(bindSourceVariable,bindPredicateVariable,bindTargetVariable,customQueryOptions);		
+		PathTupleExpr rightPattern ;
+		
+		if(bindPattern.getTupleExpr()==null ) {
+			bindSourceVariable.setName("n0");
+			rightPattern = getRightPathElement().pathPatternQuery(bindSourceVariable,predicateVariable,targetVariable,customQueryOptions);
+			rightPattern.setBoundVariable(bindSourceVariable);
+			return rightPattern;
+		}else {
+			rightPattern = getRightPathElement().pathPatternQuery(sourceVariable,predicateVariable,targetVariable,customQueryOptions);
+			Extension leftPattern = new Extension(bindPattern.getTupleExpr(),new ExtensionElem(bindSourceVariable, "n0" ) );
+			Join boundPattern = new Join(leftPattern,rightPattern.getTupleExpr() );		
+			PathTupleExpr boundPatternTupleExpr = new PathTupleExpr( boundPattern);
+			boundPatternTupleExpr.setStatementBinding(rightPattern.getStatementBinding());
+			boundPatternTupleExpr.setBoundVariable(bindSourceVariable);
+			return boundPatternTupleExpr;	
+		}
 	}
 	
 	/**
@@ -183,8 +209,8 @@ public class BoundPathElement extends PathElement{
 	 */
 	@Override
 	public PathBinding visitPathBinding(PathBinding pathBinding, Integer pathIteration) {
-		// TODO Auto-generated method stub
-		return null;
+		return  getRightPathElement().visitPathBinding(pathBinding,pathIteration);
+		
 	}
 
 

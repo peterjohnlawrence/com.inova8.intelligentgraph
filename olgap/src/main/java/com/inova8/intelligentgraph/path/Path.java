@@ -21,7 +21,6 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 
 import com.inova8.intelligentgraph.model.Resource;
-import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Edge.Direction;
 import com.inova8.intelligentgraph.results.ResourceResults;
 import com.inova8.intelligentgraph.vocabulary.PATHQL;
@@ -48,10 +47,12 @@ public class Path extends Resource  implements Iterable<Edge>{
 	 * @throws UnsupportedRDFormatException the unsupported RD format exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public static Path create(Thing thing, Value pathValue) throws RDFParseException, UnsupportedRDFormatException, IOException {
+	//public static Path create(Thing thing, Value pathValue) throws RDFParseException, UnsupportedRDFormatException, IOException {
+		public static Path create(Value boundValue, Value pathValue) throws RDFParseException, UnsupportedRDFormatException, IOException {
 		String pathString = pathValue.stringValue();
 		Model pathModel = Rio.parse(new ByteArrayInputStream(pathString.getBytes(StandardCharsets.UTF_8)), PATHQL.NAMESPACE, RDFFormat.TURTLE);
-		Path path = new Path(thing.getValue());
+	//	Path path = new Path(thing.getValue());
+		Path path = new Path(boundValue);
 		for (org.eclipse.rdf4j.model.Resource edge: pathModel.filter(null, RDF.TYPE, PATHQL.EDGE).subjects()) {
 			Edge pathEdge;
 			Optional<org.eclipse.rdf4j.model.Resource> source =Models.getPropertyResource( pathModel , edge, PATHQL.EDGE_SOURCE);    

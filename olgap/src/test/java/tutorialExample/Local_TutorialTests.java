@@ -529,7 +529,7 @@ class Local_TutorialTests {
 							graph.getThing(":aPerson_Observation_2")).stringValue());
 
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 
@@ -654,7 +654,7 @@ class Local_TutorialTests {
 			
 			 assertEquals(1.006889937409004,aPerson.getFact(":hasFamilialRelativeBMI").doubleValue() );
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 

@@ -1141,7 +1141,42 @@ void test_29() {
 		assertEquals("", e.getMessage());
 	}
 }
+@Test 
+@Order(29)
+void test_29_1() {
+	try {
 
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[rdf:label [ like \"Unit\" ; a :Unit]]/:hasProductBatteryLimit");
+		//Query.assertEqualsWOSpaces 
+				assertEquals
+				("  Join\r\n"
+						+ "      Filter\r\n"
+						+ "         Regex\r\n"
+						+ "            Var (name=b1)\r\n"
+						+ "            ValueConstant (value=\"Unit1\")\r\n"
+						+ "         Extension\r\n"
+						+ "            Join\r\n"
+						+ "               StatementPattern\r\n"
+						+ "                  Var (name=bind)\r\n"
+						+ "                  Var (name=_const_9285ccfc_uri, value=http://www.w3.org/2000/01/rdf-schema#label, anonymous)\r\n"
+						+ "                  Var (name=b1)\r\n"
+						+ "               StatementPattern\r\n"
+						+ "                  Var (name=bind)\r\n"
+						+ "                  Var (name=_const_f5e5585a_uri, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, anonymous)\r\n"
+						+ "                  Var (name=_const_3433d213_uri, value=http://defaultUnit, anonymous)\r\n"
+						+ "            ExtensionElem (n0)\r\n"
+						+ "               Var (name=bind)\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Var (name=n0)\r\n"
+						+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
+						+ "         Var (name=n1)\r\n"
+						+ "" 
+				,element.pathPatternQuery().toString());
+		Query.assertEqualsWOSpaces ("BIND(<http://default/Unit1> as ?n0)\n"	+ "" , element.getLeftPathElement().toSPARQL());
+	}catch(Exception e){
+		assertEquals("", e.getMessage());
+	}
+}
 /**
  * Test 30.
  */
@@ -1153,15 +1188,19 @@ void test_30() {
 		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ a :Unit]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
-				 ("StatementPattern\r\n"
-					 		+ "   Variable (name=n0  )\r\n"
-					 		+ "   Variable (name=p_n0_n1, value=rdftype)\r\n"
-					 		+ "   Variable (name=n1_1, value=http://default/Unit)\r\n"
-					 		+ " StatementPattern\r\n"
-					 		+ "   Variable (name=n0  )\r\n"
-					 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
-					 		+ "   Variable (name=n1)\r\n"
-					 		+ "" ,element.pathPatternQuery().toString());
+				 ("Join\r\n"
+				 		+ "   Extension\r\n"
+				 		+ "      StatementPattern\r\n"
+				 		+ "         Variable (name=bind)\r\n"
+				 		+ "         Variable (name=p_bind_b1, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
+				 		+ "         Variable (name=b1, value=http://default/Unit)\r\n"
+				 		+ "      ExtensionElem (n0)\r\n"
+				 		+ "         Variable (name=bind)\r\n"
+				 		+ "   StatementPattern\r\n"
+				 		+ "      Variable (name=n0)\r\n"
+				 		+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+				 		+ "      Variable (name=n1)\r\n"
+				 		+ "" ,element.pathPatternQuery().toString());
 		Query.assertEqualsWOSpaces ("?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
 				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
@@ -1177,15 +1216,23 @@ void test_30() {
 void test_31() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ like \"Unit1\"]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ rdfs:label [ eq \"Unit\"]]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
-				assertEquals
-				 ("StatementPattern\r\n"
-				 		+ "   Variable (name=n0  )\r\n"
-				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
-				 		+ "   Variable (name=n1)\r\n"
-				 		+ "" ,element.pathPatternQuery().toString());
-		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
+				assertEquals				
+				("Join\r\n"
+						+ "   Extension\r\n"
+						+ "      StatementPattern\r\n"
+						+ "         Variable (name=bind)\r\n"
+						+ "         Variable (name=p_bind_b1, value=http://rdfs/label)\r\n"
+						+ "         Variable (name=b1, value=\"Unit\")\r\n"
+						+ "      ExtensionElem (n0)\r\n"
+						+ "         Variable (name=bind)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "" 		,element.pathPatternQuery().toString());
+//		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit1'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1199,7 +1246,7 @@ void test_31() {
 void test_32() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ like \"Unit* NOT (location OR product*)\"]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[rdfs:label [ like \"Unit\"] ; NOT (location OR product*)]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
 				 ("StatementPattern\r\n"
@@ -1211,7 +1258,7 @@ void test_32() {
 				 		+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
 				 		+ "   Variable (name=n1)\r\n"
 				 		+ "" ,element.pathPatternQuery().toString());
-		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
+//		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit* NOT (location OR product*)'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0]." , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
@@ -1225,16 +1272,34 @@ void test_32() {
 void test_33() {
 	try {
 
-		PathElement element = PathParser.parsePathPattern(repositoryContext, "[ like \"Unit\" ; a :Unit]/:hasProductBatteryLimit");
+		PathElement element = PathParser.parsePathPattern(repositoryContext, "[rdfs:label [ like \"Unit\" ]; a :Unit]/:hasProductBatteryLimit");
 		//Query.assertEqualsWOSpaces 
 				assertEquals
-				("StatementPattern\r\n"
-						+ "   Variable (name=n0)\r\n"
-						+ "   Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
-						+ "   Variable (name=n1)\r\n"
-						+ "" ,element.pathPatternQuery().toString());
-		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
-				+ "" , element.getLeftPathElement().toSPARQL());
+				("Join\r\n"
+						+ "   Extension\r\n"
+						+ "      Join\r\n"
+						+ "         Filter\r\n"
+						+ "            Regex\r\n"
+						+ "               Variable (name=b1)\r\n"
+						+ "               ValueConstant (value=\"Unit\")\r\n"
+						+ "               ValueConstant (value=\"i\")\r\n"
+						+ "            StatementPattern\r\n"
+						+ "               Variable (name=bind)\r\n"
+						+ "               Variable (name=p_bind_b1, value=http://rdfs/label)\r\n"
+						+ "               Variable (name=b1)\r\n"
+						+ "         StatementPattern\r\n"
+						+ "            Variable (name=bind)\r\n"
+						+ "            Variable (name=p_bind_b2, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type)\r\n"
+						+ "            Variable (name=b2, value=http://default/Unit)\r\n"
+						+ "      ExtensionElem (n0)\r\n"
+						+ "         Variable (name=bind)\r\n"
+						+ "   StatementPattern\r\n"
+						+ "      Variable (name=n0)\r\n"
+						+ "      Variable (name=p_n0_n1, value=http://default/hasProductBatteryLimit)\r\n"
+						+ "      Variable (name=n1)\r\n"
+						+ "" 	,element.pathPatternQuery().toString());
+//		Query.assertEqualsWOSpaces ("?n0 <http://www.openrdf.org/contrib/lucenesail#matches> [<http://www.openrdf.org/contrib/lucenesail#query> 'Unit'; <http://www.openrdf.org/contrib/lucenesail#property> ?property_0;<http://www.openrdf.org/contrib/lucenesail#score> ?score_0;<http://www.openrdf.org/contrib/lucenesail#snippet> ?snippet_0].?n0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://default/Unit> .\n"
+//				+ "" , element.getLeftPathElement().toSPARQL());
 	}catch(Exception e){
 		assertEquals("", e.getMessage());
 	}
