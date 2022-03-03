@@ -17,6 +17,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.vocabulary.OWL;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.XSD;
 
 import utilities.Query;
 
@@ -45,9 +49,10 @@ class Example7_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example7/");
-		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
-		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+		conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+		conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+		conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
@@ -103,7 +108,7 @@ class Example7_Tests {
 
 		try {
 			Thing aPerson = source.getThing(":aPerson");
-			assertEquals("[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another5;]",  aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}; {s=http://inova8.com/intelligentgraph/example7/Another4, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another5};]",  aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
 		} catch (Exception e) {
 			assertEquals("", e.getCause().getMessage());
 		}
@@ -118,7 +123,7 @@ class Example7_Tests {
 
 		try {
 			Thing aPerson = source.getThing(":aPerson");
-			assertEquals("[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another2;http://inova8.com/intelligentgraph/example7/Another4;http://inova8.com/intelligentgraph/example7/Another5;http://inova8.com/intelligentgraph/example7/Another6;]",  aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasLocation :Maidstone]").toString());
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}; {s=http://inova8.com/intelligentgraph/example7/Another1, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another2}; {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}; {s= {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another5}; {s= {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another6};]",  aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasLocation :Maidstone]").toString());
 		} catch (Exception e) {
 			assertEquals("", e.getCause().getMessage());
 		}

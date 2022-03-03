@@ -22,7 +22,9 @@ import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.path.Edge;
 import com.inova8.intelligentgraph.path.Path;
 import com.inova8.intelligentgraph.results.PathResults;
+import com.inova8.intelligentgraph.vocabulary.OWL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 import com.inova8.intelligentgraph.vocabulary.XSD;
 
@@ -59,8 +61,10 @@ class Local_TutorialTests {
 
 			RepositoryConnection conn = workingRep.getConnection();
 			conn.setNamespace("", "http://inova8.com/intelligentgraph/example1/");
-			conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-			conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+			conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+			conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+			conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+			conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 
 			source.removeGraph("<http://inova8.com/intelligentgraph/example1>");
@@ -429,7 +433,7 @@ class Local_TutorialTests {
 			}
 			
 
-			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]",
+			assertEquals("[ {s= {s=http://inova8.com/intelligentgraph/example5/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_1}, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example5/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_2}, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example5/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_3}, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example5/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_4}, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example5/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_5}, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example5/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_6}, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>};]",
 					graph.getThing(":aPerson").getFacts("^:measurementOf/:hasBMI").toString());
 			assertEquals("22.03856749311295",
 					graph.getThing(":aPerson").getFact("^:measurementOf[:hasDate %1]/:hasBMI",
@@ -503,7 +507,7 @@ class Local_TutorialTests {
 			graph.getThing(":aPerson_Observation_5").addFact(RDF.TYPE, Observation).addFact(":observationMeasurement", Measurement_5).addFact(":observationType", BMIObservation).addFact(":observationOf", aPerson);
 			graph.getThing(":aPerson_Observation_6").addFact(RDF.TYPE, Observation).addFact(":observationMeasurement", Measurement_6).addFact(":observationType", BMIObservation).addFact(":observationOf", aPerson);
 
-			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]",
+			assertEquals("[ {s= {s=http://inova8.com/intelligentgraph/example6/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example6/aPerson_Observation_1}, p=http://inova8.com/intelligentgraph/example6/hasBMI, o=\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example6/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example6/aPerson_Observation_2}, p=http://inova8.com/intelligentgraph/example6/hasBMI, o=\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example6/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example6/aPerson_Observation_3}, p=http://inova8.com/intelligentgraph/example6/hasBMI, o=\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example6/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example6/aPerson_Observation_4}, p=http://inova8.com/intelligentgraph/example6/hasBMI, o=\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example6/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example6/aPerson_Observation_5}, p=http://inova8.com/intelligentgraph/example6/hasBMI, o=\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s= {s=http://inova8.com/intelligentgraph/example6/Measurement, p=^http://www.w3.org/1999/02/22-rdf-syntax-ns, o=http://inova8.com/intelligentgraph/example6/aPerson_Observation_6}, p=http://inova8.com/intelligentgraph/example6/hasBMI, o=\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>};]",
   					graph.getThing(":aPerson").getFacts(":Observation@:BMIObservation/:hasBMI").toString());
 			
 			assertEquals("22.03856749311295",
@@ -515,7 +519,7 @@ class Local_TutorialTests {
 							literal(LocalDate.parse("2021-08-03"))).stringValue());
 			
 			Resource Measurement_2_hasDate = Measurement_2.getFact(":hasDate");
-			assertEquals("22.03856749311295",
+			assertEquals("21.453287197231838",
 					graph.getThing(":aPerson").getFact(":Observation@:BMIObservation[:hasDate %1]/:hasBMI",
 							Measurement_2_hasDate).stringValue());
  			assertEquals(21.453287197231838,
@@ -598,10 +602,10 @@ class Local_TutorialTests {
 			assertEquals("http://inova8.com/intelligentgraph/example7/Another3",
 					aPerson.getFact(":hasParent{0,4}/:hasParent[:hasGender :Female]").stringValue());
 			assertEquals(
-					"[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another5;]",
+					"[ {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}; {s= {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another5};]",
 					aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
 			assertEquals(
-					"[http://inova8.com/intelligentgraph/example7/Another3;http://inova8.com/intelligentgraph/example7/Another2;http://inova8.com/intelligentgraph/example7/Another4;http://inova8.com/intelligentgraph/example7/Another5;http://inova8.com/intelligentgraph/example7/Another6;]",
+					"[ {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}; {s=http://inova8.com/intelligentgraph/example7/Another1, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another2}; {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}; {s= {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another5}; {s= {s= {s=http://inova8.com/intelligentgraph/example7/aPerson, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another3}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another4}, p=http://inova8.com/intelligentgraph/example7/hasParent, o=http://inova8.com/intelligentgraph/example7/Another6};]",
 					aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasLocation :Maidstone]").toString());
 			PathResults paths = aPerson.getPaths(":hasParent{0,4}/:hasParent[:hasGender :Female]");
 			assertEquals(

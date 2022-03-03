@@ -62,18 +62,6 @@ public interface PathPatternListener extends ParseTreeListener {
 	 */
 	void exitBoundPattern(PathPatternParser.BoundPatternContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code matchOnlyPattern}
-	 * labeled alternative in {@link PathPatternParser#pathPattern}.
-	 * @param ctx the parse tree
-	 */
-	void enterMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code matchOnlyPattern}
-	 * labeled alternative in {@link PathPatternParser#pathPattern}.
-	 * @param ctx the parse tree
-	 */
-	void exitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code pathOnlyPattern}
 	 * labeled alternative in {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree

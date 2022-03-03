@@ -21,6 +21,10 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.OWL;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.XSD;
 
 import utilities.Query;
 
@@ -49,9 +53,10 @@ class Example5_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example5/");
-		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		conn.setNamespace("xsd", "http://www.w3.org/2000/01/rdf-schema#");
+		conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+		conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+		conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+		conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
@@ -111,7 +116,7 @@ class Example5_Tests {
 			Thing aPerson = source.getThing(":aPerson");
 
 			ResourceResults bmis = aPerson.getFacts("^:measurementOf/:hasBMI");
-			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>;\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>;\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>;]", bmis.toString());
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_1, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_2, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_3, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"22.49134948096886\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_4, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"19.723183391003463\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_5, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"19.918367346938776\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_6, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"20.571428571428573\"^^<http://www.w3.org/2001/XMLSchema#double>};]", bmis.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -161,7 +166,7 @@ class Example5_Tests {
 			Thing aPerson = source.getThing(":aPerson");
 
 			ResourceResults bmis = aPerson.getFacts("^:measurementOf[:hasDate [lt %1]]/:hasBMI",literal(LocalDate.parse("2021-08-03")));
-			assertEquals("[\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>;\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>;]", bmis.toString());
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_1, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"21.453287197231838\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example5/aPerson_Measurement_2, p=http://inova8.com/intelligentgraph/example5/hasBMI, o=\"22.03856749311295\"^^<http://www.w3.org/2001/XMLSchema#double>};]", bmis.toString());
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

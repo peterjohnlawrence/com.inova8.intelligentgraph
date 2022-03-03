@@ -78,18 +78,6 @@ public class PathPatternBaseListener implements PathPatternListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPathOnlyPattern(PathPatternParser.PathOnlyPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}

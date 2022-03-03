@@ -61,9 +61,11 @@ class PlantDemoTests {
 		//workingRep = Query.createNativeRepository("src/test/resources/datadir/PlantDemo_Tests/");
 		conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/plantdemo/");
-		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-		conn.setNamespace("SCRIPT","http://inova8.com/script/");
+		conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+		conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+		conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+		conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
+		conn.setNamespace(SCRIPT.PREFIX, SCRIPT.NAMESPACE);
 		
 		source = IntelligentGraphRepository.create(workingRep);
 		 conn1 = source.getRepository().getConnection();

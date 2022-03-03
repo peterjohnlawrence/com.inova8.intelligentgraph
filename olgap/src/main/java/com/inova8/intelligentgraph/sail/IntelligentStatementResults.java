@@ -195,13 +195,17 @@ public  class IntelligentStatementResults extends AbstractCloseableIteration< In
 				 parameterizedPredicate = this.pathElement.getParameterizedPredicate((IRI)predBinding.getValue());
 			} catch (URISyntaxException e) {
 				 parameterizedPredicate =(IRI)predBinding.getValue();
-			}	
-			Value boundValue = nextBindingset.getBinding(this.boundVariableName).getValue() ;
+			}
+			Value subjectValue;
+			if(subjBinding!=null )
+				subjectValue = subjBinding.getValue();
+			else
+				subjectValue = nextBindingset.getBinding(this.boundVariableName).getValue() ;
 			if(trace && this.evaluationContext!=null) {
 				thing.getEvaluationContext().getTracer().traceFactReturnValue(thing, predBinding.getValue().stringValue(), objBinding.getValue());
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) boundValue, parameterizedPredicate, literal(thing.getEvaluationContext().getTrace()),null),null,this.evaluationContext, customQueryOptions);
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) subjectValue, parameterizedPredicate, literal(thing.getEvaluationContext().getTrace()),null),null,this.evaluationContext, customQueryOptions);
 			}else {				
-				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) boundValue, parameterizedPredicate, objBinding.getValue(),null),source,this.evaluationContext, customQueryOptions);
+				return new IntelligentStatement((ContextStatement) simpleValueFactory.createStatement((Resource) subjectValue, parameterizedPredicate, objBinding.getValue(),null),source,this.evaluationContext, customQueryOptions);
 			}
 		}
 		else

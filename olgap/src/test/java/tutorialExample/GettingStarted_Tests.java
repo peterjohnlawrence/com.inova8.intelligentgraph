@@ -43,8 +43,10 @@ class GettingStarted_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/gettingStarted/");
-		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+		conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+		conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+		conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}

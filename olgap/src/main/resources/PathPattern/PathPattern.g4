@@ -66,7 +66,7 @@ queryOptions 		:	( queryOption )+;
 queryOption			:	KEY '=' literal ('^^' type )?;
 type 				:	qname;
 pathPattern 		:	binding ('/'|'>') pathPatterns  #boundPattern
- 					|	binding  #matchOnlyPattern
+ //					|	binding  #matchOnlyPattern
  					|	pathPatterns  #pathOnlyPattern;
 binding 			:	factFilterPattern  ;
 pathPatterns 		:	pathEltOrInverse cardinality?  #Path  

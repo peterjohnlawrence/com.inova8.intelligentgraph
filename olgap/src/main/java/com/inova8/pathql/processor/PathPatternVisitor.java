@@ -195,23 +195,20 @@ public RepositoryContext getRepositoryContext() {
 		// boundPattern :  binding ('/'|'>') pathPatterns EOF 
 		PathElement pathElement = new BoundPathElement(this.repositoryContext);
 		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
-		pathElement.setRightPathElement(visit(ctx.pathPatterns()));
+		if(ctx.pathPatterns()!=null )
+			pathElement.setRightPathElement(visit(ctx.pathPatterns()));
+		else
+			throw new ScriptFailedException( String.format("Bolund pattern %s must be followed by pathPatterns", ctx.getText()));
 		return pathElement;	
 	}
 
-	/**
-	 * Visit match only pattern.
-	 *
-	 * @param ctx the ctx
-	 * @return the path element
-	 */
-	@Override 
-	public PathElement visitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { 
-		// matchOnlyPattern: pathPattern :  binding  EOF 
-		PathElement pathElement = new BoundPathElement(this.repositoryContext);
-		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
-		return pathElement;	
-	}
+//	@Override 
+//	public PathElement visitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx) { 
+//		// matchOnlyPattern: pathPattern :  binding  EOF 
+//		PathElement pathElement = new BoundPathElement(this.repositoryContext);
+//		pathElement.setLeftPathElement( (FactFilterElement) visit(ctx.binding()));
+//		return pathElement;	
+//	}
 	
 
 	/**

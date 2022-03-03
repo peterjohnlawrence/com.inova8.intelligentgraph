@@ -21,7 +21,11 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.results.PathResults;
+import com.inova8.intelligentgraph.vocabulary.OWL;
 import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.XSD;
+
 import utilities.Query;
 
 /**
@@ -52,8 +56,10 @@ class Local_PathTutorialTests {
 
 			RepositoryConnection conn = workingRep.getConnection();
 			conn.setNamespace("", "http://inova8.com/intelligentgraph/path1/");
-			conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-			conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+			conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+			conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+			conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+			conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 			IntelligentGraphRepository source = IntelligentGraphRepository.create(workingRep);
 
 			source.removeGraph("<http://inova8.com/intelligentgraph/path1>");
@@ -99,7 +105,7 @@ class Local_PathTutorialTests {
 //			assertEquals("http://inova8.com/intelligentgraph/path1/Another3", aPerson.getFact(":hasParent[:hasGender :Female]").stringValue());
 //			assertEquals("http://inova8.com/intelligentgraph/path1/Another3", aPerson.getFact(":hasParent[:hasLocation :Maidstone]").stringValue());
 			assertEquals("http://inova8.com/intelligentgraph/path1/Another3", aPerson.getFact(":hasParent{0,4}/:hasParent[:hasGender :Female]").stringValue());
-			assertEquals("[http://inova8.com/intelligentgraph/path1/Another3;http://inova8.com/intelligentgraph/path1/Another5;]", aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/path1/aPerson, p=http://inova8.com/intelligentgraph/path1/hasParent, o=http://inova8.com/intelligentgraph/path1/Another3}; {s=http://inova8.com/intelligentgraph/path1/Another4, p=http://inova8.com/intelligentgraph/path1/hasParent, o=http://inova8.com/intelligentgraph/path1/Another5};]", aPerson.getFacts(":hasParent{0,4}/:hasParent[:hasGender :Female]").toString());
 //			PathElement element = PathParser.parsePathPattern(aPerson, ":hasParent[:hasGender :Female]{1,4}");
 //			assertEquals ("<http://inova8.com/intelligentgraph/path1/hasParent>[<http://inova8.com/intelligentgraph/path1/hasGender> <http://inova8.com/intelligentgraph/path1/Female> ]{1,4}" , element.toString());
 //			assertEquals ("{0=1, 1=2, 2=3, 3=4}",element.getIterations().toString());

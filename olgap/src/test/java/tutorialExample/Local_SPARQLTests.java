@@ -12,6 +12,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import com.inova8.intelligentgraph.vocabulary.OWL;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.XSD;
+
 import utilities.Query;
 import org.eclipse.rdf4j.query.Update;
 
@@ -42,8 +47,10 @@ public class Local_SPARQLTests {
 
 			RepositoryConnection conn = workingRep.getConnection();
 			conn.setNamespace("", "http://inova8.com/intelligentgraph/example1/");
-			conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-			conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+			conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+			conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+			conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+			conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 			
 			Update updateQuery = conn.prepareUpdate(QueryLanguage.SPARQL, 
 					"PREFIX :<http://inova8.com/intelligentgraph/example1/> "

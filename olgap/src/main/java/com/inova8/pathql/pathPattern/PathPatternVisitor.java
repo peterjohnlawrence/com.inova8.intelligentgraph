@@ -44,13 +44,6 @@ public interface PathPatternVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoundPattern(PathPatternParser.BoundPatternContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code matchOnlyPattern}
-	 * labeled alternative in {@link PathPatternParser#pathPattern}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMatchOnlyPattern(PathPatternParser.MatchOnlyPatternContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code pathOnlyPattern}
 	 * labeled alternative in {@link PathPatternParser#pathPattern}.
 	 * @param ctx the parse tree

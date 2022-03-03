@@ -15,6 +15,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.inova8.intelligentgraph.intelligentGraphRepository.Graph;
 import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRepository;
 import com.inova8.intelligentgraph.model.Thing;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
 import com.inova8.intelligentgraph.vocabulary.SCRIPT;
 
 /**
@@ -46,7 +47,7 @@ class Remote_TutorialTests {
 			IntelligentGraphRepository source = IntelligentGraphRepository.create("http://localhost:8080/rdf4j-server","tutorial");
 			//IntelligentGraphRepository source = IntelligentGraphRepository.create("http://host.docker.internal:8080/rdf4j-server","tutorial");
 			source.prefix("<http://inova8.com/intelligentgraph/example1/>");
-			source.prefix("rdfs","<http://www.w3.org/2000/01/rdf-schema#>");
+			source.prefix(RDFS.PREFIX , RDFS.NAMESPACE);
 			source.removeGraph("<http://inova8.com/intelligentgraph/example1>");
 			Graph graph = source.addGraph("<http://inova8.com/intelligentgraph/example1>");
 			Thing aPerson = graph.getThing(":aPerson");

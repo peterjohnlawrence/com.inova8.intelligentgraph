@@ -20,6 +20,10 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.OWL;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.XSD;
 
 import utilities.Query;
 
@@ -48,8 +52,10 @@ class Example4_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example4/");
-		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+		conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+		conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+		conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
@@ -156,6 +162,43 @@ class Example4_Tests {
 			assertEquals("0.9394366395990403", genderLocationRelativeBMI.toString());
 		} catch (Exception e) {
 			assertEquals("",e.getMessage());
+		}
+	}
+	@Test
+	@Order(6)
+	void example4_6() {
+
+		try {
+			//Thing owlClass = source.getThing("owl:Class"); 
+			ResourceResults classes = source.getFacts("[ a owl:Class]/rdfs:label");
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Person, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Person\"}; {s=http://inova8.com/intelligentgraph/example4/Gender, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Gender\"}; {s=http://inova8.com/intelligentgraph/example4/Gender_Location, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Gender Location\"}; {s=http://inova8.com/intelligentgraph/example4/Location, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Location\"};]", classes.toString());
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+		}
+	}
+	@Test
+	@Order(7)
+	void example4_7() {
+
+		try {
+			//Thing owlClass = source.getThing("owl:Class"); 
+			ResourceResults classes = source.getFacts("[ a owl:Class; eq :Person]/^a[:hasLocation :Maidstone]/:hasHeight");
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another3, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"2\"^^<http://www.w3.org/2001/XMLSchema#integer>}; {s=http://inova8.com/intelligentgraph/example4/Another4, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.8\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another5, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another6, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another7, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another8, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.6\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another9, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>};]", classes.toString());
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+		}
+	}
+	@Test
+	@Order(8)
+	void example4_8() {
+
+		try {
+			//Thing owlClass = source.getThing("owl:Class"); 
+			Resource fact = source.getFact("[ a owl:Class; eq :Person]/^a[:hasLocation (:Maidstone|:Tideswell)]/:hasHeight");
+			assertEquals(" {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}", fact.toString());
+
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 }

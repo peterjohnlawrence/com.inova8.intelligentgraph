@@ -20,6 +20,10 @@ import com.inova8.intelligentgraph.intelligentGraphRepository.IntelligentGraphRe
 import com.inova8.intelligentgraph.model.Resource;
 import com.inova8.intelligentgraph.model.Thing;
 import com.inova8.intelligentgraph.results.ResourceResults;
+import com.inova8.intelligentgraph.vocabulary.OWL;
+import com.inova8.intelligentgraph.vocabulary.RDFS;
+import com.inova8.intelligentgraph.vocabulary.RDF;
+import com.inova8.intelligentgraph.vocabulary.XSD;
 
 import utilities.Query;
 import org.eclipse.rdf4j.model.Literal;
@@ -49,9 +53,10 @@ class Example2_Tests {
 		
 		RepositoryConnection conn = workingRep.getConnection();
 		conn.setNamespace("", "http://inova8.com/intelligentgraph/example2/");
-		conn.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
-		conn.setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		conn.setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+		conn.setNamespace(XSD.PREFIX, XSD.NAMESPACE);
+		conn.setNamespace( RDF.PREFIX, RDF.NAMESPACE);
+		conn.setNamespace(RDFS.PREFIX , RDFS.NAMESPACE);
+		conn.setNamespace(OWL.PREFIX, OWL.NAMESPACE);
 		source = IntelligentGraphRepository.create(workingRep);
 
 	}
@@ -81,8 +86,7 @@ class Example2_Tests {
 			Resource another1bmi = another1.getFact(":hasBMI");
 			assertEquals("19.94459833795014", another1bmi.stringValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -102,8 +106,7 @@ class Example2_Tests {
 			 }
 			assertEquals("[http://inova8.com/intelligentgraph/example2/Another1, http://inova8.com/intelligentgraph/example2/Another10, http://inova8.com/intelligentgraph/example2/Another11, http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another3, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another5, http://inova8.com/intelligentgraph/example2/Another6, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another8, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/aPerson]", personValues.toString());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -123,8 +126,7 @@ class Example2_Tests {
 			 }
 			assertEquals("[19.94459833795014, 16.897506925207757, 27.11111111111111, 23.148148148148145, 22.49134948096886, 14.75, 14.506172839506172, 31.11111111111111, 24.88888888888889, 21.79930795847751, 25.781249999999996, 15.91695501730104, 21.453287197231838]", personValues.toString());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -140,8 +142,7 @@ class Example2_Tests {
 			Resource averagebmi = person.getFact(":averageBMI");
 			assertEquals("21.523052847377123", averagebmi.stringValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -157,8 +158,7 @@ class Example2_Tests {
 			Resource relativeBMI = person.getFact(":hasRelativeBMI");
 			assertEquals("0.9967585615925397", relativeBMI.stringValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -174,8 +174,7 @@ class Example2_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge '1.9'^^xsd:double ]]/:hasBMI").average();
 			assertEquals("17.197368421052634", bmi.toString());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -191,8 +190,7 @@ class Example2_Tests {
 			Resource bmi = person.getFact(":averageTallBMI");
 			assertEquals("17.197368421052634", bmi.stringValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -212,8 +210,7 @@ class Example2_Tests {
 			}
 			assertEquals("[http://inova8.com/intelligentgraph/example2/Another12, http://inova8.com/intelligentgraph/example2/Another2, http://inova8.com/intelligentgraph/example2/Another4, http://inova8.com/intelligentgraph/example2/Another7, http://inova8.com/intelligentgraph/example2/Another9, http://inova8.com/intelligentgraph/example2/aPerson]", personValues.toString());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -229,8 +226,7 @@ class Example2_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge '1.7'^^xsd:double  ; le '1.8'^^xsd:double  ]]/:hasBMI").average();
 			assertEquals("19.885870106938924", bmi.toString());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -248,8 +244,7 @@ class Example2_Tests {
 			Double bmi = person.getFacts("^rdf:type[:hasHeight [ ge %1  ; le %2  ]]/:hasBMI",minHeight,maxHeight).average();
 			assertEquals("19.885870106938924", bmi.toString());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
 	
@@ -265,8 +260,9 @@ class Example2_Tests {
 			Resource bmi = person.getFact(":average1.7-1.8BMI");
 			assertEquals("19.885870106938924", bmi.stringValue());
 		} catch (Exception e) {
-			assertEquals("", e.getMessage());
-			e.printStackTrace();
+			assertEquals("", e.getCause().getMessage());
 		}
 	}
+	
+
 }

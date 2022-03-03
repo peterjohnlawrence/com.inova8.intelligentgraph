@@ -14,7 +14,7 @@ public class SCRIPT {
 
 	/** The Constant NAMESPACE. */
 	public static final String NAMESPACE = "http://inova8.com/script/";
-	
+	public static final String PREFIX = "script";	
 	/** The Constant GROOVY. */
 	public static final String groovy = NAMESPACE + "groovy";
 	public static final IRI GROOVY = iri(groovy);

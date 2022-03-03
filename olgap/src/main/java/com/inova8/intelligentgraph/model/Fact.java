@@ -95,7 +95,7 @@ public class Fact extends Resource {
 	 */
 	@Override
 	public String toString() {
-		return "Fact [Resource[ object=" + super.toString() +  "], predicate=" + predicate + ", subject=" + subject +  "]";
+		return "Fact [Resource[ subject=" + subject  +  "], predicate=" + predicate + ", object=" +  super.toString() + "]";
 	}
 
 	/**

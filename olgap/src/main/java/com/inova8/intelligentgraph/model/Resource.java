@@ -143,7 +143,10 @@ private IntelligentGraphRepository source;
 	@Override
 	public String toString() {
 		if (getValue() != null)
-			return getValue().toString();
+			if(predicate!=null )
+				return " {s=" + subject.toString() + ", p=" + predicate.toString() + ", o=" + superValue.toString() + "}";
+			else
+		    	return getValue().toString();
 		else
 			return null;
 	}
@@ -284,12 +287,7 @@ private IntelligentGraphRepository source;
 	 * @return true, if successful
 	 */
 	public boolean searchStack(String stackKey) {
-		//		if (evaluationContext!=null && evaluationContext.getStack() != null) {
-		//		if(evaluationContext.getStack().size()>10 ) return true;
 		return evaluationContext.getStack().contains(stackKey);
-		//		}else {
-		//			return true;
-		//		}
 	}
 
 	/**
@@ -526,42 +524,6 @@ private IntelligentGraphRepository source;
 			return (XMLGregorianCalendar) null;
 	}
 
-//	@Deprecated
-//	public IRI convertQName(String predicateIRI) {
-//		predicateIRI = Utilities.trimIRIString(predicateIRI);
-//		String[] predicateIRIParts = predicateIRI.split(":");
-//		IRI predicate = null;
-//		if (predicateIRIParts[0].equals("a")) {
-//			predicate = iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-//		} else if (predicateIRIParts[0].equals("http") || predicateIRIParts[0].equals("urn")) {
-//			predicate = iri(predicateIRI);
-//		} else {
-//			IRI namespace = getNamespace(predicateIRIParts[0]);
-//			if (namespace == null) {
-//				logger.error(String.format("Error identifying namespace of qName %s", predicateIRI));
-//				this.getEvaluationContext().getTracer().traceQNameError(predicateIRI);
-//				//	addTrace(message);
-//			} else {
-//				predicate = iri(namespace.stringValue(), predicateIRIParts[1]);
-//			}
-//		}
-//		return predicate;
-//	}
-
-//	@Deprecated
-//	private IRI getNamespace(String namespaceString) {
-//		IRI namespace = getPrefixes().get(namespaceString);
-//		return namespace;
-//	}
-
-//	@Deprecated
-//	public Prefixes getPrefixes() {
-//		if (this.getEvaluationContext() != null)
-//			return this.getEvaluationContext().getPrefixes();
-//		else
-//			return null;
-//	}
-
 	/**
  * Gets the super value.
  *
@@ -606,9 +568,5 @@ public Value getSuperValue() {
 	public  Predicate getPredicate() {
 		return predicate;
 	};
-
-//	public abstract Object getSnippet();
-//
-//	public abstract Object getScore();
 
 }
