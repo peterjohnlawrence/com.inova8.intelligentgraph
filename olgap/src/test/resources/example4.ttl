@@ -137,6 +137,8 @@
 .
 :Female
   a :Gender ;
+  :averageBMI "<:GenderAverageBMI>"^^script:groovy ;
+  :total "<:GenderTotal>"^^script:groovy ;
   rdfs:label "Female" ;
 .
 :Female_Maidstone
@@ -157,6 +159,11 @@
   a owl:Class ;
   rdfs:label "Gender" ;
 .
+:GenderAverageBMI
+  a :Script ;
+  script:scriptCode "_this.getFacts('^:hasGender/:hasBMI')average()"^^script:groovy ;
+  rdfs:label "Gender Average BMI" ;
+.
 :GenderLocationRelativeBMI
   a :Script ;
   script:scriptCode """BMI=_this.getFact(':hasBMI').doubleValue();
@@ -165,6 +172,11 @@ location=_this.getFact(':hasLocation');
 genderLocationAverageBMI = _this.getThing(':Gender_Location').getFact('^rdf:type[:hasGender %1; :hasLocation %2]/:averageBMI',gender,location).doubleValue();
 BMI/genderLocationAverageBMI;"""^^script:groovy ;
   rdfs:label "GenderLocationRelativeBMI" ;
+.
+:GenderTotal
+  a :Script ;
+  script:scriptCode "_this.getFacts('^:hasGender').count()"^^script:groovy ;
+  rdfs:label "Gender Total" ;
 .
 :Gender_Location
   a owl:Class ;
@@ -186,13 +198,21 @@ location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()"""^^s
   script:scriptCode "_this.getFacts('^:hasLocation/:hasBMI')average()"^^script:groovy ;
   rdfs:label "Location Average BMI" ;
 .
+:LocationTotal
+  a :Script ;
+  script:scriptCode "_this.getFacts('^:hasLocation').count()"^^script:groovy ;
+  rdfs:label "Location Total" ;
+.
 :Maidstone
   a :Location ;
   :averageBMI "<:LocationAverageBMI>"^^script:groovy ;
+  :total "<:LocationTotal>"^^script:groovy ;
   rdfs:label "Maidstone" ;
 .
 :Male
   a :Gender ;
+  :averageBMI "<:GenderAverageBMI>"^^script:groovy ;
+  :total "<:GenderTotal>"^^script:groovy ;
   rdfs:label "Male" ;
 .
 :Male_Maidstone
@@ -225,6 +245,7 @@ location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()"""^^s
 :Tideswell
   a :Location ;
   :averageBMI "<:LocationAverageBMI>"^^script:groovy ;
+  :total "<:LocationTotal>"^^script:groovy ;
   rdfs:label "Tideswell" ;
 .
 :aPerson
@@ -280,4 +301,10 @@ location.getFacts('^:hasLocation[:hasGender %1]/:hasBMI',gender).average()"""^^s
   a owl:DatatypeProperty ;
   rdfs:domain :Person ;
   rdfs:label "has weight" ;
+.
+:total
+  a owl:DatatypeProperty ;
+  rdfs:domain :Gender ;
+  rdfs:domain :Location ;
+  rdfs:label "total" ;
 .

@@ -97,7 +97,7 @@ class Local_BoundFact_Tests {
 	void test_1() {
 		try {
 			ResourceResults results = source.getFacts("[ rdfs:label [ like \"Unit1\"]; a :Unit]/:hasProductBatteryLimit");
-			assertEquals("[http://inova8.com/calc2graph/id/BatteryLimit2;http://inova8.com/calc2graph/id/BatteryLimit3;]", results.toString());
+			assertEquals("[ {s=http://inova8.com/calc2graph/id/Unit1, p=http://inova8.com/calc2graph/def/hasProductBatteryLimit, o=http://inova8.com/calc2graph/id/BatteryLimit2}; {s=http://inova8.com/calc2graph/id/Unit1, p=http://inova8.com/calc2graph/def/hasProductBatteryLimit, o=http://inova8.com/calc2graph/id/BatteryLimit3};]", results.toString());
 		} catch (Exception e) {
 			assertEquals("", e.getMessage());
 			e.printStackTrace();
@@ -108,7 +108,7 @@ class Local_BoundFact_Tests {
 	void test_1_1() {
 		try {
 			ResourceResults results = source.getFacts(":hasProductBatteryLimit");
-			assertEquals("[http://inova8.com/calc2graph/id/BatteryLimit2;http://inova8.com/calc2graph/id/BatteryLimit3;]", results.toString());
+			assertEquals("[ {s=http://inova8.com/calc2graph/id/Unit1, p=http://inova8.com/calc2graph/def/hasProductBatteryLimit, o=http://inova8.com/calc2graph/id/BatteryLimit2}; {s=http://inova8.com/calc2graph/id/Unit1, p=http://inova8.com/calc2graph/def/hasProductBatteryLimit, o=http://inova8.com/calc2graph/id/BatteryLimit3};]", results.toString());
 		} catch (Exception e) {
 			assertEquals("Facts query unbound", e.getMessage());
 		}

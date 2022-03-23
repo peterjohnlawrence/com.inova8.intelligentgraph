@@ -98,7 +98,8 @@ public class SEEQSource {
 	 * @param password the password
 	 */
 	public SEEQSource(String basePath, String userName, String password) {
-		ApiClient apiClient = new ApiClient();
+	 	ApiClient apiClient = new ApiClient();
+	//	ApiClient apiClient =Class.forName("com.seeq.ApiClient").newInstance();
 		apiClient.setBasePath(basePath);
 		AuthApi authApi = new AuthApi(apiClient);
 		AuthInputV1 input = new AuthInputV1();
@@ -203,8 +204,8 @@ public class SEEQSource {
 		List<String> fragments = null;
 		Integer offset = null;
 		Integer limit = null;
-		FormulaRunOutputV1 formulaOutput = formulasApi.runFormula(null, null, formula, function, parameters,
-				fragments, offset, limit);
+		FormulaRunOutputV1 formulaOutput = formulasApi.runFormula((String)null, (String)null, formula, function, parameters,
+				fragments, (String)null, (String)null,offset, limit);
 		return formulaOutput.getScalar().getValue();
 	}
 

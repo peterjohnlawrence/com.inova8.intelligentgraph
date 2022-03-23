@@ -169,7 +169,6 @@ class Example4_Tests {
 	void example4_6() {
 
 		try {
-			//Thing owlClass = source.getThing("owl:Class"); 
 			ResourceResults classes = source.getFacts("[ a owl:Class]/rdfs:label");
 			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Person, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Person\"}; {s=http://inova8.com/intelligentgraph/example4/Gender, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Gender\"}; {s=http://inova8.com/intelligentgraph/example4/Gender_Location, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Gender Location\"}; {s=http://inova8.com/intelligentgraph/example4/Location, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Location\"};]", classes.toString());
 		} catch (Exception e) {
@@ -181,7 +180,6 @@ class Example4_Tests {
 	void example4_7() {
 
 		try {
-			//Thing owlClass = source.getThing("owl:Class"); 
 			ResourceResults classes = source.getFacts("[ a owl:Class; eq :Person]/^a[:hasLocation :Maidstone]/:hasHeight");
 			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another3, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"2\"^^<http://www.w3.org/2001/XMLSchema#integer>}; {s=http://inova8.com/intelligentgraph/example4/Another4, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.8\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another5, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another6, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another7, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another8, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.6\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another9, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>};]", classes.toString());
 		} catch (Exception e) {
@@ -193,9 +191,56 @@ class Example4_Tests {
 	void example4_8() {
 
 		try {
-			//Thing owlClass = source.getThing("owl:Class"); 
-			Resource fact = source.getFact("[ a owl:Class; eq :Person]/^a[:hasLocation (:Maidstone|:Tideswell)]/:hasHeight");
-			assertEquals(" {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}", fact.toString());
+			ResourceResults facts = source.getFacts("[ a owl:Class; eq :Person]/^a[:hasLocation :Maidstone ; :hasGender :Male]/(:hasHeight | :hasWeight | :hasLocation)");
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.7\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasWeight, o=\"65\"^^<http://www.w3.org/2001/XMLSchema#integer>}; {s=http://inova8.com/intelligentgraph/example4/Another2, p=http://inova8.com/intelligentgraph/example4/hasLocation, o=http://inova8.com/intelligentgraph/example4/Maidstone}; {s=http://inova8.com/intelligentgraph/example4/Another4, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.8\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another4, p=http://inova8.com/intelligentgraph/example4/hasWeight, o=\"47\"^^<http://www.w3.org/2001/XMLSchema#integer>}; {s=http://inova8.com/intelligentgraph/example4/Another4, p=http://inova8.com/intelligentgraph/example4/hasLocation, o=http://inova8.com/intelligentgraph/example4/Maidstone}; {s=http://inova8.com/intelligentgraph/example4/Another6, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another6, p=http://inova8.com/intelligentgraph/example4/hasWeight, o=\"56\"^^<http://www.w3.org/2001/XMLSchema#integer>}; {s=http://inova8.com/intelligentgraph/example4/Another6, p=http://inova8.com/intelligentgraph/example4/hasLocation, o=http://inova8.com/intelligentgraph/example4/Maidstone}; {s=http://inova8.com/intelligentgraph/example4/Another8, p=http://inova8.com/intelligentgraph/example4/hasHeight, o=\"1.6\"^^<http://www.w3.org/2001/XMLSchema#decimal>}; {s=http://inova8.com/intelligentgraph/example4/Another8, p=http://inova8.com/intelligentgraph/example4/hasWeight, o=\"66\"^^<http://www.w3.org/2001/XMLSchema#integer>}; {s=http://inova8.com/intelligentgraph/example4/Another8, p=http://inova8.com/intelligentgraph/example4/hasLocation, o=http://inova8.com/intelligentgraph/example4/Maidstone};]", facts.toString());
+
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+		}
+	}
+	@Test
+	@Order(9)
+	void example4_9() {
+
+		try {
+			ResourceResults facts = source.getFacts("[ a owl:Class; eq :Gender]/^a/*");
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Male, p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, o=http://inova8.com/intelligentgraph/example4/Gender}; {s=http://inova8.com/intelligentgraph/example4/Male, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Male\"}; {s=http://inova8.com/intelligentgraph/example4/Male, p=http://inova8.com/intelligentgraph/example4/averageBMI, o=\"22.31095112223672\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example4/Male, p=http://inova8.com/intelligentgraph/example4/total, o=\"9\"^^<http://www.w3.org/2001/XMLSchema#int>}; {s=http://inova8.com/intelligentgraph/example4/Female, p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, o=http://inova8.com/intelligentgraph/example4/Gender}; {s=http://inova8.com/intelligentgraph/example4/Female, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Female\"}; {s=http://inova8.com/intelligentgraph/example4/Female, p=http://inova8.com/intelligentgraph/example4/averageBMI, o=\"20.603838193374262\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example4/Female, p=http://inova8.com/intelligentgraph/example4/total, o=\"8\"^^<http://www.w3.org/2001/XMLSchema#int>};]", facts.toString());
+
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+		}
+	}
+	@Test
+	@Order(9)
+	void example4_91() {
+
+		try {
+			Resource fact = source.getFact("[ a owl:Class; eq :Gender]/^a/*");
+			assertEquals(" {s=http://inova8.com/intelligentgraph/example4/Male, p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, o=http://inova8.com/intelligentgraph/example4/Gender}", fact.toString());
+
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+		}
+	}
+	@Test
+	@Order(10)
+	void example4_10() {
+
+		try {
+			ResourceResults facts = source.getFacts("[  eq :Another1]/:hasLocation/*");
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, o=http://inova8.com/intelligentgraph/example4/Location}; {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Tideswell\"}; {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://inova8.com/intelligentgraph/example4/averageBMI, o=\"21.7109303439298\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://inova8.com/intelligentgraph/example4/total, o=\"7\"^^<http://www.w3.org/2001/XMLSchema#int>};]", facts.toString());
+
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+		}
+	}
+	@Test
+	@Order(11)
+	void example4_11() {
+
+		try {
+			ResourceResults facts = source.getFacts("[ a owl:Class; eq :Person]/^a[:hasLocation :Tideswell ; :hasGender :Male ;eq :Another1]/:hasLocation/*");
+			assertEquals("[ {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, o=http://inova8.com/intelligentgraph/example4/Location}; {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://www.w3.org/2000/01/rdf-schema#label, o=\"Tideswell\"}; {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://inova8.com/intelligentgraph/example4/averageBMI, o=\"21.7109303439298\"^^<http://www.w3.org/2001/XMLSchema#double>}; {s=http://inova8.com/intelligentgraph/example4/Tideswell, p=http://inova8.com/intelligentgraph/example4/total, o=\"7\"^^<http://www.w3.org/2001/XMLSchema#int>};]", facts.toString());
 
 		} catch (Exception e) {
 			assertEquals("", e.getCause().getMessage());

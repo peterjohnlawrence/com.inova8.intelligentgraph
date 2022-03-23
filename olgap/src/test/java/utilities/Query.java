@@ -35,6 +35,7 @@ import org.eclipse.rdf4j.sail.config.SailConfigException;
 import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+import org.eclipse.rdf4j.query.explanation.*;
 
 import com.inova8.intelligentgraph.sail.IntelligentGraphConfig;
 import com.inova8.intelligentgraph.sail.IntelligentGraphFactory;
@@ -262,7 +263,11 @@ public class Query {
 		TupleQuery query = conn.prepareTupleQuery(queryString);
 		return query.toString();
 	}
-	
+	public static String explainSPARQL(RepositoryConnection conn, String queryString) {
+		TupleQuery query = conn.prepareTupleQuery(queryString);
+		 Explanation explanation = query.explain(Explanation.Level.Optimized);
+		return explanation.toString();
+	}
 	/**
 	 * Run CONSTRUCT.
 	 *

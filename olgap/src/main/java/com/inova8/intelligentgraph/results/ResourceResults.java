@@ -236,7 +236,8 @@ protected EvaluationContext getEvaluationContext() {
 	public String toString() {
 		String toString="[";
 		while( hasNext()) {
-			toString +=next().toString()+";";
+			Resource resource = (Resource)next();
+			toString +=resource.toString()+";";
 		}
 		return toString+"]";
 	}

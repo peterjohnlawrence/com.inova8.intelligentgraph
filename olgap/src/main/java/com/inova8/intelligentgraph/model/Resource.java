@@ -144,7 +144,7 @@ private IntelligentGraphRepository source;
 	public String toString() {
 		if (getValue() != null)
 			if(predicate!=null )
-				return " {s=" + subject.toString() + ", p=" + predicate.toString() + ", o=" + superValue.toString() + "}";
+				return " {s=" + subject.getValue().toString() + ", p=" + predicate.toString() + ", o=" + superValue.toString() + "}";
 			else
 		    	return getValue().toString();
 		else

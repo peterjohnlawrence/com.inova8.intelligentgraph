@@ -66,16 +66,7 @@ Variable sourceVariable;
 			direction = Edge.Direction.DIRECT;
 	}
 
-	/**
-	 * Instantiates a new statement binding.
-	 *
-	 * @param sourceVariable the source variable
-	 * @param reification the reification
-	 * @param predicateVariable the predicate variable
-	 * @param targetVariable the target variable
-	 * @param isInverseOf the is inverse of
-	 * @param isDereified the is dereified
-	 */
+
 	public StatementBinding(Variable sourceVariable, IRI reification, Variable reificationVariable, Variable predicateVariable, Variable targetVariable, Boolean isInverseOf, Boolean isDereified) {
 		this.sourceVariable = sourceVariable;
 		this.predicateVariable = predicateVariable;

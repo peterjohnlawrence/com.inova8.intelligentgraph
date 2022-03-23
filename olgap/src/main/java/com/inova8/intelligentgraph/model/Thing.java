@@ -682,7 +682,11 @@ public Trace traceFact(String predicatePattern, CustomQueryOptions customQueryOp
 		IRI thingIri = getSource().getRepositoryContext().convertQName(thing);
 		return create(this.getSource(), thingIri,this.getEvaluationContext());
 	}
-
+//	@Override
+//	public String toString() {
+//		return  getValue().toString() ;
+//
+//	}
 
 
 

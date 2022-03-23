@@ -44,17 +44,6 @@ public class ResourceStatementResults extends ResourceResults {
 		this.statementSet = statementSet;
 	}
 	
-	/**
-	 * Instantiates a new resource statement results.
-	 *
-	 * @param statementSet the statement set
-	 * @param thing the thing
-	 */
-//	@Deprecated
-//	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet, Thing thing) {
-//		super(thing);
-//		this.statementSet = statementSet;
-//	}
 
 	/**
 	 * Instantiates a new resource statement results.
@@ -70,16 +59,7 @@ public class ResourceStatementResults extends ResourceResults {
 		this.statementSet = statementSet;
 	}
 	
-	/**
-	 * Instantiates a new resource statement results.
-	 *
-	 * @param statementSet the statement set
-	 */
-//	@Deprecated
-//	public ResourceStatementResults(CloseableIteration<Statement, RepositoryException> statementSet) {
-//		super();
-//		this.statementSet = statementSet;
-//	}
+
 	public ResourceStatementResults(
 			CloseableIteration<? extends Statement, QueryEvaluationException> localStatementIterator, IntelligentGraphRepository source,
 			Object pathElement, CustomQueryOptions customQueryOptions) {

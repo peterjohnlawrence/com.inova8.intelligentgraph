@@ -316,6 +316,35 @@ class SPARQL_To_TupleExpr {
 					+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
 					+ "         Var (name=n1)\r\n"
 					+ "",result);
+			String explanation = Query.explainSPARQL(conn, queryString1);
+			assertEquals("Projection\r\n"
+					+ "\u2560\u2550\u2550ProjectionElemList\r\n"
+					+ "\u2551     ProjectionElem \"bind\"\r\n"
+					+ "\u2551     ProjectionElem \"b1\"\r\n"
+					+ "\u2551     ProjectionElem \"n0\"\r\n"
+					+ "\u2551     ProjectionElem \"n1\"\r\n"
+					+ "\u255A\u2550\u2550Join (JoinIterator)\r\n"
+					+ "   \u251C\u2500\u2500Extension\r\n"
+					+ "   \u2502  \u2560\u2550\u2550Join (JoinIterator)\r\n"
+					+ "   \u2502  \u2551  \u251C\u2500\u2500StatementPattern (costEstimate=0, resultSizeEstimate=0)\r\n"
+					+ "   \u2502  \u2551  \u2502     Var (name=bind)\r\n"
+					+ "   \u2502  \u2551  \u2502     Var (name=_const_f5e5585a_uri, value=http://www.w3.org/1999/02/22-rdf-syntax-ns#type, anonymous)\r\n"
+					+ "   \u2502  \u2551  \u2502     Var (name=_const_3433d213_uri, value=http://defaultUnit, anonymous)\r\n"
+					+ "   \u2502  \u2551  \u2514\u2500\u2500Filter (costEstimate=0, resultSizeEstimate=0)\r\n"
+					+ "   \u2502  \u2551     \u2560\u2550\u2550Compare (=)\r\n"
+					+ "   \u2502  \u2551     \u2551     Var (name=b1)\r\n"
+					+ "   \u2502  \u2551     \u2551     ValueConstant (value=\"Unit1\")\r\n"
+					+ "   \u2502  \u2551     \u255A\u2550\u2550StatementPattern (costEstimate=11, resultSizeEstimate=119)\r\n"
+					+ "   \u2502  \u2551           Var (name=bind)\r\n"
+					+ "   \u2502  \u2551           Var (name=_const_9285ccfc_uri, value=http://www.w3.org/2000/01/rdf-schema#label, anonymous)\r\n"
+					+ "   \u2502  \u2551           Var (name=b1)\r\n"
+					+ "   \u2502  \u255A\u2550\u2550ExtensionElem (n0)\r\n"
+					+ "   \u2502        Var (name=bind)\r\n"
+					+ "   \u2514\u2500\u2500StatementPattern (costEstimate=0, resultSizeEstimate=0)\r\n"
+					+ "         Var (name=n0)\r\n"
+					+ "         Var (name=_const_eec771f2_uri, value=http://defaulthasProductBatteryLimit, anonymous)\r\n"
+					+ "         Var (name=n1)\r\n"
+					+ "",explanation);
 
 		} catch (Exception e) {
 			assertEquals("", e.getMessage());

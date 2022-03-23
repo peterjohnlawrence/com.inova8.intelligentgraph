@@ -77,16 +77,7 @@ public class Edge {
 			direction = Direction.DIRECT;
 	}
 
-	/**
-	 * Instantiates a new edge.
-	 *
-	 * @param source the source
-	 * @param reification the reification
-	 * @param predicate the predicate
-	 * @param target the target
-	 * @param isInverseOf the is inverse of
-	 * @param isDereified the is dereified
-	 */
+
 	public Edge(org.eclipse.rdf4j.model.Resource source, org.eclipse.rdf4j.model.Resource reified, IRI reification,  org.eclipse.rdf4j.model.Resource predicate, org.eclipse.rdf4j.model.Value target, Boolean isInverseOf, Boolean isDereified) {
 		this.source = source;
 		this.predicate = predicate;

@@ -130,7 +130,21 @@ class Local_GetFact_Tests {
 			e.printStackTrace();
 		}
 	}
-
+/**
+* Test 1.1.
+*/
+@Test
+@Order(1)
+void test_1_1() {
+	try {
+		Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/BatteryLimit1"), null);
+		Resource result = _this.getFact("<http://inova8.com/calc2graph/def/testProperty4>");
+		assertEquals("0.26677333333333336", result.stringValue());
+	} catch (Exception e) {
+		assertEquals("", e.getMessage());
+		e.printStackTrace();
+	}
+}
 	/**
 	 * Test 2.
 	 */
