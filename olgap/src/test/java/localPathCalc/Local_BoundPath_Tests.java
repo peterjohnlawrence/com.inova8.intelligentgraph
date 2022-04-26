@@ -113,7 +113,38 @@ class Local_BoundPath_Tests {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Test 1_1.
+	 */
+	@Test
+	@Order(1)
+	void test_1_1() {
+		try {
+			PathResults paths =  source.getPaths("[ eq <http://inova8.com/calc2graph/id/Equipment_1>]/:connectedTo{1,3}");
+			assertEquals("Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_3,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_3,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_4,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "Path=[[http://inova8.com/calc2graph/id/Equipment_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_1,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_1,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_2,DIRECT]\r\n"
+					+ "[http://inova8.com/calc2graph/id/Equipment_2_2,http://inova8.com/calc2graph/def/connectedTo,http://inova8.com/calc2graph/id/Equipment_2_3,DIRECT]\r\n"
+					+ "]\r\n"
+					+ "", paths.toString());
+		} catch (Exception e) {
+			assertEquals("", e.getCause().getMessage());
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Test 2.
 	 */
@@ -227,13 +258,13 @@ class Local_BoundPath_Tests {
 		try {
 			Thing _this =source.getThing(iri("http://inova8.com/calc2graph/id/Equipment_1"), null);
 			
-			ResourceResults results = _this.getFacts(":connectedTo{1,3}");
+			ResourceResults results = source.getFacts("[ eq <http://inova8.com/calc2graph/id/Equipment_1>]/:connectedTo{1,3}");
 			ArrayList<String> resultsArrayList = new ArrayList<String>();
 			for (Resource result : results) {
 				resultsArrayList.add(result.stringValue());
 			}
 			assertEquals("[http://inova8.com/calc2graph/id/Equipment_2, http://inova8.com/calc2graph/id/Equipment_2_1, http://inova8.com/calc2graph/id/Equipment_3, http://inova8.com/calc2graph/id/Equipment_2_2, http://inova8.com/calc2graph/id/Equipment_4, http://inova8.com/calc2graph/id/Equipment_2_3]", resultsArrayList.toString());
-			PathResults paths =  _this.getPaths(":connectedTo{1,3}");
+			PathResults paths =  source.getPaths("[ eq <http://inova8.com/calc2graph/id/Equipment_1>]/:connectedTo{1,3}");
 			ArrayList<String> pathArrayList = new ArrayList<String>();
 			for (Path path : paths) {
 				pathArrayList.add(path.toString());

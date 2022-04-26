@@ -116,11 +116,11 @@ public class BoundPathElement extends PathElement{
 		
 		if(bindPattern.getTupleExpr()==null ) {
 			bindSourceVariable.setName("n0");
-			rightPattern = getRightPathElement().pathPatternQuery(bindSourceVariable,predicateVariable,targetVariable,customQueryOptions);
+			rightPattern = getRightPathElement().pathPatternQuery(bindSourceVariable,predicateVariable,targetVariable,pathIteration,customQueryOptions);
 			rightPattern.setBoundVariable(bindSourceVariable);
 			return rightPattern;
 		}else {
-			rightPattern = getRightPathElement().pathPatternQuery(sourceVariable,predicateVariable,targetVariable,customQueryOptions);
+			rightPattern = getRightPathElement().pathPatternQuery(sourceVariable,predicateVariable,targetVariable,pathIteration, customQueryOptions);
 			Extension leftPattern = new Extension(bindPattern.getTupleExpr(),new ExtensionElem(bindSourceVariable, "n0" ) );
 			Join boundPattern = new Join(leftPattern,rightPattern.getTupleExpr() );		
 			PathTupleExpr boundPatternTupleExpr = new PathTupleExpr( boundPattern);
